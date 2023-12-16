@@ -1,3 +1,4 @@
+import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -60,6 +61,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
         validator: widget.validator,
         onSaved: widget.onSaved,
         decoration: InputDecoration(
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(
+                color:
+                    CustomColors.blueColor), // Defina a cor desejada da borda
+          ),
           prefixIcon: Icon(widget.icon),
           suffixIcon: widget.isSecret
               ? IconButton(
@@ -76,7 +83,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           labelText: widget.label,
           isDense: true,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(10),
           ),
         ),
       ),

@@ -1,6 +1,8 @@
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
+import 'package:app_law_order/src/pages/auth/view/components/forgot_password_dialog.dart';
 import 'package:app_law_order/src/pages/common_widgets/custom_text_field.dart';
+import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:app_law_order/src/services/validators.dart';
 import 'package:flutter/material.dart';
@@ -33,17 +35,11 @@ class SignInScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    //Nome do APP
-                    // SvgPicture.asset(
-                    //   'assets/logo3.svg',
-                    //   colorBlendMode: BlendMode.srcIn,
-                    //   fit: BoxFit.contain,
-                    //   width: 200,
-                    // ),
-                    // Image.asset(
-                    //   "assets/logo/MARCA-DAGUA-PRETA-2.png",
-                    // )
-                    //Categorias
+                    Image.asset(
+                      "assets/MARCA-DAGUA-PRETA-2.png",
+                      fit: BoxFit.contain,
+                      width: 300,
+                    )
                   ],
                 ),
               ),
@@ -90,7 +86,7 @@ class SignInScreen extends StatelessWidget {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: CustomColors.blueColor,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18),
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
                               onPressed: authController.isLoading.value
@@ -101,10 +97,10 @@ class SignInScreen extends StatelessWidget {
                                         String email = emailController.text;
                                         String password =
                                             passwordController.text;
-                                        // authController.signIn(
-                                        //   email: email,
-                                        //   password: password,
-                                        // );
+                                        authController.signIn(
+                                          email: email,
+                                          password: password,
+                                        );
                                       } else {
                                         //print('Campos não válidos');
                                       }
@@ -114,9 +110,9 @@ class SignInScreen extends StatelessWidget {
                                       color: CustomColors.black,
                                     )
                                   : Text(
-                                      'Entrar',
+                                      'Login',
                                       style: TextStyle(
-                                        color: CustomColors.black,
+                                        color: CustomColors.white,
                                         fontSize: 18,
                                       ),
                                     ),
@@ -130,22 +126,24 @@ class SignInScreen extends StatelessWidget {
                         child: TextButton(
                           child: Text(
                             'Esqueceu a senha?',
-                            style: TextStyle(color: CustomColors.black),
+                            style: TextStyle(
+                                color: CustomColors.blueColor,
+                                fontSize: CustomFontSizes.fontSize16),
                           ),
                           onPressed: () async {
-                            // final bool? result = await showDialog(
-                            //   context: context,
-                            //   builder: (_) {
-                            //     return ForgotPasswordDialog(
-                            //         email: emailController.text);
-                            //   },
-                            // );
+                            final bool? result = await showDialog(
+                              context: context,
+                              builder: (_) {
+                                return ForgotPasswordDialog(
+                                    email: emailController.text);
+                              },
+                            );
 
-                            // if (result ?? false) {
-                            //   // utilServices.showToast(
-                            //   //     message:
-                            //   //         'Um link de recuperação foi enviado para o seu meail');
-                            // }
+                            if (result ?? false) {
+                              // utilServices.showToast(
+                              //     message:
+                              //         'Um link de recuperação foi enviado para o seu meail');
+                            }
                           },
                         ),
                       ),
@@ -184,24 +182,15 @@ class SignInScreen extends StatelessWidget {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: CustomColors.blueColor,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18),
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
                               onPressed: authController.isLoading.value
                                   ? null
                                   : () {
-                                      FocusScope.of(context).unfocus();
-                                      if (_formKey.currentState!.validate()) {
-                                        String email = emailController.text;
-                                        String password =
-                                            passwordController.text;
-                                        // authController.signIn(
-                                        //   email: email,
-                                        //   password: password,
-                                        // );
-                                      } else {
-                                        //print('Campos não válidos');
-                                      }
+                                      //FocusScope.of(context).unfocus();
+
+                                      Get.toNamed(PagesRoutes.signUpStep1);
                                     },
                               child: authController.isLoading.value
                                   ? CircularProgressIndicator(
@@ -210,7 +199,7 @@ class SignInScreen extends StatelessWidget {
                                   : Text(
                                       'Cadastre-se',
                                       style: TextStyle(
-                                        color: CustomColors.black,
+                                        color: CustomColors.white,
                                         fontSize: 18,
                                       ),
                                     ),
