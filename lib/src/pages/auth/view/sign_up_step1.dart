@@ -1,14 +1,17 @@
 import 'package:app_law_order/src/config/custom_colors.dart';
+import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
+import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class SignUpStep1 extends StatefulWidget {
-  const SignUpStep1({Key? key}) : super(key: key);
+class SignUpStep1Screen extends StatefulWidget {
+  const SignUpStep1Screen({Key? key}) : super(key: key);
 
   @override
-  _SignUpStep1State createState() => _SignUpStep1State();
+  _SignUpStep1ScreenState createState() => _SignUpStep1ScreenState();
 }
 
-class _SignUpStep1State extends State<SignUpStep1> {
+class _SignUpStep1ScreenState extends State<SignUpStep1Screen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -60,49 +63,69 @@ class _SignUpStep1State extends State<SignUpStep1> {
                 height: 10,
                 color: Colors.transparent,
               ),
-              SizedBox(
-                height: size.height / 3.5,
-                width: size.width / 1.5,
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  elevation: 5,
-                  color: CustomColors.blueColor,
-                  child: Center(
-                    child: Text(
-                      "Quero trabalhar",
-                      style: TextStyle(
-                          color: CustomColors.white,
-                          fontSize: CustomFontSizes.fontSize24,
-                          fontWeight: FontWeight.bold),
+              GetBuilder<AuthController>(
+                builder: (controller) {
+                  return GestureDetector(
+                    onTap: () {
+                      controller.isWork.value = true;
+                      Get.toNamed(PagesRoutes.signUp);
+                    },
+                    child: SizedBox(
+                      height: size.height / 3.5,
+                      width: size.width / 1.5,
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        elevation: 5,
+                        color: CustomColors.blueColor,
+                        child: Center(
+                          child: Text(
+                            "Quero trabalhar",
+                            style: TextStyle(
+                                color: CustomColors.white,
+                                fontSize: CustomFontSizes.fontSize24,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
               const Divider(
                 height: 10,
                 color: Colors.transparent,
               ),
-              SizedBox(
-                height: size.height / 3.5,
-                width: size.width / 1.5,
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  elevation: 5,
-                  color: CustomColors.blueColor,
-                  child: Center(
-                    child: Text(
-                      "Quero contratar",
-                      style: TextStyle(
-                          color: CustomColors.white,
-                          fontSize: CustomFontSizes.fontSize24,
-                          fontWeight: FontWeight.bold),
+              GetBuilder<AuthController>(
+                builder: (controller) {
+                  return GestureDetector(
+                    onTap: () {
+                      controller.isWork.value = false;
+                      Get.toNamed(PagesRoutes.signUp);
+                    },
+                    child: SizedBox(
+                      height: size.height / 3.5,
+                      width: size.width / 1.5,
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        elevation: 5,
+                        color: CustomColors.blueColor,
+                        child: Center(
+                          child: Text(
+                            "Quero contratar",
+                            style: TextStyle(
+                                color: CustomColors.white,
+                                fontSize: CustomFontSizes.fontSize24,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
             ],
           ),

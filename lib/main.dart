@@ -1,6 +1,7 @@
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
 import 'package:app_law_order/src/pages/auth/view/sign_in_screen.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,6 +27,15 @@ class MyApp extends StatelessWidget {
       ),
       getPages: AppPages.pages,
       initialRoute: PagesRoutes.signInRoute,
+      localizationsDelegates: const [
+        GlobalWidgetsLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('pt', 'BR'),
+        Locale('pt'),
+      ],
     );
   }
 }

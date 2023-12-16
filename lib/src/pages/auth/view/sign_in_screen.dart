@@ -188,8 +188,6 @@ class SignInScreen extends StatelessWidget {
                               onPressed: authController.isLoading.value
                                   ? null
                                   : () {
-                                      //FocusScope.of(context).unfocus();
-
                                       Get.toNamed(PagesRoutes.signUpStep1);
                                     },
                               child: authController.isLoading.value
