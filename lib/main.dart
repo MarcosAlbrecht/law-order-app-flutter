@@ -5,9 +5,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-void main() {
+Future<void> main() async {
   Get.put(AuthController());
+  WidgetsFlutterBinding.ensureInitialized();
+  await GetStorage.init();
   runApp(const MyApp());
 }
 
@@ -17,6 +21,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return GetMaterialApp(
       title: 'Prestadio',
       debugShowCheckedModeBanner: false,
@@ -24,6 +29,9 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: CustomColors.blueColor,
         //colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        textTheme: GoogleFonts.latoTextTheme(textTheme).copyWith(
+          bodyMedium: GoogleFonts.oswald(textStyle: textTheme.bodyMedium),
+        ),
       ),
       getPages: AppPages.pages,
       initialRoute: PagesRoutes.signInRoute,

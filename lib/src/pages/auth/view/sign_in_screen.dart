@@ -49,7 +49,7 @@ class SignInScreen extends StatelessWidget {
                   left: 32,
                   right: 32,
                   bottom: 20,
-                  top: 40,
+                  top: 15,
                 ),
                 decoration: BoxDecoration(
                     color: CustomColors.white,
@@ -62,6 +62,16 @@ class SignInScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      Image.asset(
+                        "assets/SIMBOLO-2.png",
+                        height: 50,
+                        width: 50,
+                      ),
+                      const Divider(
+                        height: 15,
+                        color: Colors.transparent,
+                      ),
+
                       CustomTextField(
                         controller: emailController,
                         icon: Icons.email,
@@ -139,11 +149,11 @@ class SignInScreen extends StatelessWidget {
                               },
                             );
 
-                            if (result ?? false) {
-                              // utilServices.showToast(
-                              //     message:
-                              //         'Um link de recuperação foi enviado para o seu meail');
-                            }
+                            // if (result ?? false) {
+                            //   utilServices.showToast(
+                            //       message:
+                            //           'Um link de recuperação foi enviado para o seu e-mail');
+                            // }
                           },
                         ),
                       ),
@@ -180,7 +190,7 @@ class SignInScreen extends StatelessWidget {
                           builder: (authController) {
                             return ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: CustomColors.blueColor,
+                                backgroundColor: CustomColors.blueDarkColor,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),

@@ -41,19 +41,24 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
         onSaved: widget.onSaved,
         onChanged: widget.onChanged,
         decoration: InputDecoration(
-          labelStyle: TextStyle(color: CustomColors.blueColor),
+          prefixIcon: const Icon(Icons.calendar_month),
+          //labelStyle: TextStyle(color: CustomColors.black),
           labelText: widget.label,
           isDense: true,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(
+              color: CustomColors.blueColor,
+            ),
           ),
         ),
         onShowPicker: (context, currentValue) async {
           return await showDatePicker(
             context: context,
-            firstDate: DateTime(2000),
+            firstDate: DateTime(1900),
             initialDate: currentValue ?? DateTime.now(),
-            lastDate: DateTime(2100),
+            lastDate: DateTime.now(),
+            initialDatePickerMode: DatePickerMode.year,
           );
         },
       ),

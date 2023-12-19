@@ -79,7 +79,8 @@ class ForgotPasswordDialog extends StatelessWidget {
                   ),
                   onPressed: () {
                     if (_formFieldKey.currentState!.validate()) {
-                      //authController.resetPassword(emailController.text);
+                      authController.handleForgotPassword(
+                          email: emailController.text);
                       Get.back(result: true);
                     }
                   },
