@@ -11,10 +11,28 @@ class UserModel {
   String? email;
   @JsonKey(name: 'name')
   String? name;
+  @JsonKey(name: 'password')
+  String? password;
+  @JsonKey(name: 'firstName')
+  String? firstName;
+  @JsonKey(name: 'lastName')
+  String? lastName;
+  @JsonKey(name: 'userType')
+  String? userType;
   @JsonKey(name: 'phone')
   String? phone;
+  @JsonKey(name: 'city')
+  String? city;
+  @JsonKey(name: 'state')
+  String? state;
+  @JsonKey(name: 'cep')
+  String? cep;
   @JsonKey(name: 'active')
   bool? active;
+  @JsonKey(name: 'birthday')
+  String? birthday;
+  @JsonKey(name: 'occupationArea')
+  String? occupationArea;
   @JsonKey(name: 'isPasswordReset')
   bool? isPasswordReset;
   @JsonKey(name: 'type')
@@ -25,8 +43,17 @@ class UserModel {
     this.id,
     this.email,
     this.name,
+    this.password,
+    this.firstName,
+    this.lastName,
+    this.userType,
     this.phone,
+    this.city,
+    this.state,
+    this.cep,
     this.active,
+    this.birthday,
+    this.occupationArea,
     this.isPasswordReset,
     this.type,
     this.accessToken,
@@ -39,6 +66,6 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, email: $email, name: $name, phone: $phone, active: $active, isPasswordReset: $isPasswordReset, type: $type, accessToken: $accessToken)';
+    return 'UserModel(id: $id, email: $email, name: $name, password: $password, firstName: $firstName, lastName: $lastName, userType: $userType, phone: $phone, city: $city, state: $state, cep: $cep, active: $active, birthday: $birthday, isPasswordReset: $isPasswordReset, type: $type, accessToken: $accessToken)';
   }
 }

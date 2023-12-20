@@ -9,8 +9,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 Future<void> main() async {
-  Get.put(AuthController());
   WidgetsFlutterBinding.ensureInitialized();
+  Get.put(AuthController());
   await GetStorage.init();
   runApp(const MyApp());
 }

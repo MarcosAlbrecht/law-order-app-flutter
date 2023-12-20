@@ -23,26 +23,14 @@ class SignInScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: CustomColors.blueColor,
+      backgroundColor: CustomColors.white,
       body: SingleChildScrollView(
         child: SizedBox(
           height: size.height,
           width: size.width,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      "assets/MARCA-DAGUA-PRETA-2.png",
-                      fit: BoxFit.contain,
-                      width: 300,
-                    )
-                  ],
-                ),
-              ),
               //Formulario
               Container(
                 padding: const EdgeInsets.only(
@@ -52,10 +40,8 @@ class SignInScreen extends StatelessWidget {
                   top: 15,
                 ),
                 decoration: BoxDecoration(
-                    color: CustomColors.white,
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(45),
-                    )),
+                  color: CustomColors.white,
+                ),
                 //Campos de email e senha
                 child: Form(
                   key: _formKey,
@@ -64,14 +50,27 @@ class SignInScreen extends StatelessWidget {
                     children: [
                       Image.asset(
                         "assets/SIMBOLO-2.png",
-                        height: 50,
-                        width: 50,
+                        height: 100,
+                        width: 100,
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 100),
+                        child: Divider(
+                          height: 40,
+                        ),
+                      ),
+                      Center(
+                        child: Text(
+                          "Login",
+                          style: TextStyle(
+                            fontSize: CustomFontSizes.fontSize24,
+                          ),
+                        ),
                       ),
                       const Divider(
-                        height: 15,
+                        height: 20,
                         color: Colors.transparent,
                       ),
-
                       CustomTextField(
                         controller: emailController,
                         icon: Icons.email,

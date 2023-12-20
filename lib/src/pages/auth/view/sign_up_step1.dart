@@ -25,12 +25,12 @@ class _SignUpStep1ScreenState extends State<SignUpStep1Screen> {
         toolbarHeight: 80,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(20),
+            bottom: Radius.circular(10),
           ),
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.only(top: 10),
         child: Container(
           height: size.height,
           width: size.width,
@@ -43,7 +43,7 @@ class _SignUpStep1ScreenState extends State<SignUpStep1Screen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                "assets/MARCA-DAGUA.png",
+                "assets/MARCA-DAGUA-1.png",
                 height: 50,
               ),
               const Padding(
@@ -68,6 +68,7 @@ class _SignUpStep1ScreenState extends State<SignUpStep1Screen> {
                   return GestureDetector(
                     onTap: () {
                       controller.isWork.value = true;
+                      controller.user.userType = "user";
                       Get.toNamed(PagesRoutes.signUp);
                     },
                     child: SizedBox(
@@ -102,6 +103,7 @@ class _SignUpStep1ScreenState extends State<SignUpStep1Screen> {
                   return GestureDetector(
                     onTap: () {
                       controller.isWork.value = false;
+                      controller.user.userType = "provider";
                       Get.toNamed(PagesRoutes.signUp);
                     },
                     child: SizedBox(

@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:app_law_order/src/constants/endpoints.dart';
+import 'package:app_law_order/src/models/cep_model.dart';
 import 'package:app_law_order/src/models/user_model.dart';
+import 'package:app_law_order/src/pages/auth/result/cep_result.dart';
 import 'package:app_law_order/src/pages/auth/result/forgot_password_result.dart';
 import 'package:app_law_order/src/pages/auth/result/sign_in_result.dart';
 
@@ -53,5 +55,20 @@ class AuthRepository {
 
     throw Exception(
         'Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
+  }
+
+  Future<CepResult> getCep({required String cep}) async {
+    final result = await httpManager.restRequest(
+      method: HttpMethods.get,
+      url: '${EndPointsViaCep.cep}$cep/json',
+    );
+
+    if (result['cep'] != null) {
+      var cep = result as Map<String, dynamic>;
+      CepModel data = CepModel.fromJson(cep);
+      return CepResult.success(data);
+    } else {
+      return CepResult.error("Cep inválido");
+    }
   }
 }
