@@ -6,6 +6,7 @@ import 'package:app_law_order/src/models/user_model.dart';
 import 'package:app_law_order/src/pages/auth/result/cep_result.dart';
 import 'package:app_law_order/src/pages/auth/result/forgot_password_result.dart';
 import 'package:app_law_order/src/pages/auth/result/sign_in_result.dart';
+import 'package:app_law_order/src/pages/auth/result/sign_up_result.dart';
 
 import 'package:app_law_order/src/services/http_manager.dart';
 import 'package:get/get.dart';
@@ -35,6 +36,25 @@ class AuthRepository {
 
     throw Exception(
         'Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
+  }
+
+  Future<SignUpResult> signUp({required UserModel user}) async {
+    final result = await httpManager.restRequest(
+      method: HttpMethods.post,
+      url: EndPoints.createUser,
+      body: user.toJson(),
+    );
+
+    if (result['message'] == null && result['_id'] != null) {
+      var userData = result as Map<String, dynamic>;
+      UserModel data = UserModel.fromJson(userData);
+      return SignUpResult.success(data);
+    } else if (result['message'] != null && result['statusCode'] == 409) {
+      return SignUpResult.error('Email já cadastrado!');
+    }
+
+    throw Exception(
+        'Ocorreu um erro ao cadastrar os dados. Tente novamente mais tarde!');
   }
 
   Future<ForgotPasswordResult> forgotPassword({required String email}) async {

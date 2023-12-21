@@ -1,6 +1,9 @@
 import 'package:app_law_order/src/pages/auth/view/sign_in_screen.dart';
 import 'package:app_law_order/src/pages/auth/view/sign_up.dart';
 import 'package:app_law_order/src/pages/auth/view/sign_up_step1.dart';
+import 'package:app_law_order/src/pages/base/base_screen.dart';
+import 'package:app_law_order/src/pages/base/binding/navigation_binding.dart';
+import 'package:app_law_order/src/pages/home/binding/home_binding.dart';
 import 'package:get/get.dart';
 
 abstract class AppPages {
@@ -16,6 +19,14 @@ abstract class AppPages {
     GetPage(
       name: PagesRoutes.signUp,
       page: () => SignUpScreen(),
+    ),
+    GetPage(
+      page: () => const BaseScreen(),
+      name: PagesRoutes.baseRoute,
+      bindings: [
+        NavigationBinding(),
+        HomeBinding(),
+      ],
     ),
   ];
 }

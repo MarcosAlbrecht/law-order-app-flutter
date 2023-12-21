@@ -3,6 +3,7 @@ import 'package:app_law_order/src/constants/storage_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
 
 class UtilServices {
   final box = GetStorage();
@@ -48,5 +49,16 @@ class UtilServices {
     await box.remove(StorageKeys.email);
     await box.remove(StorageKeys.password);
     await box.remove(StorageKeys.token);
+  }
+
+  Future<String> convertBirthday(String date) async {
+    try {
+      DateTime data = DateTime.parse(date);
+
+      String formattedDate = DateFormat('dd/MM/yyyy').format(data);
+      return formattedDate;
+    } catch (e) {
+      return date;
+    }
   }
 }

@@ -77,7 +77,23 @@ class AuthController extends GetxController {
       return;
     }
 
+    //formata a data para modelo 10/10/1999
+    user.birthday = await utilServices.convertBirthday(user.birthday!);
+
     //chamar a api para efetuar cadastro
+    var result = await authRepository.signUp(user: user);
+
+    result.when(
+      success: (data) {
+        utilServices.showToast(message: "Cadastro realizado com sucesso!");
+        var password = user.password;
+        user = data;
+        saveTokenAndProceedToBase(user.email!, password!, user.accessToken!);
+      },
+      error: (message) {
+        utilServices.showToast(message: message, isError: true);
+      },
+    );
   }
 
   //envia email de recuperaçao de senha
@@ -98,7 +114,7 @@ class AuthController extends GetxController {
       token: token,
     );
     //ir para a tela base
-    //Get.offAllNamed(PagesRoutes.baseRoute);
+    Get.offAllNamed(PagesRoutes.baseRoute);
   }
 
   //valida o cep digitado
@@ -114,7 +130,7 @@ class AuthController extends GetxController {
       },
       error: (message) {
         isValidCep = false;
-        utilServices.showToast(message: message);
+        utilServices.showToast(message: message, isError: true);
       },
     );
   }
