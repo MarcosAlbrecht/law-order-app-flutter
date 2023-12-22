@@ -1,3 +1,4 @@
+import 'package:app_law_order/src/services/util_services.dart';
 import 'package:dio/dio.dart';
 
 abstract class HttpMethods {
@@ -14,19 +15,29 @@ class HttpManager {
     required String method,
     Map? headers,
     Map? body,
+    Map<String, dynamic>? queryParams,
   }) async {
     // Headers da requisição
+    final utilServices = UtilServices();
+    final token = await utilServices.getToken();
+
     final defaultHeaders = headers?.cast<String, String>() ?? {}
       ..addAll({
         'content-type': 'application/json',
         'accept': 'application/json',
       });
 
+    //enviar o token do user poi é obrigatorio para fazer as chamadas da API
+    if (token != null && defaultHeaders['Authorization'] == null) {
+      defaultHeaders['Authorization'] = 'Bearer $token';
+    }
+
     Dio dio = Dio();
 
     try {
       Response response = await dio.request(
         url,
+        queryParameters: queryParams,
         options: Options(
           method: method,
           headers: defaultHeaders,

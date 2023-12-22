@@ -4,6 +4,8 @@ import 'package:app_law_order/src/pages/auth/view/sign_up_step1.dart';
 import 'package:app_law_order/src/pages/base/base_screen.dart';
 import 'package:app_law_order/src/pages/base/binding/navigation_binding.dart';
 import 'package:app_law_order/src/pages/home/binding/home_binding.dart';
+import 'package:app_law_order/src/pages/home/controller/home_controller.dart';
+import 'package:app_law_order/src/pages/profile/profile_tab.dart';
 import 'package:get/get.dart';
 
 abstract class AppPages {
@@ -21,11 +23,15 @@ abstract class AppPages {
       page: () => SignUpScreen(),
     ),
     GetPage(
+      name: PagesRoutes.profile,
+      page: () => const ProfileTab(),
+    ),
+    GetPage(
       page: () => const BaseScreen(),
       name: PagesRoutes.baseRoute,
       bindings: [
-        NavigationBinding(),
         HomeBinding(),
+        NavigationBinding(),
       ],
     ),
   ];
@@ -36,4 +42,5 @@ abstract class PagesRoutes {
   static const String signInRoute = '/signin';
   static const String signUpStep1 = '/signupstep1';
   static const String signUp = '/signup';
+  static const String profile = '/profile';
 }

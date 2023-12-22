@@ -39,6 +39,8 @@ class UserModel {
   int? type;
   @JsonKey(name: 'accessToken')
   String? accessToken;
+  @JsonKey(name: 'profilePicture')
+  Map<String, dynamic>? profilePicture;
   UserModel({
     this.id,
     this.email,
@@ -57,6 +59,7 @@ class UserModel {
     this.isPasswordReset,
     this.type,
     this.accessToken,
+    this.profilePicture,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
@@ -66,6 +69,6 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, email: $email, name: $name, password: $password, firstName: $firstName, lastName: $lastName, userType: $userType, phone: $phone, city: $city, state: $state, cep: $cep, active: $active, birthday: $birthday, isPasswordReset: $isPasswordReset, type: $type, accessToken: $accessToken)';
+    return 'UserModel(id: $id, email: $email, name: $name, password: $password, firstName: $firstName, lastName: $lastName, userType: $userType, phone: $phone, city: $city, state: $state, cep: $cep, active: $active, birthday: $birthday, occupationArea: $occupationArea, isPasswordReset: $isPasswordReset, type: $type, accessToken: $accessToken, profilePicture: $profilePicture)';
   }
 }

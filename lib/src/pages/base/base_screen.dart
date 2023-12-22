@@ -1,5 +1,6 @@
 import 'package:app_law_order/src/pages/base/controller/navigation_controller.dart';
 import 'package:app_law_order/src/pages/home/view/home_tab.dart';
+import 'package:app_law_order/src/pages/profile/profile_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -21,6 +22,7 @@ class _BaseScreenState extends State<BaseScreen> {
         controller: navigationController.pageController,
         children: const [
           HomeTab(),
+          ProfileTab(),
         ],
       ),
       bottomNavigationBar: Obx(() => BottomNavigationBar(
@@ -39,14 +41,6 @@ class _BaseScreenState extends State<BaseScreen> {
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.shopping_cart_outlined),
-                label: 'Carrinho',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.list),
-                label: 'Pedidos',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person_outline),
                 label: 'Perfil',
               ),
             ],

@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 
 abstract class NavigationTabs {
   static const int home = 0;
-  static const int cart = 1;
-  static const int orders = 2;
-  static const int profile = 3;
+  static const int perfil = 1;
+  static const int portfolio = 2;
+  static const int conversas = 3;
 }
 
 class NavigationController extends GetxController {
