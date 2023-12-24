@@ -29,6 +29,7 @@ class _ProviderTileState extends State<ProviderTile> {
               //Get.toNamed(PagesRoutes.productRoute, arguments: widget.item);
             },
             child: Card(
+              color: CustomColors.cyanColor,
               elevation: 6,
               shadowColor: Colors.grey.shade300,
               shape: RoundedRectangleBorder(
@@ -50,7 +51,7 @@ class _ProviderTileState extends State<ProviderTile> {
                               borderRadius: BorderRadius.circular(50),
                               child: widget.item.profilePicture != null
                                   ? Image.network(
-                                      widget.item.profilePicture!['url'],
+                                      widget.item.profilePicture!.url!,
                                       height: 70,
                                       width: 70,
                                     )
@@ -108,25 +109,53 @@ class _ProviderTileState extends State<ProviderTile> {
                               const Divider(
                                 height: 20,
                               ),
-                              Text(
-                                '${widget.item.city},${widget.item.state}',
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  //fontWeight: FontWeight.bold,
-                                  fontSize: CustomFontSizes.fontSize16,
-                                  color: Colors.grey.shade600,
-                                ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.place_outlined,
+                                    size: 16,
+                                    color: CustomColors.blueColor,
+                                  ),
+                                  const VerticalDivider(
+                                    width: 10,
+                                    color: Colors.transparent,
+                                  ),
+                                  Text(
+                                    '${widget.item.city},${widget.item.state}',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      //fontWeight: FontWeight.bold,
+                                      fontSize: CustomFontSizes.fontSize16,
+                                      color: Colors.grey.shade600,
+                                    ),
+                                  ),
+                                ],
                               ),
                               const Divider(
                                 height: 5,
                                 color: Colors.transparent,
                               ),
-                              Text(
-                                '${widget.item.occupationArea}',
-                                style: TextStyle(
-                                  color: Colors.grey.shade600,
-                                  fontSize: CustomFontSizes.fontSize16,
-                                ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.wallet_giftcard_outlined,
+                                    size: 16,
+                                    color: CustomColors.blueColor,
+                                  ),
+                                  const VerticalDivider(
+                                    width: 10,
+                                    color: Colors.transparent,
+                                  ),
+                                  Text(
+                                    '${widget.item.occupationArea}',
+                                    style: TextStyle(
+                                      color: Colors.grey.shade600,
+                                      fontSize: CustomFontSizes.fontSize16,
+                                    ),
+                                  ),
+                                ],
                               ),
                               const Divider(
                                 height: 10,
@@ -155,7 +184,7 @@ class _ProviderTileState extends State<ProviderTile> {
                                           ),
                                         )),
                                   ),
-                                  VerticalDivider(
+                                  const VerticalDivider(
                                     width: 5,
                                   ),
                                   SizedBox(

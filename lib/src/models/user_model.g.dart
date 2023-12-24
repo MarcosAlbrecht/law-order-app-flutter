@@ -24,7 +24,13 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       isPasswordReset: json['isPasswordReset'] as bool?,
       type: json['type'] as int?,
       accessToken: json['accessToken'] as String?,
-      profilePicture: json['profilePicture'] as Map<String, dynamic>?,
+      profilePicture: json['profilePicture'] == null
+          ? null
+          : PictureModel.fromJson(
+              json['profilePicture'] as Map<String, dynamic>),
+      portfolioPictures: (json['portfolioPictures'] as List<dynamic>?)
+          ?.map((e) => PictureModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
@@ -46,4 +52,5 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'type': instance.type,
       'accessToken': instance.accessToken,
       'profilePicture': instance.profilePicture,
+      'portfolioPictures': instance.portfolioPictures,
     };

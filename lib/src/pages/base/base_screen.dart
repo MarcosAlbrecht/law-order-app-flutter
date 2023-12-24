@@ -1,3 +1,4 @@
+import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/pages/base/controller/navigation_controller.dart';
 import 'package:app_law_order/src/pages/home/view/home_tab.dart';
 import 'package:app_law_order/src/pages/profile/profile_tab.dart';
@@ -25,26 +26,32 @@ class _BaseScreenState extends State<BaseScreen> {
           ProfileTab(),
         ],
       ),
-      bottomNavigationBar: Obx(() => BottomNavigationBar(
-            onTap: (index) {
-              navigationController.navigatePageView(index);
-            },
-            currentIndex: navigationController.currentIndex,
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.green,
-            selectedItemColor: Colors.white,
-            unselectedItemColor: Colors.black,
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home_outlined),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_cart_outlined),
-                label: 'Perfil',
-              ),
-            ],
-          )),
+      bottomNavigationBar: Obx(
+        () => BottomNavigationBar(
+          onTap: (index) {
+            navigationController.navigatePageView(index);
+          },
+          currentIndex: navigationController.currentIndex,
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: CustomColors.blueDarkColor,
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.cyan.shade700,
+          items: [
+            BottomNavigationBarItem(
+              icon: navigationController.currentIndex != 0
+                  ? const Icon(Icons.home_outlined)
+                  : const Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: navigationController.currentIndex != 1
+                  ? const Icon(Icons.person_2_outlined)
+                  : const Icon(Icons.person_2),
+              label: 'Perfil',
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

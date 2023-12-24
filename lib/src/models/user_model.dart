@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:app_law_order/src/models/picture_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user_model.g.dart';
@@ -40,7 +41,9 @@ class UserModel {
   @JsonKey(name: 'accessToken')
   String? accessToken;
   @JsonKey(name: 'profilePicture')
-  Map<String, dynamic>? profilePicture;
+  PictureModel? profilePicture;
+  @JsonKey(name: 'portfolioPictures')
+  List<PictureModel>? portfolioPictures;
   UserModel({
     this.id,
     this.email,
@@ -60,6 +63,7 @@ class UserModel {
     this.type,
     this.accessToken,
     this.profilePicture,
+    this.portfolioPictures,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
@@ -69,6 +73,6 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, email: $email, name: $name, password: $password, firstName: $firstName, lastName: $lastName, userType: $userType, phone: $phone, city: $city, state: $state, cep: $cep, active: $active, birthday: $birthday, occupationArea: $occupationArea, isPasswordReset: $isPasswordReset, type: $type, accessToken: $accessToken, profilePicture: $profilePicture)';
+    return 'UserModel(id: $id, email: $email, name: $name, password: $password, firstName: $firstName, lastName: $lastName, userType: $userType, phone: $phone, city: $city, state: $state, cep: $cep, active: $active, birthday: $birthday, occupationArea: $occupationArea, isPasswordReset: $isPasswordReset, type: $type, accessToken: $accessToken, profilePicture: $profilePicture, portfolioPictures: $portfolioPictures)';
   }
 }

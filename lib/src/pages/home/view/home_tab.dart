@@ -21,27 +21,44 @@ class _HomeTabState extends State<HomeTab> {
         child: Container(
           height: size.height,
           width: size.width,
-          padding: EdgeInsets.only(top: 10),
+          padding: const EdgeInsets.only(top: 10),
           color: CustomColors.white,
-          child: GetBuilder<HomeController>(
-            builder: (controller) {
-              return ListView.builder(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                physics: const BouncingScrollPhysics(),
-                itemCount: controller.allUsers.length,
-                itemBuilder: (_, index) {
-                  if (((index + 1) == controller.allUsers.length) &&
-                      (!controller.isLastPage)) {
-                    controller.loadMoreProducts();
-                  }
-                  return ProviderTile(
-                    //height: 100,
-                    //child: Text("OLA" + index.toString()),
-                    item: controller.allUsers[index],
-                  );
-                },
-              );
-            },
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Busque por profissionais na Prestadio. Utilize os filtros para encontrar o profissional mais próximo de você 😁",
+                  textAlign: TextAlign.left,
+                ),
+                const Divider(
+                  height: 20,
+                ),
+                Expanded(
+                  child: GetBuilder<HomeController>(
+                    builder: (controller) {
+                      return ListView.builder(
+                        //padding: const EdgeInsets.fromLTRB(10, 10, 16, 10),
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: controller.allUsers.length,
+                        itemBuilder: (_, index) {
+                          if (((index + 1) == controller.allUsers.length) &&
+                              (!controller.isLastPage)) {
+                            controller.loadMoreProducts();
+                          }
+                          return ProviderTile(
+                            //height: 100,
+                            //child: Text("OLA" + index.toString()),
+                            item: controller.allUsers[index],
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
