@@ -1,6 +1,8 @@
-import 'package:app_law_order/src/config/custom_colors.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'package:app_law_order/src/config/custom_colors.dart';
 
 class CustomTextField extends StatefulWidget {
   final IconData icon;
@@ -15,6 +17,7 @@ class CustomTextField extends StatefulWidget {
   final String? Function(String?)? validator;
   final void Function(String?)? onSaved;
   final void Function(String?)? onChanged;
+  final int? maxLength;
 
   final TextEditingController? controller;
 
@@ -26,12 +29,13 @@ class CustomTextField extends StatefulWidget {
     this.inputFormatters,
     this.initialValue,
     this.readOnly = false,
+    this.formFieldKey,
     this.textInputType = TextInputType.text,
     this.validator,
-    this.controller,
     this.onSaved,
     this.onChanged,
-    this.formFieldKey,
+    this.maxLength,
+    this.controller,
   }) : super(key: key);
 
   @override
@@ -63,6 +67,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         validator: widget.validator,
         onSaved: widget.onSaved,
         onChanged: widget.onChanged,
+        maxLength: widget.maxLength,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),

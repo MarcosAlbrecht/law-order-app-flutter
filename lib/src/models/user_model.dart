@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:app_law_order/src/models/picture_model.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+import 'package:app_law_order/src/models/picture_model.dart';
 
 part 'user_model.g.dart';
 
@@ -28,6 +29,8 @@ class UserModel {
   String? state;
   @JsonKey(name: 'cep')
   String? cep;
+  @JsonKey(name: 'cpf')
+  String? cpf;
   @JsonKey(name: 'active')
   bool? active;
   @JsonKey(name: 'birthday')
@@ -56,6 +59,7 @@ class UserModel {
     this.city,
     this.state,
     this.cep,
+    this.cpf,
     this.active,
     this.birthday,
     this.occupationArea,
@@ -73,6 +77,6 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, email: $email, name: $name, password: $password, firstName: $firstName, lastName: $lastName, userType: $userType, phone: $phone, city: $city, state: $state, cep: $cep, active: $active, birthday: $birthday, occupationArea: $occupationArea, isPasswordReset: $isPasswordReset, type: $type, accessToken: $accessToken, profilePicture: $profilePicture, portfolioPictures: $portfolioPictures)';
+    return 'UserModel(id: $id, email: $email, name: $name, password: $password, firstName: $firstName, lastName: $lastName, userType: $userType, phone: $phone, city: $city, state: $state, cep: $cep, cpf: $cpf, active: $active, birthday: $birthday, occupationArea: $occupationArea, isPasswordReset: $isPasswordReset, type: $type, accessToken: $accessToken, profilePicture: $profilePicture, portfolioPictures: $portfolioPictures)';
   }
 }

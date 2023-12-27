@@ -57,6 +57,28 @@ class AuthRepository {
         'Ocorreu um erro ao cadastrar os dados. Tente novamente mais tarde!');
   }
 
+  Future<SignUpResult> editProfile({required UserModel user}) async {
+    final result = await httpManager.restRequest(
+      method: HttpMethods.patch,
+      url: '${EndPoints.updateUser}/${user.id!}',
+      body: {
+        'firstName': user.firstName,
+        'lastName': user.lastName,
+        'cpf': user.cpf,
+        'cep': user.cep,
+      },
+    );
+
+    if (result['_id'] != null) {
+      var userData = result as Map<String, dynamic>;
+      UserModel data = UserModel.fromJson(userData);
+      return SignUpResult.success(data);
+    } else {
+      return SignUpResult.error(
+          'Ocorreu um erro ao editar os dados. Tente novamente mais tarde!');
+    }
+  }
+
   Future<ForgotPasswordResult> forgotPassword({required String email}) async {
     final result = await httpManager.restRequest(
       method: HttpMethods.post,

@@ -1,7 +1,7 @@
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/pages/base/controller/navigation_controller.dart';
 import 'package:app_law_order/src/pages/home/view/home_tab.dart';
-import 'package:app_law_order/src/pages/profile/profile_tab.dart';
+import 'package:app_law_order/src/pages/profile/view/profile_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

@@ -1,3 +1,4 @@
+import 'package:app_law_order/src/models/occupation_areas_model.dart';
 import 'package:get/get.dart';
 
 String? emailValidator(String? email) {
@@ -57,7 +58,7 @@ String? cpfValidator(String? cpf) {
 }
 
 String? cepValidator(String? cep) {
-  if (cep == null || cep.isEmpty || cep.length != 9) {
+  if (cep == null || cep.isEmpty || cep.length != 8) {
     return 'Digite seu CEP';
   }
 
@@ -79,4 +80,12 @@ String? nascimentoValidator(DateTime? dateTime) {
   }
 
   return null;
+}
+
+String? occupationAreaValidator(OccupationAreasModel? value) {
+  if (value == null) {
+    return 'Por favor, selecione uma área de atuação';
+  }
+  // Outras validações conforme necessário
+  return null; // Retorna null se estiver tudo certo
 }

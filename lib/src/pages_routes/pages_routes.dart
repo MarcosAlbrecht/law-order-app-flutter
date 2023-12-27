@@ -6,7 +6,8 @@ import 'package:app_law_order/src/pages/base/binding/navigation_binding.dart';
 import 'package:app_law_order/src/pages/home/binding/home_binding.dart';
 import 'package:app_law_order/src/pages/home/controller/home_controller.dart';
 import 'package:app_law_order/src/pages/profile/binding/profile_binding.dart';
-import 'package:app_law_order/src/pages/profile/profile_tab.dart';
+import 'package:app_law_order/src/pages/profile/view/components/profile_screen.dart';
+import 'package:app_law_order/src/pages/profile/view/profile_tab.dart';
 import 'package:get/get.dart';
 
 abstract class AppPages {
@@ -24,15 +25,19 @@ abstract class AppPages {
       page: () => SignUpScreen(),
     ),
     GetPage(
-      name: PagesRoutes.profile,
+      name: PagesRoutes.profileTab,
       page: () => const ProfileTab(),
+    ),
+    GetPage(
+      name: PagesRoutes.profileScreen,
+      page: () => const ProfileScreen(),
     ),
     GetPage(
       page: () => const BaseScreen(),
       name: PagesRoutes.baseRoute,
       bindings: [
-        HomeBinding(),
         NavigationBinding(),
+        HomeBinding(),
         ProfileBinding(),
       ],
     ),
@@ -44,5 +49,6 @@ abstract class PagesRoutes {
   static const String signInRoute = '/signin';
   static const String signUpStep1 = '/signupstep1';
   static const String signUp = '/signup';
-  static const String profile = '/profile';
+  static const String profileTab = '/profileTab';
+  static const String profileScreen = '/profileScreen';
 }

@@ -1,0 +1,228 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:app_law_order/src/pages_routes/pages_routes.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+
+import 'package:app_law_order/src/config/custom_colors.dart';
+import 'package:app_law_order/src/pages/profile/controller/profile_controller.dart';
+
+class ProfileTab extends StatefulWidget {
+  const ProfileTab({Key? key}) : super(key: key);
+
+  @override
+  _ProfileTabState createState() => _ProfileTabState();
+}
+
+class _ProfileTabState extends State<ProfileTab> {
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    return SafeArea(
+      child: Container(
+        height: size.height,
+        width: size.width,
+        color: CustomColors.backGround,
+        child: GetBuilder<ProfileController>(
+          builder: (controller) {
+            return Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(top: 30, bottom: 10),
+                  child: Column(
+                    children: [
+                      Stack(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(3),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                width: 4,
+                                color: CustomColors.blueColor,
+                              ),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: controller
+                                          .authController.user.profilePicture !=
+                                      null
+                                  ? Image.network(
+                                      controller.authController.user
+                                          .profilePicture!.url!,
+                                      height: 160,
+                                      width: 160,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.asset(
+                                      "assets/ICONPEOPLE.png",
+                                      height: 160,
+                                      width: 160,
+                                    ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Divider(
+                        height: 20,
+                        color: Colors.transparent,
+                      ),
+                      Text(
+                        '${controller.authController.user.firstName} ${controller.authController.user.lastName}',
+                        style: TextStyle(
+                            color: CustomColors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: CustomFontSizes.fontSize20),
+                      ),
+                      const Divider(
+                        height: 5,
+                        color: Colors.transparent,
+                      ),
+                      Text(
+                        '${controller.authController.user.email}',
+                        style: TextStyle(
+                            color: CustomColors.black.withAlpha(100),
+                            fontSize: CustomFontSizes.fontSize18),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(30),
+                          topRight: Radius.circular(30),
+                        ),
+                        color: CustomColors.white,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          child: Column(
+                            children: [
+                              OptionInfo(
+                                text: " Informações Pessoais",
+                                icon: Icons.settings,
+                                onTap: () {
+                                  Get.toNamed(PagesRoutes.profileScreen);
+                                },
+                              ),
+                              const Divider(
+                                height: 5,
+                                color: Colors.transparent,
+                              ),
+                              OptionInfo(
+                                text: " Portfólio",
+                                icon: Icons.person_2_outlined,
+                                onTap: () {},
+                              ),
+                              const Divider(
+                                height: 5,
+                                color: Colors.transparent,
+                              ),
+                              OptionInfo(
+                                text: " Notificações",
+                                icon: Icons.notifications_outlined,
+                                onTap: () {},
+                              ),
+                              const Divider(
+                                height: 5,
+                                color: Colors.transparent,
+                              ),
+                              OptionInfo(
+                                text: " Seguidores",
+                                icon: Icons.people_alt_outlined,
+                                onTap: () {},
+                              ),
+                              const Divider(
+                                height: 5,
+                                color: Colors.transparent,
+                              ),
+                              OptionInfo(
+                                text: " Seguindo",
+                                icon: Icons.people_alt_outlined,
+                                onTap: () {},
+                              ),
+                              const Divider(
+                                height: 5,
+                                color: Colors.transparent,
+                              ),
+                              OptionInfo(
+                                text: " Sair",
+                                icon: Icons.power_settings_new_outlined,
+                                onTap: () {},
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class OptionInfo extends StatelessWidget {
+  final String text;
+  final IconData icon;
+  final Function() onTap;
+  const OptionInfo({
+    Key? key,
+    required this.text,
+    required this.icon,
+    required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: CustomColors.cyanColor,
+        ),
+        height: 50,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  icon,
+                  color: CustomColors.blueDark2Color,
+                ),
+                const VerticalDivider(
+                  width: 10,
+                  color: Colors.transparent,
+                ),
+                Text(
+                  text,
+                  style: TextStyle(fontSize: CustomFontSizes.fontSize18),
+                ),
+              ],
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: CustomColors.blueDark2Color,
+              size: 20,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

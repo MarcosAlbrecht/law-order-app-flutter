@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       title: 'Prestadio',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: CustomColors.blueColor,
+        scaffoldBackgroundColor: CustomColors.backGround,
         //colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
         textTheme: GoogleFonts.latoTextTheme(textTheme).copyWith(

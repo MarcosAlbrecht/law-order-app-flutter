@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 abstract class CustomColors {
   static Color backGround = const Color(0xffe2e8f0);
-  static Color blueColor = const Color(0xff00ccff);
+  static Color blueColor = const Color(0xff6ae0f2);
   static Color blueDarkColor = const Color(0xff0f172a);
   static Color blueDark2Color = const Color(0xff00ccff);
   static Color cyanColor = const Color(0xfff1f5f9);

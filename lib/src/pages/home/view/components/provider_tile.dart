@@ -29,7 +29,7 @@ class _ProviderTileState extends State<ProviderTile> {
               //Get.toNamed(PagesRoutes.productRoute, arguments: widget.item);
             },
             child: Card(
-              color: CustomColors.cyanColor,
+              //color: CustomColors.backGround,
               elevation: 6,
               shadowColor: Colors.grey.shade300,
               shape: RoundedRectangleBorder(
@@ -54,11 +54,13 @@ class _ProviderTileState extends State<ProviderTile> {
                                       widget.item.profilePicture!.url!,
                                       height: 70,
                                       width: 70,
+                                      fit: BoxFit.cover,
                                     )
                                   : Image.asset(
                                       "assets/ICONPEOPLE.png",
                                       height: 70,
                                       width: 70,
+                                      fit: BoxFit.cover,
                                     ),
                             ),
                             const Divider(

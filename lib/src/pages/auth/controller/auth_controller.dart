@@ -17,7 +17,7 @@ class AuthController extends GetxController {
   List<OccupationAreasModel> occupationsAreas = occupationAreas;
 
   RxBool isLoading = false.obs;
-  RxBool isSaving = false.obs;
+  bool isSaving = false;
   RxBool isWork = false.obs;
   bool isValidCep = false;
 
@@ -32,7 +32,12 @@ class AuthController extends GetxController {
   }
 
   void setSaving(bool value) {
-    isSaving.value = value;
+    isSaving = value;
+    update();
+  }
+
+  void setIsLoading(bool value) {
+    isLoading.value = value;
     update();
   }
 
@@ -41,17 +46,20 @@ class AuthController extends GetxController {
     String? password = await utilServices.getPasswordlLocalData();
     String? token = await utilServices.getToken();
 
-    if (email.isNotEmpty) {
+    if (email.isNotEmpty && password.isNotEmpty) {
       signIn(email: email, password: password);
     }
   }
 
   Future<void> signIn({required String email, required String password}) async {
+    setIsLoading(true);
     var result = await authRepository.signIn(email: email, password: password);
+    setIsLoading(false);
 
     result.when(
       success: (data) {
         user = data;
+        user.password = password;
         saveTokenAndProceedToBase(user.email!, password, user.accessToken!);
       },
       error: (message) async {
@@ -73,22 +81,56 @@ class AuthController extends GetxController {
 
     //verifica se o cep foi validado
     if (!isValidCep) {
-      utilServices.showToast(message: "A senhas não conferem!");
+      utilServices.showToast(message: "CEP inválido!");
       return;
     }
 
     //formata a data para modelo 10/10/1999
     user.birthday = await utilServices.convertBirthday(user.birthday!);
 
+    setSaving(true);
+
     //chamar a api para efetuar cadastro
     var result = await authRepository.signUp(user: user);
 
     result.when(
-      success: (data) {
+      success: (data) async {
         utilServices.showToast(message: "Cadastro realizado com sucesso!");
         var password = user.password;
         user = data;
-        saveTokenAndProceedToBase(user.email!, password!, user.accessToken!);
+        //realizar o login e salva os dados localmente
+        await signIn(email: user.email!, password: password!);
+        //saveTokenAndProceedToBase(user.email!, password!, user.accessToken!);
+      },
+      error: (message) {
+        utilServices.showToast(message: message, isError: true);
+      },
+    );
+
+    setSaving(false);
+  }
+
+  Future<void> handleProfileEdit() async {
+    //verifica se o cep foi validado
+
+    if (!isValidCep) {
+      utilServices.showToast(message: "CEP inválido");
+      return;
+    }
+
+    setSaving(true);
+
+    //chamar a api para editar perfil
+    var result = await authRepository.editProfile(user: user);
+
+    setSaving(false);
+
+    result.when(
+      success: (data) {
+        utilServices.showToast(message: "Cadastro editado com sucesso!");
+        var password = user.password;
+        user = data;
+        //saveTokenAndProceedToBase(user.email!, password!, user.accessToken!);
       },
       error: (message) {
         utilServices.showToast(message: message, isError: true);

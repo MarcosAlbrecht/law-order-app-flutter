@@ -24,13 +24,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final utilServices = UtilServices();
   final _formKey = GlobalKey<FormState>();
 
-  final phoneFormatter =
-      MaskTextInputFormatter(mask: '(##) #####-####', filter: {
-    '#': RegExp(r'[0-9]'),
-  });
-  final cepFormatter = MaskTextInputFormatter(mask: '#####-###', filter: {
-    '#': RegExp(r'[0-9]'),
-  });
+  final phoneFormatter = MaskTextInputFormatter(
+    mask: '(##) #####-####',
+    filter: {
+      '#': RegExp(r'[0-9]'),
+    },
+  );
+  final cepFormatter = MaskTextInputFormatter(
+    mask: '########',
+    filter: {
+      '#': RegExp(r'[0-9]'),
+    },
+  );
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -87,7 +93,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         CustomTextField(
                           icon: Icons.person,
-                          label: "Segundo Nome",
+                          label: "Último Nome",
                           validator: nameValidator,
                           onSaved: (value) {
                             authController.user.lastName = value;
@@ -122,12 +128,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         CustomTextField(
                           icon: Icons.email_outlined,
-                          label: "cep",
+                          label: "CEP",
                           textInputType: TextInputType.number,
+                          //maxLength: 8,
                           inputFormatters: [cepFormatter],
                           validator: cepValidator,
                           onChanged: (value) async {
-                            if (value != null && value.length == 9) {
+                            if (value != null && value.length == 8) {
                               await authController.handleValidateCep(
                                   cep1: value);
                             }
@@ -156,6 +163,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               onSaved: (data) {
                                 authController.user.occupationArea = data?.area;
                               },
+                              validator: occupationAreaValidator,
                               decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
@@ -226,7 +234,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                               "Verifique todos os campos!");
                                     }
                                   },
-                            child: authController.isLoading.value
+                            child: authController.isSaving
                                 ? CircularProgressIndicator(
                                     color: CustomColors.white,
                                   )
