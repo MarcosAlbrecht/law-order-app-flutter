@@ -28,6 +28,12 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Para personalizar seu perfil com imagens, o aplicativo precisa de acesso à sua biblioteca de fotos.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Para personalizar seu perfil com imagens, o aplicativo precisa de acesso à sua câmera.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Para gravar áudio ou fazer chamadas de voz, o aplicativo precisa de acesso ao microfone.</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
