@@ -47,4 +47,38 @@ class HomeRepository {
       return FollowsResult.error("Não foi encontrado dados!");
     }
   }
+
+  Future<FollowsResult<FollowsModel>> setFollow(
+      {required String userId}) async {
+    final result = await httpManager.restRequest(
+      method: HttpMethods.post,
+      url: '${EndPoints.setFollow}$userId',
+    );
+
+    if (result.isEmpty) {
+      List<FollowsModel> data = [];
+
+      return FollowsResult.success(data);
+    } else {
+      return FollowsResult.error("Não foi encontrado dados!");
+    }
+  }
+
+  Future<FollowsResult<FollowsModel>> setUnFollow(
+      {required String userId}) async {
+    final result = await httpManager.restRequest(
+      method: HttpMethods.delete,
+      url: '${EndPoints.setUnFollow}$userId',
+    );
+
+    if (result.isEmpty) {
+      List<FollowsModel> data = [];
+
+      return FollowsResult.success(data);
+    } else if (result['statusCode'] == 403) {
+      return FollowsResult.error("Já curtiu este usuário");
+    } else {
+      return FollowsResult.error("Ocorreu um erro inesperado");
+    }
+  }
 }

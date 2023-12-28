@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:app_law_order/src/pages/home/controller/follow_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:get/get.dart';
@@ -8,14 +9,14 @@ import 'package:app_law_order/src/models/follows_model.dart';
 import 'package:app_law_order/src/models/user_model.dart';
 
 class ProviderTile extends StatefulWidget {
+  final UserModel item;
+
   const ProviderTile({
     Key? key,
     required this.item,
-    this.follow,
   }) : super(key: key);
 
-  final UserModel item;
-  final FollowsModel? follow;
+  //final FollowsModel? follow;
 
   @override
   _ProviderTileState createState() => _ProviderTileState();
@@ -148,21 +149,30 @@ class _ProviderTileState extends State<ProviderTile> {
                                       ),
                                     ),
                                   ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      print(widget.follow);
+                                  GetBuilder<FollowController>(
+                                    init: FollowController(user: widget.item),
+                                    global: false,
+                                    builder: (controller) {
+                                      return GestureDetector(
+                                        onTap: () async {
+                                          print("clicou no follow");
+                                          await controller.handleFollow();
+                                        },
+                                        child: controller.followed == null
+                                            ? Icon(
+                                                FontAwesome.user_plus,
+                                                size: 18,
+                                                color:
+                                                    CustomColors.blueDark2Color,
+                                              )
+                                            : Icon(
+                                                FontAwesome.user_times,
+                                                size: 18,
+                                                color:
+                                                    CustomColors.blueDarkColor,
+                                              ),
+                                      );
                                     },
-                                    child: widget.follow == null
-                                        ? Icon(
-                                            FontAwesome.user_plus,
-                                            size: 18,
-                                            color: CustomColors.blueDark2Color,
-                                          )
-                                        : Icon(
-                                            FontAwesome.user_times,
-                                            size: 18,
-                                            color: CustomColors.blueDarkColor,
-                                          ),
                                   ),
                                 ],
                               ),

@@ -88,6 +88,19 @@ class HomeController extends GetxController {
     );
   }
 
+  Future<void> handleFollow(
+      {required FollowsModel? follow, required UserModel user}) async {
+    if (follow == null) {
+      //adicionar follow
+      await homeRepository.setFollow(userId: user.id!);
+      await loadFollows();
+    } else {
+      //remover follow
+      await homeRepository.setUnFollow(userId: user.id!);
+      follows.removeWhere((follow) => follow.followedId == user.id);
+    }
+  }
+
   void loadMoreProducts() {
     pagination = pagination + 10;
     loadAllUsers(canLoad: false);
