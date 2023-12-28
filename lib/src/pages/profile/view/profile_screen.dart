@@ -29,7 +29,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     },
   );
   final cepFormatter = MaskTextInputFormatter(
-    mask: '#####-###',
+    mask: '########',
     filter: {
       '#': RegExp(r'[0-9]'),
     },
@@ -102,6 +102,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ? Image.network(
                                           controller.authController.user
                                               .profilePicture!.url!,
+                                          loadingBuilder: (BuildContext context,
+                                              Widget child,
+                                              ImageChunkEvent?
+                                                  loadingProgress) {
+                                            if (loadingProgress == null) {
+                                              return child;
+                                            } else {
+                                              // Exibir um ícone de carregamento enquanto a imagem está sendo carregada
+                                              return Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: CustomColors
+                                                      .blueDark2Color,
+                                                ),
+                                              );
+                                            }
+                                          },
+                                          errorBuilder: (BuildContext context,
+                                              Object exception,
+                                              StackTrace? stackTrace) {
+                                            return const Icon(Icons.error);
+                                          },
                                           height: 160,
                                           width: 160,
                                           fit: BoxFit.cover,
@@ -214,7 +236,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     initialValue:
                                         controller.authController.user.cep,
                                     onChanged: (value) async {
-                                      if (value != null && value.length == 9) {
+                                      if (value != null && value.length == 8) {
                                         await controller.authController
                                             .handleValidateCep(cep1: value);
                                       }

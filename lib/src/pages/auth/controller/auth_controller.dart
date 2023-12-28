@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:app_law_order/src/config/app_data.dart';
 import 'package:app_law_order/src/constants/storage_keys.dart';
 import 'package:app_law_order/src/models/occupation_areas_model.dart';
@@ -112,8 +114,9 @@ class AuthController extends GetxController {
 
   Future<void> handleProfileEdit() async {
     //verifica se o cep foi validado
+    final validCep = await handleValidateCep(cep1: user.cep!);
 
-    if (!isValidCep) {
+    if (!validCep) {
       utilServices.showToast(message: "CEP inválido");
       return;
     }
@@ -136,6 +139,8 @@ class AuthController extends GetxController {
         utilServices.showToast(message: message, isError: true);
       },
     );
+
+    isValidCep = false;
   }
 
   //envia email de recuperaçao de senha
@@ -160,7 +165,7 @@ class AuthController extends GetxController {
   }
 
   //valida o cep digitado
-  Future<void> handleValidateCep({required String cep1}) async {
+  Future<bool> handleValidateCep({required String cep1}) async {
     var cep2 = cep1.replaceAll("-", "");
     var result = await authRepository.getCep(cep: cep2);
     result.when(
@@ -169,11 +174,14 @@ class AuthController extends GetxController {
         user.city = data.localidade;
         user.state = data.uf;
         user.cep = cep2;
+        return true;
       },
       error: (message) {
         isValidCep = false;
         utilServices.showToast(message: message, isError: true);
+        return false;
       },
     );
+    return true;
   }
 }

@@ -8,6 +8,10 @@ abstract class EndPoints {
   static const createUser = '$baseUrl/accounts/users';
   static const updateUser = '$baseUrl/accounts/users';
   static const getAllUsersPaginated = '$baseUrl/accounts/users';
+  static const updateProfilePicture =
+      '$baseUrl/accounts/users/update-profile-picture';
+
+  static const getFollows = '$baseUrl/accounts/follows/follows';
 }
 
 abstract class EndPointsViaCep {

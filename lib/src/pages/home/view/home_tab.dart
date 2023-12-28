@@ -47,9 +47,14 @@ class _HomeTabState extends State<HomeTab> {
                               (!controller.isLastPage)) {
                             controller.loadMoreProducts();
                           }
+                          final follow = controller.follows.firstWhereOrNull(
+                              (element) =>
+                                  element.followedId ==
+                                  controller.allUsers[index].id);
                           return ProviderTile(
                             //height: 100,
                             //child: Text("OLA" + index.toString()),
+                            follow: follow,
                             item: controller.allUsers[index],
                           );
                         },

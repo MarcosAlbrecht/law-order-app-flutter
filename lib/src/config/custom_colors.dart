@@ -8,6 +8,8 @@ abstract class CustomColors {
   static Color cyanColor = const Color(0xfff1f5f9);
   static Color white = Colors.white;
   static Color black = Colors.black;
+
+  static Color backgroudCard = const Color(0xFFF2F2F2);
 }
 
 abstract class CustomFontSizes {

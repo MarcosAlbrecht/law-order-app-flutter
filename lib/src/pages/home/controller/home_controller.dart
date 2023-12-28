@@ -1,5 +1,8 @@
+import 'package:app_law_order/src/models/follows_model.dart';
 import 'package:app_law_order/src/models/user_model.dart';
+import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
 import 'package:app_law_order/src/pages/home/repository/home_repository.dart';
+import 'package:app_law_order/src/services/util_services.dart';
 import 'package:get/get.dart';
 
 const int itemsPerPage = 10;
@@ -7,9 +10,14 @@ const int itemsPerPage = 10;
 class HomeController extends GetxController {
   final homeRepository = HomeRepository();
 
+  final utilServices = UtilServices();
+
+  final authController = Get.find<AuthController>();
+
   List<UserModel>? currentListUser;
 
   List<UserModel> allUsers = [];
+  List<FollowsModel> follows = [];
 
   int pagination = 0;
 
@@ -23,7 +31,8 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
 
-    loadAllUsers();
+    //loadAllUsers();
+    loadDatas();
   }
 
   bool isUserLoading = false;
@@ -33,6 +42,29 @@ class HomeController extends GetxController {
       isUserLoading = value;
     }
     update();
+  }
+
+  Future<void> loadDatas() async {
+    setLoading(true, isUser: true);
+    List<Future<void>> operations = [
+      loadAllUsers(),
+      loadFollows(),
+    ];
+
+    await Future.wait(operations);
+
+    setLoading(false, isUser: true);
+  }
+
+  Future<void> loadFollows() async {
+    var result = await homeRepository.getFollows();
+
+    result.when(
+      success: (data) {
+        follows.addAll(data);
+      },
+      error: (message) {},
+    );
   }
 
   Future<void> loadAllUsers({bool canLoad = true}) async {
@@ -50,7 +82,9 @@ class HomeController extends GetxController {
         currentListUser = data;
         allUsers.addAll(currentListUser!);
       },
-      error: (message) {},
+      error: (message) {
+        utilServices.showToast(message: message);
+      },
     );
   }
 

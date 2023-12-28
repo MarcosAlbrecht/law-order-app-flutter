@@ -1,16 +1,21 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:app_law_order/src/config/custom_colors.dart';
-import 'package:app_law_order/src/models/user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:get/get.dart';
+
+import 'package:app_law_order/src/config/custom_colors.dart';
+import 'package:app_law_order/src/models/follows_model.dart';
+import 'package:app_law_order/src/models/user_model.dart';
 
 class ProviderTile extends StatefulWidget {
   const ProviderTile({
     Key? key,
     required this.item,
+    this.follow,
   }) : super(key: key);
 
   final UserModel item;
+  final FollowsModel? follow;
 
   @override
   _ProviderTileState createState() => _ProviderTileState();
@@ -21,7 +26,7 @@ class _ProviderTileState extends State<ProviderTile> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 5),
+      padding: const EdgeInsets.only(bottom: 0),
       child: Stack(
         children: [
           GestureDetector(
@@ -29,10 +34,12 @@ class _ProviderTileState extends State<ProviderTile> {
               //Get.toNamed(PagesRoutes.productRoute, arguments: widget.item);
             },
             child: Card(
-              //color: CustomColors.backGround,
-              elevation: 6,
-              shadowColor: Colors.grey.shade300,
+              //color: CustomColors.backgroudCard,
+              elevation: 0,
+              shadowColor: CustomColors.white,
               shape: RoundedRectangleBorder(
+                side: BorderSide(
+                    style: BorderStyle.solid, color: Colors.cyan.shade200),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Padding(
@@ -50,8 +57,35 @@ class _ProviderTileState extends State<ProviderTile> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(50),
                               child: widget.item.profilePicture != null
-                                  ? Image.network(
+                                  ? //Image.network(
+                                  //     widget.item.profilePicture!.url!,
+                                  //     height: 70,
+                                  //     width: 70,
+                                  //     fit: BoxFit.cover,
+                                  //   )
+
+                                  Image.network(
                                       widget.item.profilePicture!.url!,
+                                      loadingBuilder: (BuildContext context,
+                                          Widget child,
+                                          ImageChunkEvent? loadingProgress) {
+                                        if (loadingProgress == null) {
+                                          return child;
+                                        } else {
+                                          // Exibir um ícone de carregamento enquanto a imagem está sendo carregada
+                                          return Center(
+                                            child: CircularProgressIndicator(
+                                              color:
+                                                  CustomColors.blueDark2Color,
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      errorBuilder: (BuildContext context,
+                                          Object exception,
+                                          StackTrace? stackTrace) {
+                                        return const Icon(Icons.error);
+                                      },
                                       height: 70,
                                       width: 70,
                                       fit: BoxFit.cover,
@@ -94,19 +128,43 @@ class _ProviderTileState extends State<ProviderTile> {
                           ],
                         ),
                         const VerticalDivider(
-                          width: 20,
+                          width: 15,
                         ),
                         Expanded(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                '${widget.item.firstName} ${widget.item.lastName}',
-                                style: TextStyle(
-                                  fontSize: CustomFontSizes.fontSize18,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      '${widget.item.firstName} ${widget.item.lastName}',
+                                      style: TextStyle(
+                                        fontSize: CustomFontSizes.fontSize18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      print(widget.follow);
+                                    },
+                                    child: widget.follow == null
+                                        ? Icon(
+                                            FontAwesome.user_plus,
+                                            size: 18,
+                                            color: CustomColors.blueDark2Color,
+                                          )
+                                        : Icon(
+                                            FontAwesome.user_times,
+                                            size: 18,
+                                            color: CustomColors.blueDarkColor,
+                                          ),
+                                  ),
+                                ],
                               ),
                               const Divider(
                                 height: 20,
@@ -117,19 +175,20 @@ class _ProviderTileState extends State<ProviderTile> {
                                   Icon(
                                     Icons.place_outlined,
                                     size: 16,
-                                    color: CustomColors.blueColor,
+                                    color: CustomColors.blueDark2Color,
                                   ),
                                   const VerticalDivider(
                                     width: 10,
                                     color: Colors.transparent,
                                   ),
-                                  Text(
-                                    '${widget.item.city},${widget.item.state}',
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      //fontWeight: FontWeight.bold,
-                                      fontSize: CustomFontSizes.fontSize16,
-                                      color: Colors.grey.shade600,
+                                  Expanded(
+                                    child: Text(
+                                      '${widget.item.city}, ${widget.item.state}',
+                                      style: TextStyle(
+                                        //fontWeight: FontWeight.bold,
+                                        fontSize: CustomFontSizes.fontSize14,
+                                        color: Colors.grey.shade600,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -144,7 +203,7 @@ class _ProviderTileState extends State<ProviderTile> {
                                   Icon(
                                     Icons.wallet_giftcard_outlined,
                                     size: 16,
-                                    color: CustomColors.blueColor,
+                                    color: CustomColors.blueDark2Color,
                                   ),
                                   const VerticalDivider(
                                     width: 10,
@@ -154,7 +213,7 @@ class _ProviderTileState extends State<ProviderTile> {
                                     '${widget.item.occupationArea}',
                                     style: TextStyle(
                                       color: Colors.grey.shade600,
-                                      fontSize: CustomFontSizes.fontSize16,
+                                      fontSize: CustomFontSizes.fontSize14,
                                     ),
                                   ),
                                 ],
@@ -163,55 +222,31 @@ class _ProviderTileState extends State<ProviderTile> {
                                 height: 10,
                                 color: Colors.transparent,
                               ),
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    height: 35,
-                                    child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor:
-                                              CustomColors.blueColor,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                        ),
-                                        onPressed: () {},
-                                        child: Text(
-                                          'Visualizar',
-                                          style: TextStyle(
-                                            color: CustomColors.white,
-                                            fontSize:
-                                                CustomFontSizes.fontSize14,
-                                          ),
-                                        )),
-                                  ),
-                                  const VerticalDivider(
-                                    width: 5,
-                                  ),
-                                  SizedBox(
-                                    height: 35,
-                                    child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor:
-                                              CustomColors.blueColor,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                        ),
-                                        onPressed: () {},
-                                        child: Text(
-                                          'Seguir',
-                                          style: TextStyle(
-                                            color: CustomColors.white,
-                                            fontSize:
-                                                CustomFontSizes.fontSize14,
-                                          ),
-                                        )),
-                                  ),
-                                ],
-                              )
+                              // Row(
+                              //   children: [
+                              //     SizedBox(
+                              //       height: 35,
+                              //       child: ElevatedButton(
+                              //           style: ElevatedButton.styleFrom(
+                              //             backgroundColor:
+                              //                 CustomColors.blueColor,
+                              //             shape: RoundedRectangleBorder(
+                              //               borderRadius:
+                              //                   BorderRadius.circular(10),
+                              //             ),
+                              //           ),
+                              //           onPressed: () {},
+                              //           child: Text(
+                              //             'Seguir',
+                              //             style: TextStyle(
+                              //               color: CustomColors.white,
+                              //               fontSize:
+                              //                   CustomFontSizes.fontSize14,
+                              //             ),
+                              //           )),
+                              //     ),
+                              //   ],
+                              // )
                             ],
                           ),
                         ),

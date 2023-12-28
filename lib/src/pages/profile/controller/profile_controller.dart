@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:app_law_order/src/models/picture_model.dart';
 import 'package:app_law_order/src/models/user_model.dart';
 import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
+import 'package:app_law_order/src/pages/profile/repository/profile_repository.dart';
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
@@ -10,6 +12,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
 class ProfileController extends GetxController {
+  final profileRepository = ProfileRepository();
+
   UserModel userModel = UserModel();
 
   final authController = Get.find<AuthController>();
@@ -18,10 +22,13 @@ class ProfileController extends GetxController {
 
   final ImagePicker imagePicker = ImagePicker();
 
-  Uint8List imageBytes = Uint8List(0);
+  late Uint8List imageBytes;
+  late File file;
+  late PictureModel profilePinctureUrl;
 
   bool isLoading = false;
   bool isSaving = false;
+  bool isSavingPicuture = false;
 
   @override
   void onInit() {
@@ -42,8 +49,23 @@ class ProfileController extends GetxController {
 
   Future<void> handleUpdateProfile() async {
     setSaving(value: true);
+
+    //fazer umload da imagem primeiro
+    if (isSavingPicuture) {
+      final result =
+          await profileRepository.updateProfilePicture(picture: file);
+      result.when(
+        success: (data) {},
+        error: (message) {
+          utilService.showToast(
+              message: "Ocorreu um erro ao fazer o upload da imagem!",
+              isError: true);
+        },
+      );
+    }
     await authController.handleProfileEdit();
     setSaving(value: false);
+    isSavingPicuture = false;
   }
 
   Future<File> compressFile(File file) async {
@@ -74,30 +96,45 @@ class ProfileController extends GetxController {
       preferredCameraDevice: CameraDevice.front,
     );
     if (image != null) {
-      File file = File(image.path);
+      //comprime a imagem
+      file = File(image.path);
       file = await compressFile(file);
-      String fileName = file.path.split('/').last;
+
+      isSavingPicuture = true;
       String filePath = file.path;
-      final sizeBytes = await file.length();
 
       imageBytes = await File(filePath).readAsBytes();
 
-      // Converter os bytes da imagem em uma string base64
-      //String base64Image = base64Encode(imageBytes);
-      //user.picture = base64Image;
+      //seta pra null a profilePicture pra poder atualizar na scrren
+      if (authController.user.profilePicture != null) {
+        profilePinctureUrl = authController.user.profilePicture!;
+        authController.user.profilePicture = null;
+      }
 
-      //salvar imagem na api
-      // final result = await authRepository.updatePictureUser(user: user);
-      // result.when(
-      //     success: (data) {},
-      //     error: (message) {
-      //       utilServices.showToast(message: message);
-      //     });
       update();
     }
   }
 
   Future<void> addPhotoFromGallery() async {
     final image = await imagePicker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      file = File(image.path);
+      file = await compressFile(file);
+
+      isSavingPicuture = true;
+
+      String filePath = file.path;
+
+      imageBytes = await File(filePath).readAsBytes();
+
+      //seta pra null a profilePicture pra poder atualizar na scrren
+      if (authController.user.profilePicture != null) {
+        profilePinctureUrl = authController.user.profilePicture!;
+        authController.user.profilePicture = null;
+      }
+
+      update();
+    }
   }
 }

@@ -52,6 +52,26 @@ class _ProfileTabState extends State<ProfileTab> {
                                   ? Image.network(
                                       controller.authController.user
                                           .profilePicture!.url!,
+                                      loadingBuilder: (BuildContext context,
+                                          Widget child,
+                                          ImageChunkEvent? loadingProgress) {
+                                        if (loadingProgress == null) {
+                                          return child;
+                                        } else {
+                                          // Exibir um ícone de carregamento enquanto a imagem está sendo carregada
+                                          return Center(
+                                            child: CircularProgressIndicator(
+                                              color:
+                                                  CustomColors.blueDark2Color,
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      errorBuilder: (BuildContext context,
+                                          Object exception,
+                                          StackTrace? stackTrace) {
+                                        return const Icon(Icons.error);
+                                      },
                                       height: 160,
                                       width: 160,
                                       fit: BoxFit.cover,
@@ -73,8 +93,8 @@ class _ProfileTabState extends State<ProfileTab> {
                         '${controller.authController.user.firstName} ${controller.authController.user.lastName}',
                         style: TextStyle(
                             color: CustomColors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: CustomFontSizes.fontSize20),
+                            fontWeight: FontWeight.normal,
+                            fontSize: CustomFontSizes.fontSize22),
                       ),
                       const Divider(
                         height: 5,
