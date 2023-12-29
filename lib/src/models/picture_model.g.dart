@@ -11,6 +11,8 @@ PictureModel _$PictureModelFromJson(Map<String, dynamic> json) => PictureModel(
       key: json['key'] as String?,
       name: json['temp'] as bool?,
       url: json['url'] as String?,
+      localPath: json['localPath'] as String?,
+      status: json['status'] as String?,
     );
 
 Map<String, dynamic> _$PictureModelToJson(PictureModel instance) =>
@@ -19,4 +21,6 @@ Map<String, dynamic> _$PictureModelToJson(PictureModel instance) =>
       'key': instance.key,
       'temp': instance.name,
       'url': instance.url,
+      'localPath': instance.localPath,
+      'status': instance.status,
     };

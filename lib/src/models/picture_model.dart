@@ -14,11 +14,17 @@ class PictureModel {
   bool? name;
   @JsonKey(name: 'url')
   String? url;
+  @JsonKey(name: 'localPath')
+  String? localPath;
+  @JsonKey(name: 'status')
+  String? status;
   PictureModel({
     this.id,
     this.key,
     this.name,
     this.url,
+    this.localPath,
+    this.status,
   });
 
   factory PictureModel.fromJson(Map<String, dynamic> json) =>
@@ -28,6 +34,6 @@ class PictureModel {
 
   @override
   String toString() {
-    return 'PictureModel(id: $id, key: $key, name: $name, url: $url)';
+    return 'PictureModel(id: $id, key: $key, name: $name, url: $url, localPath: $localPath, status: $status)';
   }
 }

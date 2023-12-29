@@ -32,7 +32,11 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       portfolioPictures: (json['portfolioPictures'] as List<dynamic>?)
           ?.map((e) => PictureModel.fromJson(e as Map<String, dynamic>))
           .toList(),
-    );
+    )
+      ..portfolioAbout = json['portfolioAbout'] as String?
+      ..portfolioTitle = json['portfolioTitle'] as String?
+      ..skills =
+          (json['skills'] as List<dynamic>?)?.map((e) => e as String).toList();
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       '_id': instance.id,
@@ -55,4 +59,7 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'accessToken': instance.accessToken,
       'profilePicture': instance.profilePicture,
       'portfolioPictures': instance.portfolioPictures,
+      'portfolioAbout': instance.portfolioAbout,
+      'portfolioTitle': instance.portfolioTitle,
+      'skills': instance.skills,
     };

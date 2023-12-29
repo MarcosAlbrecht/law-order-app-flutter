@@ -140,7 +140,9 @@ class _ProfileTabState extends State<ProfileTab> {
                               OptionInfo(
                                 text: " Portfólio",
                                 icon: Icons.person_2_outlined,
-                                onTap: () {},
+                                onTap: () {
+                                  Get.toNamed(PagesRoutes.portfolioScreen);
+                                },
                               ),
                               const Divider(
                                 height: 5,

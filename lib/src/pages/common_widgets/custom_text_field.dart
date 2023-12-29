@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:app_law_order/src/config/custom_colors.dart';
 
 class CustomTextField extends StatefulWidget {
-  final IconData icon;
+  final IconData? icon;
   final String label;
   final bool isSecret;
   final List<TextInputFormatter>? inputFormatters;
@@ -18,12 +18,14 @@ class CustomTextField extends StatefulWidget {
   final void Function(String?)? onSaved;
   final void Function(String?)? onChanged;
   final int? maxLength;
+  final int? minLines;
+  final int? maxLines;
 
   final TextEditingController? controller;
 
   const CustomTextField({
     Key? key,
-    required this.icon,
+    this.icon,
     required this.label,
     this.isSecret = false,
     this.inputFormatters,
@@ -35,6 +37,8 @@ class CustomTextField extends StatefulWidget {
     this.onSaved,
     this.onChanged,
     this.maxLength,
+    this.minLines,
+    this.maxLines,
     this.controller,
   }) : super(key: key);
 
@@ -68,6 +72,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
         onSaved: widget.onSaved,
         onChanged: widget.onChanged,
         maxLength: widget.maxLength,
+        maxLines: widget.maxLines,
+        minLines: widget.minLines,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
@@ -75,7 +81,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
               color: CustomColors.blueColor,
             ), // Defina a cor desejada da borda
           ),
-          prefixIcon: Icon(widget.icon),
+          prefixIcon: widget.icon != null ? Icon(widget.icon) : null,
           suffixIcon: widget.isSecret
               ? IconButton(
                   onPressed: () {

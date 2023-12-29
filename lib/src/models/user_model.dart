@@ -47,6 +47,12 @@ class UserModel {
   PictureModel? profilePicture;
   @JsonKey(name: 'portfolioPictures')
   List<PictureModel>? portfolioPictures;
+  @JsonKey(name: 'portfolioAbout')
+  String? portfolioAbout;
+  @JsonKey(name: 'portfolioTitle')
+  String? portfolioTitle;
+  @JsonKey(name: 'skills')
+  List<String>? skills;
   UserModel({
     this.id,
     this.email,

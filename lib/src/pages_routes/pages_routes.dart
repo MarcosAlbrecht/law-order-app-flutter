@@ -6,6 +6,7 @@ import 'package:app_law_order/src/pages/base/binding/navigation_binding.dart';
 import 'package:app_law_order/src/pages/home/binding/home_binding.dart';
 import 'package:app_law_order/src/pages/home/controller/home_controller.dart';
 import 'package:app_law_order/src/pages/profile/binding/profile_binding.dart';
+import 'package:app_law_order/src/pages/profile/view/portfolio_screen.dart';
 import 'package:app_law_order/src/pages/profile/view/profile_screen.dart';
 import 'package:app_law_order/src/pages/profile/view/profile_tab.dart';
 import 'package:get/get.dart';
@@ -33,6 +34,10 @@ abstract class AppPages {
       page: () => const ProfileScreen(),
     ),
     GetPage(
+      name: PagesRoutes.portfolioScreen,
+      page: () => const PortfolioScreen(),
+    ),
+    GetPage(
       page: () => const BaseScreen(),
       name: PagesRoutes.baseRoute,
       bindings: [
@@ -51,4 +56,5 @@ abstract class PagesRoutes {
   static const String signUp = '/signup';
   static const String profileTab = '/profileTab';
   static const String profileScreen = '/profileScreen';
+  static const String portfolioScreen = '/portfolioScreen';
 }
