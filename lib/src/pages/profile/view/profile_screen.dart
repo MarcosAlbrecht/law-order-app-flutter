@@ -151,7 +151,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     await showDialog(
                                         context: context,
                                         builder: (_) {
-                                          return CameraDialog();
+                                          return CameraDialog(
+                                            isPortfolio: false,
+                                          );
                                         });
                                   },
                                   child: Container(

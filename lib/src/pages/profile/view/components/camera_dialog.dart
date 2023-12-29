@@ -1,12 +1,16 @@
-import 'package:app_law_order/src/pages/profile/controller/profile_controller.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'package:app_law_order/src/pages/profile/controller/profile_controller.dart';
+
 class CameraDialog extends StatelessWidget {
   final atendimentoController = Get.find<ProfileController>();
+  bool isPortfolio = false;
 
   CameraDialog({
     Key? key,
+    required this.isPortfolio,
   }) : super(key: key);
 
   final _formFieldKey = GlobalKey<FormFieldState>();
@@ -58,7 +62,8 @@ class CameraDialog extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      atendimentoController.addPhotoFromCamera();
+                      atendimentoController.addPhotoFromCamera(
+                          isPortfolio: isPortfolio);
                       Get.back();
                     },
                     icon: const Icon(Icons.camera),
@@ -81,7 +86,8 @@ class CameraDialog extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      atendimentoController.addPhotoFromGallery();
+                      atendimentoController.addPhotoFromGallery(
+                          isPortfolio: isPortfolio);
                       Get.back();
                     },
                     icon: const Icon(Icons.image),

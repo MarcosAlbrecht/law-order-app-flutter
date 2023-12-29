@@ -90,48 +90,57 @@ class ProfileController extends GetxController {
     }
   }
 
-  Future<void> addPhotoFromCamera() async {
+  Future<void> addPhotoFromCamera({bool isPortfolio = false}) async {
     final image = await imagePicker.pickImage(
       source: ImageSource.camera,
       preferredCameraDevice: CameraDevice.front,
     );
     if (image != null) {
-      //comprime a imagem
-      file = File(image.path);
-      file = await compressFile(file);
+      if (!isPortfolio) {
+        //comprime a imagem
+        file = File(image.path);
+        file = await compressFile(file);
 
-      isSavingPicuture = true;
-      String filePath = file.path;
+        isSavingPicuture = true;
+        String filePath = file.path;
 
-      imageBytes = await File(filePath).readAsBytes();
+        imageBytes = await File(filePath).readAsBytes();
 
-      //seta pra null a profilePicture pra poder atualizar na scrren
-      if (authController.user.profilePicture != null) {
-        profilePinctureUrl = authController.user.profilePicture!;
-        authController.user.profilePicture = null;
+        //seta pra null a profilePicture pra poder atualizar na scrren
+        if (authController.user.profilePicture != null) {
+          profilePinctureUrl = authController.user.profilePicture!;
+          authController.user.profilePicture = null;
+        }
+      } else {
+        PictureModel portfolioPincture = PictureModel();
+        portfolioPincture.status = "insert";
+        portfolioPincture.localPath = image.path;
+        authController.user.portfolioPictures?.add(portfolioPincture);
       }
 
       update();
     }
   }
 
-  Future<void> addPhotoFromGallery() async {
+  Future<void> addPhotoFromGallery({bool isPortfolio = false}) async {
     final image = await imagePicker.pickImage(source: ImageSource.gallery);
 
     if (image != null) {
-      file = File(image.path);
-      file = await compressFile(file);
+      if (!isPortfolio) {
+        file = File(image.path);
+        file = await compressFile(file);
 
-      isSavingPicuture = true;
+        isSavingPicuture = true;
 
-      String filePath = file.path;
+        String filePath = file.path;
 
-      imageBytes = await File(filePath).readAsBytes();
+        imageBytes = await File(filePath).readAsBytes();
 
-      //seta pra null a profilePicture pra poder atualizar na scrren
-      if (authController.user.profilePicture != null) {
-        profilePinctureUrl = authController.user.profilePicture!;
-        authController.user.profilePicture = null;
+        //seta pra null a profilePicture pra poder atualizar na scrren
+        if (authController.user.profilePicture != null) {
+          profilePinctureUrl = authController.user.profilePicture!;
+          authController.user.profilePicture = null;
+        }
       }
 
       update();

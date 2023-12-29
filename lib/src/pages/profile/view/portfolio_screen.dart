@@ -68,9 +68,9 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                         minLines: 1,
                         maxLines: 5,
                         initialValue:
-                            controller.authController.user.portfolioTitle,
+                            controller.authController.user.portfolioAbout,
                         onSaved: (value) {
-                          controller.authController.user.portfolioTitle = value;
+                          controller.authController.user.portfolioAbout = value;
                         },
                       ),
                       SizedBox(
@@ -93,7 +93,9 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                   await showDialog(
                                     context: context,
                                     builder: (_) {
-                                      return CameraDialog();
+                                      return CameraDialog(
+                                        isPortfolio: true,
+                                      );
                                     },
                                   );
                                 },
