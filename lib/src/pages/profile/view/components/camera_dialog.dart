@@ -58,7 +58,7 @@ class CameraDialog extends StatelessWidget {
                   child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                     onPressed: () {
@@ -82,7 +82,7 @@ class CameraDialog extends StatelessWidget {
                   child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                     onPressed: () {

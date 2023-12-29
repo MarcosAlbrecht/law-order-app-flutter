@@ -33,4 +33,42 @@ class ProfileRepository {
       return UpdateProfilePictureResult.error(false);
     }
   }
+
+  Future<UpdateProfilePictureResult> insertPortfolioPicture(
+      {required String picture}) async {
+    // Criar um FormData para enviar a imagem
+    FormData formData = FormData.fromMap({
+      'files[]': await MultipartFile.fromFile(picture,
+          filename: picture.split('/').last),
+      // Adicione outros campos se necessário
+    });
+
+    final result = await httpManager.restRequest(
+      method: HttpMethods.post,
+      url: EndPoints.insertPortfolioPicture,
+      body: formData,
+    );
+
+    if (result.isEmpty) {
+      return UpdateProfilePictureResult.success(true);
+    } else {
+      return UpdateProfilePictureResult.error(false);
+    }
+  }
+
+  Future<UpdateProfilePictureResult> deletePortfolioPicture(
+      {required String idPicture}) async {
+    // Criar um FormData para enviar a imagem
+
+    final result = await httpManager.restRequest(
+      method: HttpMethods.delete,
+      url: '${EndPoints.deletePortfolioPicture}$idPicture',
+    );
+
+    if (result.isEmpty) {
+      return UpdateProfilePictureResult.success(true);
+    } else {
+      return UpdateProfilePictureResult.error(false);
+    }
+  }
 }

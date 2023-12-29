@@ -24,7 +24,7 @@ class PictureTile extends StatefulWidget {
 }
 
 class _PictureTileState extends State<PictureTile> {
-  final atendimentoController = Get.find<ProfileController>();
+  final profileController = Get.find<ProfileController>();
 
   Uint8List _buildMemoryBytes(String base64Image) {
     return base64Decode(base64Image);
@@ -44,7 +44,12 @@ class _PictureTileState extends State<PictureTile> {
                 TextButton(
                   onPressed: () {
                     // atendimentoController.removePhotoFromList(widget.index - 1);
-                    // Navigator.pop(context); // Fechar o AlertDialog
+                    //  // Fechar o AlertDialog
+                    profileController.deleteImagePortfolio(
+                      picture: widget.picture,
+                      index: widget.index,
+                    );
+                    Navigator.pop(context);
                   },
                   child: const Text('Confirmar'),
                 ),

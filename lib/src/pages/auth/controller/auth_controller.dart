@@ -184,4 +184,16 @@ class AuthController extends GetxController {
     );
     return true;
   }
+
+  Future<void> getUserById() async {
+    final result = await authRepository.getUserById(user: user);
+    result.when(
+      success: (data) {
+        user = data;
+      },
+      error: (message) {
+        utilServices.showToast(message: message);
+      },
+    );
+  }
 }

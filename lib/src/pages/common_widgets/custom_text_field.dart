@@ -38,7 +38,7 @@ class CustomTextField extends StatefulWidget {
     this.onChanged,
     this.maxLength,
     this.minLines,
-    this.maxLines,
+    this.maxLines = 1,
     this.controller,
   }) : super(key: key);
 

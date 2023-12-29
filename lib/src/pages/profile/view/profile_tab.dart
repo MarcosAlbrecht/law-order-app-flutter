@@ -70,7 +70,11 @@ class _ProfileTabState extends State<ProfileTab> {
                                       errorBuilder: (BuildContext context,
                                           Object exception,
                                           StackTrace? stackTrace) {
-                                        return const Icon(Icons.error);
+                                        return Image.asset(
+                                          "assets/ICONPEOPLE.png",
+                                          height: 160,
+                                          width: 160,
+                                        );
                                       },
                                       height: 160,
                                       width: 160,
@@ -215,7 +219,7 @@ class OptionInfo extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: CustomColors.cyanColor,
+          color: CustomColors.backgroudCard,
         ),
         height: 50,
         child: Row(

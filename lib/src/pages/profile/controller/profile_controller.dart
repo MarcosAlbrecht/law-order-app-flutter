@@ -116,6 +116,7 @@ class ProfileController extends GetxController {
         portfolioPincture.status = "insert";
         portfolioPincture.localPath = image.path;
         authController.user.portfolioPictures?.add(portfolioPincture);
+        inertImagePortfolio(imagePath: image.path);
       }
 
       update();
@@ -141,9 +142,50 @@ class ProfileController extends GetxController {
           profilePinctureUrl = authController.user.profilePicture!;
           authController.user.profilePicture = null;
         }
+      } else {
+        PictureModel portfolioPincture = PictureModel();
+        portfolioPincture.status = "insert";
+        portfolioPincture.localPath = image.path;
+        authController.user.portfolioPictures?.add(portfolioPincture);
+        inertImagePortfolio(imagePath: image.path);
       }
 
       update();
     }
+  }
+
+  Future<void> inertImagePortfolio({required String imagePath}) async {
+    setSaving(value: true);
+    final result =
+        await profileRepository.insertPortfolioPicture(picture: imagePath);
+
+    await result.when(
+      success: (data) async {
+        //recaregar informaçoes do usuário;
+        await authController.getUserById();
+      },
+      error: (data) {
+        utilService.showToast(
+            message: "Oocrreu um erro a adicionar a imagem!", isError: true);
+      },
+    );
+
+    setSaving(value: false);
+  }
+
+  Future<void> deleteImagePortfolio(
+      {required PictureModel picture, required int index}) async {
+    setSaving(value: true);
+    final result =
+        await profileRepository.deletePortfolioPicture(idPicture: picture.id!);
+    result.when(success: (data) {
+      authController.user.portfolioPictures
+          ?.removeWhere((item) => item.id == picture.id);
+    }, error: (data) {
+      utilService.showToast(
+          message: "Não foi possível remover a foto!", isError: true);
+    });
+
+    setSaving(value: false);
   }
 }
