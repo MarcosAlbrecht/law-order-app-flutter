@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         //colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
         textTheme: GoogleFonts.latoTextTheme(textTheme).copyWith(
-          bodyMedium: GoogleFonts.oswald(textStyle: textTheme.bodyMedium),
+          bodyMedium: GoogleFonts.lato(textStyle: textTheme.bodyMedium),
         ),
       ),
       getPages: AppPages.pages,

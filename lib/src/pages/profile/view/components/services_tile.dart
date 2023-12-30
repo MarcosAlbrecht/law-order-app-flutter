@@ -22,8 +22,15 @@ class ServicesTile extends StatelessWidget {
         color: CustomColors.backgroudCard,
       ),
       child: ListTile(
-        title: Text(service.title!),
-        subtitle: Text(service.description!),
+        visualDensity: VisualDensity.compact,
+        title: Text(
+          service.title!,
+          style: TextStyle(fontSize: CustomFontSizes.fontSize16),
+        ),
+        subtitle: Text(
+          service.description!,
+          style: TextStyle(fontSize: CustomFontSizes.fontSize12),
+        ),
         trailing: Text(
           utilServices.priceToCurrency(service.value!),
           style: TextStyle(fontSize: CustomFontSizes.fontSize14),

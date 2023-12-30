@@ -93,68 +93,72 @@ class ProfileController extends GetxController {
   Future<void> addPhotoFromCamera({bool isPortfolio = false}) async {
     final image = await imagePicker.pickImage(
       source: ImageSource.camera,
-      preferredCameraDevice: CameraDevice.front,
+      preferredCameraDevice:
+          isPortfolio ? CameraDevice.rear : CameraDevice.front,
     );
     if (image != null) {
+      //comprime a imagem
+      file = File(image.path);
+      file = await compressFile(file);
+
+      isSavingPicuture = true;
+      String filePath = file.path;
+
+      imageBytes = await File(filePath).readAsBytes();
+
       if (!isPortfolio) {
-        //comprime a imagem
-        file = File(image.path);
-        file = await compressFile(file);
-
-        isSavingPicuture = true;
-        String filePath = file.path;
-
-        imageBytes = await File(filePath).readAsBytes();
-
         //seta pra null a profilePicture pra poder atualizar na scrren
         if (authController.user.profilePicture != null) {
           profilePinctureUrl = authController.user.profilePicture!;
           authController.user.profilePicture = null;
         }
       } else {
-        PictureModel portfolioPincture = PictureModel();
-        portfolioPincture.status = "insert";
-        portfolioPincture.localPath = image.path;
-        authController.user.portfolioPictures?.add(portfolioPincture);
-        inertImagePortfolio(imagePath: image.path);
+        //verifica se inseriu a imagem com sucesso no banco
+        if (await inertImagePortfolio(imagePath: file.path)) {
+          // PictureModel portfolioPincture = PictureModel();
+          // portfolioPincture.status = "insert";
+          // portfolioPincture.localPath = file.path;
+          // authController.user.portfolioPictures?.add(portfolioPincture);
+        }
       }
-
-      update();
     }
+    update();
   }
 
   Future<void> addPhotoFromGallery({bool isPortfolio = false}) async {
     final image = await imagePicker.pickImage(source: ImageSource.gallery);
 
     if (image != null) {
+      file = File(image.path);
+      file = await compressFile(file);
+
+      isSavingPicuture = true;
+
+      String filePath = file.path;
+
+      imageBytes = await File(filePath).readAsBytes();
+
+      //seta pra null a profilePicture pra poder atualizar na scrren
       if (!isPortfolio) {
-        file = File(image.path);
-        file = await compressFile(file);
-
-        isSavingPicuture = true;
-
-        String filePath = file.path;
-
-        imageBytes = await File(filePath).readAsBytes();
-
-        //seta pra null a profilePicture pra poder atualizar na scrren
         if (authController.user.profilePicture != null) {
           profilePinctureUrl = authController.user.profilePicture!;
           authController.user.profilePicture = null;
         }
       } else {
-        PictureModel portfolioPincture = PictureModel();
-        portfolioPincture.status = "insert";
-        portfolioPincture.localPath = image.path;
-        authController.user.portfolioPictures?.add(portfolioPincture);
-        inertImagePortfolio(imagePath: image.path);
+        //verifica se inseri a imagem com sucesso no banco
+        if (await inertImagePortfolio(imagePath: file.path)) {
+          // PictureModel portfolioPincture = PictureModel();
+          // portfolioPincture.status = "insert";
+          // portfolioPincture.localPath = file.path;
+          // authController.user.portfolioPictures?.add(portfolioPincture);
+        }
       }
-
-      update();
     }
+    update();
   }
 
-  Future<void> inertImagePortfolio({required String imagePath}) async {
+  Future<bool> inertImagePortfolio({required String imagePath}) async {
+    bool success = false;
     setSaving(value: true);
     final result =
         await profileRepository.insertPortfolioPicture(picture: imagePath);
@@ -163,14 +167,17 @@ class ProfileController extends GetxController {
       success: (data) async {
         //recaregar informaçoes do usuário;
         await authController.getUserById();
+        success = true;
       },
       error: (data) {
         utilService.showToast(
             message: "Oocrreu um erro a adicionar a imagem!", isError: true);
+        success = false;
       },
     );
 
     setSaving(value: false);
+    return success;
   }
 
   Future<void> deleteImagePortfolio(
