@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:app_law_order/src/models/picture_model.dart';
+import 'package:app_law_order/src/models/service_model.dart';
 import 'package:app_law_order/src/models/user_model.dart';
 import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
 import 'package:app_law_order/src/pages/profile/repository/profile_repository.dart';
@@ -15,6 +16,7 @@ class ProfileController extends GetxController {
   final profileRepository = ProfileRepository();
 
   UserModel userModel = UserModel();
+  ServiceModel actualService = ServiceModel();
 
   final authController = Get.find<AuthController>();
 
@@ -193,6 +195,60 @@ class ProfileController extends GetxController {
           message: "Não foi possível remover a foto!", isError: true);
     });
 
+    setSaving(value: false);
+  }
+
+  Future<void> handleService({
+    required String status,
+  }) async {
+    setSaving(value: true);
+    switch (status) {
+      case 'insert':
+        final result =
+            await profileRepository.insertService(service: actualService);
+        await result.when(
+          success: (data) async {
+            await authController.getUserById();
+            utilService.showToast(message: "Serviço adicionado com sucesso!");
+          },
+          error: (message) {
+            utilService.showToast(message: message, isError: true);
+          },
+        );
+        break;
+      case 'edit':
+        final result =
+            await profileRepository.updateService(service: actualService);
+        result.when(
+          success: (data) {
+            for (var element in authController.user.services!) {
+              element.id == actualService.id;
+              element = actualService;
+              utilService.showToast(message: "Serviço atualizado com sucesso!");
+              break;
+            }
+          },
+          error: (message) {
+            utilService.showToast(message: message, isError: true);
+          },
+        );
+        break;
+      case 'delete':
+        final result =
+            await profileRepository.deleteService(service: actualService);
+        result.when(
+          success: (data) {
+            authController.user.services
+                ?.removeWhere((element) => element.id == actualService.id);
+            utilService.showToast(message: "Serviço removido com sucesso!");
+          },
+          error: (message) {
+            utilService.showToast(message: message, isError: true);
+          },
+        );
+        break;
+      default:
+    }
     setSaving(value: false);
   }
 }

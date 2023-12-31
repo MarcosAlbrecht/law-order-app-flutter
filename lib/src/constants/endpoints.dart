@@ -19,6 +19,10 @@ abstract class EndPoints {
       '$baseUrl/accounts/users/add-portfolio-pictures';
   static const deletePortfolioPicture =
       '$baseUrl/accounts/users/remove-portfolio-picture/';
+
+  static const setUserService = '$baseUrl/accounts/users/add-services';
+  static const deleteUserService = '$baseUrl/accounts/users/remove-service/';
+  static const updateUserService = '$baseUrl/accounts/users/update-service/';
 }
 
 abstract class EndPointsViaCep {

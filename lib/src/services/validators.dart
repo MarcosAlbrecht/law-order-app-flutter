@@ -89,3 +89,27 @@ String? occupationAreaValidator(OccupationAreasModel? value) {
   // Outras validações conforme necessário
   return null; // Retorna null se estiver tudo certo
 }
+
+String? titleServiceValidator(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Digite o Título do Serviço';
+  }
+
+  return null;
+}
+
+String? descriprionServiceValidator(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Digite a Descrição do Serviço';
+  }
+
+  return null;
+}
+
+String? valueServiceValidator(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Digite o Valor do Serviço';
+  }
+
+  return null;
+}

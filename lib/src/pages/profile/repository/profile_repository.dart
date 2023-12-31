@@ -2,8 +2,10 @@ import 'dart:ffi';
 import 'dart:io';
 
 import 'package:app_law_order/src/constants/endpoints.dart';
+import 'package:app_law_order/src/models/service_model.dart';
 import 'package:app_law_order/src/models/user_model.dart';
 import 'package:app_law_order/src/pages/profile/result/update_picture_profile_result.dart';
+import 'package:app_law_order/src/pages/profile/result/user_service_result.dart';
 import 'package:app_law_order/src/services/http_manager.dart';
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:dio/dio.dart';
@@ -69,6 +71,61 @@ class ProfileRepository {
       return UpdateProfilePictureResult.success(true);
     } else {
       return UpdateProfilePictureResult.error(false);
+    }
+  }
+
+  Future<UserServiceResult> insertService(
+      {required ServiceModel service}) async {
+    // Criar um FormData para enviar a imagem
+
+    final result = await httpManager.restRequest(
+      method: HttpMethods.post,
+      url: EndPoints.setUserService,
+      body: [
+        service.toJson(),
+      ],
+    );
+
+    if (result.isEmpty) {
+      return UserServiceResult.success(true);
+    } else {
+      return UserServiceResult.error(
+          "Ocorreu um erro inesperado ao inserir o serviço!");
+    }
+  }
+
+  Future<UserServiceResult> updateService(
+      {required ServiceModel service}) async {
+    // Criar um FormData para enviar a imagem
+
+    final result = await httpManager.restRequest(
+      method: HttpMethods.put,
+      url: '${EndPoints.updateUserService}${service.id}',
+      body: service.toJson(),
+    );
+
+    if (result.isEmpty) {
+      return UserServiceResult.success(true);
+    } else {
+      return UserServiceResult.error(
+          "Ocorreu um erro inesperado ao inserir o serviço!");
+    }
+  }
+
+  Future<UserServiceResult> deleteService(
+      {required ServiceModel service}) async {
+    // Criar um FormData para enviar a imagem
+
+    final result = await httpManager.restRequest(
+      method: HttpMethods.delete,
+      url: '${EndPoints.deleteUserService}${service.id}',
+    );
+
+    if (result.isEmpty) {
+      return UserServiceResult.success(true);
+    } else {
+      return UserServiceResult.error(
+          "Ocorreu um erro inesperado ao inserir o serviço!");
     }
   }
 }

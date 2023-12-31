@@ -1,8 +1,12 @@
 import 'package:app_law_order/src/config/custom_colors.dart';
+import 'package:app_law_order/src/models/service_model.dart';
 import 'package:app_law_order/src/pages/common_widgets/custom_text_field.dart';
 import 'package:app_law_order/src/pages/profile/controller/profile_controller.dart';
 import 'package:app_law_order/src/pages/profile/view/components/picture_tile.dart';
+import 'package:app_law_order/src/pages/profile/view/components/service_dialog.dart';
 import 'package:app_law_order/src/pages/profile/view/components/services_tile.dart';
+import 'package:app_law_order/src/pages/profile/view/components/skill_tile.dart';
+import 'package:app_law_order/src/services/util_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,6 +18,11 @@ class PortfolioScreen extends StatefulWidget {
   @override
   _PortfolioScreenState createState() => _PortfolioScreenState();
 }
+
+final focus = FocusNode();
+final focusStatus = FocusNode();
+final utilServices = UtilServices();
+final _formKey = GlobalKey<FormState>();
 
 class _PortfolioScreenState extends State<PortfolioScreen> {
   @override
@@ -84,8 +93,10 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                         child: Text(
                           "Fotos do Portfólio",
                           textAlign: TextAlign.left,
-                          style:
-                              TextStyle(fontSize: CustomFontSizes.fontSize16),
+                          style: TextStyle(
+                            fontSize: CustomFontSizes.fontSize16,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                       //lista com as fotos
@@ -162,7 +173,10 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                       ),
 
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 10, left: 0),
+                        padding: const EdgeInsets.only(
+                          bottom: 15,
+                          left: 0,
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -170,11 +184,27 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                               "Serviços Ofertados",
                               textAlign: TextAlign.left,
                               style: TextStyle(
-                                  fontSize: CustomFontSizes.fontSize16),
+                                fontSize: CustomFontSizes.fontSize16,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
-                            Icon(
-                              Icons.add_circle_outline,
-                              color: CustomColors.blueDark2Color,
+                            InkWell(
+                              onTap: () async {
+                                ServiceModel serviceModel = ServiceModel();
+                                controller.actualService = serviceModel;
+                                await showDialog(
+                                  context: context,
+                                  builder: (_) {
+                                    return const ServiceDialog(
+                                      status: "insert",
+                                    );
+                                  },
+                                );
+                              },
+                              child: Icon(
+                                Icons.add_circle_outline,
+                                color: CustomColors.blueDark2Color,
+                              ),
                             )
                           ],
                         ),
@@ -184,32 +214,55 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                         height: 200,
                         child: ListView.separated(
                           itemBuilder: (context, index) {
-                            return Dismissible(
-                              background: Container(
-                                alignment: Alignment.centerLeft,
-                                color: Colors.green,
-                                child: const Icon(
-                                  Icons.edit,
-                                  color: Colors.white,
+                            return Visibility(
+                              visible: !controller.isSaving,
+                              replacement: const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                              child: Dismissible(
+                                background: Container(
+                                  alignment: Alignment.centerLeft,
+                                  color: Colors.green,
+                                  child: const Icon(
+                                    Icons.edit,
+                                    color: Colors.white,
+                                  ),
                                 ),
+                                secondaryBackground: Container(
+                                  alignment: Alignment.centerRight,
+                                  color: Colors.red,
+                                  child: const Icon(Icons.cancel),
+                                ),
+                                key: ValueKey<int>(index),
+                                child: ServicesTile(
+                                  service: controller
+                                      .authController.user.services![index],
+                                ),
+                                confirmDismiss: (direction) async {
+                                  if (direction ==
+                                      DismissDirection.endToStart) {
+                                    final bool result =
+                                        await showDeleteConfirmation(context);
+                                    if (result) {
+                                      controller.handleService(
+                                          status: 'delete');
+                                    }
+                                  } else {
+                                    await showDialog(
+                                      context: context,
+                                      builder: (_) {
+                                        controller.actualService = controller
+                                            .authController
+                                            .user
+                                            .services![index];
+                                        return const ServiceDialog(
+                                          status: "edit",
+                                        );
+                                      },
+                                    );
+                                  }
+                                },
                               ),
-                              secondaryBackground: Container(
-                                alignment: Alignment.centerRight,
-                                color: Colors.red,
-                                child: const Icon(Icons.cancel),
-                              ),
-                              key: ValueKey<int>(index),
-                              child: ServicesTile(
-                                service: controller
-                                    .authController.user.services![index],
-                              ),
-                              confirmDismiss: (direction) async {
-                                if (direction == DismissDirection.endToStart) {
-                                  return await showDeleteConfirmation(context);
-                                } else {
-                                  //chama dialog para editar
-                                }
-                              },
                             );
                           },
                           itemCount:
@@ -219,7 +272,120 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                         ),
                       ),
                       const Divider(
-                        height: 20,
+                        height: 30,
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10, left: 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Competências",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  fontSize: CustomFontSizes.fontSize16,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            InkWell(
+                              onTap: () async {
+                                ServiceModel serviceModel = ServiceModel();
+                                controller.actualService = serviceModel;
+                                await showDialog(
+                                  context: context,
+                                  builder: (_) {
+                                    return const ServiceDialog(
+                                      status: "insert",
+                                    );
+                                  },
+                                );
+                              },
+                              child: Icon(
+                                Icons.add_circle_outline,
+                                color: CustomColors.blueDark2Color,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+
+                      SizedBox(
+                        height: 200,
+                        child: ListView.separated(
+                          itemBuilder: (context, index) {
+                            return Visibility(
+                              visible: !controller.isSaving,
+                              replacement: const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                              child: Dismissible(
+                                background: Container(
+                                  alignment: Alignment.centerRight,
+                                  color: Colors.red,
+                                  child: const Icon(Icons.cancel),
+                                ),
+                                key: ValueKey<int>(index),
+                                child: SkillTile(
+                                  skill: controller
+                                      .authController.user.skills![index],
+                                ),
+                                confirmDismiss: (direction) async {
+                                  if (direction ==
+                                      DismissDirection.endToStart) {
+                                    final bool result =
+                                        await showDeleteConfirmation(context);
+                                    if (result) {
+                                      controller.handleService(
+                                          status: 'delete');
+                                    }
+                                  }
+                                },
+                              ),
+                            );
+                          },
+                          itemCount:
+                              controller.authController.user.skills!.length,
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(height: 5),
+                        ),
+                      ),
+
+                      //botao para salvar o portfolio
+                      SizedBox(
+                        height: 50,
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: CustomColors.blueColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          onPressed: controller.authController.isLoading.value
+                              ? null
+                              : () async {
+                                  //Get.toNamed(PagesRoutes.signUpStep1);
+                                  FocusScope.of(context).unfocus();
+                                  if (_formKey.currentState!.validate()) {
+                                    _formKey.currentState!.save();
+                                    await controller.handleUpdateProfile();
+                                  } else {
+                                    utilServices.showToast(
+                                        message: "Verifique todos os campos!");
+                                  }
+                                },
+                          child: controller.isSaving
+                              ? CircularProgressIndicator(
+                                  color: CustomColors.white,
+                                )
+                              : Text(
+                                  'Atualizar perfil',
+                                  style: TextStyle(
+                                    color: CustomColors.white,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                        ),
                       ),
                     ],
                   ),
