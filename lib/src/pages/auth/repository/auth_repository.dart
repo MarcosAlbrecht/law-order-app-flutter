@@ -82,6 +82,8 @@ class AuthRepository {
         'lastName': user.lastName,
         'cpf': user.cpf,
         'cep': user.cep,
+        'portfolioAbout': user.portfolioAbout,
+        'portfolioTitle': user.portfolioTitle
       },
     );
 

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
 
@@ -126,6 +127,42 @@ class ProfileRepository {
     } else {
       return UserServiceResult.error(
           "Ocorreu um erro inesperado ao inserir o serviço!");
+    }
+  }
+
+  Future<UserServiceResult> updateSkills({required UserModel user}) async {
+    //String jsonSkill = jsonEncode(user.skills);
+    final result = await httpManager.restRequest(
+      method: HttpMethods.patch,
+      url: '${EndPoints.updateUser}/${user.id!}',
+      body: {
+        "skills": user.skills,
+      },
+    );
+
+    if (result['_id'] != null) {
+      return UserServiceResult.success(true);
+    } else {
+      return UserServiceResult.error(
+          'Ocorreu um erro ao editar os dados. Tente novamente mais tarde!');
+    }
+  }
+
+  Future<UserServiceResult> updateProfile({required UserModel user}) async {
+    final result = await httpManager.restRequest(
+      method: HttpMethods.patch,
+      url: '${EndPoints.updateUser}/${user.id!}',
+      body: {
+        "portfolioTitle": user.portfolioTitle,
+        "portfolioAbout": user.portfolioAbout,
+      },
+    );
+
+    if (result['_id'] != null) {
+      return UserServiceResult.success(true);
+    } else {
+      return UserServiceResult.error(
+          'Ocorreu um erro ao editar os dados. Tente novamente mais tarde!');
     }
   }
 }

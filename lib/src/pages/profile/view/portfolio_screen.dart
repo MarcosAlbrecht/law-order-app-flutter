@@ -5,6 +5,7 @@ import 'package:app_law_order/src/pages/profile/controller/profile_controller.da
 import 'package:app_law_order/src/pages/profile/view/components/picture_tile.dart';
 import 'package:app_law_order/src/pages/profile/view/components/service_dialog.dart';
 import 'package:app_law_order/src/pages/profile/view/components/services_tile.dart';
+import 'package:app_law_order/src/pages/profile/view/components/skill_dialog.dart';
 import 'package:app_law_order/src/pages/profile/view/components/skill_tile.dart';
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:flutter/material.dart';
@@ -63,331 +64,337 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                     vertical: 20,
                     horizontal: 10,
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomTextField(
-                        label: "Título do Perfil",
-                        initialValue:
-                            controller.authController.user.portfolioTitle,
-                        onSaved: (value) {
-                          controller.authController.user.portfolioTitle = value;
-                        },
-                      ),
-                      CustomTextField(
-                        label: "Sobre você",
-                        minLines: 1,
-                        maxLines: 5,
-                        initialValue:
-                            controller.authController.user.portfolioAbout,
-                        onSaved: (value) {
-                          controller.authController.user.portfolioAbout = value;
-                        },
-                      ),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomTextField(
+                          label: "Título do Perfil",
+                          initialValue:
+                              controller.authController.user.portfolioTitle,
+                          onSaved: (value) {
+                            controller.authController.user.portfolioTitle =
+                                value;
+                          },
+                        ),
+                        CustomTextField(
+                          label: "Sobre você",
+                          minLines: 1,
+                          maxLines: 5,
+                          initialValue:
+                              controller.authController.user.portfolioAbout,
+                          onSaved: (value) {
+                            controller.authController.user.portfolioAbout =
+                                value;
+                          },
+                        ),
 
-                      const Divider(
-                        height: 30,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 10, left: 0),
-                        child: Text(
-                          "Fotos do Portfólio",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            fontSize: CustomFontSizes.fontSize16,
-                            fontWeight: FontWeight.w600,
+                        const Divider(
+                          height: 30,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10, left: 0),
+                          child: Text(
+                            "Fotos do Portfólio",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontSize: CustomFontSizes.fontSize16,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
-                      ),
-                      //lista com as fotos
-                      SizedBox(
-                        height: 180,
-                        child: Visibility(
-                          visible: !controller.isSaving,
-                          replacement:
-                              const Center(child: CircularProgressIndicator()),
-                          child: ListView.separated(
-                            physics: const BouncingScrollPhysics(),
-                            padding:
-                                const EdgeInsets.only(right: 15, bottom: 15),
-                            scrollDirection: Axis.horizontal,
-                            itemCount: controller.authController.user
-                                        .portfolioPictures !=
-                                    null
-                                ? controller.authController.user
-                                        .portfolioPictures!.length +
-                                    1
-                                : 1,
-                            itemBuilder: (context, index) {
-                              if (index == 0) {
-                                return GestureDetector(
-                                  onTap: () async {
-                                    await showDialog(
-                                      context: context,
-                                      builder: (_) {
-                                        return CameraDialog(
-                                          isPortfolio: true,
-                                        );
-                                      },
-                                    );
-                                  },
-                                  child: Container(
-                                    width: 150,
-                                    height: 120,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      color: CustomColors.blueDarkColor,
+                        //lista com as fotos
+                        SizedBox(
+                          height: 180,
+                          child: Visibility(
+                            visible: !controller.isSavingPortfolioPicuture,
+                            replacement: const Center(
+                                child: CircularProgressIndicator()),
+                            child: ListView.separated(
+                              physics: const BouncingScrollPhysics(),
+                              padding:
+                                  const EdgeInsets.only(right: 15, bottom: 15),
+                              scrollDirection: Axis.horizontal,
+                              itemCount: controller.authController.user
+                                          .portfolioPictures !=
+                                      null
+                                  ? controller.authController.user
+                                          .portfolioPictures!.length +
+                                      1
+                                  : 1,
+                              itemBuilder: (context, index) {
+                                if (index == 0) {
+                                  return GestureDetector(
+                                    onTap: () async {
+                                      await showDialog(
+                                        context: context,
+                                        builder: (_) {
+                                          return CameraDialog(
+                                            isPortfolio: true,
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: Container(
+                                      width: 150,
+                                      height: 120,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        color: CustomColors.blueDarkColor,
+                                      ),
+                                      child: Icon(
+                                        Icons.camera_alt,
+                                        color: CustomColors.white,
+                                        size: 40,
+                                      ),
                                     ),
-                                    child: Icon(
-                                      Icons.camera_alt,
-                                      color: CustomColors.white,
-                                      size: 40,
-                                    ),
-                                  ),
-                                );
-                              } else {
-                                final photo = controller.authController.user
-                                    .portfolioPictures![index - 1];
-                                if (photo != null ||
-                                    photo.url != null ||
-                                    photo.localPath != null) {
-                                  return PictureTile(
-                                    picture: controller.authController.user
-                                        .portfolioPictures![index - 1],
-                                    index: index,
                                   );
                                 } else {
-                                  return const SizedBox
-                                      .shrink(); // Retorna um container vazio caso a propriedade seja nula
+                                  final photo = controller.authController.user
+                                      .portfolioPictures![index - 1];
+                                  if (photo != null ||
+                                      photo.url != null ||
+                                      photo.localPath != null) {
+                                    return PictureTile(
+                                      picture: controller.authController.user
+                                          .portfolioPictures![index - 1],
+                                      index: index,
+                                    );
+                                  } else {
+                                    return const SizedBox
+                                        .shrink(); // Retorna um container vazio caso a propriedade seja nula
+                                  }
                                 }
-                              }
-                            },
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(width: 5),
+                              },
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(width: 5),
+                            ),
                           ),
                         ),
-                      ),
 
-                      const Divider(
-                        height: 20,
-                      ),
+                        const Divider(
+                          height: 20,
+                        ),
 
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: 15,
-                          left: 0,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Serviços Ofertados",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontSize: CustomFontSizes.fontSize16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () async {
-                                ServiceModel serviceModel = ServiceModel();
-                                controller.actualService = serviceModel;
-                                await showDialog(
-                                  context: context,
-                                  builder: (_) {
-                                    return const ServiceDialog(
-                                      status: "insert",
-                                    );
-                                  },
-                                );
-                              },
-                              child: Icon(
-                                Icons.add_circle_outline,
-                                color: CustomColors.blueDark2Color,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      //container que lista os serviços oferecidos
-                      SizedBox(
-                        height: 200,
-                        child: ListView.separated(
-                          itemBuilder: (context, index) {
-                            return Visibility(
-                              visible: !controller.isSaving,
-                              replacement: const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                              child: Dismissible(
-                                background: Container(
-                                  alignment: Alignment.centerLeft,
-                                  color: Colors.green,
-                                  child: const Icon(
-                                    Icons.edit,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                secondaryBackground: Container(
-                                  alignment: Alignment.centerRight,
-                                  color: Colors.red,
-                                  child: const Icon(Icons.cancel),
-                                ),
-                                key: ValueKey<int>(index),
-                                child: ServicesTile(
-                                  service: controller
-                                      .authController.user.services![index],
-                                ),
-                                confirmDismiss: (direction) async {
-                                  if (direction ==
-                                      DismissDirection.endToStart) {
-                                    final bool result =
-                                        await showDeleteConfirmation(context);
-                                    if (result) {
-                                      controller.handleService(
-                                          status: 'delete');
-                                    }
-                                  } else {
-                                    await showDialog(
-                                      context: context,
-                                      builder: (_) {
-                                        controller.actualService = controller
-                                            .authController
-                                            .user
-                                            .services![index];
-                                        return const ServiceDialog(
-                                          status: "edit",
-                                        );
-                                      },
-                                    );
-                                  }
-                                },
-                              ),
-                            );
-                          },
-                          itemCount:
-                              controller.authController.user.services!.length,
-                          separatorBuilder: (context, index) =>
-                              const SizedBox(height: 5),
-                        ),
-                      ),
-                      const Divider(
-                        height: 30,
-                      ),
-
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 10, left: 0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Competências",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: 15,
+                            left: 0,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Serviços Ofertados",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
                                   fontSize: CustomFontSizes.fontSize16,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            InkWell(
-                              onTap: () async {
-                                ServiceModel serviceModel = ServiceModel();
-                                controller.actualService = serviceModel;
-                                await showDialog(
-                                  context: context,
-                                  builder: (_) {
-                                    return const ServiceDialog(
-                                      status: "insert",
-                                    );
-                                  },
-                                );
-                              },
-                              child: Icon(
-                                Icons.add_circle_outline,
-                                color: CustomColors.blueDark2Color,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-
-                      SizedBox(
-                        height: 200,
-                        child: ListView.separated(
-                          itemBuilder: (context, index) {
-                            return Visibility(
-                              visible: !controller.isSaving,
-                              replacement: const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                              child: Dismissible(
-                                background: Container(
-                                  alignment: Alignment.centerRight,
-                                  color: Colors.red,
-                                  child: const Icon(Icons.cancel),
+                                  fontWeight: FontWeight.w600,
                                 ),
-                                key: ValueKey<int>(index),
-                                child: SkillTile(
-                                  skill: controller
-                                      .authController.user.skills![index],
-                                ),
-                                confirmDismiss: (direction) async {
-                                  if (direction ==
-                                      DismissDirection.endToStart) {
-                                    final bool result =
-                                        await showDeleteConfirmation(context);
-                                    if (result) {
-                                      controller.handleService(
-                                          status: 'delete');
-                                    }
-                                  }
+                              ),
+                              InkWell(
+                                onTap: () async {
+                                  ServiceModel serviceModel = ServiceModel();
+                                  controller.actualService = serviceModel;
+                                  await showDialog(
+                                    context: context,
+                                    builder: (_) {
+                                      return const ServiceDialog(
+                                        status: "insert",
+                                      );
+                                    },
+                                  );
                                 },
-                              ),
-                            );
-                          },
-                          itemCount:
-                              controller.authController.user.skills!.length,
-                          separatorBuilder: (context, index) =>
-                              const SizedBox(height: 5),
-                        ),
-                      ),
-
-                      //botao para salvar o portfolio
-                      SizedBox(
-                        height: 50,
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: CustomColors.blueColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
+                                child: Icon(
+                                  Icons.add_circle_outline,
+                                  color: CustomColors.blueDark2Color,
+                                ),
+                              )
+                            ],
                           ),
-                          onPressed: controller.authController.isLoading.value
-                              ? null
-                              : () async {
-                                  //Get.toNamed(PagesRoutes.signUpStep1);
-                                  FocusScope.of(context).unfocus();
-                                  if (_formKey.currentState!.validate()) {
-                                    _formKey.currentState!.save();
-                                    await controller.handleUpdateProfile();
-                                  } else {
-                                    utilServices.showToast(
-                                        message: "Verifique todos os campos!");
-                                  }
-                                },
-                          child: controller.isSaving
-                              ? CircularProgressIndicator(
-                                  color: CustomColors.white,
-                                )
-                              : Text(
-                                  'Atualizar perfil',
-                                  style: TextStyle(
-                                    color: CustomColors.white,
-                                    fontSize: 18,
-                                  ),
-                                ),
                         ),
-                      ),
-                    ],
+                        //container que lista os serviços oferecidos
+                        SizedBox(
+                          height: 200,
+                          child: ListView.separated(
+                            itemBuilder: (context, index) {
+                              return Visibility(
+                                visible: !controller.isSavingService,
+                                replacement: const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                                child: Dismissible(
+                                  background: Container(
+                                    alignment: Alignment.centerLeft,
+                                    color: Colors.green,
+                                    child: const Icon(
+                                      Icons.edit,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  secondaryBackground: Container(
+                                    alignment: Alignment.centerRight,
+                                    color: Colors.red,
+                                    child: const Icon(Icons.cancel),
+                                  ),
+                                  key: ValueKey<int>(index),
+                                  child: ServicesTile(
+                                    service: controller
+                                        .authController.user.services![index],
+                                  ),
+                                  confirmDismiss: (direction) async {
+                                    if (direction ==
+                                        DismissDirection.endToStart) {
+                                      final bool result =
+                                          await showDeleteConfirmation(context);
+                                      if (result) {
+                                        controller.handleService(
+                                            status: 'delete');
+                                      }
+                                    } else {
+                                      await showDialog(
+                                        context: context,
+                                        builder: (_) {
+                                          controller.actualService = controller
+                                              .authController
+                                              .user
+                                              .services![index];
+                                          return const ServiceDialog(
+                                            status: "edit",
+                                          );
+                                        },
+                                      );
+                                    }
+                                  },
+                                ),
+                              );
+                            },
+                            itemCount:
+                                controller.authController.user.services!.length,
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(height: 5),
+                          ),
+                        ),
+                        const Divider(
+                          height: 30,
+                        ),
+
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10, left: 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Competências",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontSize: CustomFontSizes.fontSize16,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              InkWell(
+                                onTap: () async {
+                                  ServiceModel serviceModel = ServiceModel();
+                                  controller.actualService = serviceModel;
+                                  await showDialog(
+                                    context: context,
+                                    builder: (_) {
+                                      return const SkillDialog();
+                                    },
+                                  );
+                                },
+                                child: Icon(
+                                  Icons.add_circle_outline,
+                                  color: CustomColors.blueDark2Color,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+
+                        SizedBox(
+                          height: 200,
+                          child: ListView.separated(
+                            itemBuilder: (context, index) {
+                              return Visibility(
+                                visible: !controller.isSavingSkill,
+                                replacement: const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                                child: Dismissible(
+                                  background: Container(
+                                    alignment: Alignment.centerRight,
+                                    color: Colors.red,
+                                    child: const Icon(Icons.cancel),
+                                  ),
+                                  key: ValueKey<int>(index),
+                                  child: SkillTile(
+                                    skill: controller
+                                        .authController.user.skills![index],
+                                  ),
+                                  confirmDismiss: (direction) async {
+                                    if (direction ==
+                                        DismissDirection.endToStart) {
+                                      final bool result =
+                                          await showDeleteConfirmation(context);
+                                      if (result) {
+                                        controller.skill = controller
+                                            .authController.user.skills![index];
+                                        controller.handleSkill(
+                                            status: 'delete');
+                                      }
+                                    }
+                                  },
+                                ),
+                              );
+                            },
+                            itemCount:
+                                controller.authController.user.skills!.length,
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(height: 5),
+                          ),
+                        ),
+
+                        //botao para salvar o portfolio
+                        SizedBox(
+                          height: 50,
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: CustomColors.blueColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            onPressed: controller.authController.isLoading.value
+                                ? null
+                                : () async {
+                                    //Get.toNamed(PagesRoutes.signUpStep1);
+                                    FocusScope.of(context).unfocus();
+                                    if (_formKey.currentState!.validate()) {
+                                      _formKey.currentState!.save();
+                                      await controller.handleUpdateProfile();
+                                    } else {
+                                      utilServices.showToast(
+                                          message:
+                                              "Verifique todos os campos!");
+                                    }
+                                  },
+                            child: controller.isSaving
+                                ? CircularProgressIndicator(
+                                    color: CustomColors.white,
+                                  )
+                                : Text(
+                                    'Atualizar perfil',
+                                    style: TextStyle(
+                                      color: CustomColors.white,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );

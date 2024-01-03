@@ -113,3 +113,11 @@ String? valueServiceValidator(String? value) {
 
   return null;
 }
+
+String? skillValidator(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Digite o Valor do Serviço';
+  }
+
+  return null;
+}

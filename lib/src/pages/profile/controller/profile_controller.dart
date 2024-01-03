@@ -27,10 +27,14 @@ class ProfileController extends GetxController {
   late Uint8List imageBytes;
   late File file;
   late PictureModel profilePinctureUrl;
+  late String skill;
 
   bool isLoading = false;
   bool isSaving = false;
   bool isSavingPicuture = false;
+  bool isSavingPortfolioPicuture = false;
+  bool isSavingService = false;
+  bool isSavingSkill = false;
 
   @override
   void onInit() {
@@ -44,6 +48,24 @@ class ProfileController extends GetxController {
   }
 
   void setSaving({required bool value}) {
+    isSaving = value;
+
+    update();
+  }
+
+  void setSavingPortfolioPicuture({required bool value}) {
+    isSaving = value;
+
+    update();
+  }
+
+  void setSavingService({required bool value}) {
+    isSaving = value;
+
+    update();
+  }
+
+  void setSavingSkill({required bool value}) {
     isSaving = value;
 
     update();
@@ -161,7 +183,7 @@ class ProfileController extends GetxController {
 
   Future<bool> inertImagePortfolio({required String imagePath}) async {
     bool success = false;
-    setSaving(value: true);
+    setSavingPortfolioPicuture(value: true);
     final result =
         await profileRepository.insertPortfolioPicture(picture: imagePath);
 
@@ -170,6 +192,7 @@ class ProfileController extends GetxController {
         //recaregar informaçoes do usuário;
         await authController.getUserById();
         success = true;
+        utilService.showToast(message: "Foto adicionada com sucesso!");
       },
       error: (data) {
         utilService.showToast(
@@ -178,30 +201,32 @@ class ProfileController extends GetxController {
       },
     );
 
-    setSaving(value: false);
+    setSavingPortfolioPicuture(value: false);
     return success;
   }
 
   Future<void> deleteImagePortfolio(
       {required PictureModel picture, required int index}) async {
-    setSaving(value: true);
+    setSavingPortfolioPicuture(value: true);
     final result =
         await profileRepository.deletePortfolioPicture(idPicture: picture.id!);
     result.when(success: (data) {
       authController.user.portfolioPictures
           ?.removeWhere((item) => item.id == picture.id);
+
+      utilService.showToast(message: "Foto removida com sucesso!");
     }, error: (data) {
       utilService.showToast(
           message: "Não foi possível remover a foto!", isError: true);
     });
 
-    setSaving(value: false);
+    setSavingPortfolioPicuture(value: false);
   }
 
   Future<void> handleService({
     required String status,
   }) async {
-    setSaving(value: true);
+    setSavingService(value: true);
     switch (status) {
       case 'insert':
         final result =
@@ -249,6 +274,47 @@ class ProfileController extends GetxController {
         break;
       default:
     }
-    setSaving(value: false);
+    setSavingService(value: false);
+  }
+
+  Future<void> handleSkill({required String status}) async {
+    setSavingSkill(value: true);
+    switch (status) {
+      case 'insert':
+        authController.user.skills?.add(skill);
+        final result =
+            await profileRepository.updateSkills(user: authController.user);
+        result.when(
+          success: (data) {
+            utilService.showToast(
+                message: "Competência adicionada com sucesso!");
+          },
+          error: (message) {
+            utilService.showToast(message: message, isError: true);
+            authController.user.skills
+                ?.removeWhere((element) => element == skill);
+          },
+        );
+
+        break;
+      case 'delete':
+        authController.user.skills?.removeWhere((element) => element == skill);
+        final result =
+            await profileRepository.updateSkills(user: authController.user);
+        result.when(
+          success: (data) {
+            utilService.showToast(message: "Competência removida com sucesso!");
+          },
+          error: (message) {
+            utilService.showToast(message: message, isError: true);
+            authController.user.skills
+                ?.removeWhere((element) => element == skill);
+          },
+        );
+
+      default:
+    }
+    skill = "";
+    setSavingSkill(value: false);
   }
 }
