@@ -24,7 +24,7 @@ class SkillTile extends StatelessWidget {
         visualDensity: VisualDensity.compact,
         title: Text(
           skill,
-          style: TextStyle(fontSize: CustomFontSizes.fontSize16),
+          style: TextStyle(fontSize: CustomFontSizes.fontSize14),
         ),
       ),
     );

@@ -29,8 +29,28 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: CustomColors.backGround,
         //colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
-        textTheme: GoogleFonts.latoTextTheme(textTheme).copyWith(
-          bodyMedium: GoogleFonts.lato(textStyle: textTheme.bodyMedium),
+
+        textTheme: GoogleFonts.robotoTextTheme(textTheme).copyWith(
+          bodyMedium: GoogleFonts.roboto(
+            textStyle: textTheme.bodySmall,
+            letterSpacing: 1,
+          ),
+          bodyLarge: GoogleFonts.roboto(
+            textStyle: textTheme.bodyMedium,
+            letterSpacing: 1,
+          ),
+          titleLarge: GoogleFonts.roboto(
+            textStyle: textTheme.titleLarge,
+            letterSpacing: 1,
+          ),
+          titleMedium: GoogleFonts.roboto(
+            textStyle: textTheme.titleMedium,
+            letterSpacing: 1,
+          ),
+          titleSmall: GoogleFonts.roboto(
+            textStyle: textTheme.titleSmall,
+            letterSpacing: 1,
+          ),
         ),
       ),
       getPages: AppPages.pages,

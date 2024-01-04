@@ -26,91 +26,93 @@ class _ProfileTabState extends State<ProfileTab> {
         child: GetBuilder<ProfileController>(
           builder: (controller) {
             return Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  padding: const EdgeInsets.only(top: 30, bottom: 10),
-                  child: Column(
-                    children: [
-                      Stack(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(3),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                width: 4,
-                                color: CustomColors.blueColor,
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.only(top: 30, bottom: 10),
+                    child: Column(
+                      children: [
+                        Stack(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(3),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  width: 4,
+                                  color: CustomColors.blueColor,
+                                ),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: controller.authController.user
+                                            .profilePicture !=
+                                        null
+                                    ? Image.network(
+                                        controller.authController.user
+                                            .profilePicture!.url!,
+                                        loadingBuilder: (BuildContext context,
+                                            Widget child,
+                                            ImageChunkEvent? loadingProgress) {
+                                          if (loadingProgress == null) {
+                                            return child;
+                                          } else {
+                                            // Exibir um ícone de carregamento enquanto a imagem está sendo carregada
+                                            return Center(
+                                              child: CircularProgressIndicator(
+                                                color:
+                                                    CustomColors.blueDark2Color,
+                                              ),
+                                            );
+                                          }
+                                        },
+                                        errorBuilder: (BuildContext context,
+                                            Object exception,
+                                            StackTrace? stackTrace) {
+                                          return Image.asset(
+                                            "assets/ICONPEOPLE.png",
+                                            height: 160,
+                                            width: 160,
+                                          );
+                                        },
+                                        height: 160,
+                                        width: 160,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Image.asset(
+                                        "assets/ICONPEOPLE.png",
+                                        height: 160,
+                                        width: 160,
+                                      ),
                               ),
                             ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: controller
-                                          .authController.user.profilePicture !=
-                                      null
-                                  ? Image.network(
-                                      controller.authController.user
-                                          .profilePicture!.url!,
-                                      loadingBuilder: (BuildContext context,
-                                          Widget child,
-                                          ImageChunkEvent? loadingProgress) {
-                                        if (loadingProgress == null) {
-                                          return child;
-                                        } else {
-                                          // Exibir um ícone de carregamento enquanto a imagem está sendo carregada
-                                          return Center(
-                                            child: CircularProgressIndicator(
-                                              color:
-                                                  CustomColors.blueDark2Color,
-                                            ),
-                                          );
-                                        }
-                                      },
-                                      errorBuilder: (BuildContext context,
-                                          Object exception,
-                                          StackTrace? stackTrace) {
-                                        return Image.asset(
-                                          "assets/ICONPEOPLE.png",
-                                          height: 160,
-                                          width: 160,
-                                        );
-                                      },
-                                      height: 160,
-                                      width: 160,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Image.asset(
-                                      "assets/ICONPEOPLE.png",
-                                      height: 160,
-                                      width: 160,
-                                    ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Divider(
-                        height: 20,
-                        color: Colors.transparent,
-                      ),
-                      Text(
-                        '${controller.authController.user.firstName} ${controller.authController.user.lastName}',
-                        style: TextStyle(
-                            color: CustomColors.black,
-                            fontWeight: FontWeight.normal,
-                            fontSize: CustomFontSizes.fontSize22),
-                      ),
-                      const Divider(
-                        height: 5,
-                        color: Colors.transparent,
-                      ),
-                      Text(
-                        '${controller.authController.user.email}',
-                        style: TextStyle(
-                            color: CustomColors.black.withAlpha(100),
-                            fontSize: CustomFontSizes.fontSize18),
-                      ),
-                    ],
+                          ],
+                        ),
+                        const Divider(
+                          height: 20,
+                          color: Colors.transparent,
+                        ),
+                        Text(
+                          '${controller.authController.user.firstName} ${controller.authController.user.lastName}',
+                          style: TextStyle(
+                              color: CustomColors.black,
+                              fontWeight: FontWeight.normal,
+                              fontSize: CustomFontSizes.fontSize22),
+                        ),
+                        const Divider(
+                          height: 5,
+                          color: Colors.transparent,
+                        ),
+                        Text(
+                          '${controller.authController.user.email}',
+                          style: TextStyle(
+                              color: CustomColors.black.withAlpha(100),
+                              fontSize: CustomFontSizes.fontSize18),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Expanded(
@@ -129,6 +131,8 @@ class _ProfileTabState extends State<ProfileTab> {
                         child: SingleChildScrollView(
                           physics: const BouncingScrollPhysics(),
                           child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               OptionInfo(
                                 text: " Informações Pessoais",
@@ -173,7 +177,9 @@ class _ProfileTabState extends State<ProfileTab> {
                               OptionInfo(
                                 text: " Seguindo",
                                 icon: Icons.people_alt_outlined,
-                                onTap: () {},
+                                onTap: () {
+                                  Get.toNamed(PagesRoutes.followsScreen);
+                                },
                               ),
                               const Divider(
                                 height: 5,
@@ -237,7 +243,7 @@ class OptionInfo extends StatelessWidget {
                 ),
                 Text(
                   text,
-                  style: TextStyle(fontSize: CustomFontSizes.fontSize18),
+                  style: TextStyle(fontSize: CustomFontSizes.fontSize16),
                 ),
               ],
             ),

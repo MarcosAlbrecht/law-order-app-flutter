@@ -153,24 +153,27 @@ class _ProviderTileState extends State<ProviderTile> {
                                     init: FollowController(user: widget.item),
                                     global: false,
                                     builder: (controller) {
-                                      return GestureDetector(
-                                        onTap: () async {
-                                          print("clicou no follow");
-                                          await controller.handleFollow();
-                                        },
-                                        child: controller.followed == null
-                                            ? Icon(
-                                                FontAwesome.user_plus,
-                                                size: 18,
-                                                color:
-                                                    CustomColors.blueDark2Color,
-                                              )
-                                            : Icon(
-                                                FontAwesome.user_times,
-                                                size: 18,
-                                                color:
-                                                    CustomColors.blueDarkColor,
-                                              ),
+                                      return Padding(
+                                        padding: const EdgeInsets.only(left: 2),
+                                        child: GestureDetector(
+                                          onTap: () async {
+                                            //print("clicou no follow");
+                                            await controller.handleFollow();
+                                          },
+                                          child: controller.followed == null
+                                              ? Icon(
+                                                  FontAwesome.user_plus,
+                                                  size: 18,
+                                                  color: CustomColors
+                                                      .blueDark2Color,
+                                                )
+                                              : Icon(
+                                                  FontAwesome.user_times,
+                                                  size: 18,
+                                                  color: CustomColors
+                                                      .blueDarkColor,
+                                                ),
+                                        ),
                                       );
                                     },
                                   ),
@@ -219,11 +222,13 @@ class _ProviderTileState extends State<ProviderTile> {
                                     width: 10,
                                     color: Colors.transparent,
                                   ),
-                                  Text(
-                                    '${widget.item.occupationArea}',
-                                    style: TextStyle(
-                                      color: Colors.grey.shade600,
-                                      fontSize: CustomFontSizes.fontSize14,
+                                  Expanded(
+                                    child: Text(
+                                      '${widget.item.occupationArea}',
+                                      style: TextStyle(
+                                        color: Colors.grey.shade600,
+                                        fontSize: CustomFontSizes.fontSize14,
+                                      ),
                                     ),
                                   ),
                                 ],

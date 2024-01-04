@@ -62,7 +62,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     vertical: 20,
-                    horizontal: 10,
+                    horizontal: 16,
                   ),
                   child: Form(
                     key: _formKey,
@@ -353,6 +353,11 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                             separatorBuilder: (context, index) =>
                                 const SizedBox(height: 5),
                           ),
+                        ),
+
+                        const Divider(
+                          height: 15,
+                          color: Colors.transparent,
                         ),
 
                         //botao para salvar o portfolio

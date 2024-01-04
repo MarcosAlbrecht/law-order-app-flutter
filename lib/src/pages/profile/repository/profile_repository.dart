@@ -3,8 +3,10 @@ import 'dart:ffi';
 import 'dart:io';
 
 import 'package:app_law_order/src/constants/endpoints.dart';
+import 'package:app_law_order/src/models/follows_model.dart';
 import 'package:app_law_order/src/models/service_model.dart';
 import 'package:app_law_order/src/models/user_model.dart';
+import 'package:app_law_order/src/pages/home/result/follows_result.dart';
 import 'package:app_law_order/src/pages/profile/result/update_picture_profile_result.dart';
 import 'package:app_law_order/src/pages/profile/result/user_service_result.dart';
 import 'package:app_law_order/src/services/http_manager.dart';
@@ -163,6 +165,29 @@ class ProfileRepository {
     } else {
       return UserServiceResult.error(
           'Ocorreu um erro ao editar os dados. Tente novamente mais tarde!');
+    }
+  }
+
+  Future<FollowsResult<FollowsModel>> getFollows(
+      {required int limit, required int skip}) async {
+    final result = await httpManager.restRequest(
+      method: HttpMethods.get,
+      url: EndPoints.getFollows,
+      queryParams: {
+        'limit': limit,
+        'skip': skip,
+      },
+    );
+
+    if (result['result'] != null) {
+      List<FollowsModel> data =
+          (List<Map<String, dynamic>>.from(result['result']))
+              .map(FollowsModel.fromJson)
+              .toList();
+
+      return FollowsResult.success(data);
+    } else {
+      return FollowsResult.error("Não foram encontrado dados!");
     }
   }
 }

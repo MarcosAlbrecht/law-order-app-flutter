@@ -5,7 +5,9 @@ import 'package:app_law_order/src/pages/base/base_screen.dart';
 import 'package:app_law_order/src/pages/base/binding/navigation_binding.dart';
 import 'package:app_law_order/src/pages/home/binding/home_binding.dart';
 import 'package:app_law_order/src/pages/home/controller/home_controller.dart';
+import 'package:app_law_order/src/pages/profile/binding/follows_binding.dart';
 import 'package:app_law_order/src/pages/profile/binding/profile_binding.dart';
+import 'package:app_law_order/src/pages/profile/view/follows_screen.dart';
 import 'package:app_law_order/src/pages/profile/view/portfolio_screen.dart';
 import 'package:app_law_order/src/pages/profile/view/profile_screen.dart';
 import 'package:app_law_order/src/pages/profile/view/profile_tab.dart';
@@ -38,6 +40,11 @@ abstract class AppPages {
       page: () => const PortfolioScreen(),
     ),
     GetPage(
+      name: PagesRoutes.followsScreen,
+      page: () => const FollowsScreen(),
+      binding: FollowsBinding(),
+    ),
+    GetPage(
       page: () => const BaseScreen(),
       name: PagesRoutes.baseRoute,
       bindings: [
@@ -57,4 +64,5 @@ abstract class PagesRoutes {
   static const String profileTab = '/profileTab';
   static const String profileScreen = '/profileScreen';
   static const String portfolioScreen = '/portfolioScreen';
+  static const String followsScreen = '/followsScreen';
 }

@@ -80,6 +80,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       padding: const EdgeInsets.only(
                         top: 30,
                         bottom: 10,
+                        right: 6,
+                        left: 6,
                       ),
                       child: Column(
                         children: [
