@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:app_law_order/src/models/follower_model.dart';
 import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:flutter/material.dart';
 
@@ -6,11 +7,11 @@ import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/models/follows_model.dart';
 import 'package:get/get.dart';
 
-class FollowsTile extends StatelessWidget {
-  final FollowsModel follow;
-  const FollowsTile({
+class FollowerTile extends StatelessWidget {
+  final FollowerModel follower;
+  const FollowerTile({
     Key? key,
-    required this.follow,
+    required this.follower,
   }) : super(key: key);
 
   @override
@@ -19,11 +20,11 @@ class FollowsTile extends StatelessWidget {
       onTap: () {
         Get.toNamed(
           PagesRoutes.profileViewScreen,
-          arguments: {'idUser': follow.followed?.id},
+          arguments: {'idUser': follower.follower?.id},
         );
       },
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.only(bottom: 5),
         child: Material(
           elevation: 5,
           color: CustomColors.cyanColor,
@@ -38,6 +39,7 @@ class FollowsTile extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
+
               // border: Border.all(
               //   color: Colors.cyan.shade200,
               //   width: 1, // Defina a largura da borda conforme necessário
@@ -47,17 +49,17 @@ class FollowsTile extends StatelessWidget {
             child: ListTile(
               visualDensity: VisualDensity.comfortable,
               leading: CircleAvatar(
-                backgroundImage: follow.followed?.profilePicture != null
-                    ? NetworkImage(follow.followed!.profilePicture!.url!)
+                backgroundImage: follower.follower?.profilePicture != null
+                    ? NetworkImage(follower.follower!.profilePicture!.url!)
                     : const AssetImage("assets/ICONPEOPLE.png")
                         as ImageProvider<Object>,
               ),
               title: Text(
-                '${follow.followed!.firstName!} ${follow.followed!.lastName!}',
+                '${follower.follower!.firstName!} ${follower.follower!.lastName!}',
                 style: TextStyle(fontSize: CustomFontSizes.fontSize16),
               ),
               subtitle: Text(
-                '${follow.followed!.city!}, ${follow.followed!.state!}',
+                '${follower.follower!.city!}, ${follower.follower!.state!}',
                 style: TextStyle(fontSize: CustomFontSizes.fontSize14),
               ),
             ),

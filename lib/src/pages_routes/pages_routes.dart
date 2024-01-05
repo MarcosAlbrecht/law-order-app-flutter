@@ -5,12 +5,16 @@ import 'package:app_law_order/src/pages/base/base_screen.dart';
 import 'package:app_law_order/src/pages/base/binding/navigation_binding.dart';
 import 'package:app_law_order/src/pages/home/binding/home_binding.dart';
 import 'package:app_law_order/src/pages/home/controller/home_controller.dart';
+import 'package:app_law_order/src/pages/profile/binding/follower_binding.dart';
 import 'package:app_law_order/src/pages/profile/binding/follows_binding.dart';
 import 'package:app_law_order/src/pages/profile/binding/profile_binding.dart';
+import 'package:app_law_order/src/pages/profile/view/followers_screen.dart';
 import 'package:app_law_order/src/pages/profile/view/follows_screen.dart';
 import 'package:app_law_order/src/pages/profile/view/portfolio_screen.dart';
 import 'package:app_law_order/src/pages/profile/view/profile_screen.dart';
 import 'package:app_law_order/src/pages/profile/view/profile_tab.dart';
+import 'package:app_law_order/src/pages/profile_view/binding/profile_view_binding.dart';
+import 'package:app_law_order/src/pages/profile_view/view/profile_view_screen.dart';
 import 'package:get/get.dart';
 
 abstract class AppPages {
@@ -45,6 +49,16 @@ abstract class AppPages {
       binding: FollowsBinding(),
     ),
     GetPage(
+      name: PagesRoutes.followerScreen,
+      page: () => const FollowerScreen(),
+      binding: FollowerBinding(),
+    ),
+    GetPage(
+      name: PagesRoutes.profileViewScreen,
+      page: () => const ProfileViewScreen(),
+      binding: ProfileViewBinding(),
+    ),
+    GetPage(
       page: () => const BaseScreen(),
       name: PagesRoutes.baseRoute,
       bindings: [
@@ -65,4 +79,6 @@ abstract class PagesRoutes {
   static const String profileScreen = '/profileScreen';
   static const String portfolioScreen = '/portfolioScreen';
   static const String followsScreen = '/followsScreen';
+  static const String followerScreen = '/followerScreen';
+  static const String profileViewScreen = '/profileViewScreen';
 }

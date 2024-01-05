@@ -196,4 +196,10 @@ class AuthController extends GetxController {
       },
     );
   }
+
+  Future<void> logout() async {
+    await utilServices.removeLocalData();
+    user = UserModel();
+    Get.offAllNamed(PagesRoutes.signInRoute);
+  }
 }

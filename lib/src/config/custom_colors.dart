@@ -5,7 +5,7 @@ abstract class CustomColors {
   static Color blueColor = const Color(0xff6ae0f2);
   static Color blueDarkColor = const Color(0xff0f172a);
   static Color blueDark2Color = const Color(0xff00ccff);
-  static Color cyanColor = const Color(0xfff1f5f9);
+  static Color cyanColor = const Color(0xfffafafa);
   static Color white = Colors.white;
   static Color black = Colors.black;
 

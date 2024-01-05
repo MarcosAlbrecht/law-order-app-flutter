@@ -168,7 +168,9 @@ class _ProfileTabState extends State<ProfileTab> {
                               OptionInfo(
                                 text: " Seguidores",
                                 icon: Icons.people_alt_outlined,
-                                onTap: () {},
+                                onTap: () {
+                                  Get.toNamed(PagesRoutes.followerScreen);
+                                },
                               ),
                               const Divider(
                                 height: 5,
@@ -188,7 +190,13 @@ class _ProfileTabState extends State<ProfileTab> {
                               OptionInfo(
                                 text: " Sair",
                                 icon: Icons.power_settings_new_outlined,
-                                onTap: () {},
+                                onTap: () async {
+                                  final bool result =
+                                      await showLogoutfirmation(context);
+                                  if (result) {
+                                    controller.authController.logout();
+                                  }
+                                },
                               ),
                             ],
                           ),
@@ -257,4 +265,33 @@ class OptionInfo extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<bool> showLogoutfirmation(BuildContext context) async {
+  return await showDialog<bool>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Sair'),
+            content: Text('Tem certeza que deseja deslogar do aplicativo?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context)
+                      .pop(false); // Retorna falso para cancelar a exclusão
+                },
+                child: Text('Cancelar'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(
+                      true); // Retorna verdadeiro para confirmar a exclusão
+                },
+                child: Text('Confirmar'),
+              ),
+            ],
+          );
+        },
+      ) ??
+      false; // Retorna falso por padrão se showDialog retornar nulo
 }

@@ -13,6 +13,7 @@ abstract class EndPoints {
       '$baseUrl/accounts/users/update-profile-picture';
 
   static const getFollows = '$baseUrl/accounts/follows/follows';
+  static const getFollowers = '$baseUrl/accounts/follows/followers';
   static const setFollow = '$baseUrl/accounts/follows/follow/';
   static const setUnFollow = '$baseUrl/accounts/follows/unfollow/';
   static const insertPortfolioPicture =

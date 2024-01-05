@@ -3,10 +3,12 @@ import 'dart:ffi';
 import 'dart:io';
 
 import 'package:app_law_order/src/constants/endpoints.dart';
+import 'package:app_law_order/src/models/follower_model.dart';
 import 'package:app_law_order/src/models/follows_model.dart';
 import 'package:app_law_order/src/models/service_model.dart';
 import 'package:app_law_order/src/models/user_model.dart';
 import 'package:app_law_order/src/pages/home/result/follows_result.dart';
+import 'package:app_law_order/src/pages/profile/result/follower_result.dart';
 import 'package:app_law_order/src/pages/profile/result/update_picture_profile_result.dart';
 import 'package:app_law_order/src/pages/profile/result/user_service_result.dart';
 import 'package:app_law_order/src/services/http_manager.dart';
@@ -188,6 +190,29 @@ class ProfileRepository {
       return FollowsResult.success(data);
     } else {
       return FollowsResult.error("Não foram encontrado dados!");
+    }
+  }
+
+  Future<FollowerResult<FollowerModel>> getFollowers(
+      {required int limit, required int skip}) async {
+    final result = await httpManager.restRequest(
+      method: HttpMethods.get,
+      url: EndPoints.getFollowers,
+      queryParams: {
+        'limit': limit,
+        'skip': skip,
+      },
+    );
+
+    if (result['result'] != null) {
+      List<FollowerModel> data =
+          (List<Map<String, dynamic>>.from(result['result']))
+              .map(FollowerModel.fromJson)
+              .toList();
+
+      return FollowerResult.success(data);
+    } else {
+      return FollowerResult.error("Não foram encontrado dados!");
     }
   }
 }

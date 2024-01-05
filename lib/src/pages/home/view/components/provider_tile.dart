@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:app_law_order/src/pages/home/controller/follow_controller.dart';
+import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:get/get.dart';
@@ -27,22 +28,35 @@ class _ProviderTileState extends State<ProviderTile> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 0),
+      padding: const EdgeInsets.only(bottom: 10),
       child: Stack(
         children: [
           GestureDetector(
             onTap: () {
               //Get.toNamed(PagesRoutes.productRoute, arguments: widget.item);
+              Get.toNamed(
+                PagesRoutes.profileViewScreen,
+                arguments: {'idUser': widget.item.id},
+              );
             },
-            child: Card(
+            child: Material(
               //color: CustomColors.backgroudCard,
-              elevation: 0,
-              shadowColor: CustomColors.white,
-              shape: RoundedRectangleBorder(
-                side: BorderSide(
-                    style: BorderStyle.solid, color: Colors.cyan.shade200),
-                borderRadius: BorderRadius.circular(10),
+              elevation: 4,
+              color: CustomColors.cyanColor,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(16),
+                  bottomRight: Radius.circular(16),
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
+                ),
               ),
+              shadowColor: CustomColors.white,
+              // shape: RoundedRectangleBorder(
+              //   side: BorderSide(
+              //       style: BorderStyle.solid, color: Colors.cyan.shade200),
+              //   borderRadius: BorderRadius.circular(10),
+              // ),
               child: Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
