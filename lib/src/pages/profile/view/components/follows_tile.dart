@@ -29,10 +29,10 @@ class FollowsTile extends StatelessWidget {
           color: CustomColors.cyanColor,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(16),
-              bottomRight: Radius.circular(16),
-              topLeft: Radius.circular(16),
-              topRight: Radius.circular(16),
+              bottomLeft: Radius.circular(10),
+              bottomRight: Radius.circular(10),
+              topLeft: Radius.circular(10),
+              topRight: Radius.circular(10),
             ),
           ),
           child: Container(

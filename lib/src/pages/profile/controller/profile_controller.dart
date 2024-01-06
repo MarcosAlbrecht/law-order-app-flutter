@@ -262,7 +262,7 @@ class ProfileController extends GetxController {
         final result =
             await profileRepository.deleteService(service: actualService);
         result.when(
-          success: (data) {
+          success: (data) async {
             authController.user.services
                 ?.removeWhere((element) => element.id == actualService.id);
             utilService.showToast(message: "Serviço removido com sucesso!");

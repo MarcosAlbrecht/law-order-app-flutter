@@ -176,7 +176,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                         const Divider(
                           height: 20,
                         ),
-
+                        //titulo serviços oferecidos e icone para cadastrar
                         Padding(
                           padding: const EdgeInsets.only(
                             bottom: 15,
@@ -215,71 +215,91 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                           ),
                         ),
                         //container que lista os serviços oferecidos
-                        SizedBox(
-                          height: 200,
-                          child: ListView.separated(
-                            itemBuilder: (context, index) {
-                              return Visibility(
-                                visible: !controller.isSavingService,
-                                replacement: const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                                child: Dismissible(
-                                  background: Container(
-                                    alignment: Alignment.centerLeft,
-                                    color: Colors.green,
-                                    child: const Icon(
-                                      Icons.edit,
-                                      color: Colors.white,
+                        Visibility(
+                          visible:
+                              controller.authController.user.services != null &&
+                                  controller
+                                      .authController.user.services!.isNotEmpty,
+                          replacement: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.search_off,
+                                    color: CustomColors.black),
+                                const Text('Não há itens para apresentar'),
+                              ],
+                            ),
+                          ),
+                          child: SizedBox(
+                            height: 200,
+                            child: ListView.separated(
+                              itemBuilder: (context, index) {
+                                return Visibility(
+                                  visible: !controller.isSavingService,
+                                  replacement: const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                  child: Dismissible(
+                                    background: Container(
+                                      alignment: Alignment.centerLeft,
+                                      color: Colors.green,
+                                      child: const Icon(
+                                        Icons.edit,
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                  ),
-                                  secondaryBackground: Container(
-                                    alignment: Alignment.centerRight,
-                                    color: Colors.red,
-                                    child: const Icon(Icons.cancel),
-                                  ),
-                                  key: ValueKey<int>(index),
-                                  child: ServicesTile(
-                                    service: controller
-                                        .authController.user.services![index],
-                                  ),
-                                  confirmDismiss: (direction) async {
-                                    if (direction ==
-                                        DismissDirection.endToStart) {
-                                      final bool result =
-                                          await showDeleteConfirmation(context);
-                                      if (result) {
-                                        controller.handleService(
-                                            status: 'delete');
-                                      }
-                                    } else {
-                                      await showDialog(
-                                        context: context,
-                                        builder: (_) {
+                                    secondaryBackground: Container(
+                                      alignment: Alignment.centerRight,
+                                      color: Colors.red,
+                                      child: const Icon(Icons.cancel),
+                                    ),
+                                    key: ValueKey<int>(index),
+                                    child: ServicesTile(
+                                      service: controller
+                                          .authController.user.services![index],
+                                    ),
+                                    confirmDismiss: (direction) async {
+                                      if (direction ==
+                                          DismissDirection.endToStart) {
+                                        final bool result =
+                                            await showDeleteConfirmation(
+                                                context);
+                                        if (result) {
                                           controller.actualService = controller
                                               .authController
                                               .user
                                               .services![index];
-                                          return const ServiceDialog(
-                                            status: "edit",
-                                          );
-                                        },
-                                      );
-                                    }
-                                  },
-                                ),
-                              );
-                            },
-                            itemCount:
-                                controller.authController.user.services!.length,
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(height: 5),
+                                          controller.handleService(
+                                              status: 'delete');
+                                        }
+                                      } else {
+                                        await showDialog(
+                                          context: context,
+                                          builder: (_) {
+                                            controller.actualService =
+                                                controller.authController.user
+                                                    .services![index];
+                                            return const ServiceDialog(
+                                              status: "edit",
+                                            );
+                                          },
+                                        );
+                                      }
+                                    },
+                                  ),
+                                );
+                              },
+                              itemCount: controller
+                                  .authController.user.services!.length,
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(height: 5),
+                            ),
                           ),
                         ),
                         const Divider(
                           height: 30,
                         ),
-
+                        //titulo competencias e botao para cadastrar
                         Padding(
                           padding: const EdgeInsets.only(bottom: 10, left: 0),
                           child: Row(
@@ -312,46 +332,65 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                           ),
                         ),
 
-                        SizedBox(
-                          height: 200,
-                          child: ListView.separated(
-                            itemBuilder: (context, index) {
-                              return Visibility(
-                                visible: !controller.isSavingSkill,
-                                replacement: const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                                child: Dismissible(
-                                  background: Container(
-                                    alignment: Alignment.centerRight,
-                                    color: Colors.red,
-                                    child: const Icon(Icons.cancel),
+                        //container com a lista de skill
+                        Visibility(
+                          visible: controller.authController.user.skills !=
+                                  null &&
+                              controller.authController.user.skills!.isNotEmpty,
+                          replacement: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.search_off,
+                                    color: CustomColors.black),
+                                const Text('Não há itens para apresentar'),
+                              ],
+                            ),
+                          ),
+                          child: SizedBox(
+                            height: 200,
+                            child: ListView.separated(
+                              itemBuilder: (context, index) {
+                                return Visibility(
+                                  visible: !controller.isSavingSkill,
+                                  replacement: const Center(
+                                    child: CircularProgressIndicator(),
                                   ),
-                                  key: ValueKey<int>(index),
-                                  child: SkillTile(
-                                    skill: controller
-                                        .authController.user.skills![index],
-                                  ),
-                                  confirmDismiss: (direction) async {
-                                    if (direction ==
-                                        DismissDirection.endToStart) {
-                                      final bool result =
-                                          await showDeleteConfirmation(context);
-                                      if (result) {
-                                        controller.skill = controller
-                                            .authController.user.skills![index];
-                                        controller.handleSkill(
-                                            status: 'delete');
+                                  child: Dismissible(
+                                    background: Container(
+                                      alignment: Alignment.centerRight,
+                                      color: Colors.red,
+                                      child: const Icon(Icons.cancel),
+                                    ),
+                                    key: ValueKey<int>(index),
+                                    child: SkillTile(
+                                      skill: controller
+                                          .authController.user.skills![index],
+                                    ),
+                                    confirmDismiss: (direction) async {
+                                      if (direction ==
+                                          DismissDirection.endToStart) {
+                                        final bool result =
+                                            await showDeleteConfirmation(
+                                                context);
+                                        if (result) {
+                                          controller.skill = controller
+                                              .authController
+                                              .user
+                                              .skills![index];
+                                          controller.handleSkill(
+                                              status: 'delete');
+                                        }
                                       }
-                                    }
-                                  },
-                                ),
-                              );
-                            },
-                            itemCount:
-                                controller.authController.user.skills!.length,
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(height: 5),
+                                    },
+                                  ),
+                                );
+                              },
+                              itemCount:
+                                  controller.authController.user.skills!.length,
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(height: 5),
+                            ),
                           ),
                         ),
 

@@ -1,6 +1,7 @@
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/pages/profile_view/controller/profile_view_controller.dart';
 import 'package:app_law_order/src/pages/profile_view/view/components/picture_tile.dart';
+import 'package:app_law_order/src/pages/profile_view/view/components/services_tile.dart';
 import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -44,6 +45,7 @@ class ProfileViewScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
+                          //container com foto e nome
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -131,6 +133,8 @@ class ProfileViewScreen extends StatelessWidget {
                               )
                             ],
                           ),
+
+                          //container com cidade
                           Padding(
                             padding: const EdgeInsets.only(top: 20),
                             child: Row(
@@ -158,6 +162,8 @@ class ProfileViewScreen extends StatelessWidget {
                               ],
                             ),
                           ),
+
+                          //container com area de atuaçao
                           Padding(
                             padding: const EdgeInsets.only(top: 10),
                             child: Row(
@@ -185,55 +191,138 @@ class ProfileViewScreen extends StatelessWidget {
                             ),
                           ),
                           const Divider(
-                            height: 30,
+                            height: 20,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              //width: double.infinity,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Trabalhos',
-                                    style: TextStyle(
-                                        color: CustomColors.black,
-                                        fontSize: CustomFontSizes.fontSize18),
-                                  ),
-                                  Visibility(
-                                    visible:
-                                        controller.user.portfolioPictures !=
-                                            null,
-                                    child: Container(
-                                      height: 160,
-                                      child: ListView.separated(
-                                          physics:
-                                              const BouncingScrollPhysics(),
-                                          padding: const EdgeInsets.only(
-                                              right: 15, bottom: 15),
-                                          scrollDirection: Axis.horizontal,
-                                          itemBuilder: (context, index) {
-                                            return PictureTile(
-                                              picture: controller.user
-                                                  .portfolioPictures![index],
-                                            );
-                                          },
-                                          separatorBuilder: (context, index) =>
-                                              const SizedBox(width: 5),
-                                          itemCount: controller
-                                                      .user.portfolioPictures !=
-                                                  null
-                                              ? controller.user
-                                                  .portfolioPictures!.length
-                                              : 0),
-                                    ),
-                                  )
-                                ],
+
+                          //container com as fotos do portfolio
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Trabalhos',
+                                style: TextStyle(
+                                    color: CustomColors.black,
+                                    fontSize: CustomFontSizes.fontSize18),
                               ),
-                            ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5),
+                                child: Visibility(
+                                  visible: controller.user.portfolioPictures !=
+                                          null &&
+                                      controller
+                                          .user.portfolioPictures!.isNotEmpty,
+                                  replacement: const Text('Não informado'),
+                                  child: Container(
+                                    padding: const EdgeInsets.only(top: 5),
+                                    height: 180,
+                                    child: GridView.builder(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            16, 0, 16, 16),
+                                        physics: const BouncingScrollPhysics(),
+                                        gridDelegate:
+                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 2,
+                                                mainAxisSpacing: 10,
+                                                crossAxisSpacing: 10,
+                                                childAspectRatio: 9 / 8),
+                                        itemBuilder: (context, index) {
+                                          return PictureTile(
+                                            picture: controller
+                                                .user.portfolioPictures![index],
+                                          );
+                                        },
+                                        // separatorBuilder: (context, index) =>
+                                        //     const SizedBox(width: 5),
+                                        itemCount:
+                                            controller.user.portfolioPictures !=
+                                                    null
+                                                ? controller.user
+                                                    .portfolioPictures!.length
+                                                : 0),
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
                           const Divider(
                             height: 30,
+                          ),
+
+                          //sontainer texto SOBRE
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Sobre',
+                                style: TextStyle(
+                                    color: CustomColors.black,
+                                    fontSize: CustomFontSizes.fontSize18),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5),
+                                child: Visibility(
+                                  visible:
+                                      controller.user.portfolioAbout != null &&
+                                          controller
+                                              .user.portfolioAbout!.isNotEmpty,
+                                  replacement: const Text('Não informado'),
+                                  child: Text(
+                                    '${controller.user.portfolioAbout}',
+                                    style: TextStyle(
+                                      //fontWeight: FontWeight.bold,
+                                      fontSize: CustomFontSizes.fontSize14,
+                                      color: Colors.grey.shade600,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const Divider(
+                                height: 30,
+                              ),
+                            ],
+                          ),
+
+                          //container com a lista de serviços
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Serviços',
+                                style: TextStyle(
+                                    color: CustomColors.black,
+                                    fontSize: CustomFontSizes.fontSize18),
+                              ),
+                              Visibility(
+                                visible: controller.user.services != null &&
+                                    controller.user.services!.isNotEmpty,
+                                replacement: const Text(
+                                    'Nenhum serviço adicionado ainda.'),
+                                child: Container(
+                                  height: 180,
+                                  padding: const EdgeInsets.only(top: 10),
+                                  child: ListView.separated(
+                                    separatorBuilder: (_, context) {
+                                      return const SizedBox(
+                                        height: 10,
+                                      );
+                                    },
+                                    physics: const BouncingScrollPhysics(),
+                                    itemBuilder: (_, index) {
+                                      return ServicesTile(
+                                        //height: 100,
+                                        //child: Text("OLA" + index.toString()),
+
+                                        service:
+                                            controller.user.services![index],
+                                      );
+                                    },
+                                    itemCount: controller.user.services != null
+                                        ? controller.user.services!.length
+                                        : 0,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),

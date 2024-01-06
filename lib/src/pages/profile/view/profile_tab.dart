@@ -22,7 +22,7 @@ class _ProfileTabState extends State<ProfileTab> {
       child: Container(
         height: size.height,
         width: size.width,
-        color: CustomColors.backGround,
+        color: CustomColors.backgroudCard,
         child: GetBuilder<ProfileController>(
           builder: (controller) {
             return Column(

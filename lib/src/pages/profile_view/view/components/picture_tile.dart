@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:app_law_order/src/models/picture_model.dart';
+import 'package:app_law_order/src/pages/profile_view/view/components/picture_dialog.dart';
 import 'package:flutter/material.dart';
 
 class PictureTile extends StatelessWidget {
@@ -14,7 +15,14 @@ class PictureTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onLongPress: () async {},
+      onTap: () async {
+        await showDialog(
+          context: context,
+          builder: (_) {
+            return PictureDialog(imageUrl: picture.url!);
+          },
+        );
+      },
       child: Container(
         margin: const EdgeInsets.only(right: 8),
         width: 200,

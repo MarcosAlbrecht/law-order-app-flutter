@@ -58,21 +58,22 @@ class FollowsScreen extends StatelessWidget {
                         ),
                       ),
                       child: ListView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          itemBuilder: (_, index) {
-                            if (((index + 1) == controller.follows.length) &&
-                                (!controller.isLastPage)) {
-                              controller.loadMoreFollows();
-                            }
+                        physics: const BouncingScrollPhysics(),
+                        itemBuilder: (_, index) {
+                          if (((index + 1) == controller.follows.length) &&
+                              (!controller.isLastPage)) {
+                            controller.loadMoreFollows();
+                          }
 
-                            return FollowsTile(
-                              //height: 100,
-                              //child: Text("OLA" + index.toString()),
+                          return FollowsTile(
+                            //height: 100,
+                            //child: Text("OLA" + index.toString()),
 
-                              follow: controller.follows[index],
-                            );
-                          },
-                          itemCount: controller.follows.length),
+                            follow: controller.follows[index],
+                          );
+                        },
+                        itemCount: controller.follows.length,
+                      ),
                     );
             },
           ),
