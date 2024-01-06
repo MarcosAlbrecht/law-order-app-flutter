@@ -112,13 +112,15 @@ class AuthController extends GetxController {
     setSaving(false);
   }
 
-  Future<void> handleProfileEdit() async {
+  Future<void> handleProfileEdit({bool validaCep = true}) async {
     //verifica se o cep foi validado
-    final validCep = await handleValidateCep(cep1: user.cep!);
+    if (validaCep) {
+      final validCep = await handleValidateCep(cep1: user.cep!);
 
-    if (!validCep) {
-      utilServices.showToast(message: "CEP inválido");
-      return;
+      if (!validCep) {
+        utilServices.showToast(message: "CEP inválido");
+        return;
+      }
     }
 
     setSaving(true);

@@ -21,7 +21,7 @@ class FollowsController extends GetxController {
   bool get isLastPage {
     if (currentListFollows!.length < itemsPerPage) return true;
 
-    return pagination * itemsPerPage > follows.length;
+    return pagination + itemsPerPage > follows.length;
   }
 
   @override

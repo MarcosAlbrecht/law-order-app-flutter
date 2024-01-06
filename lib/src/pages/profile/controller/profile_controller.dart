@@ -87,7 +87,7 @@ class ProfileController extends GetxController {
         },
       );
     }
-    await authController.handleProfileEdit();
+    await authController.handleProfileEdit(validaCep: false);
     setSaving(value: false);
     isSavingPicuture = false;
   }

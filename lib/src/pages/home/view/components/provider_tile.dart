@@ -168,7 +168,7 @@ class _ProviderTileState extends State<ProviderTile> {
                                     global: false,
                                     builder: (controller) {
                                       return Padding(
-                                        padding: const EdgeInsets.only(left: 2),
+                                        padding: const EdgeInsets.only(left: 5),
                                         child: GestureDetector(
                                           onTap: () async {
                                             //print("clicou no follow");

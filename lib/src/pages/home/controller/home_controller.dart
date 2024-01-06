@@ -24,7 +24,7 @@ class HomeController extends GetxController {
   bool get isLastPage {
     if (currentListUser!.length < itemsPerPage) return true;
 
-    return pagination * itemsPerPage > allUsers.length;
+    return pagination + itemsPerPage > allUsers.length;
   }
 
   @override

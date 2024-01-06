@@ -22,7 +22,7 @@ class FollowerController extends GetxController {
     if (currentListFollower!.length < itemsPerPage) return true;
 
     var follower;
-    return pagination * itemsPerPage > follower.length;
+    return pagination + itemsPerPage > follower.length;
   }
 
   @override
