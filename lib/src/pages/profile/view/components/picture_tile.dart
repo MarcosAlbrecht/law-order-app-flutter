@@ -39,12 +39,9 @@ class _PictureTileState extends State<PictureTile> {
             context: context,
             builder: (context) => AlertDialog(
               title: const Text('Remover imagem'),
-              //content: const Text('Escolha uma opção:'),
               actions: [
                 TextButton(
                   onPressed: () {
-                    // atendimentoController.removePhotoFromList(widget.index - 1);
-                    //  // Fechar o AlertDialog
                     profileController.deleteImagePortfolio(
                       picture: widget.picture,
                       index: widget.index,
@@ -64,19 +61,68 @@ class _PictureTileState extends State<PictureTile> {
           );
         }
       },
-      child: Container(
-        margin: const EdgeInsets.only(right: 8),
-        width: 150,
-        height: 120,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          image: DecorationImage(
-            image: widget.picture.url != null
-                ? NetworkImage(widget.picture.url!) as ImageProvider<Object>
-                : FileImage(File(widget.picture.localPath!)),
-            fit: BoxFit.cover,
+      child: Stack(
+        children: [
+          Container(
+            margin: const EdgeInsets.only(right: 2),
+            width: 170,
+            height: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              image: DecorationImage(
+                image: widget.picture.url != null
+                    ? NetworkImage(widget.picture.url!) as ImageProvider<Object>
+                    : FileImage(File(widget.picture.localPath!)),
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
-        ),
+          Positioned(
+            top: 2,
+            right: 5,
+            child: GestureDetector(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Remover imagem'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          profileController.deleteImagePortfolio(
+                            picture: widget.picture,
+                            index: widget.index,
+                          );
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Confirmar'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context); // Fechar o AlertDialog
+                        },
+                        child: const Text('Cancelar'),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              child: Container(
+                width: 30,
+                height: 30,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.black.withOpacity(0.5),
+                ),
+                child: const Icon(
+                  Icons.close,
+                  color: Colors.white,
+                  size: 20,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

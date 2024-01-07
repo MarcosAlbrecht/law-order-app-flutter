@@ -14,7 +14,9 @@ import 'package:app_law_order/src/pages/profile/view/portfolio_screen.dart';
 import 'package:app_law_order/src/pages/profile/view/profile_screen.dart';
 import 'package:app_law_order/src/pages/profile/view/profile_tab.dart';
 import 'package:app_law_order/src/pages/profile_view/binding/profile_view_binding.dart';
+import 'package:app_law_order/src/pages/profile_view/binding/service_request_binding.dart';
 import 'package:app_law_order/src/pages/profile_view/view/profile_view_screen.dart';
+import 'package:app_law_order/src/pages/profile_view/view/service_request_screen.dart';
 import 'package:get/get.dart';
 
 abstract class AppPages {
@@ -59,6 +61,11 @@ abstract class AppPages {
       binding: ProfileViewBinding(),
     ),
     GetPage(
+      name: PagesRoutes.serviceRequestScreen,
+      page: () => const ServiceRequestScreen(),
+      binding: ServiceRequestBinding(),
+    ),
+    GetPage(
       page: () => const BaseScreen(),
       name: PagesRoutes.baseRoute,
       bindings: [
@@ -81,4 +88,5 @@ abstract class PagesRoutes {
   static const String followsScreen = '/followsScreen';
   static const String followerScreen = '/followerScreen';
   static const String profileViewScreen = '/profileViewScreen';
+  static const String serviceRequestScreen = '/serviceRequestScreen';
 }

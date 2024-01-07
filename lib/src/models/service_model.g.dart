@@ -11,6 +11,7 @@ ServiceModel _$ServiceModelFromJson(Map<String, dynamic> json) => ServiceModel(
       title: json['title'] as String?,
       description: json['description'] as String?,
       value: (json['value'] as num?)?.toDouble(),
+      isChecked: json['isChecked'] as bool?,
     );
 
 Map<String, dynamic> _$ServiceModelToJson(ServiceModel instance) =>
@@ -19,4 +20,5 @@ Map<String, dynamic> _$ServiceModelToJson(ServiceModel instance) =>
       'title': instance.title,
       'description': instance.description,
       'value': instance.value,
+      'isChecked': instance.isChecked,
     };

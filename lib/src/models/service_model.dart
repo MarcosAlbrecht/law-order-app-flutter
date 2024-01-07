@@ -13,11 +13,13 @@ class ServiceModel {
   String? description;
   @JsonKey(name: 'value')
   double? value;
+  bool? isChecked = false;
   ServiceModel({
     this.id,
     this.title,
     this.description,
     this.value,
+    this.isChecked,
   });
 
   factory ServiceModel.fromJson(Map<String, dynamic> json) =>

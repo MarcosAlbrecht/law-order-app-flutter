@@ -11,34 +11,33 @@ class PictureDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      insetPadding: EdgeInsets.all(10),
+      insetPadding: EdgeInsets.all(0),
       backgroundColor: Colors.transparent,
       child: Stack(
-        fit: StackFit.expand,
+        //fit: StackFit.expand,
         children: [
           Image.network(
             imageUrl,
             fit: BoxFit.contain,
           ),
           Positioned(
-            top: 20,
-            right: 20,
+            top: 5,
+            right: 5,
             child: GestureDetector(
               onTap: () {
                 Navigator.pop(context);
               },
               child: Container(
+                width: 30,
+                height: 30,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.black.withOpacity(0.5),
                 ),
-                padding: const EdgeInsets.all(0),
-                child: IconButton(
-                  icon: const Icon(Icons.close),
+                child: const Icon(
+                  Icons.close,
                   color: Colors.white,
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
+                  size: 20,
                 ),
               ),
             ),

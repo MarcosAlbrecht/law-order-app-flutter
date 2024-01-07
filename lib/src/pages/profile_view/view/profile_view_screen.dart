@@ -324,6 +324,57 @@ class ProfileViewScreen extends StatelessWidget {
                               ),
                             ],
                           ),
+
+                          //container das avaliaçoes
+                          const Divider(
+                            height: 30,
+                          ),
+
+                          //container com as avaliaçoes
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Avaliações',
+                                style: TextStyle(
+                                    color: CustomColors.black,
+                                    fontSize: CustomFontSizes.fontSize18),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5),
+                                child: Visibility(
+                                  visible: false,
+                                  replacement: const Text(
+                                      'O Prestador ainda não recebeu avaliações'),
+                                  child: Container(
+                                    height: 180,
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: ListView.separated(
+                                      separatorBuilder: (_, context) {
+                                        return const SizedBox(
+                                          height: 10,
+                                        );
+                                      },
+                                      physics: const BouncingScrollPhysics(),
+                                      itemBuilder: (_, index) {
+                                        return ServicesTile(
+                                          //height: 100,
+                                          //child: Text("OLA" + index.toString()),
+
+                                          service:
+                                              controller.user.services![index],
+                                        );
+                                      },
+                                      itemCount:
+                                          controller.user.services != null
+                                              ? controller.user.services!.length
+                                              : 0,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ),
@@ -342,7 +393,7 @@ class ProfileViewScreen extends StatelessWidget {
                           onPressed: authController.isLoading
                               ? null
                               : () {
-                                  Get.toNamed(PagesRoutes.signUpStep1);
+                                  Get.toNamed(PagesRoutes.serviceRequestScreen);
                                 },
                           child: authController.isLoading
                               ? CircularProgressIndicator(

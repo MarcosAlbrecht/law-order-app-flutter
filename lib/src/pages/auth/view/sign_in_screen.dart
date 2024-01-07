@@ -116,7 +116,7 @@ class SignInScreen extends StatelessWidget {
                                     },
                               child: authController.isLoading.value
                                   ? CircularProgressIndicator(
-                                      color: CustomColors.black,
+                                      color: CustomColors.blueDark2Color,
                                     )
                                   : Text(
                                       'Login',
@@ -201,7 +201,7 @@ class SignInScreen extends StatelessWidget {
                                     },
                               child: authController.isLoading.value
                                   ? CircularProgressIndicator(
-                                      color: CustomColors.black,
+                                      color: CustomColors.blueDark2Color,
                                     )
                                   : Text(
                                       'Cadastre-se',

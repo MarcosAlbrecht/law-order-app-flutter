@@ -26,7 +26,7 @@ class FollowerTile extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(bottom: 5),
         child: Material(
-          elevation: 5,
+          elevation: 3,
           color: CustomColors.cyanColor,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
