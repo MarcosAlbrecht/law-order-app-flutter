@@ -49,6 +49,7 @@ class HttpManager {
       // ignore: deprecated_member_use
     } on DioError catch (error) {
       //erro do dio
+
       return error.response?.data ?? {};
     } catch (error) {
       return {};

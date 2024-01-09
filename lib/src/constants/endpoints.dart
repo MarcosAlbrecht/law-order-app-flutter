@@ -24,6 +24,9 @@ abstract class EndPoints {
   static const setUserService = '$baseUrl/accounts/users/add-services';
   static const deleteUserService = '$baseUrl/accounts/users/remove-service/';
   static const updateUserService = '$baseUrl/accounts/users/update-service/';
+
+  static const setServiceRequest =
+      '$baseUrl/accounts/service-requests/request/';
 }
 
 abstract class EndPointsViaCep {

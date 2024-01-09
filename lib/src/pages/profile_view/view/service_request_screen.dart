@@ -50,11 +50,18 @@ class ServiceRequestScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
-                      'Selecione o(s) serviço(s) desejado(s) e clique em "Enviar solicitação"',
-                      style: TextStyle(
-                          //fontWeight: FontWeight.bold,
-                          fontSize: CustomFontSizes.fontSize14),
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Text(
+                        'Selecione o(s) serviço(s) desejado(s) e clique em "Enviar solicitação"',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: CustomFontSizes.fontSize14,
+                        ),
+                      ),
+                    ),
+                    Divider(
+                      height: 10,
                     ),
                     GetBuilder<ServiceRequestController>(
                       builder: (controller) {
@@ -80,7 +87,7 @@ class ServiceRequestScreen extends StatelessWidget {
                                     service: controller.services[index],
                                   );
                                 },
-                                separatorBuilder: (_, index) => const Divider(
+                                separatorBuilder: (_, index) => const SizedBox(
                                       height: 10,
                                     ),
                                 itemCount: controller.services.length),
@@ -91,31 +98,36 @@ class ServiceRequestScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Valor Total:',
-                      style: TextStyle(
-                          color: CustomColors.black,
-                          fontSize: CustomFontSizes.fontSize18,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    GetBuilder<ServiceRequestController>(
-                      builder: (controller) {
-                        return Text(
-                          utilServices
-                              .priceToCurrency(controller.orderService.total!),
-                          style: TextStyle(
-                              color: CustomColors.black,
-                              fontSize: CustomFontSizes.fontSize18,
-                              fontWeight: FontWeight.bold),
-                        );
-                      },
-                    ),
-                  ],
+              const Divider(
+                height: 30,
+              ),
+              Material(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Valor Total:',
+                        style: TextStyle(
+                            color: CustomColors.black,
+                            fontSize: CustomFontSizes.fontSize18,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      GetBuilder<ServiceRequestController>(
+                        builder: (controller) {
+                          return Text(
+                            utilServices.priceToCurrency(
+                                controller.orderService.total!),
+                            style: TextStyle(
+                                color: CustomColors.black,
+                                fontSize: CustomFontSizes.fontSize18,
+                                fontWeight: FontWeight.bold),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
 
@@ -125,7 +137,7 @@ class ServiceRequestScreen extends StatelessWidget {
                 child: SizedBox(
                   height: 50,
                   child: GetBuilder<ServiceRequestController>(
-                    builder: (authController) {
+                    builder: (controller) {
                       return ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: CustomColors.blueDark2Color,
@@ -133,12 +145,12 @@ class ServiceRequestScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        onPressed: authController.isLoading
+                        onPressed: controller.isSaving
                             ? null
                             : () {
-                                Get.back();
+                                controller.handleServiceRequest();
                               },
-                        child: authController.isSaving
+                        child: controller.isSaving
                             ? CircularProgressIndicator(
                                 color: CustomColors.black,
                               )

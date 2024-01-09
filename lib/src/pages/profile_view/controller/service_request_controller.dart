@@ -1,12 +1,14 @@
 import 'package:app_law_order/src/models/order_service_model.dart';
 import 'package:app_law_order/src/models/service_model.dart';
 import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
+import 'package:app_law_order/src/pages/profile/view/portfolio_screen.dart';
 import 'package:app_law_order/src/pages/profile_view/controller/profile_view_controller.dart';
 import 'package:app_law_order/src/pages/profile_view/repository/profile_view_repository.dart';
+import 'package:app_law_order/src/pages/profile_view/view/components/services_request_tile.dart';
 import 'package:get/get.dart';
 
 class ServiceRequestController extends GetxController {
-  final rofileViewRepository = ProfileViewRepository();
+  final profileViewRepository = ProfileViewRepository();
 
   final profileController = Get.find<ProfileViewController>();
 
@@ -15,6 +17,8 @@ class ServiceRequestController extends GetxController {
 
   bool isLoading = false;
   bool isSaving = false;
+
+  List<String> requestedServiceIds = [];
 
   @override
   void onInit() {
@@ -25,6 +29,11 @@ class ServiceRequestController extends GetxController {
 
   void setLoading({required bool value}) {
     isLoading = value;
+    update();
+  }
+
+  void setSaving({required bool value}) {
+    isSaving = value;
     update();
   }
 
@@ -64,5 +73,49 @@ class ServiceRequestController extends GetxController {
   bool isChecked({required ServiceModel service}) {
     final result = services.firstWhere((element) => element.id == service.id);
     return result.isChecked!;
+  }
+
+  Future<void> handleServiceRequest() async {
+    setSaving(value: true);
+    if (services.isEmpty) {
+      return;
+    }
+
+    requestedServiceIds = [];
+
+    if (verifyServicesChecked() > 0) {
+      final result = await profileViewRepository.insertServiceRequest(
+          userRequestedId: profileController.user.id!,
+          requestedServiceIds: requestedServiceIds);
+
+      result.when(
+        success: (data) {
+          utilServices.showToast(message: "Solicitação enviada com sucesso!");
+          Get.back();
+        },
+        error: (message) {
+          utilServices.showToast(message: message, isError: true);
+        },
+      );
+    } else {
+      utilServices.showToast(
+          message: "Selecione o(s) serviços(s) que deseja solicitar");
+      return;
+    }
+
+    setSaving(value: false);
+  }
+
+  int verifyServicesChecked() {
+    var count = 0;
+
+    for (var service in services) {
+      if (service.isChecked!) {
+        requestedServiceIds.add(service.id!);
+        count++;
+      }
+    }
+
+    return count;
   }
 }
