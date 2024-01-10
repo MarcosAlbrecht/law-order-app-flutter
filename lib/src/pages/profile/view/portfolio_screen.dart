@@ -387,7 +387,10 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                 );
                               },
                               itemCount:
-                                  controller.authController.user.skills!.length,
+                                  controller.authController.user.skills != null
+                                      ? controller
+                                          .authController.user.skills!.length
+                                      : 0,
                               separatorBuilder: (context, index) =>
                                   const SizedBox(height: 5),
                             ),

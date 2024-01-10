@@ -24,9 +24,9 @@ class PictureTile extends StatelessWidget {
         );
       },
       child: Container(
-        margin: const EdgeInsets.only(right: 8),
-        width: 200,
-        height: 140,
+        margin: const EdgeInsets.only(right: 2),
+        width: 180,
+        height: 120,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           image: DecorationImage(

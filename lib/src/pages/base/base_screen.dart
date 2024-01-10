@@ -2,6 +2,7 @@ import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/pages/base/controller/navigation_controller.dart';
 import 'package:app_law_order/src/pages/home/view/home_tab.dart';
 import 'package:app_law_order/src/pages/profile/view/profile_tab.dart';
+import 'package:app_law_order/src/pages/requests/view/request_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -22,6 +23,7 @@ class _BaseScreenState extends State<BaseScreen> {
         physics: const NeverScrollableScrollPhysics(),
         controller: navigationController.pageController,
         children: const [
+          RequestTab(),
           HomeTab(),
           ProfileTab(),
         ],
@@ -41,10 +43,16 @@ class _BaseScreenState extends State<BaseScreen> {
               icon: navigationController.currentIndex != 0
                   ? const Icon(Icons.home_outlined)
                   : const Icon(Icons.home),
-              label: 'Home',
+              label: 'Solicitações',
             ),
             BottomNavigationBarItem(
               icon: navigationController.currentIndex != 1
+                  ? const Icon(Icons.home_outlined)
+                  : const Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: navigationController.currentIndex != 2
                   ? const Icon(Icons.person_2_outlined)
                   : const Icon(Icons.person_2),
               label: 'Perfil',

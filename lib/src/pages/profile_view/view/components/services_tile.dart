@@ -16,32 +16,38 @@ class ServicesTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      elevation: 3,
-      color: CustomColors.cyanColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(10),
-          bottomRight: Radius.circular(10),
-          topLeft: Radius.circular(10),
-          topRight: Radius.circular(10),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Material(
+        elevation: 3,
+        color: CustomColors.cyanColor,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(10),
+            bottomRight: Radius.circular(10),
+            topLeft: Radius.circular(10),
+            topRight: Radius.circular(10),
+          ),
         ),
-      ),
-      child: ListTile(
-        visualDensity: VisualDensity.compact,
-        title: Text(
-          service.title!,
-          style: TextStyle(fontSize: CustomFontSizes.fontSize16),
-        ),
-        subtitle: Text(
-          service.description!,
-          style: TextStyle(fontSize: CustomFontSizes.fontSize12),
-        ),
-        trailing: Text(
-          utilServices.priceToCurrency(service.value!),
-          style: TextStyle(
-              fontSize: CustomFontSizes.fontSize14,
-              color: CustomColors.blueDark2Color),
+        child: ListTile(
+          visualDensity: VisualDensity.standard,
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Text(
+              service.title!,
+              style: TextStyle(fontSize: CustomFontSizes.fontSize16),
+            ),
+          ),
+          subtitle: Text(
+            service.description!,
+            style: TextStyle(fontSize: CustomFontSizes.fontSize12),
+          ),
+          trailing: Text(
+            utilServices.priceToCurrency(service.value!),
+            style: TextStyle(
+                fontSize: CustomFontSizes.fontSize14,
+                color: CustomColors.blueDark2Color),
+          ),
         ),
       ),
     );

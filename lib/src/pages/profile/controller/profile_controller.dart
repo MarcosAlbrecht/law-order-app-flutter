@@ -24,7 +24,7 @@ class ProfileController extends GetxController {
 
   final ImagePicker imagePicker = ImagePicker();
 
-  late Uint8List imageBytes;
+  Uint8List imageBytes = Uint8List(0);
   late File file;
   late PictureModel profilePinctureUrl;
   late String skill;

@@ -68,7 +68,7 @@ class _SignUpStep1ScreenState extends State<SignUpStep1Screen> {
                   return GestureDetector(
                     onTap: () {
                       controller.isWork.value = true;
-                      controller.user.userType = "user";
+                      controller.user.userType = "provider";
                       Get.toNamed(PagesRoutes.signUp);
                     },
                     child: SizedBox(
@@ -103,7 +103,7 @@ class _SignUpStep1ScreenState extends State<SignUpStep1Screen> {
                   return GestureDetector(
                     onTap: () {
                       controller.isWork.value = false;
-                      controller.user.userType = "provider";
+                      controller.user.userType = "user";
                       Get.toNamed(PagesRoutes.signUp);
                     },
                     child: SizedBox(

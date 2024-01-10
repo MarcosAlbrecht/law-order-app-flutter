@@ -60,8 +60,11 @@ class ServiceRequestScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Divider(
-                      height: 10,
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: Divider(
+                        height: 30,
+                      ),
                     ),
                     GetBuilder<ServiceRequestController>(
                       builder: (controller) {
@@ -70,7 +73,7 @@ class ServiceRequestScreen extends StatelessWidget {
                             visible: controller.services.isNotEmpty,
                             replacement: Center(
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Icon(
@@ -100,6 +103,7 @@ class ServiceRequestScreen extends StatelessWidget {
               ),
               const Divider(
                 height: 30,
+                thickness: 2,
               ),
               Material(
                 child: Container(

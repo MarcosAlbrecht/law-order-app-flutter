@@ -78,6 +78,7 @@ class ServiceRequestController extends GetxController {
   Future<void> handleServiceRequest() async {
     setSaving(value: true);
     if (services.isEmpty) {
+      setSaving(value: false);
       return;
     }
 
@@ -99,11 +100,11 @@ class ServiceRequestController extends GetxController {
       );
     } else {
       utilServices.showToast(
-          message: "Selecione o(s) serviços(s) que deseja solicitar");
+        message: "Selecione o(s) serviços(s) que deseja solicitar",
+      );
+      setSaving(value: false);
       return;
     }
-
-    setSaving(value: false);
   }
 
   int verifyServicesChecked() {

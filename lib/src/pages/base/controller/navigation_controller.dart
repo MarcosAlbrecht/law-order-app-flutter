@@ -2,10 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 abstract class NavigationTabs {
-  static const int home = 0;
-  static const int perfil = 1;
-  static const int portfolio = 2;
-  static const int conversas = 3;
+  static const int request = 0;
+  static const int home = 1;
+  static const int perfil = 2;
 }
 
 class NavigationController extends GetxController {

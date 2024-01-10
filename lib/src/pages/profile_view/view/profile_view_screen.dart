@@ -4,6 +4,7 @@ import 'package:app_law_order/src/pages/profile_view/view/components/picture_til
 import 'package:app_law_order/src/pages/profile_view/view/components/services_tile.dart';
 import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:get/get.dart';
 
 class ProfileViewScreen extends StatelessWidget {
@@ -73,28 +74,33 @@ class ProfileViewScreen extends StatelessWidget {
                                                   as ImageProvider,
                                     ),
                                   ),
-                                  Positioned(
-                                    left: 15,
-                                    right: 15,
-                                    bottom: 0,
-                                    child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 1),
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            color: CustomColors.blueDark2Color,
-                                            shape: BoxShape.rectangle),
-                                        child: Center(
-                                          child: Text(
-                                            "Prestador",
-                                            style: TextStyle(
-                                                color: CustomColors.white,
-                                                fontWeight: FontWeight.w600,
-                                                fontSize:
-                                                    CustomFontSizes.fontSize12),
-                                          ),
-                                        )),
+                                  Visibility(
+                                    visible:
+                                        controller.user.userType == "provider",
+                                    child: Positioned(
+                                      left: 15,
+                                      right: 15,
+                                      bottom: 0,
+                                      child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 1),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              color:
+                                                  CustomColors.blueDark2Color,
+                                              shape: BoxShape.rectangle),
+                                          child: Center(
+                                            child: Text(
+                                              "Prestador",
+                                              style: TextStyle(
+                                                  color: CustomColors.white,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: CustomFontSizes
+                                                      .fontSize12),
+                                            ),
+                                          )),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -165,7 +171,7 @@ class ProfileViewScreen extends StatelessWidget {
 
                           //container com area de atuaçao
                           Padding(
-                            padding: const EdgeInsets.only(top: 10),
+                            padding: const EdgeInsets.only(top: 10, bottom: 20),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
@@ -190,8 +196,87 @@ class ProfileViewScreen extends StatelessWidget {
                               ],
                             ),
                           ),
+                          // const Divider(
+                          //   height: 10,
+                          // ),
+
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Expanded(
+                                    child: ElevatedButton.icon(
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                          CustomColors.blueDark2Color,
+                                        ),
+                                        shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              20,
+                                            ), // Define a borda quadrada
+                                          ),
+                                        ),
+                                      ),
+                                      onPressed: () {},
+                                      icon: Icon(
+                                        FontAwesome.user_plus,
+                                        size: 16,
+                                        color: CustomColors.white,
+                                      ),
+                                      label: Text(
+                                        'Seguir',
+                                        style: TextStyle(
+                                          color: CustomColors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const VerticalDivider(
+                                    width: 20,
+                                  ),
+                                  Expanded(
+                                    child: ElevatedButton.icon(
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                          CustomColors.blueDark2Color,
+                                        ),
+                                        shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              20,
+                                            ), // Define a borda quadrada
+                                          ),
+                                        ),
+                                      ),
+                                      onPressed: () {},
+                                      icon: Icon(
+                                        Icons.message,
+                                        size: 16,
+                                        color: CustomColors.white,
+                                      ),
+                                      label: Text(
+                                        'Mensagem',
+                                        style: TextStyle(
+                                          color: CustomColors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+
                           const Divider(
-                            height: 20,
+                            height: 10,
                           ),
 
                           //container com as fotos do portfolio
@@ -214,10 +299,10 @@ class ProfileViewScreen extends StatelessWidget {
                                   replacement: const Text('Não informado'),
                                   child: Container(
                                     padding: const EdgeInsets.only(top: 5),
-                                    height: 180,
+                                    height: 190,
                                     child: GridView.builder(
                                         padding: const EdgeInsets.fromLTRB(
-                                            16, 0, 16, 16),
+                                            0, 0, 0, 16),
                                         physics: const BouncingScrollPhysics(),
                                         gridDelegate:
                                             const SliverGridDelegateWithFixedCrossAxisCount(
@@ -298,14 +383,9 @@ class ProfileViewScreen extends StatelessWidget {
                                 replacement: const Text(
                                     'Nenhum serviço adicionado ainda.'),
                                 child: Container(
-                                  height: 180,
+                                  height: 200,
                                   padding: const EdgeInsets.only(top: 10),
-                                  child: ListView.separated(
-                                    separatorBuilder: (_, context) {
-                                      return const SizedBox(
-                                        height: 10,
-                                      );
-                                    },
+                                  child: ListView.builder(
                                     physics: const BouncingScrollPhysics(),
                                     itemBuilder: (_, index) {
                                       return ServicesTile(
@@ -379,35 +459,39 @@ class ProfileViewScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 50,
-                    child: GetBuilder<ProfileViewController>(
-                      builder: (authController) {
-                        return ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: CustomColors.blueDark2Color,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: SizedBox(
+                      height: 50,
+                      child: GetBuilder<ProfileViewController>(
+                        builder: (authController) {
+                          return ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: CustomColors.blueDark2Color,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
-                          ),
-                          onPressed: authController.isLoading
-                              ? null
-                              : () {
-                                  Get.toNamed(PagesRoutes.serviceRequestScreen);
-                                },
-                          child: authController.isLoading
-                              ? CircularProgressIndicator(
-                                  color: CustomColors.black,
-                                )
-                              : Text(
-                                  'Solicitar serviço',
-                                  style: TextStyle(
-                                    color: CustomColors.white,
-                                    fontSize: 18,
+                            onPressed: authController.isLoading
+                                ? null
+                                : () {
+                                    Get.toNamed(
+                                        PagesRoutes.serviceRequestScreen);
+                                  },
+                            child: authController.isLoading
+                                ? CircularProgressIndicator(
+                                    color: CustomColors.black,
+                                  )
+                                : Text(
+                                    'Solicitar serviço',
+                                    style: TextStyle(
+                                      color: CustomColors.white,
+                                      fontSize: 18,
+                                    ),
                                   ),
-                                ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ],

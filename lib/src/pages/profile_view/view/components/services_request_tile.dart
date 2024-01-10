@@ -20,7 +20,7 @@ class ServicesRequestTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Material(
         elevation: 3,
         color: CustomColors.cyanColor,

@@ -34,6 +34,10 @@ class HomeRepository {
     final result = await httpManager.restRequest(
       method: HttpMethods.get,
       url: EndPoints.getFollows,
+      queryParams: {
+        'limit': 99999999999,
+        'skip': 0,
+      },
     );
 
     if (result['result'] != null) {
