@@ -4,6 +4,7 @@ import 'package:app_law_order/src/pages/home/view/home_tab.dart';
 import 'package:app_law_order/src/pages/profile/view/profile_tab.dart';
 import 'package:app_law_order/src/pages/requests/view/request_tab.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:get/get.dart';
 
 class BaseScreen extends StatefulWidget {
@@ -41,8 +42,8 @@ class _BaseScreenState extends State<BaseScreen> {
           items: [
             BottomNavigationBarItem(
               icon: navigationController.currentIndex != 0
-                  ? const Icon(Icons.home_outlined)
-                  : const Icon(Icons.home),
+                  ? const Icon(Icons.next_week_outlined)
+                  : const Icon(Icons.next_week),
               label: 'Solicitações',
             ),
             BottomNavigationBarItem(

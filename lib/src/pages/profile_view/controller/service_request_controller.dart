@@ -78,6 +78,9 @@ class ServiceRequestController extends GetxController {
   Future<void> handleServiceRequest() async {
     setSaving(value: true);
     if (services.isEmpty) {
+      utilServices.showToast(
+        message: "Prestador ainda não possui serviços cadastrado(s).",
+      );
       setSaving(value: false);
       return;
     }
