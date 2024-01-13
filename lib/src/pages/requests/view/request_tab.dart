@@ -48,7 +48,10 @@ class RequestTab extends StatelessWidget {
                                   style: TextStyle(
                                     fontSize: CustomFontSizes.fontSize12,
                                     fontWeight: FontWeight.bold,
-                                    color: CustomColors.black,
+                                    color:
+                                        controller.currentCategory == "received"
+                                            ? CustomColors.white
+                                            : CustomColors.black,
                                   ),
                                 ),
                                 Expanded(
@@ -97,7 +100,9 @@ class RequestTab extends StatelessWidget {
                                   style: TextStyle(
                                     fontSize: CustomFontSizes.fontSize12,
                                     fontWeight: FontWeight.bold,
-                                    color: CustomColors.black,
+                                    color: controller.currentCategory == "sent"
+                                        ? CustomColors.white
+                                        : CustomColors.black,
                                   ),
                                 ),
                                 Expanded(
@@ -135,32 +140,40 @@ class RequestTab extends StatelessWidget {
                           label: "Pesquisar",
                         ),
                       ),
-                      Expanded(
-                        child: DropdownMenu<String>(
-                            requestFocusOnTap: true,
-                            label: Text('Filtrar'),
-                            dropdownMenuEntries: [
-                              DropdownMenuEntry<String>(
-                                  label: 'Filtrar', value: '1'),
-                              DropdownMenuEntry<String>(
-                                  label: 'Mais Antigas', value: '2'),
-                              DropdownMenuEntry<String>(
-                                  label: 'Mais Recentes', value: '3'),
-                            ]),
-                      ),
                     ],
                   ),
-                  Expanded(
-                    child: ListView.separated(
-                      itemBuilder: (_, index) {
-                        return RequestTile(
-                          requestModel: controller.allRequest[index],
-                        );
-                      },
-                      separatorBuilder: (_, index) => const SizedBox(
-                        height: 5,
+                  Visibility(
+                    visible: controller.allRequest.isNotEmpty,
+                    replacement: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.search_off,
+                            color: CustomColors.blueDarkColor,
+                          ),
+                          const Text('Não há itens para apresentar'),
+                        ],
                       ),
-                      itemCount: controller.allRequest.length,
+                    ),
+                    child: Expanded(
+                      child: Visibility(
+                        visible: !controller.isLoading,
+                        replacement: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        child: ListView.separated(
+                          itemBuilder: (_, index) {
+                            return RequestTile(
+                              requestModel: controller.allRequest[index],
+                            );
+                          },
+                          separatorBuilder: (_, index) => const SizedBox(
+                            height: 10,
+                          ),
+                          itemCount: controller.allRequest.length,
+                        ),
+                      ),
                     ),
                   ),
                 ],

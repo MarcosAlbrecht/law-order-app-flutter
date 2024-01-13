@@ -42,8 +42,8 @@ class _BaseScreenState extends State<BaseScreen> {
           items: [
             BottomNavigationBarItem(
               icon: navigationController.currentIndex != 0
-                  ? const Icon(Icons.next_week_outlined)
-                  : const Icon(Icons.next_week),
+                  ? const Icon(Icons.featured_play_list_outlined)
+                  : const Icon(Icons.featured_play_list),
               label: 'Solicitações',
             ),
             BottomNavigationBarItem(
