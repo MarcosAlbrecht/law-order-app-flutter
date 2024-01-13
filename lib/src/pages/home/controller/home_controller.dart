@@ -61,6 +61,7 @@ class HomeController extends GetxController {
 
     result.when(
       success: (data) {
+        follows.clear();
         follows.addAll(data);
       },
       error: (message) {},

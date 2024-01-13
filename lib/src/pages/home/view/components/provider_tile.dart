@@ -72,14 +72,7 @@ class _ProviderTileState extends State<ProviderTile> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(50),
                               child: widget.item.profilePicture != null
-                                  ? //Image.network(
-                                  //     widget.item.profilePicture!.url!,
-                                  //     height: 70,
-                                  //     width: 70,
-                                  //     fit: BoxFit.cover,
-                                  //   )
-
-                                  Image.network(
+                                  ? Image.network(
                                       widget.item.profilePicture!.url!,
                                       loadingBuilder: (BuildContext context,
                                           Widget child,

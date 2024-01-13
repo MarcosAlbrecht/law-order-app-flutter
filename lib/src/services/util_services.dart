@@ -70,4 +70,20 @@ class UtilServices {
 
     return numberFormat.format(price);
   }
+
+  //converter a data do banco para usuario
+  String formatDateTime(String? originalDateTimeString) {
+    if (originalDateTimeString == null || originalDateTimeString.isEmpty) {
+      return '';
+    }
+    // Convertendo a string para um objeto DateTime
+    DateTime originalDateTime = DateTime.parse(originalDateTimeString);
+
+    // Formatando a data e hora para o novo formato desejado
+    String formattedDateTime =
+        "${originalDateTime.day.toString().padLeft(2, '0')}/${originalDateTime.month.toString().padLeft(2, '0')}/${originalDateTime.year} "
+        "${originalDateTime.hour.toString().padLeft(2, '0')}:${originalDateTime.minute.toString().padLeft(2, '0')}:${originalDateTime.second.toString().padLeft(2, '0')}";
+
+    return formattedDateTime;
+  }
 }

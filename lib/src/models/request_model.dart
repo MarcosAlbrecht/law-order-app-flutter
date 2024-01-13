@@ -32,8 +32,18 @@ class RequestModel {
   bool? applicantsAcceptance;
   @JsonKey(name: 'canceled')
   bool? canceled;
+  @JsonKey(name: 'providerSetCompleted')
+  bool? providerSetCompleted;
+  @JsonKey(name: 'serviceCompleted')
+  bool? serviceCompleted;
+  @JsonKey(name: 'deadline')
+  String? deadline;
+  @JsonKey(name: 'providerAcceptanceDate')
+  String? providerAcceptanceDate;
   @JsonKey(name: 'createdAt')
   String? createdAt;
+  @JsonKey(name: 'updatedAt')
+  String? updatedAt;
   @JsonKey(name: 'requester')
   UserModel? requester;
   RequestModel({
@@ -49,7 +59,12 @@ class RequestModel {
     this.providerAcceptance,
     this.applicantsAcceptance,
     this.canceled,
+    this.providerSetCompleted,
+    this.serviceCompleted,
+    this.deadline,
+    this.providerAcceptanceDate,
     this.createdAt,
+    this.updatedAt,
     this.requester,
   });
 

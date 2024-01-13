@@ -21,7 +21,12 @@ RequestModel _$RequestModelFromJson(Map<String, dynamic> json) => RequestModel(
       providerAcceptance: json['providerAcceptance'] as bool?,
       applicantsAcceptance: json['applicantsAcceptance'] as bool?,
       canceled: json['canceled'] as bool?,
+      providerSetCompleted: json['providerSetCompleted'] as bool?,
+      serviceCompleted: json['serviceCompleted'] as bool?,
+      deadline: json['deadline'] as String?,
+      providerAcceptanceDate: json['providerAcceptanceDate'] as String?,
       createdAt: json['createdAt'] as String?,
+      updatedAt: json['updatedAt'] as String?,
       requester: json['requester'] == null
           ? null
           : UserModel.fromJson(json['requester'] as Map<String, dynamic>),
@@ -41,6 +46,11 @@ Map<String, dynamic> _$RequestModelToJson(RequestModel instance) =>
       'providerAcceptance': instance.providerAcceptance,
       'applicantsAcceptance': instance.applicantsAcceptance,
       'canceled': instance.canceled,
+      'providerSetCompleted': instance.providerSetCompleted,
+      'serviceCompleted': instance.serviceCompleted,
+      'deadline': instance.deadline,
+      'providerAcceptanceDate': instance.providerAcceptanceDate,
       'createdAt': instance.createdAt,
+      'updatedAt': instance.updatedAt,
       'requester': instance.requester,
     };

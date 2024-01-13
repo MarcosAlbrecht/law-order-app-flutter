@@ -1,4 +1,6 @@
+import 'package:app_law_order/src/models/follows_model.dart';
 import 'package:app_law_order/src/models/user_model.dart';
+import 'package:app_law_order/src/pages/home/controller/home_controller.dart';
 import 'package:app_law_order/src/pages/profile/view/portfolio_screen.dart';
 import 'package:app_law_order/src/pages/profile_view/repository/profile_view_repository.dart';
 import 'package:app_law_order/src/services/util_services.dart';
@@ -6,10 +8,13 @@ import 'package:get/get.dart';
 
 class ProfileViewController extends GetxController {
   final profileViewRepository = ProfileViewRepository();
+  final homeController = Get.find<HomeController>();
 
   final utilService = UtilServices();
+  FollowsModel? followed = FollowsModel();
 
   UserModel user = UserModel();
+  late String userID;
 
   bool isLoading = false;
 
@@ -19,6 +24,7 @@ class ProfileViewController extends GetxController {
 
     final arguments = Get.arguments as Map<String, dynamic>;
     final String idUser = arguments['idUser'];
+    userID = idUser;
     loadUser(id: idUser);
   }
 
@@ -30,6 +36,7 @@ class ProfileViewController extends GetxController {
   Future<void> loadUser({required String id}) async {
     setLoading(value: true);
     final result = await profileViewRepository.getUserById(id: id);
+    await getFollow();
     setLoading(value: false);
     result.when(
       success: (data) {
@@ -39,5 +46,23 @@ class ProfileViewController extends GetxController {
         utilServices.showToast(message: message, isError: true);
       },
     );
+  }
+
+  Future<FollowsModel?> getFollow() async {
+    followed = homeController.follows
+        .firstWhereOrNull((element) => element.followedId == userID);
+
+    return followed;
+  }
+
+  Future<void> handleFollow() async {
+    //setFollowing(true);
+
+    await homeController.handleFollow(follow: followed, user: user);
+    await getFollow();
+
+    update();
+
+    //setFollowing(true);
   }
 }

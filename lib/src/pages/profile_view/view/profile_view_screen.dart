@@ -207,32 +207,71 @@ class ProfileViewScreen extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Expanded(
-                                    child: ElevatedButton.icon(
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all<Color>(
-                                          CustomColors.blueDark2Color,
+                                  Visibility(
+                                    replacement: Expanded(
+                                      child: ElevatedButton.icon(
+                                        style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all<Color>(
+                                            CustomColors.cyanColor,
+                                          ),
+                                          shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                10,
+                                              ), // Define a borda quadrada
+                                            ),
+                                          ),
                                         ),
-                                        shape: MaterialStateProperty.all<
-                                            RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              20,
-                                            ), // Define a borda quadrada
+                                        onPressed: () async {
+                                          await controller.handleFollow();
+                                        },
+                                        icon: Icon(
+                                          FontAwesome.user_times,
+                                          size: 16,
+                                          color: CustomColors.black,
+                                        ),
+                                        label: Text(
+                                          'Deixar de Seguir',
+                                          style: TextStyle(
+                                            color: CustomColors.black,
                                           ),
                                         ),
                                       ),
-                                      onPressed: () {},
-                                      icon: Icon(
-                                        FontAwesome.user_plus,
-                                        size: 16,
-                                        color: CustomColors.white,
-                                      ),
-                                      label: Text(
-                                        'Seguir',
-                                        style: TextStyle(
+                                    ),
+                                    visible: controller.followed == null,
+                                    child: Expanded(
+                                      child: ElevatedButton.icon(
+                                        style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all<Color>(
+                                            CustomColors.blueDark2Color,
+                                          ),
+                                          shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                10,
+                                              ), // Define a borda quadrada
+                                            ),
+                                          ),
+                                        ),
+                                        onPressed: () async {
+                                          await controller.handleFollow();
+                                        },
+                                        icon: Icon(
+                                          FontAwesome.user_plus,
+                                          size: 16,
                                           color: CustomColors.white,
+                                        ),
+                                        label: Text(
+                                          'Seguir',
+                                          style: TextStyle(
+                                            color: CustomColors.white,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -251,7 +290,7 @@ class ProfileViewScreen extends StatelessWidget {
                                             RoundedRectangleBorder>(
                                           RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(
-                                              20,
+                                              10,
                                             ), // Define a borda quadrada
                                           ),
                                         ),

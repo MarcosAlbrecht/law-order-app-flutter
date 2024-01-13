@@ -35,6 +35,14 @@ class RequestTab extends StatelessWidget {
                             height: 80,
                             padding: EdgeInsets.all(10),
                             decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: CustomColors.black.withOpacity(0.2),
+                                  blurRadius: 4, // Ajuste conforme necessário
+                                  offset: const Offset(
+                                      3, 4), // Ajuste conforme necessário
+                                ),
+                              ],
                               borderRadius: BorderRadius.circular(10),
                               color: controller.currentCategory == "received"
                                   ? CustomColors.blueDark2Color
@@ -75,7 +83,7 @@ class RequestTab extends StatelessWidget {
                         ),
                       ),
                       const VerticalDivider(
-                        width: 5,
+                        width: 10,
                         color: Colors.transparent,
                       ),
                       Expanded(
@@ -87,6 +95,14 @@ class RequestTab extends StatelessWidget {
                             height: 80,
                             padding: EdgeInsets.all(10),
                             decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: CustomColors.black.withOpacity(0.2),
+                                  blurRadius: 4, // Ajuste conforme necessário
+                                  offset: const Offset(
+                                      3, 4), // Ajuste conforme necessário
+                                ),
+                              ],
                               borderRadius: BorderRadius.circular(10),
                               color: controller.currentCategory == "sent"
                                   ? CustomColors.blueDark2Color
@@ -130,30 +146,35 @@ class RequestTab extends StatelessWidget {
                   const Divider(
                     height: 30,
                   ),
-                  const Row(
+                  Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Expanded(
+                      const Expanded(
                         child: CustomTextField(
                           icon: Icons.search,
                           label: "Pesquisar",
                         ),
                       ),
+                      Container(
+                        width: 50,
+                      ),
                     ],
                   ),
                   Visibility(
                     visible: controller.allRequest.isNotEmpty,
-                    replacement: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.search_off,
-                            color: CustomColors.blueDarkColor,
-                          ),
-                          const Text('Não há itens para apresentar'),
-                        ],
+                    replacement: Expanded(
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.search_off,
+                              color: CustomColors.blueDarkColor,
+                            ),
+                            const Text('Não há solicitações para apresentar'),
+                          ],
+                        ),
                       ),
                     ),
                     child: Expanded(
@@ -164,6 +185,10 @@ class RequestTab extends StatelessWidget {
                         ),
                         child: ListView.separated(
                           itemBuilder: (_, index) {
+                            if (((index + 1) == controller.allRequest.length) &&
+                                (!controller.isLastPage)) {
+                              controller.loadMoreRequestsReceived();
+                            }
                             return RequestTile(
                               requestModel: controller.allRequest[index],
                             );
