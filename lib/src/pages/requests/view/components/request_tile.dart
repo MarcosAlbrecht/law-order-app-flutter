@@ -111,7 +111,7 @@ class RequestTile extends StatelessWidget {
                                         color: CustomColors.blueDark2Color,
                                       ),
                                       Text(
-                                        ' ${utilServices.formatDateTime(requestModel.deadline)}',
+                                        ' ${utilServices.formatDate(requestModel.deadline)}',
                                         style: TextStyle(
                                             fontSize:
                                                 CustomFontSizes.fontSize12),

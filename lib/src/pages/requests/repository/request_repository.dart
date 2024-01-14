@@ -16,6 +16,8 @@ class RequestRepository {
       queryParams: {
         'limit': limit,
         'skip': skip,
+        'sortColumn': 'createdAt',
+        'sortDirection': 'DESC',
       },
     );
 

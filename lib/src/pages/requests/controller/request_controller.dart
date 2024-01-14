@@ -39,6 +39,16 @@ StatusInfo getStatusInfo(UserServiceRequestStatusEnum status) {
   }
 }
 
+Map<UserServiceRequestStatusEnum, String> customStatusMapping = {
+  UserServiceRequestStatusEnum.WAITING_PROVIDER_ACCEPT: 'aguardando aceitação',
+  UserServiceRequestStatusEnum.SCHEDULING: 'em agendamento',
+  UserServiceRequestStatusEnum.CANCELED: 'cancelado',
+  UserServiceRequestStatusEnum.EXPIRED: 'expirado',
+  UserServiceRequestStatusEnum.IN_CONTEST: 'em disputa',
+  UserServiceRequestStatusEnum.CONTEST_FINISHED: 'disputa finalizada',
+  UserServiceRequestStatusEnum.COMPLETED: 'concluído',
+};
+
 class StatusInfo {
   final String text;
   final Color color;
@@ -65,6 +75,8 @@ class RequestController extends GetxController {
 
   List<RequestModel> allRequest = [];
 
+  RxString searchRequest = ''.obs;
+
   bool get isLastPage {
     if (currentListRequest!.length < itemsPerPage) return true;
 
@@ -74,6 +86,12 @@ class RequestController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
+    debounce(
+      searchRequest,
+      (_) => filterByTitle(),
+      time: const Duration(milliseconds: 600),
+    );
 
     loadRequests();
   }
@@ -123,5 +141,42 @@ class RequestController extends GetxController {
     // Obtendo o texto e a cor correspondentes ao status
     StatusInfo statusInfo = getStatusInfo(statusEnum);
     return statusInfo;
+  }
+
+  void filterByTitle() {
+    setLoading(true, isUser: true);
+    if (searchRequest.value.isEmpty) {
+      allRequest.clear();
+      loadRequests(canLoad: false);
+    } else {
+      String? matchedEnumValue;
+
+      //buscar se contem algo no status
+      customStatusMapping.forEach(
+        (key, value) {
+          if (value.toLowerCase().contains(searchRequest.value.toLowerCase())) {
+            matchedEnumValue = key.toString().split('.').last;
+            return;
+          }
+        },
+      );
+      print(matchedEnumValue);
+      String statusEnumValue = matchedEnumValue ?? '';
+
+      List<RequestModel> complexSearch = allRequest.where(
+        (request) {
+          return request.requester!.firstName!
+                  .toLowerCase()
+                  .contains(searchRequest.value) ||
+              request.status!.contains(statusEnumValue) ||
+              request.createdAt!.contains(searchRequest.value) ||
+              request.total.toString().contains(searchRequest.value) ||
+              (request.deadline ?? '').contains(searchRequest.value);
+        },
+      ).toList();
+      allRequest.clear();
+      allRequest.addAll(complexSearch);
+    }
+    setLoading(false, isUser: true);
   }
 }

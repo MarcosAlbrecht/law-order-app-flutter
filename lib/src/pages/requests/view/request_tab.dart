@@ -155,10 +155,14 @@ class RequestTab extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Expanded(
+                        Expanded(
                           child: CustomTextField(
                             icon: Icons.search,
                             label: "Pesquisar",
+                            onChanged: (value) {
+                              controller.searchRequest.value =
+                                  value!.toLowerCase();
+                            },
                           ),
                         ),
                         Padding(
