@@ -3,6 +3,8 @@ import 'package:app_law_order/src/pages/common_widgets/custom_text_field.dart';
 import 'package:app_law_order/src/pages/requests/controller/request_controller.dart';
 import 'package:app_law_order/src/pages/requests/view/components/request_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttericon/font_awesome5_icons.dart';
+import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:get/get.dart';
 
 class RequestTab extends StatelessWidget {
@@ -146,20 +148,71 @@ class RequestTab extends StatelessWidget {
                   const Divider(
                     height: 30,
                   ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Expanded(
-                        child: CustomTextField(
-                          icon: Icons.search,
-                          label: "Pesquisar",
+                  Container(
+                    height: 60,
+                    width: double.infinity,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Expanded(
+                          child: CustomTextField(
+                            icon: Icons.search,
+                            label: "Pesquisar",
+                          ),
                         ),
-                      ),
-                      Container(
-                        width: 50,
-                      ),
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10, left: 5),
+                          child: SizedBox(
+                            width: 70,
+                            height: double.infinity,
+                            // child: ElevatedButton(
+                            //   style: ElevatedButton.styleFrom(
+                            //     backgroundColor: CustomColors.cyanColor,
+                            //     shape: RoundedRectangleBorder(
+                            //       borderRadius: BorderRadius.circular(10.0),
+                            //     ),
+                            //   ),
+                            //   onPressed: () {},
+                            //   child: Icon(FontAwesome.sliders),
+                            // ),
+                            child: Material(
+                              elevation: 3,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                ),
+                              ),
+                              child: PopupMenuButton<String>(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      10.0), // Borda arredondada
+                                ),
+                                icon: const Icon(FontAwesome.sliders),
+                                itemBuilder: (BuildContext context) =>
+                                    <PopupMenuEntry<String>>[
+                                  const PopupMenuItem<String>(
+                                    value: 'Filtrar',
+                                    child: Text('Filtrar'),
+                                  ),
+                                  const PopupMenuItem<String>(
+                                    value: 'Mais antigas',
+                                    child: Text('Mais antigas'),
+                                  ),
+                                  const PopupMenuItem<String>(
+                                    value: 'Mais recentes',
+                                    child: Text('Mais recentes'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   Visibility(
                     visible: controller.allRequest.isNotEmpty,

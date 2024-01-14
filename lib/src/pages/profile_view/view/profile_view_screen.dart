@@ -15,6 +15,7 @@ class ProfileViewScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: CustomColors.white,
         title: Text(
           "Perfil",
           style: TextStyle(color: CustomColors.black),
