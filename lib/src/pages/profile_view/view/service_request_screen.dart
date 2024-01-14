@@ -107,6 +107,7 @@ class ServiceRequestScreen extends StatelessWidget {
               ),
               Material(
                 child: Container(
+                  color: CustomColors.white,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
