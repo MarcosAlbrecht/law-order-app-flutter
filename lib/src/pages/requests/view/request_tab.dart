@@ -35,7 +35,7 @@ class RequestTab extends StatelessWidget {
                           },
                           child: Container(
                             height: 80,
-                            padding: EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               boxShadow: [
                                 BoxShadow(
@@ -95,7 +95,7 @@ class RequestTab extends StatelessWidget {
                           },
                           child: Container(
                             height: 80,
-                            padding: EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               boxShadow: [
                                 BoxShadow(
@@ -198,17 +198,26 @@ class RequestTab extends StatelessWidget {
                                 icon: const Icon(FontAwesome.sliders),
                                 itemBuilder: (BuildContext context) =>
                                     <PopupMenuEntry<String>>[
-                                  const PopupMenuItem<String>(
-                                    value: 'Filtrar',
-                                    child: Text('Filtrar'),
+                                  PopupMenuItem<String>(
+                                    value: '1',
+                                    child: const Text('Filtrar'),
+                                    onTap: () {
+                                      controller.handleSort(value: "DESC");
+                                    },
                                   ),
-                                  const PopupMenuItem<String>(
-                                    value: 'Mais antigas',
-                                    child: Text('Mais antigas'),
+                                  PopupMenuItem<String>(
+                                    value: '2',
+                                    child: const Text('Mais antigas'),
+                                    onTap: () {
+                                      controller.handleSort(value: "ASC");
+                                    },
                                   ),
-                                  const PopupMenuItem<String>(
-                                    value: 'Mais recentes',
-                                    child: Text('Mais recentes'),
+                                  PopupMenuItem<String>(
+                                    value: '3',
+                                    child: const Text('Mais recentes'),
+                                    onTap: () {
+                                      controller.handleSort(value: "DESC");
+                                    },
                                   ),
                                 ],
                               ),

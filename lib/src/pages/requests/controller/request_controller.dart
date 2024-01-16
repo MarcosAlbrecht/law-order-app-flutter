@@ -105,14 +105,16 @@ class RequestController extends GetxController {
   }
 
   Future<void> loadRequests(
-      {bool canLoad = true, bool alterCategory = false}) async {
+      {bool canLoad = true,
+      bool alterCategory = false,
+      String sortDirection = 'DESC'}) async {
     if (canLoad) {
       setLoading(true, isUser: true);
     }
     var result;
     if (currentCategory == 'received') {
       result = await requestsRepository.getRequestsReceived(
-          limit: itemsPerPage, skip: pagination);
+          limit: itemsPerPage, skip: pagination, sortDirection: sortDirection);
     } else {
       result = await requestsRepository.getMyRequest(
           limit: itemsPerPage, skip: pagination);
@@ -141,6 +143,13 @@ class RequestController extends GetxController {
     currentCategory = value;
     pagination = 0;
     loadRequests(canLoad: true, alterCategory: true);
+  }
+
+  void handleSort({required String value}) {
+    allRequest.clear();
+    currentListRequest = [];
+    pagination = 0;
+    loadRequests(canLoad: true, sortDirection: value);
   }
 
   StatusInfo serviceRequestStatus({required String status}) {
@@ -172,33 +181,12 @@ class RequestController extends GetxController {
           }
         },
       );
-      print(matchedEnumValue);
+      //print(matchedEnumValue);
       String? statusEnumValue = matchedEnumValue ?? null;
 
       List<RequestModel> complexSearch = [];
-      List<RequestModel> complexSearch1 = [];
-      List<RequestModel> complexSearch2 = [];
-      List<RequestModel> complexSearch3 = [];
+
       if (currentCategory == Constants.received) {
-        // complexSearch = allRequest.where(
-        //   (request) {
-        //     return request.requester!.firstName!
-        //         .toLowerCase()
-        //         .contains(searchRequest.value);
-        //   },
-        // ).toList();
-        // complexSearch1 = allRequest.where(
-        //   (request) {
-        //     return request.requester!.lastName!.contains(searchRequest.value);
-        //   },
-        // ).toList();
-        // if (statusEnumValue != null) {
-        //   complexSearch2 = allRequest.where(
-        //     (request) {
-        //       return request.status!.contains(statusEnumValue);
-        //     },
-        //   ).toList();
-        // }
         complexSearch = allRequest.where(
           (request) {
             return (request.requester!.firstName!
@@ -230,18 +218,6 @@ class RequestController extends GetxController {
                 request.createdAt!.contains(searchRequest.value));
           },
         ).toList();
-        // complexSearch1 = allRequest.where(
-        //   (request) {
-        //     return request.requested!.lastName!.contains(searchRequest.value);
-        //   },
-        // ).toList();
-        // if (statusEnumValue != null) {
-        //   complexSearch2 = allRequest.where(
-        //     (request) {
-        //       return request.status!.contains(statusEnumValue);
-        //     },
-        //   ).toList();
-        // }
       }
 
       allRequest.clear();
