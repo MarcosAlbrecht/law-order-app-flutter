@@ -247,6 +247,7 @@ class RequestTab extends StatelessWidget {
                               controller.loadMoreRequestsReceived();
                             }
                             return RequestTile(
+                              currentCategory: controller.currentCategory,
                               requestModel: controller.allRequest[index],
                             );
                           },

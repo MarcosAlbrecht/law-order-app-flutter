@@ -46,6 +46,8 @@ class RequestModel {
   String? updatedAt;
   @JsonKey(name: 'requester')
   UserModel? requester;
+  @JsonKey(name: 'requested')
+  UserModel? requested;
   RequestModel({
     this.id,
     this.requesterId,

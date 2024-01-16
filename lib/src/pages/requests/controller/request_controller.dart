@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:app_law_order/src/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -103,16 +104,27 @@ class RequestController extends GetxController {
     update();
   }
 
-  Future<void> loadRequests({bool canLoad = true}) async {
+  Future<void> loadRequests(
+      {bool canLoad = true, bool alterCategory = false}) async {
     if (canLoad) {
       setLoading(true, isUser: true);
     }
-    final result = await requestsRepository.getRequestsReceived(
-        limit: itemsPerPage, skip: pagination);
-
+    var result;
+    if (currentCategory == 'received') {
+      result = await requestsRepository.getRequestsReceived(
+          limit: itemsPerPage, skip: pagination);
+    } else {
+      result = await requestsRepository.getMyRequest(
+          limit: itemsPerPage, skip: pagination);
+    }
     setLoading(false, isUser: true);
     result.when(
       success: (data) {
+        if (alterCategory) {
+          allRequest.clear();
+          currentListRequest = [];
+        }
+
         currentListRequest = data;
         allRequest.addAll(currentListRequest!);
       },
@@ -126,11 +138,9 @@ class RequestController extends GetxController {
   }
 
   void selectCategory({required String value}) {
-    setLoading(true);
     currentCategory = value;
-
-    //carregar itens da api
-    setLoading(true);
+    pagination = 0;
+    loadRequests(canLoad: true, alterCategory: true);
   }
 
   StatusInfo serviceRequestStatus({required String status}) {
@@ -146,6 +156,8 @@ class RequestController extends GetxController {
   void filterByTitle() {
     setLoading(true, isUser: true);
     if (searchRequest.value.isEmpty) {
+      currentListRequest = [];
+      pagination = 0;
       allRequest.clear();
       loadRequests(canLoad: false);
     } else {
@@ -161,21 +173,81 @@ class RequestController extends GetxController {
         },
       );
       print(matchedEnumValue);
-      String statusEnumValue = matchedEnumValue ?? '';
+      String? statusEnumValue = matchedEnumValue ?? null;
 
-      List<RequestModel> complexSearch = allRequest.where(
-        (request) {
-          return request.requester!.firstName!
-                  .toLowerCase()
-                  .contains(searchRequest.value) ||
-              request.status!.contains(statusEnumValue) ||
-              request.createdAt!.contains(searchRequest.value) ||
-              request.total.toString().contains(searchRequest.value) ||
-              (request.deadline ?? '').contains(searchRequest.value);
-        },
-      ).toList();
+      List<RequestModel> complexSearch = [];
+      List<RequestModel> complexSearch1 = [];
+      List<RequestModel> complexSearch2 = [];
+      List<RequestModel> complexSearch3 = [];
+      if (currentCategory == Constants.received) {
+        // complexSearch = allRequest.where(
+        //   (request) {
+        //     return request.requester!.firstName!
+        //         .toLowerCase()
+        //         .contains(searchRequest.value);
+        //   },
+        // ).toList();
+        // complexSearch1 = allRequest.where(
+        //   (request) {
+        //     return request.requester!.lastName!.contains(searchRequest.value);
+        //   },
+        // ).toList();
+        // if (statusEnumValue != null) {
+        //   complexSearch2 = allRequest.where(
+        //     (request) {
+        //       return request.status!.contains(statusEnumValue);
+        //     },
+        //   ).toList();
+        // }
+        complexSearch = allRequest.where(
+          (request) {
+            return (request.requester!.firstName!
+                    .toLowerCase()
+                    .contains(searchRequest.value) ||
+                request.requester!.lastName!
+                    .toLowerCase()
+                    .contains(searchRequest.value) ||
+                request.status == statusEnumValue ||
+                utilServices
+                    .priceToCurrency(request.total!)
+                    .contains(searchRequest.value) ||
+                request.createdAt!.contains(searchRequest.value));
+          },
+        ).toList();
+      } else {
+        complexSearch = allRequest.where(
+          (request) {
+            return (request.requested!.firstName!
+                    .toLowerCase()
+                    .contains(searchRequest.value) ||
+                request.requested!.lastName!
+                    .toLowerCase()
+                    .contains(searchRequest.value) ||
+                request.status == statusEnumValue ||
+                utilServices
+                    .priceToCurrency(request.total!)
+                    .contains(searchRequest.value) ||
+                request.createdAt!.contains(searchRequest.value));
+          },
+        ).toList();
+        // complexSearch1 = allRequest.where(
+        //   (request) {
+        //     return request.requested!.lastName!.contains(searchRequest.value);
+        //   },
+        // ).toList();
+        // if (statusEnumValue != null) {
+        //   complexSearch2 = allRequest.where(
+        //     (request) {
+        //       return request.status!.contains(statusEnumValue);
+        //     },
+        //   ).toList();
+        // }
+      }
+
       allRequest.clear();
       allRequest.addAll(complexSearch);
+      //allRequest.addAll(complexSearch1);
+      //allRequest.addAll(complexSearch2);
     }
     setLoading(false, isUser: true);
   }

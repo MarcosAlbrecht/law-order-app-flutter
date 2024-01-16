@@ -29,6 +29,7 @@ abstract class EndPoints {
       '$baseUrl/accounts/service-requests/request/';
 
   static const getRequestsReceived = '$baseUrl/accounts/service-requests';
+  static const getMyRequest = '$baseUrl/accounts/service-requests/my';
 }
 
 abstract class EndPointsViaCep {

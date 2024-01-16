@@ -1,20 +1,22 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:app_law_order/src/pages/profile/view/portfolio_screen.dart';
-import 'package:app_law_order/src/pages/requests/controller/request_controller.dart';
 import 'package:flutter/material.dart';
-
-import 'package:app_law_order/src/config/custom_colors.dart';
-import 'package:app_law_order/src/models/request_model.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:fluttericon/iconic_icons.dart';
 import 'package:get/get.dart';
 
+import 'package:app_law_order/src/config/custom_colors.dart';
+import 'package:app_law_order/src/models/request_model.dart';
+import 'package:app_law_order/src/pages/profile/view/portfolio_screen.dart';
+import 'package:app_law_order/src/pages/requests/controller/request_controller.dart';
+
 class RequestTile extends StatelessWidget {
   final RequestModel requestModel;
+  final String currentCategory;
 
   const RequestTile({
     Key? key,
     required this.requestModel,
+    required this.currentCategory,
   }) : super(key: key);
 
   @override
@@ -74,12 +76,20 @@ class RequestTile extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  '${requestModel.requester?.firstName} ${requestModel.requester?.lastName}',
-                                  style: TextStyle(
-                                      fontSize: CustomFontSizes.fontSize16),
-                                ),
-                                Divider(
+                                currentCategory == 'received'
+                                    ? Text(
+                                        '${requestModel.requester!.firstName?.trim()} ${requestModel.requester!.lastName?.trim()}',
+                                        style: TextStyle(
+                                            fontSize:
+                                                CustomFontSizes.fontSize16),
+                                      )
+                                    : Text(
+                                        '${requestModel.requested!.firstName?.trim()} ${requestModel.requested!.lastName?.trim()}',
+                                        style: TextStyle(
+                                            fontSize:
+                                                CustomFontSizes.fontSize16),
+                                      ),
+                                const Divider(
                                   height: 15,
                                 ),
                                 Row(

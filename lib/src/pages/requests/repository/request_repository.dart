@@ -9,7 +9,9 @@ class RequestRepository {
   final utilServices = UtilServices();
 
   Future<RequestReceivedResult<RequestModel>> getRequestsReceived(
-      {required int limit, required int skip}) async {
+      {required int limit,
+      required int skip,
+      String sortDirection = 'DESC'}) async {
     final result = await httpManager.restRequest(
       method: HttpMethods.get,
       url: EndPoints.getRequestsReceived,
@@ -17,7 +19,34 @@ class RequestRepository {
         'limit': limit,
         'skip': skip,
         'sortColumn': 'createdAt',
-        'sortDirection': 'DESC',
+        'sortDirection': sortDirection,
+      },
+    );
+
+    if (result['result'].isNotEmpty) {
+      List<RequestModel> data =
+          (List<Map<String, dynamic>>.from(result['result']))
+              .map(RequestModel.fromJson)
+              .toList();
+
+      return RequestReceivedResult.success(data);
+    } else {
+      return RequestReceivedResult.error("Não foi possível buscar os dados!");
+    }
+  }
+
+  Future<RequestReceivedResult<RequestModel>> getMyRequest(
+      {required int limit,
+      required int skip,
+      String sortDirection = 'DESC'}) async {
+    final result = await httpManager.restRequest(
+      method: HttpMethods.get,
+      url: EndPoints.getMyRequest,
+      queryParams: {
+        'limit': limit,
+        'skip': skip,
+        'sortColumn': 'createdAt',
+        'sortDirection': sortDirection,
       },
     );
 
