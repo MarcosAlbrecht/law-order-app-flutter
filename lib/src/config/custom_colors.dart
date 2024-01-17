@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 abstract class CustomColors {
+  static Color bodyBackgroundColor = const Color(0xfff1f5f9);
   static Color backGround = const Color(0xffe2e8f0);
   static Color blueColor = const Color(0xff6ae0f2);
   static Color blueDarkColor = const Color(0xff0f172a);
@@ -8,8 +9,9 @@ abstract class CustomColors {
   static Color cyanColor = const Color(0xfffafafa);
   static Color white = Colors.white;
   static Color black = Colors.black;
-
+  static Color green = const Color(0xff38a169);
   static Color backgroudCard = const Color(0xFFF2F2F2);
+  static Color red = const Color(0xffdc2626);
 }
 
 abstract class CustomFontSizes {

@@ -48,7 +48,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         title: Text(
           "Informações Pessoais",
-          style: TextStyle(color: CustomColors.black),
+          style: TextStyle(
+            color: CustomColors.black,
+          ),
         ),
         centerTitle: true,
         toolbarHeight: 80,
