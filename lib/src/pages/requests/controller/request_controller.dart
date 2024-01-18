@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,7 +27,7 @@ StatusInfo getStatusInfo(UserServiceRequestStatusEnum status) {
     case UserServiceRequestStatusEnum.SCHEDULING:
       return StatusInfo('Em Agendamento', Colors.orange, 0.1);
     case UserServiceRequestStatusEnum.CANCELED:
-      return StatusInfo('Cancelado', Colors.red, 0.3);
+      return StatusInfo('Cancelado', CustomColors.blueDarkColor, 0.3);
     case UserServiceRequestStatusEnum.EXPIRED:
       return StatusInfo('Expirado', Colors.grey, 0.1);
     case UserServiceRequestStatusEnum.IN_CONTEST:
@@ -75,6 +76,8 @@ class RequestController extends GetxController {
   List<RequestModel>? currentListRequest;
 
   List<RequestModel> allRequest = [];
+
+  RequestModel? selectedRequest;
 
   RxString searchRequest = ''.obs;
 

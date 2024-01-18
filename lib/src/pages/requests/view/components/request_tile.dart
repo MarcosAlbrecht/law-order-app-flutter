@@ -22,33 +22,34 @@ class RequestTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Get.toNamed(PagesRoutes.requestDetailScreen);
-      },
-      child: Material(
-        elevation: 3,
-        color: CustomColors.cyanColor,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(10),
-            bottomRight: Radius.circular(10),
-            topLeft: Radius.circular(10),
-            topRight: Radius.circular(10),
-          ),
-        ),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(10),
-            bottomRight: Radius.circular(10),
-            topLeft: Radius.circular(10),
-            topRight: Radius.circular(10),
-          ),
-          child: GetBuilder<RequestController>(
-            builder: (controller) {
-              final statusInfo =
-                  controller.serviceRequestStatus(status: requestModel.status!);
-              return Stack(
+    return GetBuilder<RequestController>(
+      builder: (controller) {
+        final statusInfo =
+            controller.serviceRequestStatus(status: requestModel.status!);
+        return GestureDetector(
+          onTap: () {
+            controller.selectedRequest = requestModel;
+            Get.toNamed(PagesRoutes.requestDetailScreen);
+          },
+          child: Material(
+            elevation: 3,
+            color: CustomColors.cyanColor,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(10),
+                bottomRight: Radius.circular(10),
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
+              ),
+            ),
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(10),
+                bottomRight: Radius.circular(10),
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
+              ),
+              child: Stack(
                 children: [
                   Container(
                     padding: const EdgeInsets.only(
@@ -188,11 +189,11 @@ class RequestTile extends StatelessWidget {
                     ),
                   ) // Barra verde no canto esquerdo
                 ],
-              );
-            },
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
