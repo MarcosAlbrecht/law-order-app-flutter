@@ -1,18 +1,19 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:app_law_order/src/constants/constants.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/src/simple/get_state.dart';
+
+import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/models/request_model.dart';
 import 'package:app_law_order/src/models/service_model.dart';
 import 'package:app_law_order/src/pages/requests/controller/request_controller.dart';
+import 'package:app_law_order/src/pages/requests/controller/request_detail_controller.dart';
 import 'package:app_law_order/src/pages/requests/view/components/request_tile.dart';
 import 'package:app_law_order/src/pages/requests/view/components/services_tile.dart';
 import 'package:app_law_order/src/services/util_services.dart';
-import 'package:flutter/material.dart';
 
-import 'package:app_law_order/src/config/custom_colors.dart';
-import 'package:app_law_order/src/pages/requests/controller/request_detail_controller.dart';
-import 'package:get/get_state_manager/src/simple/get_state.dart';
-
-class RequestDetailScreen extends StatelessWidget {
-  const RequestDetailScreen({
+class RequestManagerScreen extends StatelessWidget {
+  const RequestManagerScreen({
     Key? key,
   }) : super(key: key);
 
@@ -29,6 +30,7 @@ class RequestDetailScreen extends StatelessWidget {
             color: CustomColors.black,
           ),
         ),
+        backgroundColor: CustomColors.white,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(10),
@@ -41,7 +43,7 @@ class RequestDetailScreen extends StatelessWidget {
           children: [
             // Add the request details here
             _RequestDetails(),
-            const SizedBox(height: 16.0),
+            //const SizedBox(height: 4.0),
             // Add the actions here
             _Actions(),
           ],
@@ -179,12 +181,23 @@ class _RequestDetails extends StatelessWidget {
                             itemCount: controller
                                 .selectedRequest!.requestedServices!.length),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Valor total'),
-                          Text('Total'),
-                        ],
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 8.0, right: 24, left: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Valor total'),
+                            Text(
+                              utilServices.priceToCurrency(
+                                  controller.selectedRequest!.total!),
+                              style: TextStyle(
+                                fontSize: CustomFontSizes.fontSize14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       )
                     ],
                   ),
@@ -304,27 +317,106 @@ class _RowDetailServiceStatus extends StatelessWidget {
 class _Actions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        // Add the chat button here
-        _ChatButton(),
-        // Add the service confirmation button here
-        _ServiceConfirmationButton(),
-        // Add the payment button here
-        // _PaymentButton(),
-        // // Add the evaluation button here
-        // _EvaluationButton(),
-        // // Add the dispute button here
-        // _DisputeButton(),
-        // // Add the cancellation button here
-        // _CancelButton(),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: GetBuilder<RequestController>(
+        builder: (controller) {
+          List<Widget> actionWidgets = [];
+
+          //verifica o tipo de usuário pra montar o botao de chat
+          String? labelButton = controller.currentCategory == Constants.received
+              ? 'Conversar com o solicitante'
+              : 'Conversar com o prestador';
+
+          switch (controller.selectedRequest?.status) {
+            case 'WAITING_PROVIDER_ACCEPT':
+              actionWidgets.add(_ServiceConfirmationRefuseButton());
+              actionWidgets.add(
+                const Divider(
+                  height: 20,
+                ),
+              );
+              actionWidgets.add(_DisputeButton());
+              break;
+            case 'SCHEDULING':
+              actionWidgets.add(_ServiceFinalizedConfirmationRefuseButton());
+              actionWidgets.add(
+                const Divider(
+                  height: 20,
+                ),
+              );
+              actionWidgets.add(
+                _ChatButton(labelButton: labelButton),
+              );
+              actionWidgets.add(
+                const Divider(
+                  height: 20,
+                ),
+              );
+              actionWidgets.add(_DisputeButton());
+            case 'COMPLETED':
+              actionWidgets.add(
+                Text(
+                  'Ações',
+                  style: TextStyle(
+                    fontSize: CustomFontSizes.fontSize16,
+                    color: CustomColors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              );
+              actionWidgets.add(
+                _ChatButton(labelButton: labelButton),
+              );
+
+              actionWidgets.add(
+                const Divider(
+                  height: 20,
+                ),
+              );
+              actionWidgets.add(_DisputeButton());
+            case 'CANCELED':
+              actionWidgets.add(
+                Text(
+                  'Ações',
+                  style: TextStyle(
+                    fontSize: CustomFontSizes.fontSize16,
+                    color: CustomColors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              );
+              actionWidgets.add(
+                _ChatButton(labelButton: labelButton),
+              );
+
+              actionWidgets.add(
+                const Divider(
+                  height: 20,
+                ),
+              );
+              actionWidgets.add(_DisputeButton());
+            default:
+            // Lida com outros casos ou não faz nada
+          }
+
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: actionWidgets,
+          );
+        },
+      ),
     );
   }
 }
 
 class _ChatButton extends StatelessWidget {
+  String labelButton;
+  _ChatButton({
+    Key? key,
+    required this.labelButton,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -338,7 +430,7 @@ class _ChatButton extends StatelessWidget {
         // Add chat functionality here
       },
       child: Text(
-        'Chat',
+        labelButton,
         style: TextStyle(
           color: CustomColors.white,
         ),
@@ -347,25 +439,132 @@ class _ChatButton extends StatelessWidget {
   }
 }
 
-class _ServiceConfirmationButton extends StatelessWidget {
+class _ServiceConfirmationRefuseButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: CustomColors.green,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Ações',
+          style: TextStyle(
+            fontSize: CustomFontSizes.fontSize16,
+            color: CustomColors.black,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-      ),
-      onPressed: () {
-        // Add service confirmation functionality here
-      },
-      child: Text(
-        'Confirmar',
-        style: TextStyle(
-          color: CustomColors.white,
+        Row(
+          children: [
+            Expanded(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: CustomColors.green,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onPressed: () {
+                  // Add service confirmation functionality here
+                },
+                child: Text(
+                  'Aceitar Solicitaçao',
+                  style: TextStyle(
+                    color: CustomColors.white,
+                  ),
+                ),
+              ),
+            ),
+            const VerticalDivider(
+              width: 5,
+              color: Colors.transparent,
+            ),
+            Expanded(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: CustomColors.red,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onPressed: () {
+                  // Add service confirmation functionality here
+                },
+                child: Text(
+                  'Recusar Solicitaçao',
+                  style: TextStyle(
+                    color: CustomColors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-      ),
+      ],
+    );
+  }
+}
+
+class _ServiceFinalizedConfirmationRefuseButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Ações',
+          style: TextStyle(
+            fontSize: CustomFontSizes.fontSize16,
+            color: CustomColors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: CustomColors.green,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onPressed: () {
+                  // Add service confirmation functionality here
+                },
+                child: Text(
+                  'Serviço finalizado',
+                  style: TextStyle(
+                    color: CustomColors.white,
+                  ),
+                ),
+              ),
+            ),
+            const VerticalDivider(
+              width: 5,
+              color: Colors.transparent,
+            ),
+            Expanded(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: CustomColors.red,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onPressed: () {
+                  // Add service confirmation functionality here
+                },
+                child: Text(
+                  'Cancelar',
+                  style: TextStyle(
+                    color: CustomColors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -421,7 +620,7 @@ class _DisputeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        backgroundColor: CustomColors.blueColor,
+        backgroundColor: CustomColors.blueDarkColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),

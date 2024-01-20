@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/constants/constants.dart';
+import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
+import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -66,6 +68,8 @@ class StatusInfo {
 class RequestController extends GetxController {
   final requestsRepository = RequestRepository();
   final utilServices = UtilServices();
+
+  final authController = Get.find<AuthController>();
 
   int pagination = 0;
 
@@ -229,5 +233,11 @@ class RequestController extends GetxController {
       //allRequest.addAll(complexSearch2);
     }
     setLoading(false, isUser: true);
+  }
+
+  void handleSelectedRequest({required RequestModel request}) {
+    selectedRequest = request;
+
+    Get.toNamed(PagesRoutes.requestDetailScreen);
   }
 }

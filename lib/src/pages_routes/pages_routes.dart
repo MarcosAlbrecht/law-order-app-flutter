@@ -17,7 +17,7 @@ import 'package:app_law_order/src/pages/profile_view/binding/service_request_bin
 import 'package:app_law_order/src/pages/profile_view/view/profile_view_screen.dart';
 import 'package:app_law_order/src/pages/profile_view/view/service_request_screen.dart';
 import 'package:app_law_order/src/pages/requests/binding/request_binding.dart';
-import 'package:app_law_order/src/pages/requests/view/request_detail_screen.dart';
+import 'package:app_law_order/src/pages/requests/view/request_manager_screen.dart';
 import 'package:app_law_order/src/pages/requests/view/request_tab.dart';
 import 'package:get/get.dart';
 
@@ -73,7 +73,7 @@ abstract class AppPages {
     ),
     GetPage(
       name: PagesRoutes.requestDetailScreen,
-      page: () => RequestDetailScreen(),
+      page: () => RequestManagerScreen(),
       //binding: ServiceRequestBinding(),
     ),
     GetPage(

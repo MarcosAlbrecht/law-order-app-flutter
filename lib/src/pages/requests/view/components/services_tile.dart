@@ -18,8 +18,10 @@ class ServicesTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      visualDensity: VisualDensity.compact,
       title: Text(
         '${service.title!}',
+        style: TextStyle(fontSize: CustomFontSizes.fontSize12),
       ),
       trailing: Text(
         utilServices.priceToCurrency(
