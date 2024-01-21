@@ -32,7 +32,7 @@ abstract class EndPoints {
   static const getMyRequest = '$baseUrl/accounts/service-requests/my';
 
   static const acceptBudget =
-      '$baseUrl/accounts/service-requests/accept-budget/';
+      '$baseUrl/accounts/service-requests/set-provider-acceptance/';
 
   static const declineBudget =
       '$baseUrl/accounts/service-requests/decline-budget/';

@@ -3,6 +3,7 @@ import 'package:app_law_order/src/pages/home/controller/follow_controller.dart';
 import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:get/get.dart';
 
@@ -53,11 +54,7 @@ class _ProviderTileState extends State<ProviderTile> {
                 ),
               ),
               shadowColor: CustomColors.white,
-              // shape: RoundedRectangleBorder(
-              //   side: BorderSide(
-              //       style: BorderStyle.solid, color: Colors.cyan.shade200),
-              //   borderRadius: BorderRadius.circular(10),
-              // ),
+
               child: Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
@@ -97,30 +94,17 @@ class _ProviderTileState extends State<ProviderTile> {
                               height: 10,
                               color: Colors.transparent,
                             ),
-                            const Row(
-                              children: [
-                                Icon(
-                                  Icons.star_rate,
-                                  size: 18,
-                                ),
-                                Icon(
-                                  Icons.star_border_outlined,
-                                  size: 18,
-                                ),
-                                Icon(
-                                  Icons.star_border_outlined,
-                                  size: 18,
-                                ),
-                                Icon(
-                                  Icons.star_border_outlined,
-                                  size: 18,
-                                ),
-                                Icon(
-                                  Icons.star_border_outlined,
-                                  size: 18,
-                                ),
-                              ],
-                            )
+                            RatingBarIndicator(
+                              //unratedColor: CustomColors.black,
+                              rating: 2.75,
+                              itemBuilder: (context, index) => Icon(
+                                Icons.star_rate,
+                                color: CustomColors.blueDark2Color,
+                              ),
+                              itemCount: 5,
+                              itemSize: 15.0,
+                              direction: Axis.horizontal,
+                            ),
                           ],
                         ),
                         const VerticalDivider(
@@ -139,7 +123,7 @@ class _ProviderTileState extends State<ProviderTile> {
                                     child: Text(
                                       '${widget.item.firstName} ${widget.item.lastName}',
                                       style: TextStyle(
-                                        fontSize: CustomFontSizes.fontSize18,
+                                        fontSize: CustomFontSizes.fontSize16,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),

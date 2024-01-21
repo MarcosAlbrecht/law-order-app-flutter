@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:app_law_order/src/pages_routes/pages_routes.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app_law_order/src/config/custom_colors.dart';
@@ -46,11 +47,23 @@ class FollowsTile extends StatelessWidget {
             ),
             child: ListTile(
               visualDensity: VisualDensity.comfortable,
-              leading: CircleAvatar(
-                backgroundImage: follow.followed?.profilePicture != null
-                    ? NetworkImage(follow.followed!.profilePicture!.url!)
-                    : const AssetImage("assets/ICONPEOPLE.png")
-                        as ImageProvider<Object>,
+              leading: ClipRRect(
+                borderRadius: BorderRadius.circular(50),
+                child: follow.followed?.profilePicture != null
+                    ? CachedNetworkImage(
+                        imageUrl: follow.followed!.profilePicture!.url!,
+                        progressIndicatorBuilder:
+                            (context, url, downloadProgress) =>
+                                CircularProgressIndicator(
+                                    value: downloadProgress.progress),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                        fit: BoxFit.cover,
+                      )
+                    : Image.asset(
+                        "assets/ICONPEOPLE.png",
+                        fit: BoxFit.cover,
+                      ),
               ),
               title: Text(
                 '${follow.followed!.firstName!} ${follow.followed!.lastName!}',

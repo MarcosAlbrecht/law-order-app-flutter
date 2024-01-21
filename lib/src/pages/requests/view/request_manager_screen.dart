@@ -1,14 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:app_law_order/src/constants/constants.dart';
+import 'package:app_law_order/src/pages/requests/view/components/calendar_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
-
 import 'package:app_law_order/src/config/custom_colors.dart';
-import 'package:app_law_order/src/models/request_model.dart';
-import 'package:app_law_order/src/models/service_model.dart';
 import 'package:app_law_order/src/pages/requests/controller/request_controller.dart';
-import 'package:app_law_order/src/pages/requests/controller/request_detail_controller.dart';
-import 'package:app_law_order/src/pages/requests/view/components/request_tile.dart';
 import 'package:app_law_order/src/pages/requests/view/components/services_tile.dart';
 import 'package:app_law_order/src/services/util_services.dart';
 
@@ -180,6 +176,9 @@ class _RequestDetails extends StatelessWidget {
                                 ),
                             itemCount: controller
                                 .selectedRequest!.requestedServices!.length),
+                      ),
+                      const Divider(
+                        height: 15,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(
@@ -453,24 +452,30 @@ class _ServiceConfirmationRefuseButton extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        Row(
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Expanded(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: CustomColors.green,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: CustomColors.green,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                onPressed: () {
-                  // Add service confirmation functionality here
-                },
-                child: Text(
-                  'Aceitar Solicitaçao',
-                  style: TextStyle(
-                    color: CustomColors.white,
-                  ),
+              ),
+              onPressed: () {
+                // Add service confirmation functionality here
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return CalendarDialog();
+                  },
+                );
+              },
+              child: Text(
+                'Aceitar Solicitaçao',
+                style: TextStyle(
+                  color: CustomColors.white,
+                  fontSize: CustomFontSizes.fontSize14,
                 ),
               ),
             ),
@@ -478,22 +483,21 @@ class _ServiceConfirmationRefuseButton extends StatelessWidget {
               width: 5,
               color: Colors.transparent,
             ),
-            Expanded(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: CustomColors.red,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: CustomColors.red,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                onPressed: () {
-                  // Add service confirmation functionality here
-                },
-                child: Text(
-                  'Recusar Solicitaçao',
-                  style: TextStyle(
-                    color: CustomColors.white,
-                  ),
+              ),
+              onPressed: () {
+                // Add service confirmation functionality here
+              },
+              child: Text(
+                'Recusar Solicitaçao',
+                style: TextStyle(
+                  color: CustomColors.white,
+                  fontSize: CustomFontSizes.fontSize14,
                 ),
               ),
             ),

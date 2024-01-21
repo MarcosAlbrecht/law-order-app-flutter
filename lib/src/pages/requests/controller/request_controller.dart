@@ -85,6 +85,8 @@ class RequestController extends GetxController {
 
   RxString searchRequest = ''.obs;
 
+  late DateTime dateDeadlineAcceptance;
+
   bool get isLastPage {
     if (currentListRequest!.length < itemsPerPage) return true;
 

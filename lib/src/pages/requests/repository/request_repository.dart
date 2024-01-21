@@ -63,11 +63,15 @@ class RequestRepository {
   }
 
   Future<RequestReceivedResult<RequestModel>> acceptBudget({
-    required int idRequest,
+    required DateTime dataDeadline,
   }) async {
     final result = await httpManager.restRequest(
-      method: HttpMethods.get,
-      url: EndPoints.getMyRequest,
+      method: HttpMethods.patch,
+      url: EndPoints.acceptBudget,
+      body: {
+        "providerAcceptance": true,
+        "deadline": dataDeadline,
+      },
     );
 
     if (result['result'].isNotEmpty) {
@@ -86,7 +90,7 @@ class RequestRepository {
     required int idRequest,
   }) async {
     final result = await httpManager.restRequest(
-      method: HttpMethods.get,
+      method: HttpMethods.patch,
       url: '${EndPoints.declineBudget} ',
     );
 
