@@ -61,4 +61,44 @@ class RequestRepository {
       return RequestReceivedResult.error("Não foi possível buscar os dados!");
     }
   }
+
+  Future<RequestReceivedResult<RequestModel>> acceptBudget({
+    required int idRequest,
+  }) async {
+    final result = await httpManager.restRequest(
+      method: HttpMethods.get,
+      url: EndPoints.getMyRequest,
+    );
+
+    if (result['result'].isNotEmpty) {
+      List<RequestModel> data =
+          (List<Map<String, dynamic>>.from(result['result']))
+              .map(RequestModel.fromJson)
+              .toList();
+
+      return RequestReceivedResult.success(data);
+    } else {
+      return RequestReceivedResult.error("Não foi possível buscar os dados!");
+    }
+  }
+
+  Future<RequestReceivedResult<RequestModel>> declineBudget({
+    required int idRequest,
+  }) async {
+    final result = await httpManager.restRequest(
+      method: HttpMethods.get,
+      url: '${EndPoints.declineBudget} ',
+    );
+
+    if (result['result'].isNotEmpty) {
+      List<RequestModel> data =
+          (List<Map<String, dynamic>>.from(result['result']))
+              .map(RequestModel.fromJson)
+              .toList();
+
+      return RequestReceivedResult.success(data);
+    } else {
+      return RequestReceivedResult.error("Não foi possível buscar os dados!");
+    }
+  }
 }

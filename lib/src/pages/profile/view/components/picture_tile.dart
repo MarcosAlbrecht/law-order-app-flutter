@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:app_law_order/src/pages/profile/controller/profile_controller.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -69,13 +70,34 @@ class _PictureTileState extends State<PictureTile> {
             height: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              image: DecorationImage(
-                image: widget.picture.url != null
-                    ? NetworkImage(widget.picture.url!) as ImageProvider<Object>
-                    : FileImage(File(widget.picture.localPath!)),
-                fit: BoxFit.cover,
-              ),
+              // image: DecorationImage(
+              //   image: widget.picture.url != null
+              //       ? NetworkImage(widget.picture.url!) as ImageProvider<Object>
+              //       : FileImage(File(widget.picture.localPath!)),
+              //   fit: BoxFit.cover,
+              // ),
             ),
+            child: widget.picture.url != null
+                ? CachedNetworkImage(
+                    imageUrl: widget.picture.url!,
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) => Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: CircularProgressIndicator(
+                        value: downloadProgress.progress,
+                      ),
+                    ),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                    //height: 160,
+                    //width: 160,
+                    fit: BoxFit.cover,
+                  )
+                : Image.asset(
+                    "assets/ICONPEOPLE.png",
+                    height: 160,
+                    width: 160,
+                  ),
           ),
           Positioned(
             top: 2,

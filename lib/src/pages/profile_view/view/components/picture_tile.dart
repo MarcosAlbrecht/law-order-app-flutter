@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:app_law_order/src/models/picture_model.dart';
 import 'package:app_law_order/src/pages/profile_view/view/components/picture_dialog.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class PictureTile extends StatelessWidget {
@@ -29,13 +30,33 @@ class PictureTile extends StatelessWidget {
         height: 120,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          image: DecorationImage(
-            image: picture.url != null
-                ? NetworkImage(picture.url!) as ImageProvider<Object>
-                : FileImage(File(picture.localPath!)),
-            fit: BoxFit.cover,
-          ),
+          // image: DecorationImage(
+          //   image: picture.url != null
+          //       ? NetworkImage(picture.url!) as ImageProvider<Object>
+          //       : FileImage(File(picture.localPath!)),
+          //   fit: BoxFit.cover,
+          // ),
         ),
+        child: picture.url != null
+            ? CachedNetworkImage(
+                imageUrl: picture.url!,
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: CircularProgressIndicator(
+                    value: downloadProgress.progress,
+                  ),
+                ),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+                //height: 160,
+                //width: 160,
+                fit: BoxFit.cover,
+              )
+            : Image.asset(
+                "assets/ICONPEOPLE.png",
+                height: 160,
+                width: 160,
+              ),
       ),
     );
   }

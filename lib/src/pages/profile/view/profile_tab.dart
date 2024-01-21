@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:app_law_order/src/pages_routes/pages_routes.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -50,33 +51,16 @@ class _ProfileTabState extends State<ProfileTab> {
                                 child: controller.authController.user
                                             .profilePicture !=
                                         null
-                                    ? Image.network(
-                                        controller.authController.user
+                                    ? CachedNetworkImage(
+                                        imageUrl: controller.authController.user
                                             .profilePicture!.url!,
-                                        loadingBuilder: (BuildContext context,
-                                            Widget child,
-                                            ImageChunkEvent? loadingProgress) {
-                                          if (loadingProgress == null) {
-                                            return child;
-                                          } else {
-                                            // Exibir um ícone de carregamento enquanto a imagem está sendo carregada
-                                            return Center(
-                                              child: CircularProgressIndicator(
-                                                color:
-                                                    CustomColors.blueDark2Color,
-                                              ),
-                                            );
-                                          }
-                                        },
-                                        errorBuilder: (BuildContext context,
-                                            Object exception,
-                                            StackTrace? stackTrace) {
-                                          return Image.asset(
-                                            "assets/ICONPEOPLE.png",
-                                            height: 160,
-                                            width: 160,
-                                          );
-                                        },
+                                        progressIndicatorBuilder: (context, url,
+                                                downloadProgress) =>
+                                            CircularProgressIndicator(
+                                                value:
+                                                    downloadProgress.progress),
+                                        errorWidget: (context, url, error) =>
+                                            Icon(Icons.error),
                                         height: 160,
                                         width: 160,
                                         fit: BoxFit.cover,

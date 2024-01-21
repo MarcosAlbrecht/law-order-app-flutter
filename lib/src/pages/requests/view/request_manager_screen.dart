@@ -269,7 +269,7 @@ class _RowDetailStatusPayment extends StatelessWidget {
             value,
             style: TextStyle(
               color: CustomColors.white,
-              fontSize: CustomFontSizes.fontSize12,
+              fontSize: CustomFontSizes.fontSize10,
             ),
           ),
         ),
@@ -305,7 +305,7 @@ class _RowDetailServiceStatus extends StatelessWidget {
             value,
             style: TextStyle(
               color: CustomColors.white,
-              fontSize: CustomFontSizes.fontSize12,
+              fontSize: CustomFontSizes.fontSize10,
             ),
           ),
         ),

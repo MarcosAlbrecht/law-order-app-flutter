@@ -231,13 +231,15 @@ class ProfileViewScreen extends StatelessWidget {
                                         },
                                         icon: Icon(
                                           FontAwesome.user_times,
-                                          size: 16,
+                                          size: 14,
                                           color: CustomColors.black,
                                         ),
                                         label: Text(
                                           'Deixar de Seguir',
                                           style: TextStyle(
                                             color: CustomColors.black,
+                                            fontSize:
+                                                CustomFontSizes.fontSize12,
                                           ),
                                         ),
                                       ),
@@ -265,20 +267,22 @@ class ProfileViewScreen extends StatelessWidget {
                                         },
                                         icon: Icon(
                                           FontAwesome.user_plus,
-                                          size: 16,
+                                          size: 14,
                                           color: CustomColors.white,
                                         ),
                                         label: Text(
                                           'Seguir',
                                           style: TextStyle(
                                             color: CustomColors.white,
+                                            fontSize:
+                                                CustomFontSizes.fontSize12,
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
                                   const VerticalDivider(
-                                    width: 20,
+                                    width: 10,
                                   ),
                                   Expanded(
                                     child: ElevatedButton.icon(
@@ -299,13 +303,14 @@ class ProfileViewScreen extends StatelessWidget {
                                       onPressed: () {},
                                       icon: Icon(
                                         Icons.message,
-                                        size: 16,
+                                        size: 14,
                                         color: CustomColors.white,
                                       ),
                                       label: Text(
                                         'Mensagem',
                                         style: TextStyle(
                                           color: CustomColors.white,
+                                          fontSize: CustomFontSizes.fontSize12,
                                         ),
                                       ),
                                     ),

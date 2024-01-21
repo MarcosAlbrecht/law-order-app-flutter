@@ -5,6 +5,7 @@ import 'package:app_law_order/src/pages/profile/controller/profile_controller.da
 import 'package:app_law_order/src/pages/profile/view/components/camera_dialog.dart';
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:app_law_order/src/services/validators.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -103,31 +104,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   child: controller.authController.user
                                               .profilePicture !=
                                           null
-                                      ? Image.network(
-                                          controller.authController.user
-                                              .profilePicture!.url!,
-                                          loadingBuilder: (BuildContext context,
-                                              Widget child,
-                                              ImageChunkEvent?
-                                                  loadingProgress) {
-                                            if (loadingProgress == null) {
-                                              return child;
-                                            } else {
-                                              // Exibir um ícone de carregamento enquanto a imagem está sendo carregada
-                                              return Center(
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  color: CustomColors
-                                                      .blueDark2Color,
-                                                ),
-                                              );
-                                            }
-                                          },
-                                          errorBuilder: (BuildContext context,
-                                              Object exception,
-                                              StackTrace? stackTrace) {
-                                            return const Icon(Icons.error);
-                                          },
+                                      ? CachedNetworkImage(
+                                          imageUrl: controller.authController
+                                              .user.profilePicture!.url!,
+                                          progressIndicatorBuilder: (context,
+                                                  url, downloadProgress) =>
+                                              CircularProgressIndicator(
+                                                  value: downloadProgress
+                                                      .progress),
+                                          errorWidget: (context, url, error) =>
+                                              Icon(Icons.error),
                                           height: 160,
                                           width: 160,
                                           fit: BoxFit.cover,
