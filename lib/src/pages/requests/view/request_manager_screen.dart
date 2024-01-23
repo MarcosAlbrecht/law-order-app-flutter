@@ -332,16 +332,19 @@ class _Actions extends StatelessWidget {
 
           switch (controller.selectedRequest?.status) {
             case 'WAITING_PROVIDER_ACCEPT':
-              actionWidgets.add(_ServiceConfirmationRefuseButton());
+              actionWidgets.add(_ServiceConfirmationRefuseButton(
+                  currentCategory: controller.currentCategory));
               actionWidgets.add(
                 const Divider(
                   height: 20,
                 ),
               );
-              actionWidgets.add(_DisputeButton());
+              actionWidgets.add(
+                  _DisputeButton(currentCategory: controller.currentCategory));
               break;
             case 'SCHEDULING':
-              actionWidgets.add(_ServiceFinalizedConfirmationRefuseButton());
+              actionWidgets.add(_ServiceFinalizedConfirmationRefuseButton(
+                  currentCategory: controller.currentCategory));
               actionWidgets.add(
                 const Divider(
                   height: 20,
@@ -355,7 +358,8 @@ class _Actions extends StatelessWidget {
                   height: 20,
                 ),
               );
-              actionWidgets.add(_DisputeButton());
+              actionWidgets.add(
+                  _DisputeButton(currentCategory: controller.currentCategory));
             case 'COMPLETED':
               actionWidgets.add(
                 Text(
@@ -376,7 +380,8 @@ class _Actions extends StatelessWidget {
                   height: 20,
                 ),
               );
-              actionWidgets.add(_DisputeButton());
+              actionWidgets.add(
+                  _DisputeButton(currentCategory: controller.currentCategory));
             case 'CANCELED':
               actionWidgets.add(
                 Text(
@@ -397,7 +402,8 @@ class _Actions extends StatelessWidget {
                   height: 20,
                 ),
               );
-              actionWidgets.add(_DisputeButton());
+              actionWidgets.add(
+                  _DisputeButton(currentCategory: controller.currentCategory));
             default:
             // Lida com outros casos ou não faz nada
           }
@@ -442,6 +448,10 @@ class _ChatButton extends StatelessWidget {
 }
 
 class _ServiceConfirmationRefuseButton extends StatelessWidget {
+  final String currentCategory;
+
+  const _ServiceConfirmationRefuseButton(
+      {super.key, required this.currentCategory});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -512,6 +522,10 @@ class _ServiceConfirmationRefuseButton extends StatelessWidget {
 }
 
 class _ServiceFinalizedConfirmationRefuseButton extends StatelessWidget {
+  final String currentCategory;
+
+  const _ServiceFinalizedConfirmationRefuseButton(
+      {super.key, required this.currentCategory});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -623,6 +637,9 @@ class _EvaluationButton extends StatelessWidget {
 }
 
 class _DisputeButton extends StatelessWidget {
+  final String currentCategory;
+
+  const _DisputeButton({super.key, required this.currentCategory});
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
