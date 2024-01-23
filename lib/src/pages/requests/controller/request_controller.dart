@@ -75,6 +75,8 @@ class RequestController extends GetxController {
 
   bool isLoading = false;
 
+  bool isSaving = false;
+
   String currentCategory = "received";
 
   List<RequestModel>? currentListRequest;
@@ -84,8 +86,6 @@ class RequestController extends GetxController {
   RequestModel? selectedRequest;
 
   RxString searchRequest = ''.obs;
-
-  late DateTime dateDeadlineAcceptance;
 
   bool get isLastPage {
     if (currentListRequest!.length < itemsPerPage) return true;
@@ -110,6 +110,11 @@ class RequestController extends GetxController {
     if (isUser) {
       isLoading = value;
     }
+    update();
+  }
+
+  void setSaving(bool value) {
+    isSaving = value;
     update();
   }
 
@@ -241,5 +246,34 @@ class RequestController extends GetxController {
     selectedRequest = request;
 
     Get.toNamed(PagesRoutes.requestDetailScreen);
+  }
+
+  void updateItemInAllRequests({required RequestModel request}) {
+    setLoading(true);
+    for (var element in allRequest) {
+      if (element.id == request.id) {
+        element = request;
+      }
+    }
+    setLoading(false);
+  }
+
+  Future<void> handleProviderConfirmRequest({required DateTime date}) async {
+    setSaving(true);
+    final dataToIso = utilServices.formatDateToBD(date);
+    final result = await requestsRepository.acceptProviderRequest(
+        dataDeadline: dataToIso, idRequest: selectedRequest!.id!);
+    setSaving(false);
+    result.when(
+      success: (data) async {
+        selectedRequest = data;
+        updateItemInAllRequests(request: data);
+      },
+      error: (message) {
+        utilServices.showToast(
+          message: message,
+        );
+      },
+    );
   }
 }

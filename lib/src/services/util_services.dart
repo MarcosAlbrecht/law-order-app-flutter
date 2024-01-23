@@ -101,4 +101,12 @@ class UtilServices {
 
     return formattedDateTime;
   }
+
+  String formatDateToBD(DateTime selectedDate) {
+    // Convertendo para formato ISO 8601
+    String iso8601String = selectedDate.toIso8601String();
+
+    // Agora você pode enviar 'iso8601String' para a sua API Node.js
+    return iso8601String;
+  }
 }

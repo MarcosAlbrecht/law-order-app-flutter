@@ -1,8 +1,10 @@
 import 'package:app_law_order/src/constants/endpoints.dart';
 import 'package:app_law_order/src/models/request_model.dart';
+import 'package:app_law_order/src/pages/requests/result/acceptance_request_result.dart';
 import 'package:app_law_order/src/pages/requests/result/request_received_result.dart';
 import 'package:app_law_order/src/services/http_manager.dart';
 import 'package:app_law_order/src/services/util_services.dart';
+import 'package:get/get_connect/http/src/request/request.dart';
 
 class RequestRepository {
   final HttpManager httpManager = HttpManager();
@@ -62,27 +64,24 @@ class RequestRepository {
     }
   }
 
-  Future<RequestReceivedResult<RequestModel>> acceptBudget({
-    required DateTime dataDeadline,
-  }) async {
+  Future<AcceptanceRequestResult> acceptProviderRequest(
+      {required String dataDeadline, required String idRequest}) async {
     final result = await httpManager.restRequest(
       method: HttpMethods.patch,
-      url: EndPoints.acceptBudget,
+      url: '${EndPoints.acceptBudget}$idRequest',
       body: {
         "providerAcceptance": true,
         "deadline": dataDeadline,
       },
     );
 
-    if (result['result'].isNotEmpty) {
-      List<RequestModel> data =
-          (List<Map<String, dynamic>>.from(result['result']))
-              .map(RequestModel.fromJson)
-              .toList();
+    if (result.isNotEmpty) {
+      var userData = result as Map<String, dynamic>;
+      RequestModel data = RequestModel.fromJson(userData);
 
-      return RequestReceivedResult.success(data);
+      return AcceptanceRequestResult.success(data);
     } else {
-      return RequestReceivedResult.error("Não foi possível buscar os dados!");
+      return AcceptanceRequestResult.error("Não foi possível buscar os dados!");
     }
   }
 

@@ -33,16 +33,19 @@ class RequestManagerScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Add the request details here
-            _RequestDetails(),
-            //const SizedBox(height: 4.0),
-            // Add the actions here
-            _Actions(),
-          ],
+      body: Padding(
+        padding: const EdgeInsets.only(bottom: 16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Add the request details here
+              _RequestDetails(),
+              //const SizedBox(height: 4.0),
+              // Add the actions here
+              _Actions(),
+            ],
+          ),
         ),
       ),
     );
