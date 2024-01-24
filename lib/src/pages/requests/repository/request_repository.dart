@@ -33,7 +33,12 @@ class RequestRepository {
 
       return RequestReceivedResult.success(data);
     } else {
-      return RequestReceivedResult.error("Não foi possível buscar os dados!");
+      if (result['result'] != null) {
+        List<RequestModel> data = [];
+        return RequestReceivedResult.success(data);
+      } else {
+        return RequestReceivedResult.error("Não foi possível buscar os dados!");
+      }
     }
   }
 

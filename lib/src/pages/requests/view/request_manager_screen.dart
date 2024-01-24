@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:app_law_order/src/constants/constants.dart';
+import 'package:app_law_order/src/constants/endpoints.dart';
 import 'package:app_law_order/src/pages/requests/view/components/calendar_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
@@ -39,11 +40,19 @@ class RequestManagerScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Add the request details here
               _RequestDetails(),
-              //const SizedBox(height: 4.0),
-              // Add the actions here
-              _Actions(),
+              GetBuilder<RequestController>(
+                builder: (controller) {
+                  switch (controller.currentCategory) {
+                    case Constants.received:
+                      return _ActionsProvider();
+                    case Constants.sent:
+                      return _ActionsUser();
+                    default:
+                      return Container();
+                  }
+                },
+              ),
             ],
           ),
         ),
@@ -316,7 +325,7 @@ class _RowDetailServiceStatus extends StatelessWidget {
   }
 }
 
-class _Actions extends StatelessWidget {
+class _ActionsProvider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -326,9 +335,7 @@ class _Actions extends StatelessWidget {
           List<Widget> actionWidgets = [];
 
           //verifica o tipo de usuário pra montar o botao de chat
-          String? labelButton = controller.currentCategory == Constants.received
-              ? 'Conversar com o solicitante'
-              : 'Conversar com o prestador';
+          String? labelButton = 'Conversar com o solicitante';
 
           switch (controller.selectedRequest?.status) {
             case 'WAITING_PROVIDER_ACCEPT':
@@ -397,6 +404,134 @@ class _Actions extends StatelessWidget {
                 _ChatButton(labelButton: labelButton),
               );
 
+              actionWidgets.add(
+                const Divider(
+                  height: 20,
+                ),
+              );
+              actionWidgets.add(
+                  _DisputeButton(currentCategory: controller.currentCategory));
+            default:
+            // Lida com outros casos ou não faz nada
+          }
+
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: actionWidgets,
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _ActionsUser extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: GetBuilder<RequestController>(
+        builder: (controller) {
+          List<Widget> actionWidgets = [];
+
+          //verifica o tipo de usuário pra montar o botao de chat
+          String? labelButton = 'Conversar com o provedor';
+
+          switch (controller.selectedRequest?.status) {
+            case 'WAITING_PROVIDER_ACCEPT':
+              actionWidgets.add(_ServiceConfirmationRefuseButton(
+                  currentCategory: controller.currentCategory));
+              actionWidgets.add(
+                const Divider(
+                  height: 20,
+                ),
+              );
+              actionWidgets.add(
+                  _DisputeButton(currentCategory: controller.currentCategory));
+              break;
+            case 'SCHEDULING':
+              actionWidgets.add(_ServiceFinalizedConfirmationRefuseButton(
+                  currentCategory: controller.currentCategory));
+              actionWidgets.add(
+                const Divider(
+                  height: 20,
+                ),
+              );
+              actionWidgets.add(
+                _ChatButton(labelButton: labelButton),
+              );
+              actionWidgets.add(
+                const Divider(
+                  height: 20,
+                ),
+              );
+              actionWidgets.add(
+                  _DisputeButton(currentCategory: controller.currentCategory));
+            case 'COMPLETED':
+              actionWidgets.add(
+                Text(
+                  'Ações',
+                  style: TextStyle(
+                    fontSize: CustomFontSizes.fontSize16,
+                    color: CustomColors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              );
+
+              actionWidgets.add(
+                _ChatButton(labelButton: labelButton),
+              );
+
+              actionWidgets.add(
+                const Divider(
+                  height: 20,
+                ),
+              );
+
+              actionWidgets.add(
+                _PaymentButton(),
+              );
+
+              actionWidgets.add(
+                const Divider(
+                  height: 20,
+                ),
+              );
+
+              actionWidgets.add(
+                _EvaluationButton(),
+              );
+
+              actionWidgets.add(
+                const Divider(
+                  height: 20,
+                ),
+              );
+              actionWidgets.add(
+                  _DisputeButton(currentCategory: controller.currentCategory));
+            case 'CANCELED':
+              actionWidgets.add(
+                Text(
+                  'Ações',
+                  style: TextStyle(
+                    fontSize: CustomFontSizes.fontSize16,
+                    color: CustomColors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              );
+              actionWidgets.add(
+                _ChatButton(labelButton: labelButton),
+              );
+
+              actionWidgets.add(
+                const Divider(
+                  height: 20,
+                ),
+              );
+              actionWidgets.add(_EvaluationButton());
               actionWidgets.add(
                 const Divider(
                   height: 20,
@@ -618,7 +753,7 @@ class _EvaluationButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        backgroundColor: CustomColors.blueColor,
+        backgroundColor: CustomColors.backgroudCard,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -629,7 +764,7 @@ class _EvaluationButton extends StatelessWidget {
       child: Text(
         'Enviar avaliação',
         style: TextStyle(
-          color: CustomColors.white,
+          color: CustomColors.black,
         ),
       ),
     );
