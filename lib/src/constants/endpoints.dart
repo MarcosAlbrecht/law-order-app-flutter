@@ -36,6 +36,11 @@ abstract class EndPoints {
 
   static const declineBudget =
       '$baseUrl/accounts/service-requests/decline-budget/';
+
+  static const openContest = '$baseUrl/accounts/service-requests/open-contest/';
+
+  static const completeService =
+      '$baseUrl/accounts/service-requests/complete-service-as-a-provider/';
 }
 
 abstract class EndPointsViaCep {

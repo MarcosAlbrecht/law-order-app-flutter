@@ -1,11 +1,14 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:app_law_order/src/constants/constants.dart';
-import 'package:app_law_order/src/constants/endpoints.dart';
-import 'package:app_law_order/src/pages/requests/view/components/calendar_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
+
 import 'package:app_law_order/src/config/custom_colors.dart';
+import 'package:app_law_order/src/constants/constants.dart';
+import 'package:app_law_order/src/constants/endpoints.dart';
+import 'package:app_law_order/src/models/request_model.dart';
 import 'package:app_law_order/src/pages/requests/controller/request_controller.dart';
+import 'package:app_law_order/src/pages/requests/view/components/calendar_dialog.dart';
+import 'package:app_law_order/src/pages/requests/view/components/contest_dialog.dart';
 import 'package:app_law_order/src/pages/requests/view/components/services_tile.dart';
 import 'package:app_law_order/src/services/util_services.dart';
 
@@ -347,11 +350,16 @@ class _ActionsProvider extends StatelessWidget {
                 ),
               );
               actionWidgets.add(
-                  _DisputeButton(currentCategory: controller.currentCategory));
+                _DisputeButton(
+                  currentCategory: controller.currentCategory,
+                  request: controller.selectedRequest!,
+                ),
+              );
               break;
             case 'SCHEDULING':
-              actionWidgets.add(_ServiceFinalizedConfirmationRefuseButton(
-                  currentCategory: controller.currentCategory));
+              actionWidgets.add(
+                  _ServiceFinalizedConfirmationRefuseButtonProvider(
+                      currentCategory: controller.currentCategory));
               actionWidgets.add(
                 const Divider(
                   height: 20,
@@ -366,7 +374,11 @@ class _ActionsProvider extends StatelessWidget {
                 ),
               );
               actionWidgets.add(
-                  _DisputeButton(currentCategory: controller.currentCategory));
+                _DisputeButton(
+                  currentCategory: controller.currentCategory,
+                  request: controller.selectedRequest!,
+                ),
+              );
             case 'COMPLETED':
               actionWidgets.add(
                 Text(
@@ -388,7 +400,11 @@ class _ActionsProvider extends StatelessWidget {
                 ),
               );
               actionWidgets.add(
-                  _DisputeButton(currentCategory: controller.currentCategory));
+                _DisputeButton(
+                  currentCategory: controller.currentCategory,
+                  request: controller.selectedRequest!,
+                ),
+              );
             case 'CANCELED':
               actionWidgets.add(
                 Text(
@@ -410,7 +426,11 @@ class _ActionsProvider extends StatelessWidget {
                 ),
               );
               actionWidgets.add(
-                  _DisputeButton(currentCategory: controller.currentCategory));
+                _DisputeButton(
+                  currentCategory: controller.currentCategory,
+                  request: controller.selectedRequest!,
+                ),
+              );
             default:
             // Lida com outros casos ou não faz nada
           }
@@ -440,19 +460,32 @@ class _ActionsUser extends StatelessWidget {
 
           switch (controller.selectedRequest?.status) {
             case 'WAITING_PROVIDER_ACCEPT':
-              actionWidgets.add(_ServiceConfirmationRefuseButton(
-                  currentCategory: controller.currentCategory));
+              actionWidgets.add(_ChatButton(labelButton: labelButton));
+              actionWidgets.add(
+                const Divider(
+                  height: 20,
+                ),
+              );
+              actionWidgets.add(_EvaluationButton());
               actionWidgets.add(
                 const Divider(
                   height: 20,
                 ),
               );
               actionWidgets.add(
-                  _DisputeButton(currentCategory: controller.currentCategory));
+                _DisputeButton(
+                  currentCategory: controller.currentCategory,
+                  request: controller.selectedRequest!,
+                ),
+              );
               break;
             case 'SCHEDULING':
-              actionWidgets.add(_ServiceFinalizedConfirmationRefuseButton(
-                  currentCategory: controller.currentCategory));
+              actionWidgets.add(
+                _ServiceFinalizedConfirmationRefuseButtonUser(
+                  currentCategory: controller.currentCategory,
+                  request: controller.selectedRequest!,
+                ),
+              );
               actionWidgets.add(
                 const Divider(
                   height: 20,
@@ -466,8 +499,31 @@ class _ActionsUser extends StatelessWidget {
                   height: 20,
                 ),
               );
+
               actionWidgets.add(
-                  _DisputeButton(currentCategory: controller.currentCategory));
+                _PaymentButton(),
+              );
+
+              actionWidgets.add(
+                const Divider(
+                  height: 20,
+                ),
+              );
+
+              actionWidgets.add(_EvaluationButton());
+
+              actionWidgets.add(
+                const Divider(
+                  height: 20,
+                ),
+              );
+
+              actionWidgets.add(
+                _DisputeButton(
+                  currentCategory: controller.currentCategory,
+                  request: controller.selectedRequest!,
+                ),
+              );
             case 'COMPLETED':
               actionWidgets.add(
                 Text(
@@ -510,7 +566,11 @@ class _ActionsUser extends StatelessWidget {
                 ),
               );
               actionWidgets.add(
-                  _DisputeButton(currentCategory: controller.currentCategory));
+                _DisputeButton(
+                  currentCategory: controller.currentCategory,
+                  request: controller.selectedRequest!,
+                ),
+              );
             case 'CANCELED':
               actionWidgets.add(
                 Text(
@@ -538,7 +598,11 @@ class _ActionsUser extends StatelessWidget {
                 ),
               );
               actionWidgets.add(
-                  _DisputeButton(currentCategory: controller.currentCategory));
+                _DisputeButton(
+                  currentCategory: controller.currentCategory,
+                  request: controller.selectedRequest!,
+                ),
+              );
             default:
             // Lida com outros casos ou não faz nada
           }
@@ -656,10 +720,11 @@ class _ServiceConfirmationRefuseButton extends StatelessWidget {
   }
 }
 
-class _ServiceFinalizedConfirmationRefuseButton extends StatelessWidget {
+class _ServiceFinalizedConfirmationRefuseButtonProvider
+    extends StatelessWidget {
   final String currentCategory;
 
-  const _ServiceFinalizedConfirmationRefuseButton(
+  const _ServiceFinalizedConfirmationRefuseButtonProvider(
       {super.key, required this.currentCategory});
   @override
   Widget build(BuildContext context) {
@@ -725,6 +790,81 @@ class _ServiceFinalizedConfirmationRefuseButton extends StatelessWidget {
   }
 }
 
+class _ServiceFinalizedConfirmationRefuseButtonUser extends StatelessWidget {
+  final String currentCategory;
+  final RequestModel request;
+
+  const _ServiceFinalizedConfirmationRefuseButtonUser(
+      {super.key, required this.currentCategory, required this.request});
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Ações',
+          style: TextStyle(
+            fontSize: CustomFontSizes.fontSize16,
+            color: CustomColors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        GetBuilder<RequestController>(
+          builder: (controller) {
+            return Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: CustomColors.green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () {
+                      // Add service confirmation functionality here
+                      controller.completeService(request: request);
+                    },
+                    child: Text(
+                      'Serviço realizado',
+                      style: TextStyle(
+                        color: CustomColors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                const VerticalDivider(
+                  width: 5,
+                  color: Colors.transparent,
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: CustomColors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () {
+                      // Add service confirmation functionality here
+                    },
+                    child: Text(
+                      'Cancelar',
+                      style: TextStyle(
+                        color: CustomColors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+
 class _PaymentButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -773,8 +913,13 @@ class _EvaluationButton extends StatelessWidget {
 
 class _DisputeButton extends StatelessWidget {
   final String currentCategory;
+  final RequestModel request;
 
-  const _DisputeButton({super.key, required this.currentCategory});
+  const _DisputeButton({
+    Key? key,
+    required this.currentCategory,
+    required this.request,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -786,6 +931,15 @@ class _DisputeButton extends StatelessWidget {
       ),
       onPressed: () {
         // Add dispute functionality here
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return ContestDialog(
+              request: request,
+              selectedCategory: currentCategory,
+            );
+          },
+        );
       },
       child: Text(
         'Abrir disputa',

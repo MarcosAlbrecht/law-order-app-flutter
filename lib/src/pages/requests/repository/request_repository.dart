@@ -109,4 +109,54 @@ class RequestRepository {
       return RequestReceivedResult.error("Não foi possível buscar os dados!");
     }
   }
+
+  Future<RequestReceivedResult<RequestModel>> openContest({
+    required String idRequest,
+  }) async {
+    final result = await httpManager.restRequest(
+      method: HttpMethods.patch,
+      url: '${EndPoints.openContest} $idRequest',
+    );
+
+    if (result['statusCode'] == null) {
+      List<RequestModel> data =
+          (List<Map<String, dynamic>>.from(result['result']))
+              .map(RequestModel.fromJson)
+              .toList();
+
+      return RequestReceivedResult.success(data);
+    } else {
+      if (result['statusCode'] == 500) {
+        return RequestReceivedResult.error(
+            "Erro interno, tente novamente mais tarde!");
+      } else {
+        return RequestReceivedResult.error("Não foi possível buscar os dados!");
+      }
+    }
+  }
+
+  Future<RequestReceivedResult<RequestModel>> completeService({
+    required String idRequest,
+  }) async {
+    final result = await httpManager.restRequest(
+      method: HttpMethods.patch,
+      url: '${EndPoints.completeService}$idRequest',
+    );
+
+    if (result['statusCode'] == null) {
+      List<RequestModel> data =
+          (List<Map<String, dynamic>>.from(result['result']))
+              .map(RequestModel.fromJson)
+              .toList();
+
+      return RequestReceivedResult.success(data);
+    } else {
+      if (result['statusCode'] == 500) {
+        return RequestReceivedResult.error(
+            "Erro interno, tente novamente mais tarde!");
+      } else {
+        return RequestReceivedResult.error("Não foi possível buscar os dados!");
+      }
+    }
+  }
 }

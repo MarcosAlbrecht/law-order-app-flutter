@@ -33,11 +33,11 @@ StatusInfo getStatusInfo(UserServiceRequestStatusEnum status) {
     case UserServiceRequestStatusEnum.EXPIRED:
       return StatusInfo('Expirado', Colors.grey, 0.1);
     case UserServiceRequestStatusEnum.IN_CONTEST:
-      return StatusInfo('Em Disputa', Colors.yellow, 0.1);
+      return StatusInfo('Em Disputa', CustomColors.blueDarkColor, 0.1);
     case UserServiceRequestStatusEnum.CONTEST_FINISHED:
       return StatusInfo('Disputa Finalizada', Colors.purple, 0.1);
     case UserServiceRequestStatusEnum.COMPLETED:
-      return StatusInfo('Concluído', Colors.green, 0.1);
+      return StatusInfo('Finalizado', Colors.green, 0.1);
     default:
       return StatusInfo('', Colors.black, 0.1);
   }
@@ -275,5 +275,20 @@ class RequestController extends GetxController {
         );
       },
     );
+  }
+
+  Future<void> openContest({required RequestModel request}) async {
+    setSaving(true);
+    final result = await requestsRepository.openContest(idRequest: request.id!);
+    setSaving(false);
+    result.when(success: (data) {}, error: (message) {});
+  }
+
+  Future<void> completeService({required RequestModel request}) async {
+    setSaving(true);
+    final result =
+        await requestsRepository.completeService(idRequest: request.id!);
+    setSaving(false);
+    result.when(success: (data) {}, error: (message) {});
   }
 }
