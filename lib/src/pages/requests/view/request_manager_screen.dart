@@ -847,6 +847,7 @@ class _ServiceFinalizedConfirmationRefuseButtonUser extends StatelessWidget {
                     ),
                     onPressed: () {
                       // Add service confirmation functionality here
+                      controller.cancelRequest(request: request);
                     },
                     child: Text(
                       'Cancelar',

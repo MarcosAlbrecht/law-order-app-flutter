@@ -159,4 +159,26 @@ class RequestRepository {
       }
     }
   }
+
+  Future<RequestReceivedResult<RequestModel>> cancelRequest({
+    required String idRequest,
+  }) async {
+    final result = await httpManager.restRequest(
+      method: HttpMethods.patch,
+      url: '${EndPoints.cancelRequest}$idRequest',
+    );
+
+    if (result.isEmpty) {
+      List<RequestModel> data = [];
+
+      return RequestReceivedResult.success(data);
+    } else {
+      if (result['statusCode'] == 500) {
+        return RequestReceivedResult.error(
+            "Erro interno, tente novamente mais tarde!");
+      } else {
+        return RequestReceivedResult.error("Não foi possível buscar os dados!");
+      }
+    }
+  }
 }

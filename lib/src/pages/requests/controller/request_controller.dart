@@ -291,4 +291,27 @@ class RequestController extends GetxController {
     setSaving(false);
     result.when(success: (data) {}, error: (message) {});
   }
+
+  Future<void> cancelRequest({required RequestModel request}) async {
+    setSaving(true);
+    final result =
+        await requestsRepository.cancelRequest(idRequest: request.id!);
+    setSaving(false);
+    result.when(
+        success: (data) async {
+          await loadRequests(alterCategory: true);
+          await updateSelectedCategory();
+        },
+        error: (message) {});
+  }
+
+  Future<void> updateSelectedCategory() async {
+    setSaving(true);
+    final request = allRequest
+        .firstWhereOrNull((element) => element.id == selectedRequest?.id);
+    if (request != null) {
+      selectedRequest = request;
+    }
+    setSaving(false);
+  }
 }

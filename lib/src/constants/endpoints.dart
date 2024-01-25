@@ -41,6 +41,9 @@ abstract class EndPoints {
 
   static const completeService =
       '$baseUrl/accounts/service-requests/complete-service-as-a-provider/';
+
+  static const cancelRequest =
+      '$baseUrl/accounts/service-requests/cancel-request/';
 }
 
 abstract class EndPointsViaCep {
