@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:app_law_order/src/pages/requests/view/components/cancel_confirmation_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 
@@ -357,9 +358,11 @@ class _ActionsProvider extends StatelessWidget {
               );
               break;
             case 'SCHEDULING':
-              actionWidgets.add(
-                  _ServiceFinalizedConfirmationRefuseButtonProvider(
-                      currentCategory: controller.currentCategory));
+              actionWidgets
+                  .add(_ServiceFinalizedConfirmationRefuseButtonProvider(
+                currentCategory: controller.currentCategory,
+                request: controller.selectedRequest!,
+              ));
               actionWidgets.add(
                 const Divider(
                   height: 20,
@@ -431,6 +434,24 @@ class _ActionsProvider extends StatelessWidget {
                   request: controller.selectedRequest!,
                 ),
               );
+            case 'IN_CONTEST':
+              actionWidgets.add(
+                _ServiceFinalizedConfirmationRefuseButtonProvider(
+                  currentCategory: controller.currentCategory,
+                  request: controller.selectedRequest!,
+                ),
+              );
+              actionWidgets.add(
+                const Divider(
+                  height: 20,
+                ),
+              );
+
+              actionWidgets.add(
+                _ChatButton(labelButton: labelButton),
+              );
+
+              break;
             default:
             // Lida com outros casos ou não faz nada
           }
@@ -603,6 +624,44 @@ class _ActionsUser extends StatelessWidget {
                   request: controller.selectedRequest!,
                 ),
               );
+
+            case 'IN_CONTEST':
+              actionWidgets.add(
+                _ServiceFinalizedConfirmationRefuseButtonUser(
+                  currentCategory: controller.currentCategory,
+                  request: controller.selectedRequest!,
+                ),
+              );
+              actionWidgets.add(
+                const Divider(
+                  height: 20,
+                ),
+              );
+
+              actionWidgets.add(
+                _ChatButton(labelButton: labelButton),
+              );
+
+              actionWidgets.add(
+                const Divider(
+                  height: 20,
+                ),
+              );
+
+              actionWidgets.add(
+                _PaymentButton(),
+              );
+              actionWidgets.add(
+                const Divider(
+                  height: 20,
+                ),
+              );
+
+              actionWidgets.add(
+                _EvaluationButton(),
+              );
+
+              break;
             default:
             // Lida com outros casos ou não faz nada
           }
@@ -723,9 +782,13 @@ class _ServiceConfirmationRefuseButton extends StatelessWidget {
 class _ServiceFinalizedConfirmationRefuseButtonProvider
     extends StatelessWidget {
   final String currentCategory;
+  final RequestModel request;
 
-  const _ServiceFinalizedConfirmationRefuseButtonProvider(
-      {super.key, required this.currentCategory});
+  const _ServiceFinalizedConfirmationRefuseButtonProvider({
+    super.key,
+    required this.currentCategory,
+    required this.request,
+  });
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -739,51 +802,64 @@ class _ServiceFinalizedConfirmationRefuseButtonProvider
             fontWeight: FontWeight.bold,
           ),
         ),
-        Row(
-          children: [
-            Expanded(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: CustomColors.green,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+        GetBuilder<RequestController>(
+          builder: (controller) {
+            return Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: CustomColors.green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () {
+                      // Add service confirmation functionality here
+                    },
+                    child: Text(
+                      'Serviço finalizado',
+                      style: TextStyle(
+                        color: CustomColors.white,
+                      ),
+                    ),
                   ),
                 ),
-                onPressed: () {
-                  // Add service confirmation functionality here
-                },
-                child: Text(
-                  'Serviço finalizado',
-                  style: TextStyle(
-                    color: CustomColors.white,
+                const VerticalDivider(
+                  width: 5,
+                  color: Colors.transparent,
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: CustomColors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () async {
+                      // Add service confirmation functionality here
+                      final bool? result = await showDialog(
+                        context: context,
+                        builder: (_) {
+                          return const CancelConfirmationDialog();
+                        },
+                      );
+                      if (result ?? false) {
+                        controller.cancelRequest(request: request);
+                      }
+                    },
+                    child: Text(
+                      'Cancelar',
+                      style: TextStyle(
+                        color: CustomColors.white,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            const VerticalDivider(
-              width: 5,
-              color: Colors.transparent,
-            ),
-            Expanded(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: CustomColors.red,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                onPressed: () {
-                  // Add service confirmation functionality here
-                },
-                child: Text(
-                  'Cancelar',
-                  style: TextStyle(
-                    color: CustomColors.white,
-                  ),
-                ),
-              ),
-            ),
-          ],
+              ],
+            );
+          },
         ),
       ],
     );
