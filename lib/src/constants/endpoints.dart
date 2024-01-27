@@ -20,6 +20,8 @@ abstract class EndPoints {
       '$baseUrl/accounts/users/add-portfolio-pictures';
   static const deletePortfolioPicture =
       '$baseUrl/accounts/users/remove-portfolio-picture/';
+  static const getNotifications = '$baseUrl/notifications';
+  static const updateNotification = '$baseUrl/notifications/read/';
 
   static const setUserService = '$baseUrl/accounts/users/add-services';
   static const deleteUserService = '$baseUrl/accounts/users/remove-service/';
@@ -44,6 +46,11 @@ abstract class EndPoints {
 
   static const cancelRequest =
       '$baseUrl/accounts/service-requests/cancel-request/';
+  //mercado pago -->
+  static const generatePaymentLink =
+      '$baseUrl/mercadopago/generate-payment-link';
+
+  //<--
 }
 
 abstract class EndPointsViaCep {

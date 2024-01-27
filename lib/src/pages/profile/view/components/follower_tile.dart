@@ -60,6 +60,8 @@ class FollowerTile extends StatelessWidget {
                                     value: downloadProgress.progress),
                         errorWidget: (context, url, error) => Icon(Icons.error),
                         fit: BoxFit.cover,
+                        height: 50,
+                        width: 50,
                       )
                     : Image.asset(
                         "assets/ICONPEOPLE.png",

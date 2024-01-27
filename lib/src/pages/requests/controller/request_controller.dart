@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:async';
+
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/constants/constants.dart';
 import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
@@ -313,5 +315,24 @@ class RequestController extends GetxController {
       selectedRequest = request;
     }
     setSaving(false);
+  }
+
+  Future<String?> handlePayment() async {
+    String? retorno;
+    final result = await requestsRepository.generatePaymentLink(
+      value: selectedRequest!.total!,
+      description: 'Prestadio',
+      serviceRequestID: selectedRequest!.id!,
+    );
+    result.when(
+      success: (data) {
+        retorno = data;
+      },
+      error: (message) {
+        utilServices.showToast(message: message);
+        retorno = null;
+      },
+    );
+    return retorno;
   }
 }

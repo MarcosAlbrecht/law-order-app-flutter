@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:app_law_order/src/pages/requests/view/components/cancel_confirmation_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 
 import 'package:app_law_order/src/config/custom_colors.dart';
@@ -945,22 +946,30 @@ class _ServiceFinalizedConfirmationRefuseButtonUser extends StatelessWidget {
 class _PaymentButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: CustomColors.blueColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-      ),
-      onPressed: () {
-        // Add payment functionality here
+    return GetBuilder<RequestController>(
+      builder: (controller) {
+        return ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: CustomColors.blueColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          onPressed: () async {
+            final link = await controller.handlePayment();
+            if (link != null) {
+              _launchURL(context, link: link);
+            }
+            // Add payment functionality here
+          },
+          child: Text(
+            'Realizar pagamento',
+            style: TextStyle(
+              color: CustomColors.white,
+            ),
+          ),
+        );
       },
-      child: Text(
-        'Realizar pagamento',
-        style: TextStyle(
-          color: CustomColors.white,
-        ),
-      ),
     );
   }
 }
@@ -1048,5 +1057,27 @@ class _CancelButton extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+Future<void> _launchURL(BuildContext context, {required String link}) async {
+  final theme = Theme.of(context);
+  try {
+    await launchUrl(
+      Uri.parse(link),
+      customTabsOptions: CustomTabsOptions(
+        colorSchemes: CustomTabsColorSchemes.defaults(
+          toolbarColor: theme.colorScheme.surface,
+          navigationBarColor: theme.colorScheme.background,
+        ),
+        urlBarHidingEnabled: true,
+        showTitle: true,
+        browser: const CustomTabsBrowserConfiguration(
+          prefersDefaultBrowser: true,
+        ),
+      ),
+    );
+  } catch (e) {
+    debugPrint(e.toString());
   }
 }

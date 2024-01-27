@@ -6,9 +6,11 @@ import 'package:app_law_order/src/pages/base/binding/navigation_binding.dart';
 import 'package:app_law_order/src/pages/home/binding/home_binding.dart';
 import 'package:app_law_order/src/pages/profile/binding/follower_binding.dart';
 import 'package:app_law_order/src/pages/profile/binding/follows_binding.dart';
+import 'package:app_law_order/src/pages/profile/binding/notification_binding.dart';
 import 'package:app_law_order/src/pages/profile/binding/profile_binding.dart';
 import 'package:app_law_order/src/pages/profile/view/followers_screen.dart';
 import 'package:app_law_order/src/pages/profile/view/follows_screen.dart';
+import 'package:app_law_order/src/pages/profile/view/notifications_screen.dart';
 import 'package:app_law_order/src/pages/profile/view/portfolio_screen.dart';
 import 'package:app_law_order/src/pages/profile/view/profile_screen.dart';
 import 'package:app_law_order/src/pages/profile/view/profile_tab.dart';
@@ -72,6 +74,11 @@ abstract class AppPages {
       binding: ServiceRequestBinding(),
     ),
     GetPage(
+      name: PagesRoutes.notificationsScreen,
+      page: () => const NotificationsScreen(),
+      binding: NotificationBinding(),
+    ),
+    GetPage(
       name: PagesRoutes.requestDetailScreen,
       page: () => RequestManagerScreen(),
       //binding: ServiceRequestBinding(),
@@ -103,4 +110,5 @@ abstract class PagesRoutes {
   static const String serviceRequestScreen = '/serviceRequestScreen';
   static const String requestTab = '/requestTab';
   static const String requestDetailScreen = '/requestDetailScreen';
+  static const String notificationsScreen = '/notificationsScreen';
 }

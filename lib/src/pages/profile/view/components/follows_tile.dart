@@ -59,6 +59,8 @@ class FollowsTile extends StatelessWidget {
                         errorWidget: (context, url, error) =>
                             const Icon(Icons.error),
                         fit: BoxFit.cover,
+                        height: 50,
+                        width: 50,
                       )
                     : Image.asset(
                         "assets/ICONPEOPLE.png",

@@ -5,10 +5,12 @@ import 'dart:io';
 import 'package:app_law_order/src/constants/endpoints.dart';
 import 'package:app_law_order/src/models/follower_model.dart';
 import 'package:app_law_order/src/models/follows_model.dart';
+import 'package:app_law_order/src/models/notification_model.dart';
 import 'package:app_law_order/src/models/service_model.dart';
 import 'package:app_law_order/src/models/user_model.dart';
 import 'package:app_law_order/src/pages/home/result/follows_result.dart';
 import 'package:app_law_order/src/pages/profile/result/follower_result.dart';
+import 'package:app_law_order/src/pages/profile/result/notifications_result.dart';
 import 'package:app_law_order/src/pages/profile/result/update_picture_profile_result.dart';
 import 'package:app_law_order/src/pages/profile/result/user_service_result.dart';
 import 'package:app_law_order/src/services/http_manager.dart';
@@ -213,6 +215,46 @@ class ProfileRepository {
       return FollowerResult.success(data);
     } else {
       return FollowerResult.error("Não foram encontrado dados!");
+    }
+  }
+
+  Future<NotificationsResult<NotificationModel>> getNotifications(
+      {required int limit, required int skip}) async {
+    final result = await httpManager.restRequest(
+      method: HttpMethods.get,
+      url: EndPoints.getNotifications,
+      queryParams: {
+        'limit': limit,
+        'skip': skip,
+      },
+    );
+
+    if (result['result'] != null) {
+      List<NotificationModel> data =
+          (List<Map<String, dynamic>>.from(result['result']))
+              .map(NotificationModel.fromJson)
+              .toList();
+
+      return NotificationsResult.success(data);
+    } else {
+      return NotificationsResult.error("Não foram encontrado notificações!");
+    }
+  }
+
+  Future<NotificationsResult<NotificationModel>> updateNotification(
+      {required String notificationID}) async {
+    final result = await httpManager.restRequest(
+      method: HttpMethods.patch,
+      url: '${EndPoints.updateNotification}$notificationID',
+    );
+
+    if (result.isEmpty) {
+      List<NotificationModel> data = [];
+
+      return NotificationsResult.success(data);
+    } else {
+      return NotificationsResult.error(
+          "Não foi possível atualizar a notificação!");
     }
   }
 }

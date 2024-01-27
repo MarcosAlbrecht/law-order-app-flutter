@@ -143,7 +143,9 @@ class _ProfileTabState extends State<ProfileTab> {
                               OptionInfo(
                                 text: " Notificações",
                                 icon: Icons.notifications_outlined,
-                                onTap: () {},
+                                onTap: () {
+                                  Get.toNamed(PagesRoutes.notificationsScreen);
+                                },
                               ),
                               const Divider(
                                 height: 5,

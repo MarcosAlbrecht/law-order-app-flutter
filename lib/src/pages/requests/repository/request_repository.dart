@@ -1,10 +1,10 @@
 import 'package:app_law_order/src/constants/endpoints.dart';
 import 'package:app_law_order/src/models/request_model.dart';
 import 'package:app_law_order/src/pages/requests/result/acceptance_request_result.dart';
+import 'package:app_law_order/src/pages/requests/result/payment_link_result.dart';
 import 'package:app_law_order/src/pages/requests/result/request_received_result.dart';
 import 'package:app_law_order/src/services/http_manager.dart';
 import 'package:app_law_order/src/services/util_services.dart';
-import 'package:get/get_connect/http/src/request/request.dart';
 
 class RequestRepository {
   final HttpManager httpManager = HttpManager();
@@ -179,6 +179,31 @@ class RequestRepository {
       } else {
         return RequestReceivedResult.error("Não foi possível buscar os dados!");
       }
+    }
+  }
+
+  Future<PaymentLinkResult> generatePaymentLink({
+    required double value,
+    required String description,
+    required String serviceRequestID,
+  }) async {
+    final result = await httpManager.restRequest(
+      method: HttpMethods.post,
+      url: '${EndPoints.generatePaymentLink}',
+      body: {
+        "value": value,
+        "productDescription": description,
+        "userServiceRequestId": serviceRequestID,
+      },
+    );
+
+    if (result != null && result['paymentLink'] != null) {
+      String data = result['paymentLink'];
+
+      return PaymentLinkResult.success(data);
+    } else {
+      return PaymentLinkResult.error(
+          "Não foi possível gerar o link para pagamento!");
     }
   }
 }
