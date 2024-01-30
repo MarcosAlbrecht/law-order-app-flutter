@@ -1,13 +1,17 @@
+import 'package:app_law_order/src/constants/constants.dart';
 import 'package:app_law_order/src/models/notification_model.dart';
+import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
 import 'package:app_law_order/src/pages/profile/repository/profile_repository.dart';
 import 'package:app_law_order/src/pages/profile/view/portfolio_screen.dart';
 import 'package:app_law_order/src/pages/requests/repository/request_repository.dart';
+import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:get/get.dart';
 
 const int itemsPerPage = 10;
 
 class NotificationController extends GetxController {
   final profileRepository = ProfileRepository();
+  final authController = AuthController();
 
   List<NotificationModel>? currentListNotifications;
   List<NotificationModel> notifications = [];
@@ -80,6 +84,16 @@ class NotificationController extends GetxController {
     setSaving(false);
   }
 
+  String? getIDRequest(String url) {
+    List<String> segments = url.split('/');
+    segments.removeWhere((segment) => segment.isEmpty);
+    if (segments.isNotEmpty) {
+      String valor = segments.last;
+      return valor;
+    }
+    return null;
+  }
+
   Future<void> handleReadNotification(
       {required NotificationModel notification}) async {
     setSaving(true);
@@ -87,8 +101,18 @@ class NotificationController extends GetxController {
         notificationID: notification.id!);
     setSaving(false);
     result.when(
-      success: (data) {
-        updateNotificationList(notification);
+      success: (data) async {
+        await updateNotificationList(notification);
+        Get.toNamed(
+          PagesRoutes.requestManagerScreen,
+          arguments: {
+            'request': getIDRequest(notification.id!),
+            'currentCategory':
+                authController.user.userType == Constants.received
+                    ? Constants.received
+                    : Constants.sent,
+          },
+        );
       },
       error: (message) {},
     );
