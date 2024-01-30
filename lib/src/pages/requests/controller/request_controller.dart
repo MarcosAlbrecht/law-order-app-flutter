@@ -247,92 +247,15 @@ class RequestController extends GetxController {
   void handleSelectedRequest({required RequestModel request}) {
     selectedRequest = request;
 
-    Get.toNamed(PagesRoutes.requestDetailScreen);
+    Get.toNamed(PagesRoutes.requestManagerScreen);
   }
 
-  void updateItemInAllRequests({required RequestModel request}) {
-    setLoading(true);
-    for (var element in allRequest) {
-      if (element.id == request.id) {
-        element = request;
-      }
+  Future<void> updateItemInAllRequests({required RequestModel request}) async {
+    setLoading(true, isUser: true);
+    final index = allRequest.indexWhere((element) => element.id == request.id);
+    if (index != -1) {
+      allRequest[index] = request;
     }
-    setLoading(false);
-  }
-
-  Future<void> handleProviderConfirmRequest({required DateTime date}) async {
-    setSaving(true);
-    final dataToIso = utilServices.formatDateToBD(date);
-    final result = await requestsRepository.acceptProviderRequest(
-        dataDeadline: dataToIso, idRequest: selectedRequest!.id!);
-    setSaving(false);
-    result.when(
-      success: (data) async {
-        selectedRequest = data;
-        updateItemInAllRequests(request: data);
-      },
-      error: (message) {
-        utilServices.showToast(
-          message: message,
-        );
-      },
-    );
-  }
-
-  Future<void> openContest({required RequestModel request}) async {
-    setSaving(true);
-    final result = await requestsRepository.openContest(idRequest: request.id!);
-    setSaving(false);
-    result.when(success: (data) {}, error: (message) {});
-  }
-
-  Future<void> completeService({required RequestModel request}) async {
-    setSaving(true);
-    final result =
-        await requestsRepository.completeService(idRequest: request.id!);
-    setSaving(false);
-    result.when(success: (data) {}, error: (message) {});
-  }
-
-  Future<void> cancelRequest({required RequestModel request}) async {
-    setSaving(true);
-    final result =
-        await requestsRepository.cancelRequest(idRequest: request.id!);
-    setSaving(false);
-    result.when(
-        success: (data) async {
-          await loadRequests(alterCategory: true);
-          await updateSelectedCategory();
-        },
-        error: (message) {});
-  }
-
-  Future<void> updateSelectedCategory() async {
-    setSaving(true);
-    final request = allRequest
-        .firstWhereOrNull((element) => element.id == selectedRequest?.id);
-    if (request != null) {
-      selectedRequest = request;
-    }
-    setSaving(false);
-  }
-
-  Future<String?> handlePayment() async {
-    String? retorno;
-    final result = await requestsRepository.generatePaymentLink(
-      value: selectedRequest!.total!,
-      description: 'Prestadio',
-      serviceRequestID: selectedRequest!.id!,
-    );
-    result.when(
-      success: (data) {
-        retorno = data;
-      },
-      error: (message) {
-        utilServices.showToast(message: message);
-        retorno = null;
-      },
-    );
-    return retorno;
+    setLoading(false, isUser: true);
   }
 }

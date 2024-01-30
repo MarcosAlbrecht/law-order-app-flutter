@@ -7,9 +7,14 @@ import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:get/get.dart';
 
-class RequestTab extends StatelessWidget {
+class RequestTab extends StatefulWidget {
   const RequestTab({Key? key}) : super(key: key);
 
+  @override
+  State<RequestTab> createState() => _RequestTabState();
+}
+
+class _RequestTabState extends State<RequestTab> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -148,7 +153,7 @@ class RequestTab extends StatelessWidget {
                   const Divider(
                     height: 30,
                   ),
-                  Container(
+                  SizedBox(
                     height: 60,
                     width: double.infinity,
                     child: Row(
@@ -170,16 +175,6 @@ class RequestTab extends StatelessWidget {
                           child: SizedBox(
                             width: 70,
                             height: double.infinity,
-                            // child: ElevatedButton(
-                            //   style: ElevatedButton.styleFrom(
-                            //     backgroundColor: CustomColors.cyanColor,
-                            //     shape: RoundedRectangleBorder(
-                            //       borderRadius: BorderRadius.circular(10.0),
-                            //     ),
-                            //   ),
-                            //   onPressed: () {},
-                            //   child: Icon(FontAwesome.sliders),
-                            // ),
                             child: Material(
                               elevation: 3,
                               shape: const RoundedRectangleBorder(

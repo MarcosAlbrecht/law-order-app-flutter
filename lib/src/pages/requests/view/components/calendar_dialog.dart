@@ -1,5 +1,6 @@
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/pages/requests/controller/request_controller.dart';
+import 'package:app_law_order/src/pages/requests/controller/request_manager_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -70,7 +71,7 @@ class _CalendarDialogState extends State<CalendarDialog> {
           },
           child: Text('Cancelar'),
         ),
-        GetBuilder<RequestController>(
+        GetBuilder<RequestManagerController>(
           builder: (controller) {
             return TextButton(
               onPressed: () {

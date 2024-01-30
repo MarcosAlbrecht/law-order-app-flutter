@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:app_law_order/src/pages/requests/controller/request_manager_controller.dart';
 import 'package:app_law_order/src/pages/requests/view/components/cancel_confirmation_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
@@ -46,7 +47,7 @@ class RequestManagerScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _RequestDetails(),
-              GetBuilder<RequestController>(
+              GetBuilder<RequestManagerController>(
                 builder: (controller) {
                   switch (controller.currentCategory) {
                     case Constants.received:
@@ -86,7 +87,7 @@ class _RequestDetails extends StatelessWidget {
                 topRight: Radius.circular(10),
               ),
             ),
-            child: GetBuilder<RequestController>(
+            child: GetBuilder<RequestManagerController>(
               builder: (controller) {
                 final statusInfo = controller.serviceRequestStatus(
                     status: controller.selectedRequest!.status!);
@@ -160,7 +161,7 @@ class _RequestDetails extends StatelessWidget {
                 topRight: Radius.circular(10),
               ),
             ),
-            child: GetBuilder<RequestController>(
+            child: GetBuilder<RequestManagerController>(
               builder: (controller) {
                 final statusInfo = controller.serviceRequestStatus(
                     status: controller.selectedRequest!.status!);
@@ -335,7 +336,7 @@ class _ActionsProvider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: GetBuilder<RequestController>(
+      child: GetBuilder<RequestManagerController>(
         builder: (controller) {
           List<Widget> actionWidgets = [];
 
@@ -473,7 +474,7 @@ class _ActionsUser extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: GetBuilder<RequestController>(
+      child: GetBuilder<RequestManagerController>(
         builder: (controller) {
           List<Widget> actionWidgets = [];
 
@@ -744,7 +745,7 @@ class _ServiceConfirmationRefuseButton extends StatelessWidget {
                 );
               },
               child: Text(
-                'Aceitar Solicitaçao',
+                'Aceitar Solicitação',
                 style: TextStyle(
                   color: CustomColors.white,
                   fontSize: CustomFontSizes.fontSize14,
@@ -766,7 +767,7 @@ class _ServiceConfirmationRefuseButton extends StatelessWidget {
                 // Add service confirmation functionality here
               },
               child: Text(
-                'Recusar Solicitaçao',
+                'Recusar Solicitação',
                 style: TextStyle(
                   color: CustomColors.white,
                   fontSize: CustomFontSizes.fontSize14,
@@ -803,7 +804,7 @@ class _ServiceFinalizedConfirmationRefuseButtonProvider
             fontWeight: FontWeight.bold,
           ),
         ),
-        GetBuilder<RequestController>(
+        GetBuilder<RequestManagerController>(
           builder: (controller) {
             return Row(
               children: [
@@ -819,7 +820,7 @@ class _ServiceFinalizedConfirmationRefuseButtonProvider
                       // Add service confirmation functionality here
                     },
                     child: Text(
-                      'Serviço finalizado',
+                      'Finalizar Serviço',
                       style: TextStyle(
                         color: CustomColors.white,
                       ),
@@ -886,7 +887,7 @@ class _ServiceFinalizedConfirmationRefuseButtonUser extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        GetBuilder<RequestController>(
+        GetBuilder<RequestManagerController>(
           builder: (controller) {
             return Row(
               children: [
@@ -946,7 +947,7 @@ class _ServiceFinalizedConfirmationRefuseButtonUser extends StatelessWidget {
 class _PaymentButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<RequestController>(
+    return GetBuilder<RequestManagerController>(
       builder: (controller) {
         return ElevatedButton(
           style: ElevatedButton.styleFrom(

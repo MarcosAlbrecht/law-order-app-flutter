@@ -28,7 +28,13 @@ class RequestTile extends StatelessWidget {
             controller.serviceRequestStatus(status: requestModel.status!);
         return GestureDetector(
           onTap: () {
-            controller.handleSelectedRequest(request: requestModel);
+            Get.toNamed(
+              PagesRoutes.requestManagerScreen,
+              arguments: {
+                'request': requestModel,
+                'currentCategory': currentCategory,
+              },
+            );
           },
           child: Material(
             elevation: 3,

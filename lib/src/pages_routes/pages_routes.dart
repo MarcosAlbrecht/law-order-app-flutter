@@ -19,6 +19,7 @@ import 'package:app_law_order/src/pages/profile_view/binding/service_request_bin
 import 'package:app_law_order/src/pages/profile_view/view/profile_view_screen.dart';
 import 'package:app_law_order/src/pages/profile_view/view/service_request_screen.dart';
 import 'package:app_law_order/src/pages/requests/binding/request_binding.dart';
+import 'package:app_law_order/src/pages/requests/binding/request_manager_binding.dart';
 import 'package:app_law_order/src/pages/requests/view/request_manager_screen.dart';
 import 'package:app_law_order/src/pages/requests/view/request_tab.dart';
 import 'package:get/get.dart';
@@ -79,9 +80,9 @@ abstract class AppPages {
       binding: NotificationBinding(),
     ),
     GetPage(
-      name: PagesRoutes.requestDetailScreen,
-      page: () => RequestManagerScreen(),
-      //binding: ServiceRequestBinding(),
+      name: PagesRoutes.requestManagerScreen,
+      page: () => const RequestManagerScreen(),
+      binding: RequestManagerBinding(),
     ),
     GetPage(
       page: () => const BaseScreen(),
@@ -109,6 +110,6 @@ abstract class PagesRoutes {
   static const String profileViewScreen = '/profileViewScreen';
   static const String serviceRequestScreen = '/serviceRequestScreen';
   static const String requestTab = '/requestTab';
-  static const String requestDetailScreen = '/requestDetailScreen';
+  static const String requestManagerScreen = '/requestManagerScreen';
   static const String notificationsScreen = '/notificationsScreen';
 }
