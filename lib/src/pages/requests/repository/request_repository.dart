@@ -97,7 +97,7 @@ class RequestRepository {
       url: '${EndPoints.getRequestsReceivedById}$idRequest',
     );
 
-    if (result.isNotEmpty) {
+    if (result.isNotEmpty && result['statusCode'] == null) {
       var userData = result as Map<String, dynamic>;
       RequestModel data = RequestModel.fromJson(userData);
 

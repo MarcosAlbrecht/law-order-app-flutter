@@ -96,21 +96,17 @@ class NotificationController extends GetxController {
 
   Future<void> handleReadNotification(
       {required NotificationModel notification}) async {
-    setSaving(true);
+    //setSaving(true);
     final result = await profileRepository.updateNotification(
         notificationID: notification.id!);
-    setSaving(false);
+    //setSaving(false);
     result.when(
       success: (data) async {
         await updateNotificationList(notification);
         Get.toNamed(
           PagesRoutes.requestManagerScreen,
           arguments: {
-            'request': getIDRequest(notification.id!),
-            'currentCategory':
-                authController.user.userType == Constants.received
-                    ? Constants.received
-                    : Constants.sent,
+            'idRequest': getIDRequest(notification.link!),
           },
         );
       },

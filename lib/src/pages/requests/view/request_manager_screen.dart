@@ -1,6 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:app_law_order/src/pages/requests/controller/request_manager_controller.dart';
-import 'package:app_law_order/src/pages/requests/view/components/cancel_confirmation_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
@@ -10,7 +8,9 @@ import 'package:app_law_order/src/constants/constants.dart';
 import 'package:app_law_order/src/constants/endpoints.dart';
 import 'package:app_law_order/src/models/request_model.dart';
 import 'package:app_law_order/src/pages/requests/controller/request_controller.dart';
+import 'package:app_law_order/src/pages/requests/controller/request_manager_controller.dart';
 import 'package:app_law_order/src/pages/requests/view/components/calendar_dialog.dart';
+import 'package:app_law_order/src/pages/requests/view/components/cancel_confirmation_dialog.dart';
 import 'package:app_law_order/src/pages/requests/view/components/contest_dialog.dart';
 import 'package:app_law_order/src/pages/requests/view/components/services_tile.dart';
 import 'package:app_law_order/src/services/util_services.dart';
@@ -22,6 +22,7 @@ class RequestManagerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: CustomColors.white,
       appBar: AppBar(
@@ -40,26 +41,30 @@ class RequestManagerScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(bottom: 16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _RequestDetails(),
-              GetBuilder<RequestManagerController>(
-                builder: (controller) {
-                  switch (controller.currentCategory) {
-                    case Constants.received:
-                      return _ActionsProvider();
-                    case Constants.sent:
-                      return _ActionsUser();
-                    default:
-                      return Container();
-                  }
-                },
-              ),
-            ],
+      body: SizedBox(
+        width: size.width,
+        height: size.height,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 16.0),
+          child: GetBuilder<RequestManagerController>(
+            builder: (controller) {
+              return Visibility(
+                visible: !controller.isLoading,
+                replacement: Center(child: CircularProgressIndicator()),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _RequestDetails(request: controller.selectedRequest!),
+                      if (controller.currentCategory == Constants.received)
+                        _ActionsProvider(),
+                      if (controller.currentCategory == Constants.sent)
+                        _ActionsUser(),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
         ),
       ),
@@ -68,7 +73,13 @@ class RequestManagerScreen extends StatelessWidget {
 }
 
 class _RequestDetails extends StatelessWidget {
+  final RequestModel request;
   final utilServices = UtilServices();
+
+  _RequestDetails({
+    Key? key,
+    required this.request,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -89,8 +100,6 @@ class _RequestDetails extends StatelessWidget {
             ),
             child: GetBuilder<RequestManagerController>(
               builder: (controller) {
-                final statusInfo = controller.serviceRequestStatus(
-                    status: controller.selectedRequest!.status!);
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -109,7 +118,7 @@ class _RequestDetails extends StatelessWidget {
                       _RowDetail(
                         'Data de Solicitação',
                         utilServices.formatDate(
-                          controller.selectedRequest!.createdAt!,
+                          request.createdAt!,
                         ),
                       ),
                       const Divider(
@@ -124,8 +133,11 @@ class _RequestDetails extends StatelessWidget {
                       const Divider(
                         height: 20,
                       ),
-                      _RowDetailServiceStatus('Status do Serviço',
-                          statusInfo.text, statusInfo.color),
+                      _RowDetailServiceStatus(
+                        'Status do Serviço',
+                        controller.selectedRequest!.statusPortuguese!.text,
+                        controller.selectedRequest!.statusPortuguese!.color,
+                      ),
                       const Divider(
                         height: 20,
                       ),
@@ -163,8 +175,6 @@ class _RequestDetails extends StatelessWidget {
             ),
             child: GetBuilder<RequestManagerController>(
               builder: (controller) {
-                final statusInfo = controller.serviceRequestStatus(
-                    status: controller.selectedRequest!.status!);
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(

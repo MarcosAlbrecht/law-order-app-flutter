@@ -1,5 +1,7 @@
 import 'package:app_law_order/src/config/custom_colors.dart';
+import 'package:app_law_order/src/constants/constants.dart';
 import 'package:app_law_order/src/models/request_model.dart';
+import 'package:app_law_order/src/models/status_info_model.dart';
 import 'package:app_law_order/src/pages/requests/controller/request_controller.dart';
 import 'package:app_law_order/src/pages/requests/repository/request_repository.dart';
 import 'package:app_law_order/src/services/util_services.dart';
@@ -16,24 +18,24 @@ enum UserServiceRequestStatusEnum {
   COMPLETED
 }
 
-StatusInfo getStatusInfo(UserServiceRequestStatusEnum status) {
+StatusInfoModel getStatusInfo(UserServiceRequestStatusEnum status) {
   switch (status) {
     case UserServiceRequestStatusEnum.WAITING_PROVIDER_ACCEPT:
-      return StatusInfo('Aguardando Aceitação', Colors.blue, 0.1);
+      return StatusInfoModel('Aguardando Aceitação', Colors.blue, 0.1);
     case UserServiceRequestStatusEnum.SCHEDULING:
-      return StatusInfo('Em Agendamento', Colors.orange, 0.1);
+      return StatusInfoModel('Em Agendamento', Colors.orange, 0.1);
     case UserServiceRequestStatusEnum.CANCELED:
-      return StatusInfo('Cancelado', CustomColors.blueDarkColor, 0.3);
+      return StatusInfoModel('Cancelado', CustomColors.blueDarkColor, 0.3);
     case UserServiceRequestStatusEnum.EXPIRED:
-      return StatusInfo('Expirado', Colors.grey, 0.1);
+      return StatusInfoModel('Expirado', Colors.grey, 0.1);
     case UserServiceRequestStatusEnum.IN_CONTEST:
-      return StatusInfo('Em Disputa', CustomColors.blueDarkColor, 0.1);
+      return StatusInfoModel('Em Disputa', CustomColors.blueDarkColor, 0.1);
     case UserServiceRequestStatusEnum.CONTEST_FINISHED:
-      return StatusInfo('Disputa Finalizada', Colors.purple, 0.1);
+      return StatusInfoModel('Disputa Finalizada', Colors.purple, 0.1);
     case UserServiceRequestStatusEnum.COMPLETED:
-      return StatusInfo('Finalizado', Colors.green, 0.1);
+      return StatusInfoModel('Finalizado', Colors.green, 0.1);
     default:
-      return StatusInfo('', Colors.black, 0.1);
+      return StatusInfoModel('', Colors.black, 0.1);
   }
 }
 
@@ -47,18 +49,6 @@ Map<UserServiceRequestStatusEnum, String> customStatusMapping = {
   UserServiceRequestStatusEnum.COMPLETED: 'concluído',
 };
 
-class StatusInfo {
-  final String text;
-  final Color color;
-  double opacidade;
-
-  StatusInfo(
-    this.text,
-    this.color,
-    this.opacidade,
-  );
-}
-
 class RequestManagerController extends GetxController {
   final requestsRepository = RequestRepository();
   final utilServices = UtilServices();
@@ -67,19 +57,22 @@ class RequestManagerController extends GetxController {
   RequestModel? selectedRequest;
   String currentCategory = "received";
 
-  bool isLoading = false;
+  bool isLoading = true;
   bool isSaving = false;
 
   @override
-  void onInit() {
-    // TODO: implement onInit
+  void onInit() async {
     super.onInit();
 
     final arguments = Get.arguments as Map<String, dynamic>;
     if (arguments['request'] == null) {
-      loadRequest(idRequest: arguments['idRequest']);
+      selectedRequest = RequestModel();
+      await loadRequest(idRequest: arguments['idRequest']);
     } else {
       selectedRequest = arguments['request'];
+      //isLoading = false;
+      //selectedRequest = RequestModel();
+      await loadRequest(idRequest: selectedRequest!.id!);
     }
     if (arguments['currentCategory'] != null) {
       currentCategory = arguments['currentCategory'];
@@ -96,17 +89,28 @@ class RequestManagerController extends GetxController {
     update();
   }
 
+  void setCategory(RequestModel request) {
+    if (request.requester != null) {
+      currentCategory = Constants.sent;
+    } else {
+      currentCategory = Constants.received;
+    }
+  }
+
   Future<void> loadRequest({required String idRequest}) async {
     setLoading(true);
     final result =
         await requestsRepository.getServiceRequestByID(idRequest: idRequest);
-    setLoading(false);
-    result.when(
-      success: (data) {
+
+    await result.when(
+      success: (data) async {
         selectedRequest = data;
+        setCategory(data);
+        serviceRequestStatus(status: selectedRequest!.status!);
       },
       error: (message) {},
     );
+    setLoading(false);
   }
 
   Future<String?> handlePayment() async {
@@ -184,13 +188,13 @@ class RequestManagerController extends GetxController {
     );
   }
 
-  StatusInfo serviceRequestStatus({required String status}) {
+  void serviceRequestStatus({required String status}) {
     UserServiceRequestStatusEnum statusEnum =
         UserServiceRequestStatusEnum.values.firstWhere(
             (e) => e.toString() == 'UserServiceRequestStatusEnum.$status');
 
     // Obtendo o texto e a cor correspondentes ao status
-    StatusInfo statusInfo = getStatusInfo(statusEnum);
-    return statusInfo;
+    StatusInfoModel statusInfo = getStatusInfo(statusEnum);
+    selectedRequest?.statusPortuguese = statusInfo;
   }
 }

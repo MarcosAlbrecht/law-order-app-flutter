@@ -3,6 +3,7 @@ import 'package:app_law_order/src/pages/profile/controller/notification_controll
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttericon/octicons_icons.dart';
 import 'package:get/get.dart';
 
 import 'package:app_law_order/src/config/custom_colors.dart';
@@ -58,7 +59,9 @@ class NotificationTile extends StatelessWidget {
                   visualDensity: VisualDensity.comfortable,
                   leading: ClipRRect(
                     borderRadius: BorderRadius.circular(50),
-                    child: Icon(Icons.note_add_outlined),
+                    child: !notification.read!
+                        ? Icon(Octicons.mail)
+                        : Icon(Octicons.mail_read),
                   ),
                   title: Text(
                     '${notification.message}',

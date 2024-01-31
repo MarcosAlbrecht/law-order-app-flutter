@@ -16,7 +16,7 @@ class NotificationModel {
   @JsonKey(name: 'createdAt')
   String? createdAt;
   @JsonKey(name: 'metadata')
-  String? metadata;
+  Map<String, dynamic>? metadata;
   @JsonKey(name: 'message')
   String? message;
   NotificationModel({
@@ -36,6 +36,6 @@ class NotificationModel {
 
   @override
   String toString() {
-    return 'NotificationModel(id: $id, read: $read, link: $link, userId: $userId, createdAt: $createdAt, metadata: $metadata)';
+    return 'NotificationModel(id: $id, read: $read, link: $link, userId: $userId, createdAt: $createdAt, metadata: $metadata, message: $message)';
   }
 }

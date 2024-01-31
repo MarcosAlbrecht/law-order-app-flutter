@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:app_law_order/src/models/status_info_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:app_law_order/src/models/service_model.dart';
@@ -48,6 +49,7 @@ class RequestModel {
   UserModel? requester;
   @JsonKey(name: 'requested')
   UserModel? requested;
+  StatusInfoModel? statusPortuguese;
   RequestModel({
     this.id,
     this.requesterId,

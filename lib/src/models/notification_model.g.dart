@@ -13,7 +13,7 @@ NotificationModel _$NotificationModelFromJson(Map<String, dynamic> json) =>
       link: json['link'] as String?,
       userId: json['userId'] as String?,
       createdAt: json['createdAt'] as String?,
-      metadata: json['metadata'] as String?,
+      metadata: json['metadata'] as Map<String, dynamic>?,
       message: json['message'] as String?,
     );
 
