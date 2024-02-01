@@ -91,6 +91,7 @@ class HomeController extends GetxController {
 
   Future<void> handleFollow(
       {required FollowsModel? follow, required UserModel user}) async {
+    setLoading(true, isUser: true);
     if (follow == null) {
       //adicionar follow
       await homeRepository.setFollow(userId: user.id!);
@@ -100,6 +101,7 @@ class HomeController extends GetxController {
       await homeRepository.setUnFollow(userId: user.id!);
       follows.removeWhere((follow) => follow.followedId == user.id);
     }
+    setLoading(false, isUser: true);
   }
 
   void loadMoreProducts() {

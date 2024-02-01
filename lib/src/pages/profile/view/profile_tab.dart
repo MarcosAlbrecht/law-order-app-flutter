@@ -23,7 +23,7 @@ class _ProfileTabState extends State<ProfileTab> {
       child: Container(
         height: size.height,
         width: size.width,
-        color: CustomColors.backgroudCard,
+        color: CustomColors.white,
         child: GetBuilder<ProfileController>(
           builder: (controller) {
             return Column(
@@ -81,8 +81,8 @@ class _ProfileTabState extends State<ProfileTab> {
                         Text(
                           '${controller.authController.user.firstName} ${controller.authController.user.lastName}',
                           style: TextStyle(
-                              color: CustomColors.black,
-                              fontWeight: FontWeight.normal,
+                              color: CustomColors.blueDark2Color,
+                              fontWeight: FontWeight.bold,
                               fontSize: CustomFontSizes.fontSize22),
                         ),
                         const Divider(
@@ -103,13 +103,13 @@ class _ProfileTabState extends State<ProfileTab> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 0),
                     child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          topRight: Radius.circular(30),
-                        ),
-                        color: CustomColors.white,
-                      ),
+                      // decoration: BoxDecoration(
+                      //   borderRadius: const BorderRadius.only(
+                      //     topLeft: Radius.circular(30),
+                      //     topRight: Radius.circular(30),
+                      //   ),
+                      //   color: CustomColors.white,
+                      // ),
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: SingleChildScrollView(
@@ -176,6 +176,21 @@ class _ProfileTabState extends State<ProfileTab> {
                               OptionInfo(
                                 text: " Sair",
                                 icon: Icons.power_settings_new_outlined,
+                                onTap: () async {
+                                  final bool result =
+                                      await showLogoutfirmation(context);
+                                  if (result) {
+                                    controller.authController.logout();
+                                  }
+                                },
+                              ),
+                              const Divider(
+                                height: 5,
+                                color: Colors.transparent,
+                              ),
+                              OptionInfo(
+                                text: " Excluir Conta",
+                                icon: Icons.delete_forever_outlined,
                                 onTap: () async {
                                   final bool result =
                                       await showLogoutfirmation(context);

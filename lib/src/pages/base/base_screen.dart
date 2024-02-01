@@ -23,10 +23,11 @@ class _BaseScreenState extends State<BaseScreen> {
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: navigationController.pageController,
-        children: const [
+        children: [
           RequestTab(),
           HomeTab(),
           ProfileTab(),
+          Container(),
         ],
       ),
       bottomNavigationBar: Obx(
@@ -57,6 +58,12 @@ class _BaseScreenState extends State<BaseScreen> {
                   ? const Icon(Icons.person_2_outlined)
                   : const Icon(Icons.person_2),
               label: 'Perfil',
+            ),
+            BottomNavigationBarItem(
+              icon: navigationController.currentIndex != 3
+                  ? const Icon(Icons.chat_outlined)
+                  : const Icon(Icons.person_2),
+              label: 'Conversas',
             ),
           ],
         ),

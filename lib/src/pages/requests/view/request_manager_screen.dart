@@ -489,7 +489,7 @@ class _ActionsUser extends StatelessWidget {
           List<Widget> actionWidgets = [];
 
           //verifica o tipo de usuário pra montar o botao de chat
-          String? labelButton = 'Conversar com o provedor';
+          String? labelButton = 'Conversar com o prestador';
 
           switch (controller.selectedRequest?.status) {
             case 'WAITING_PROVIDER_ACCEPT':

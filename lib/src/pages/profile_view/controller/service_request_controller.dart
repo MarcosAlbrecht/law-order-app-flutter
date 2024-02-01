@@ -41,9 +41,16 @@ class ServiceRequestController extends GetxController {
     setLoading(value: true);
     if (profileController.user.services != null) {
       services = profileController.user.services!;
+      unCheckServices();
     }
 
     setLoading(value: false);
+  }
+
+  void unCheckServices() {
+    for (var serv in services) {
+      serv.isChecked = false;
+    }
   }
 
   Future<void> handleService({required ServiceModel service}) async {
