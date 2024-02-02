@@ -50,17 +50,32 @@ class RequestManagerScreen extends StatelessWidget {
             builder: (controller) {
               return Visibility(
                 visible: !controller.isLoading,
-                replacement: Center(child: CircularProgressIndicator()),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _RequestDetails(request: controller.selectedRequest!),
-                      if (controller.currentCategory == Constants.received)
-                        _ActionsProvider(),
-                      if (controller.currentCategory == Constants.sent)
-                        _ActionsUser(),
-                    ],
+                replacement: const Center(child: CircularProgressIndicator()),
+                child: Visibility(
+                  visible: controller.selectedRequest!.id != null,
+                  replacement: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.search_off,
+                          color: CustomColors.blueDarkColor,
+                        ),
+                        const Text('Serviço não localizado!'),
+                      ],
+                    ),
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _RequestDetails(request: controller.selectedRequest!),
+                        if (controller.currentCategory == Constants.received)
+                          _ActionsProvider(),
+                        if (controller.currentCategory == Constants.sent)
+                          _ActionsUser(),
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -118,7 +133,7 @@ class _RequestDetails extends StatelessWidget {
                       _RowDetail(
                         'Data de Solicitação',
                         utilServices.formatDate(
-                          request.createdAt!,
+                          request.createdAt ?? '',
                         ),
                       ),
                       const Divider(

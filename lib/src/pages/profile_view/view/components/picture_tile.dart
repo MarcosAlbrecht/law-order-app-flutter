@@ -5,6 +5,7 @@ import 'package:app_law_order/src/models/picture_model.dart';
 import 'package:app_law_order/src/pages/profile_view/view/components/picture_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:square_progress_indicator/square_progress_indicator.dart';
 
 class PictureTile extends StatelessWidget {
   final PictureModel picture;
@@ -30,12 +31,6 @@ class PictureTile extends StatelessWidget {
         height: 120,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          // image: DecorationImage(
-          //   image: picture.url != null
-          //       ? NetworkImage(picture.url!) as ImageProvider<Object>
-          //       : FileImage(File(picture.localPath!)),
-          //   fit: BoxFit.cover,
-          // ),
         ),
         child: picture.url != null
             ? CachedNetworkImage(
@@ -43,13 +38,14 @@ class PictureTile extends StatelessWidget {
                 progressIndicatorBuilder: (context, url, downloadProgress) =>
                     Padding(
                   padding: const EdgeInsets.all(15.0),
-                  child: CircularProgressIndicator(
+                  child: SquareProgressIndicator(
+                    height: 100,
+                    width: 120,
+                    borderRadius: 2,
                     value: downloadProgress.progress,
                   ),
                 ),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
-                //height: 160,
-                //width: 160,
                 fit: BoxFit.cover,
               )
             : Image.asset(

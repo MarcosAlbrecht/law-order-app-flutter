@@ -65,7 +65,12 @@ class RequestRepository {
 
       return RequestReceivedResult.success(data);
     } else {
-      return RequestReceivedResult.error("Não foi possível buscar os dados!");
+      if (result['statusCode'] != null) {
+        return RequestReceivedResult.error("Não foi possível buscar os dados!");
+      } else {
+        List<RequestModel> data = [];
+        return RequestReceivedResult.success(data);
+      }
     }
   }
 

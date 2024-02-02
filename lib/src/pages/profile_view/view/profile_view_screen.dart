@@ -3,6 +3,7 @@ import 'package:app_law_order/src/pages/profile_view/controller/profile_view_con
 import 'package:app_law_order/src/pages/profile_view/view/components/picture_tile.dart';
 import 'package:app_law_order/src/pages/profile_view/view/components/services_tile.dart';
 import 'package:app_law_order/src/pages_routes/pages_routes.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:get/get.dart';
@@ -64,15 +65,36 @@ class ProfileViewScreen extends StatelessWidget {
                                         color: CustomColors.blueColor,
                                       ),
                                     ),
-                                    child: CircleAvatar(
-                                      radius: 50,
-                                      backgroundImage:
-                                          controller.user.profilePicture != null
-                                              ? NetworkImage(controller
-                                                  .user.profilePicture!.url!)
-                                              : const AssetImage(
-                                                      'assets/ICONPEOPLE.png')
-                                                  as ImageProvider,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(3),
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        child: controller.user.profilePicture !=
+                                                null
+                                            ? CachedNetworkImage(
+                                                imageUrl: controller
+                                                    .user.profilePicture!.url!,
+                                                progressIndicatorBuilder:
+                                                    (context, url,
+                                                            downloadProgress) =>
+                                                        CircularProgressIndicator(
+                                                            value:
+                                                                downloadProgress
+                                                                    .progress),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        const Icon(Icons.error),
+                                                height: 130,
+                                                width: 130,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Image.asset(
+                                                "assets/ICONPEOPLE.png",
+                                                height: 160,
+                                                width: 160,
+                                              ),
+                                      ),
                                     ),
                                   ),
                                   Visibility(

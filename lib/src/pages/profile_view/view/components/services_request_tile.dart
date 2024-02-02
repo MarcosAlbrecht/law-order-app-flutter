@@ -40,14 +40,20 @@ class ServicesRequestTile extends StatelessWidget {
           child: GetBuilder<ServiceRequestController>(
             builder: (controller) {
               return ListTile(
-                visualDensity: VisualDensity.comfortable,
                 title: Text(
                   service.title!,
-                  style: TextStyle(fontSize: CustomFontSizes.fontSize16),
+                  style: TextStyle(
+                    fontSize: CustomFontSizes.fontSize14,
+                  ),
                 ),
-                subtitle: Text(
-                  utilServices.priceToCurrency(service.value!),
-                  style: TextStyle(fontSize: CustomFontSizes.fontSize14),
+                subtitle: Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Text(
+                    utilServices.priceToCurrency(service.value!),
+                    style: TextStyle(
+                      fontSize: CustomFontSizes.fontSize14,
+                    ),
+                  ),
                 ),
                 trailing: Checkbox.adaptive(
                   activeColor: CustomColors.blueDark2Color,

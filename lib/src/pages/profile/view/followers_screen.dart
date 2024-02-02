@@ -13,7 +13,7 @@ class FollowerScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Seguindo",
+          "Seguidores",
           style: TextStyle(color: CustomColors.black),
         ),
         centerTitle: true,

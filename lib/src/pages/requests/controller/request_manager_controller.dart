@@ -70,8 +70,7 @@ class RequestManagerController extends GetxController {
       await loadRequest(idRequest: arguments['idRequest']);
     } else {
       selectedRequest = arguments['request'];
-      //isLoading = false;
-      //selectedRequest = RequestModel();
+      //setLoading(false);
       await loadRequest(idRequest: selectedRequest!.id!);
     }
     if (arguments['currentCategory'] != null) {
@@ -108,7 +107,9 @@ class RequestManagerController extends GetxController {
         setCategory(data);
         serviceRequestStatus(status: selectedRequest!.status!);
       },
-      error: (message) {},
+      error: (message) {
+        selectedRequest = RequestModel();
+      },
     );
     setLoading(false);
   }
@@ -172,11 +173,12 @@ class RequestManagerController extends GetxController {
     final dataToIso = utilServices.formatDateToBD(date);
     final result = await requestsRepository.acceptProviderRequest(
         dataDeadline: dataToIso, idRequest: selectedRequest!.id!);
-    setSaving(false);
+
     await result.when(
       success: (data) async {
         selectedRequest = data;
         //updateItemInAllRequests(request: data);
+        await serviceRequestStatus(status: selectedRequest!.status!);
         await requestController.updateItemInAllRequests(
             request: selectedRequest!);
       },
@@ -186,9 +188,10 @@ class RequestManagerController extends GetxController {
         );
       },
     );
+    setSaving(false);
   }
 
-  void serviceRequestStatus({required String status}) {
+  Future<void> serviceRequestStatus({required String status}) async {
     UserServiceRequestStatusEnum statusEnum =
         UserServiceRequestStatusEnum.values.firstWhere(
             (e) => e.toString() == 'UserServiceRequestStatusEnum.$status');
