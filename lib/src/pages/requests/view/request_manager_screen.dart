@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 
 import 'package:app_law_order/src/config/custom_colors.dart';
@@ -13,6 +14,7 @@ import 'package:app_law_order/src/pages/requests/view/components/calendar_dialog
 import 'package:app_law_order/src/pages/requests/view/components/cancel_confirmation_dialog.dart';
 import 'package:app_law_order/src/pages/requests/view/components/contest_dialog.dart';
 import 'package:app_law_order/src/pages/requests/view/components/services_tile.dart';
+import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:app_law_order/src/services/util_services.dart';
 
 class RequestManagerScreen extends StatelessWidget {
@@ -514,7 +516,9 @@ class _ActionsUser extends StatelessWidget {
                   height: 20,
                 ),
               );
-              actionWidgets.add(_EvaluationButton());
+              actionWidgets.add(_EvaluationButton(
+                request: controller.selectedRequest!,
+              ));
               actionWidgets.add(
                 const Divider(
                   height: 20,
@@ -558,7 +562,9 @@ class _ActionsUser extends StatelessWidget {
                 ),
               );
 
-              actionWidgets.add(_EvaluationButton());
+              actionWidgets.add(_EvaluationButton(
+                request: controller.selectedRequest!,
+              ));
 
               actionWidgets.add(
                 const Divider(
@@ -605,7 +611,7 @@ class _ActionsUser extends StatelessWidget {
               );
 
               actionWidgets.add(
-                _EvaluationButton(),
+                _EvaluationButton(request: controller.selectedRequest!),
               );
 
               actionWidgets.add(
@@ -639,7 +645,9 @@ class _ActionsUser extends StatelessWidget {
                   height: 20,
                 ),
               );
-              actionWidgets.add(_EvaluationButton());
+              actionWidgets.add(_EvaluationButton(
+                request: controller.selectedRequest!,
+              ));
               actionWidgets.add(
                 const Divider(
                   height: 20,
@@ -685,7 +693,7 @@ class _ActionsUser extends StatelessWidget {
               );
 
               actionWidgets.add(
-                _EvaluationButton(),
+                _EvaluationButton(request: controller.selectedRequest!),
               );
 
               break;
@@ -1001,6 +1009,13 @@ class _PaymentButton extends StatelessWidget {
 }
 
 class _EvaluationButton extends StatelessWidget {
+  final RequestModel request;
+
+  const _EvaluationButton({
+    Key? key,
+    required this.request,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -1012,6 +1027,7 @@ class _EvaluationButton extends StatelessWidget {
       ),
       onPressed: () {
         // Add evaluation functionality here
+        Get.toNamed(PagesRoutes.avaliationScreen, arguments: request);
       },
       child: Text(
         'Enviar avaliação',

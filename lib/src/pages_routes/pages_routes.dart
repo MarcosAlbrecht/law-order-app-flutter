@@ -3,6 +3,9 @@ import 'package:app_law_order/src/pages/auth/view/sign_up.dart';
 import 'package:app_law_order/src/pages/auth/view/sign_up_step1.dart';
 import 'package:app_law_order/src/pages/base/base_screen.dart';
 import 'package:app_law_order/src/pages/base/binding/navigation_binding.dart';
+import 'package:app_law_order/src/pages/chat/binding/chat_binding.dart';
+import 'package:app_law_order/src/pages/chat/controller/chat_service.dart';
+import 'package:app_law_order/src/pages/chat/view/chat_tab.dart';
 import 'package:app_law_order/src/pages/home/binding/home_binding.dart';
 import 'package:app_law_order/src/pages/profile/binding/follower_binding.dart';
 import 'package:app_law_order/src/pages/profile/binding/follows_binding.dart';
@@ -20,6 +23,7 @@ import 'package:app_law_order/src/pages/profile_view/view/profile_view_screen.da
 import 'package:app_law_order/src/pages/profile_view/view/service_request_screen.dart';
 import 'package:app_law_order/src/pages/requests/binding/request_binding.dart';
 import 'package:app_law_order/src/pages/requests/binding/request_manager_binding.dart';
+import 'package:app_law_order/src/pages/requests/view/avaliation_screen.dart';
 import 'package:app_law_order/src/pages/requests/view/request_manager_screen.dart';
 import 'package:app_law_order/src/pages/requests/view/request_tab.dart';
 import 'package:get/get.dart';
@@ -55,6 +59,10 @@ abstract class AppPages {
       page: () => const PortfolioScreen(),
     ),
     GetPage(
+      name: PagesRoutes.avaliationScreen,
+      page: () => const AvaliationScreen(),
+    ),
+    GetPage(
       name: PagesRoutes.followsScreen,
       page: () => const FollowsScreen(),
       binding: FollowsBinding(),
@@ -85,6 +93,11 @@ abstract class AppPages {
       binding: RequestManagerBinding(),
     ),
     GetPage(
+      name: PagesRoutes.chatTab,
+      page: () => const ChatTab(),
+      binding: ChatBinding(),
+    ),
+    GetPage(
       page: () => const BaseScreen(),
       name: PagesRoutes.baseRoute,
       bindings: [
@@ -112,4 +125,6 @@ abstract class PagesRoutes {
   static const String requestTab = '/requestTab';
   static const String requestManagerScreen = '/requestManagerScreen';
   static const String notificationsScreen = '/notificationsScreen';
+  static const String avaliationScreen = '/avaliationScreen';
+  static const String chatTab = '/chatTabScreen';
 }

@@ -1,4 +1,28 @@
+import 'package:app_law_order/src/models/avaliation_values_model.dart';
 import 'package:app_law_order/src/models/occupation_areas_model.dart';
+
+List<AvaliationValuesModel> avaliationValues = [
+  AvaliationValuesModel(
+    title: 'Muito Satisfeito',
+    value: 5,
+  ),
+  AvaliationValuesModel(
+    title: 'Satisfeito',
+    value: 4,
+  ),
+  AvaliationValuesModel(
+    title: 'Neutro',
+    value: 3,
+  ),
+  AvaliationValuesModel(
+    title: 'Insatisfeito',
+    value: 2,
+  ),
+  AvaliationValuesModel(
+    title: 'Muito insatisfeito',
+    value: 1,
+  ),
+];
 
 List<OccupationAreasModel> occupationAreas = [
   OccupationAreasModel(

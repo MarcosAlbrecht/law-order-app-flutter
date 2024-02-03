@@ -54,7 +54,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
         centerTitle: true,
-        toolbarHeight: 80,
+        //toolbarHeight: 80,
+        backgroundColor: CustomColors.white,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(10),

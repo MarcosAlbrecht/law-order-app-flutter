@@ -5,6 +5,7 @@ abstract class NavigationTabs {
   static const int request = 0;
   static const int home = 1;
   static const int perfil = 2;
+  static const int chat = 3;
 }
 
 class NavigationController extends GetxController {
@@ -23,8 +24,7 @@ class NavigationController extends GetxController {
     );
   }
 
-  void _initNavigation(
-      {required PageController pageController, required int currentIndex}) {
+  void _initNavigation({required PageController pageController, required int currentIndex}) {
     _pageController = pageController;
     _currentIndex = currentIndex.obs;
   }

@@ -1,5 +1,6 @@
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/pages/base/controller/navigation_controller.dart';
+import 'package:app_law_order/src/pages/chat/view/chat_tab.dart';
 import 'package:app_law_order/src/pages/home/view/home_tab.dart';
 import 'package:app_law_order/src/pages/profile/view/profile_tab.dart';
 import 'package:app_law_order/src/pages/requests/view/request_tab.dart';
@@ -27,7 +28,7 @@ class _BaseScreenState extends State<BaseScreen> {
           RequestTab(),
           HomeTab(),
           ProfileTab(),
-          Container(),
+          ChatTab(),
         ],
       ),
       bottomNavigationBar: Obx(
@@ -50,19 +51,25 @@ class _BaseScreenState extends State<BaseScreen> {
             BottomNavigationBarItem(
               icon: navigationController.currentIndex != 1
                   ? const Icon(Icons.home_outlined)
-                  : const Icon(Icons.home),
+                  : const Icon(
+                      Icons.home,
+                    ),
               label: 'Home',
             ),
             BottomNavigationBarItem(
               icon: navigationController.currentIndex != 2
                   ? const Icon(Icons.person_2_outlined)
-                  : const Icon(Icons.person_2),
+                  : const Icon(
+                      Icons.person_2,
+                    ),
               label: 'Perfil',
             ),
             BottomNavigationBarItem(
               icon: navigationController.currentIndex != 3
                   ? const Icon(Icons.chat_outlined)
-                  : const Icon(Icons.person_2),
+                  : const Icon(
+                      Icons.chat,
+                    ),
               label: 'Conversas',
             ),
           ],

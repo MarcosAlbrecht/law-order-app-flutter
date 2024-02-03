@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       title: 'Prestadio',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: CustomColors.bodyBackgroundColor,
+        scaffoldBackgroundColor: CustomColors.white,
         //colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
 
