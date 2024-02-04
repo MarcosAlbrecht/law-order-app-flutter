@@ -11,9 +11,7 @@ class RequestRepository {
   final utilServices = UtilServices();
 
   Future<RequestReceivedResult<RequestModel>> getRequestsReceived(
-      {required int limit,
-      required int skip,
-      String sortDirection = 'DESC'}) async {
+      {required int limit, required int skip, String sortDirection = 'DESC'}) async {
     final result = await httpManager.restRequest(
       method: HttpMethods.get,
       url: EndPoints.getRequestsReceived,
@@ -26,10 +24,7 @@ class RequestRepository {
     );
 
     if (result['result'].isNotEmpty) {
-      List<RequestModel> data =
-          (List<Map<String, dynamic>>.from(result['result']))
-              .map(RequestModel.fromJson)
-              .toList();
+      List<RequestModel> data = (List<Map<String, dynamic>>.from(result['result'])).map(RequestModel.fromJson).toList();
 
       return RequestReceivedResult.success(data);
     } else {
@@ -43,9 +38,7 @@ class RequestRepository {
   }
 
   Future<RequestReceivedResult<RequestModel>> getMyRequest(
-      {required int limit,
-      required int skip,
-      String sortDirection = 'ASC'}) async {
+      {required int limit, required int skip, String sortDirection = 'ASC'}) async {
     final result = await httpManager.restRequest(
       method: HttpMethods.get,
       url: EndPoints.getMyRequest,
@@ -58,10 +51,7 @@ class RequestRepository {
     );
 
     if (result['result'].isNotEmpty) {
-      List<RequestModel> data =
-          (List<Map<String, dynamic>>.from(result['result']))
-              .map(RequestModel.fromJson)
-              .toList();
+      List<RequestModel> data = (List<Map<String, dynamic>>.from(result['result'])).map(RequestModel.fromJson).toList();
 
       return RequestReceivedResult.success(data);
     } else {
@@ -74,8 +64,7 @@ class RequestRepository {
     }
   }
 
-  Future<AcceptanceRequestResult> acceptProviderRequest(
-      {required String dataDeadline, required String idRequest}) async {
+  Future<AcceptanceRequestResult> acceptProviderRequest({required String dataDeadline, required String idRequest}) async {
     final result = await httpManager.restRequest(
       method: HttpMethods.patch,
       url: '${EndPoints.acceptBudget}$idRequest',
@@ -95,8 +84,7 @@ class RequestRepository {
     }
   }
 
-  Future<AcceptanceRequestResult> getServiceRequestByID(
-      {required String idRequest}) async {
+  Future<AcceptanceRequestResult> getServiceRequestByID({required String idRequest}) async {
     final result = await httpManager.restRequest(
       method: HttpMethods.get,
       url: '${EndPoints.getRequestsReceivedById}$idRequest',
@@ -121,10 +109,7 @@ class RequestRepository {
     );
 
     if (result['result'].isNotEmpty) {
-      List<RequestModel> data =
-          (List<Map<String, dynamic>>.from(result['result']))
-              .map(RequestModel.fromJson)
-              .toList();
+      List<RequestModel> data = (List<Map<String, dynamic>>.from(result['result'])).map(RequestModel.fromJson).toList();
 
       return RequestReceivedResult.success(data);
     } else {
@@ -141,16 +126,12 @@ class RequestRepository {
     );
 
     if (result['statusCode'] == null) {
-      List<RequestModel> data =
-          (List<Map<String, dynamic>>.from(result['result']))
-              .map(RequestModel.fromJson)
-              .toList();
+      List<RequestModel> data = (List<Map<String, dynamic>>.from(result['result'])).map(RequestModel.fromJson).toList();
 
       return RequestReceivedResult.success(data);
     } else {
       if (result['statusCode'] == 500) {
-        return RequestReceivedResult.error(
-            "Erro interno, tente novamente mais tarde!");
+        return RequestReceivedResult.error("Erro interno, tente novamente mais tarde!");
       } else {
         return RequestReceivedResult.error("Não foi possível buscar os dados!");
       }
@@ -165,17 +146,34 @@ class RequestRepository {
       url: '${EndPoints.completeService}$idRequest',
     );
 
-    if (result['statusCode'] == null) {
-      List<RequestModel> data =
-          (List<Map<String, dynamic>>.from(result['result']))
-              .map(RequestModel.fromJson)
-              .toList();
+    if (result.isEmpty) {
+      List<RequestModel> data = [];
 
       return RequestReceivedResult.success(data);
     } else {
       if (result['statusCode'] == 500) {
-        return RequestReceivedResult.error(
-            "Erro interno, tente novamente mais tarde!");
+        return RequestReceivedResult.error("Erro interno, tente novamente mais tarde!");
+      } else {
+        return RequestReceivedResult.error("Não foi possível buscar os dados!");
+      }
+    }
+  }
+
+  Future<RequestReceivedResult<RequestModel>> completeServiceUser({
+    required String idRequest,
+  }) async {
+    final result = await httpManager.restRequest(
+      method: HttpMethods.patch,
+      url: '${EndPoints.completeServiceUser}$idRequest',
+    );
+
+    if (result.isEmpty) {
+      List<RequestModel> data = [];
+
+      return RequestReceivedResult.success(data);
+    } else {
+      if (result['statusCode'] == 500) {
+        return RequestReceivedResult.error("Erro interno, tente novamente mais tarde!");
       } else {
         return RequestReceivedResult.error("Não foi possível buscar os dados!");
       }
@@ -196,8 +194,7 @@ class RequestRepository {
       return RequestReceivedResult.success(data);
     } else {
       if (result['statusCode'] == 500) {
-        return RequestReceivedResult.error(
-            "Erro interno, tente novamente mais tarde!");
+        return RequestReceivedResult.error("Erro interno, tente novamente mais tarde!");
       } else {
         return RequestReceivedResult.error("Não foi possível buscar os dados!");
       }
@@ -224,8 +221,7 @@ class RequestRepository {
 
       return PaymentLinkResult.success(data);
     } else {
-      return PaymentLinkResult.error(
-          "Não foi possível gerar o link para pagamento!");
+      return PaymentLinkResult.error("Não foi possível gerar o link para pagamento!");
     }
   }
 }

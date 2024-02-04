@@ -72,10 +72,8 @@ class RequestManagerScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         _RequestDetails(request: controller.selectedRequest!),
-                        if (controller.currentCategory == Constants.received)
-                          _ActionsProvider(),
-                        if (controller.currentCategory == Constants.sent)
-                          _ActionsUser(),
+                        if (controller.currentCategory == Constants.received) _ActionsProvider(),
+                        if (controller.currentCategory == Constants.sent) _ActionsUser(),
                       ],
                     ),
                   ),
@@ -115,64 +113,59 @@ class _RequestDetails extends StatelessWidget {
                 topRight: Radius.circular(10),
               ),
             ),
-            child: GetBuilder<RequestManagerController>(
-              builder: (controller) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Solicitação de Serviço',
-                        style: TextStyle(
-                            fontSize: CustomFontSizes.fontSize20,
-                            color: CustomColors.black),
-                      ),
-                      const Divider(
-                        height: 20,
-                      ),
-                      _RowDetail(
-                        'Data de Solicitação',
-                        utilServices.formatDate(
-                          request.createdAt ?? '',
-                        ),
-                      ),
-                      const Divider(
-                        height: 20,
-                      ),
-                      _RowDetail(
-                        'Prazo',
-                        utilServices.formatDate(
-                          controller.selectedRequest!.deadline ?? '',
-                        ),
-                      ),
-                      const Divider(
-                        height: 20,
-                      ),
-                      _RowDetailServiceStatus(
-                        'Status do Serviço',
-                        controller.selectedRequest!.statusPortuguese!.text,
-                        controller.selectedRequest!.statusPortuguese!.color,
-                      ),
-                      const Divider(
-                        height: 20,
-                      ),
-                      _RowDetailStatusPayment('Status do Pagamento',
-                          'Pagamento não realizado', Colors.red),
-
-                      // _RowDetail('Serviços solicitados', 'Teste'),
-                      // _RowDetail('Valor Total', 'R$ 1,00'),
-                      // _RowDetail('Solicitante', 'Marcos Roberto Albrecht'),
-                      // _RowDetail('Marechal Cândido Rondon', ''),
-                      // SizedBox(height: 8.0),
-                      // _RowDetail('Prestadio', ''),
-                      // _RowDetail('Prestador', 'Leonardo Winter'),
-                      // _RowDetail('Marechal Cândido Rondon', ''),
-                    ],
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Solicitação de Serviço',
+                    style: TextStyle(fontSize: CustomFontSizes.fontSize20, color: CustomColors.black),
                   ),
-                );
-              },
+                  const Divider(
+                    height: 20,
+                  ),
+                  _RowDetail(
+                    'Data de Solicitação',
+                    utilServices.formatDate(
+                      request.createdAt ?? '',
+                    ),
+                  ),
+                  const Divider(
+                    height: 20,
+                  ),
+                  _RowDetail(
+                    'Prazo',
+                    utilServices.formatDate(
+                      request.deadline ?? '',
+                    ),
+                  ),
+                  const Divider(
+                    height: 20,
+                  ),
+                  _RowDetailServiceStatus(
+                    'Status do Serviço',
+                    request.statusPortuguese!.text,
+                    request.statusPortuguese!.color,
+                  ),
+                  const Divider(
+                    height: 20,
+                  ),
+                  request.paymentId != null
+                      ? _RowDetailStatusPayment('Status do Pagamento', 'Pagamento realizado', Colors.green)
+                      : _RowDetailStatusPayment('Status do Pagamento', 'Pagamento não realizado', Colors.red),
+
+                  // _RowDetail('Serviços solicitados', 'Teste'),
+                  // _RowDetail('Valor Total', 'R$ 1,00'),
+                  // _RowDetail('Solicitante', 'Marcos Roberto Albrecht'),
+                  // _RowDetail('Marechal Cândido Rondon', ''),
+                  // SizedBox(height: 8.0),
+                  // _RowDetail('Prestadio', ''),
+                  // _RowDetail('Prestador', 'Leonardo Winter'),
+                  // _RowDetail('Marechal Cândido Rondon', ''),
+                ],
+              ),
             ),
           ),
           const Divider(
@@ -212,29 +205,24 @@ class _RequestDetails extends StatelessWidget {
                         height: 150,
                         child: ListView.separated(
                             itemBuilder: (_, index) {
-                              return ServicesTile(
-                                  service: controller.selectedRequest!
-                                      .requestedServices![index]);
+                              return ServicesTile(service: controller.selectedRequest!.requestedServices![index]);
                             },
                             separatorBuilder: (_, index) => const Divider(
                                   height: 10,
                                 ),
-                            itemCount: controller
-                                .selectedRequest!.requestedServices!.length),
+                            itemCount: controller.selectedRequest!.requestedServices!.length),
                       ),
                       const Divider(
                         height: 15,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(
-                            top: 8.0, right: 24, left: 16),
+                        padding: const EdgeInsets.only(top: 8.0, right: 24, left: 16),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('Valor total'),
                             Text(
-                              utilServices.priceToCurrency(
-                                  controller.selectedRequest!.total!),
+                              utilServices.priceToCurrency(controller.selectedRequest!.total!),
                               style: TextStyle(
                                 fontSize: CustomFontSizes.fontSize14,
                                 fontWeight: FontWeight.bold,
@@ -275,10 +263,7 @@ class _RowDetail extends StatelessWidget {
           child: Text(
             value,
             textAlign: TextAlign.right,
-            style: TextStyle(
-                color: CustomColors.black,
-                fontSize: CustomFontSizes.fontSize14,
-                fontWeight: FontWeight.bold),
+            style: TextStyle(color: CustomColors.black, fontSize: CustomFontSizes.fontSize14, fontWeight: FontWeight.bold),
           ),
         ),
       ],
@@ -372,8 +357,7 @@ class _ActionsProvider extends StatelessWidget {
 
           switch (controller.selectedRequest?.status) {
             case 'WAITING_PROVIDER_ACCEPT':
-              actionWidgets.add(_ServiceConfirmationRefuseButton(
-                  currentCategory: controller.currentCategory));
+              actionWidgets.add(_ServiceConfirmationRefuseButton(currentCategory: controller.currentCategory));
               actionWidgets.add(
                 const Divider(
                   height: 20,
@@ -387,8 +371,7 @@ class _ActionsProvider extends StatelessWidget {
               );
               break;
             case 'SCHEDULING':
-              actionWidgets
-                  .add(_ServiceFinalizedConfirmationRefuseButtonProvider(
+              actionWidgets.add(_ServiceFinalizedConfirmationRefuseButtonProvider(
                 currentCategory: controller.currentCategory,
                 request: controller.selectedRequest!,
               ));
@@ -743,8 +726,7 @@ class _ChatButton extends StatelessWidget {
 class _ServiceConfirmationRefuseButton extends StatelessWidget {
   final String currentCategory;
 
-  const _ServiceConfirmationRefuseButton(
-      {super.key, required this.currentCategory});
+  const _ServiceConfirmationRefuseButton({super.key, required this.currentCategory});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -814,8 +796,7 @@ class _ServiceConfirmationRefuseButton extends StatelessWidget {
   }
 }
 
-class _ServiceFinalizedConfirmationRefuseButtonProvider
-    extends StatelessWidget {
+class _ServiceFinalizedConfirmationRefuseButtonProvider extends StatelessWidget {
   final String currentCategory;
   final RequestModel request;
 
@@ -853,7 +834,7 @@ class _ServiceFinalizedConfirmationRefuseButtonProvider
                       // Add service confirmation functionality here
                     },
                     child: Text(
-                      'Finalizar Serviço',
+                      'Confirmar',
                       style: TextStyle(
                         color: CustomColors.white,
                       ),
@@ -905,8 +886,7 @@ class _ServiceFinalizedConfirmationRefuseButtonUser extends StatelessWidget {
   final String currentCategory;
   final RequestModel request;
 
-  const _ServiceFinalizedConfirmationRefuseButtonUser(
-      {super.key, required this.currentCategory, required this.request});
+  const _ServiceFinalizedConfirmationRefuseButtonUser({super.key, required this.currentCategory, required this.request});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -937,7 +917,7 @@ class _ServiceFinalizedConfirmationRefuseButtonUser extends StatelessWidget {
                       controller.completeService(request: request);
                     },
                     child: Text(
-                      'Serviço realizado',
+                      'Confirmar',
                       style: TextStyle(
                         color: CustomColors.white,
                       ),

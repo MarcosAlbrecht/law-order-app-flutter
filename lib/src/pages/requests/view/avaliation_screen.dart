@@ -96,6 +96,7 @@ class _AvaliationScreenState extends State<AvaliationScreen> {
                     onSaved: (data) {
                       //authController.user.occupationArea = data?.area;
                     },
+
                     //validator: occupationAreaValidator,
                     decoration: InputDecoration(
                       focusedBorder: OutlineInputBorder(
@@ -106,6 +107,7 @@ class _AvaliationScreenState extends State<AvaliationScreen> {
                       ),
                       //prefixIcon: const Icon(Icons.work_outline),
                       //labelText: "Selecione uma opção",
+                      hintText: 'Selecione uma opção',
                       isDense: true,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -148,8 +150,7 @@ class _AvaliationScreenState extends State<AvaliationScreen> {
                           color: CustomColors.blueColor,
                         ), // Defina a cor desejada da borda
                       ),
-                      //prefixIcon: const Icon(Icons.work_outline),
-                      //labelText: "Selecione uma opção",
+                      hintText: 'Selecione uma opção',
                       isDense: true,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -192,8 +193,7 @@ class _AvaliationScreenState extends State<AvaliationScreen> {
                           color: CustomColors.blueColor,
                         ), // Defina a cor desejada da borda
                       ),
-                      //prefixIcon: const Icon(Icons.work_outline),
-                      //labelText: "Selecione uma opção",
+                      hintText: 'Selecione uma opção',
                       isDense: true,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -236,8 +236,7 @@ class _AvaliationScreenState extends State<AvaliationScreen> {
                           color: CustomColors.blueColor,
                         ), // Defina a cor desejada da borda
                       ),
-                      //prefixIcon: const Icon(Icons.work_outline),
-                      //labelText: "Selecione uma opção",
+                      hintText: 'Selecione uma opção',
                       isDense: true,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -280,8 +279,7 @@ class _AvaliationScreenState extends State<AvaliationScreen> {
                           color: CustomColors.blueColor,
                         ), // Defina a cor desejada da borda
                       ),
-                      //prefixIcon: const Icon(Icons.work_outline),
-                      //labelText: "Selecione uma opção",
+                      hintText: 'Selecione uma opção',
                       isDense: true,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),

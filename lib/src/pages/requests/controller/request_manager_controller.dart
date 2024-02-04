@@ -1,6 +1,7 @@
 import 'package:app_law_order/src/config/app_data.dart';
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/constants/constants.dart';
+import 'package:app_law_order/src/models/avaliation_model.dart';
 import 'package:app_law_order/src/models/avaliation_values_model.dart';
 import 'package:app_law_order/src/models/request_model.dart';
 import 'package:app_law_order/src/models/status_info_model.dart';
@@ -59,6 +60,7 @@ class RequestManagerController extends GetxController {
   List<AvaliationValuesModel> avaliationsValues = avaliationValues;
 
   RequestModel? selectedRequest;
+  late AvaliationModel avaliation;
   String currentCategory = "received";
 
   bool isLoading = true;
@@ -140,17 +142,37 @@ class RequestManagerController extends GetxController {
     setSaving(true);
     final result = await requestsRepository.openContest(idRequest: request.id!);
     setSaving(false);
-    result.when(success: (data) {}, error: (message) {});
+    await result.when(
+      success: (data) async {
+        await loadRequest(idRequest: selectedRequest!.id!);
+        await updateSelectedCategory();
+      },
+      error: (message) {},
+    );
   }
 
   Future<void> completeService({required RequestModel request}) async {
-    setSaving(true);
-    final result = await requestsRepository.completeService(idRequest: request.id!);
-    setSaving(false);
-    result.when(
-      success: (data) {},
-      error: (message) {},
-    );
+    if (currentCategory == Constants.received) {
+      setSaving(true);
+      final result = await requestsRepository.completeService(idRequest: request.id!);
+      setSaving(false);
+      result.when(
+        success: (data) {},
+        error: (message) {},
+      );
+    } else {
+      setSaving(true);
+
+      final result = await requestsRepository.completeServiceUser(idRequest: request.id!);
+      setSaving(false);
+      await result.when(
+        success: (data) async {
+          await loadRequest(idRequest: selectedRequest!.id!);
+          await updateSelectedCategory();
+        },
+        error: (message) {},
+      );
+    }
   }
 
   Future<void> cancelRequest({required RequestModel request}) async {
@@ -198,4 +220,10 @@ class RequestManagerController extends GetxController {
     StatusInfoModel statusInfo = getStatusInfo(statusEnum);
     selectedRequest?.statusPortuguese = statusInfo;
   }
+
+  void handleInitAvaliation() {
+    avaliation = AvaliationModel();
+  }
+
+  Future<void> handleSubmitAvaliation() async {}
 }

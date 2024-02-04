@@ -9,17 +9,14 @@ abstract class EndPoints {
   static const updateUser = '$baseUrl/accounts/users';
   static const getUserById = '$baseUrl/accounts/users/';
   static const getAllUsersPaginated = '$baseUrl/accounts/users';
-  static const updateProfilePicture =
-      '$baseUrl/accounts/users/update-profile-picture';
+  static const updateProfilePicture = '$baseUrl/accounts/users/update-profile-picture';
 
   static const getFollows = '$baseUrl/accounts/follows/follows';
   static const getFollowers = '$baseUrl/accounts/follows/followers';
   static const setFollow = '$baseUrl/accounts/follows/follow/';
   static const setUnFollow = '$baseUrl/accounts/follows/unfollow/';
-  static const insertPortfolioPicture =
-      '$baseUrl/accounts/users/add-portfolio-pictures';
-  static const deletePortfolioPicture =
-      '$baseUrl/accounts/users/remove-portfolio-picture/';
+  static const insertPortfolioPicture = '$baseUrl/accounts/users/add-portfolio-pictures';
+  static const deletePortfolioPicture = '$baseUrl/accounts/users/remove-portfolio-picture/';
   static const getNotifications = '$baseUrl/notifications';
   static const updateNotification = '$baseUrl/notifications/read/';
 
@@ -27,29 +24,24 @@ abstract class EndPoints {
   static const deleteUserService = '$baseUrl/accounts/users/remove-service/';
   static const updateUserService = '$baseUrl/accounts/users/update-service/';
 
-  static const setServiceRequest =
-      '$baseUrl/accounts/service-requests/request/';
+  static const setServiceRequest = '$baseUrl/accounts/service-requests/request/';
 
   static const getRequestsReceived = '$baseUrl/accounts/service-requests';
   static const getRequestsReceivedById = '$baseUrl/accounts/service-requests/';
   static const getMyRequest = '$baseUrl/accounts/service-requests/my';
 
-  static const acceptBudget =
-      '$baseUrl/accounts/service-requests/set-provider-acceptance/';
+  static const acceptBudget = '$baseUrl/accounts/service-requests/set-provider-acceptance/';
 
-  static const declineBudget =
-      '$baseUrl/accounts/service-requests/decline-budget/';
+  static const declineBudget = '$baseUrl/accounts/service-requests/decline-budget/';
 
   static const openContest = '$baseUrl/accounts/service-requests/open-contest/';
 
-  static const completeService =
-      '$baseUrl/accounts/service-requests/complete-service-as-a-provider/';
+  static const completeService = '$baseUrl/accounts/service-requests/complete-service-as-a-provider/';
+  static const completeServiceUser = '$baseUrl/accounts/service-requests/complete-service/';
 
-  static const cancelRequest =
-      '$baseUrl/accounts/service-requests/cancel-request/';
+  static const cancelRequest = '$baseUrl/accounts/service-requests/cancel-request/';
   //mercado pago -->
-  static const generatePaymentLink =
-      '$baseUrl/mercadopago/generate-payment-link';
+  static const generatePaymentLink = '$baseUrl/mercadopago/generate-payment-link';
 
   //<--
 }
