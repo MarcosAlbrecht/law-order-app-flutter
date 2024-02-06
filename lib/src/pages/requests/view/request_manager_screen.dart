@@ -998,23 +998,27 @@ class _EvaluationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: CustomColors.backgroudCard,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-      ),
-      onPressed: () {
-        // Add evaluation functionality here
-        Get.toNamed(PagesRoutes.avaliationScreen, arguments: request);
+    return GetBuilder<RequestManagerController>(
+      builder: (controller) {
+        return ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: CustomColors.backgroudCard,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          onPressed: () {
+            // Add evaluation functionality here
+            controller.handleInitAvaliation(request);
+          },
+          child: Text(
+            'Enviar avaliação',
+            style: TextStyle(
+              color: CustomColors.black,
+            ),
+          ),
+        );
       },
-      child: Text(
-        'Enviar avaliação',
-        style: TextStyle(
-          color: CustomColors.black,
-        ),
-      ),
     );
   }
 }

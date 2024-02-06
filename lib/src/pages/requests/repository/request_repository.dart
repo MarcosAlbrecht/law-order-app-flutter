@@ -1,4 +1,5 @@
 import 'package:app_law_order/src/constants/endpoints.dart';
+import 'package:app_law_order/src/models/avaliation_model.dart';
 import 'package:app_law_order/src/models/request_model.dart';
 import 'package:app_law_order/src/pages/requests/result/acceptance_request_result.dart';
 import 'package:app_law_order/src/pages/requests/result/payment_link_result.dart';
@@ -197,6 +198,29 @@ class RequestRepository {
         return RequestReceivedResult.error("Erro interno, tente novamente mais tarde!");
       } else {
         return RequestReceivedResult.error("Não foi possível buscar os dados!");
+      }
+    }
+  }
+
+  Future<RequestReceivedResult<RequestModel>> sendAvaliation({
+    required AvaliationModel avaliation,
+    required String requestedId,
+  }) async {
+    final result = await httpManager.restRequest(
+      method: HttpMethods.post,
+      url: '${EndPoints.sendAvaliation}$requestedId',
+      body: avaliation.toJson(),
+    );
+
+    if (result.isEmpty) {
+      List<RequestModel> data = [];
+
+      return RequestReceivedResult.success(data);
+    } else {
+      if (result['statusCode'] == 403) {
+        return RequestReceivedResult.error("Você já enviou sua avaliação sobre este usuário!");
+      } else {
+        return RequestReceivedResult.error("Não foi possível enviar a avaliação!");
       }
     }
   }

@@ -7,6 +7,7 @@ import 'package:app_law_order/src/models/request_model.dart';
 import 'package:app_law_order/src/models/status_info_model.dart';
 import 'package:app_law_order/src/pages/requests/controller/request_controller.dart';
 import 'package:app_law_order/src/pages/requests/repository/request_repository.dart';
+import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -221,9 +222,27 @@ class RequestManagerController extends GetxController {
     selectedRequest?.statusPortuguese = statusInfo;
   }
 
-  void handleInitAvaliation() {
+  void handleInitAvaliation(RequestModel request) {
     avaliation = AvaliationModel();
+    Get.toNamed(PagesRoutes.avaliationScreen, arguments: request);
   }
 
-  Future<void> handleSubmitAvaliation() async {}
+  Future<void> handleSubmitAvaliation() async {
+    setSaving(true);
+
+    avaliation.rating = ((avaliation.levelOfSatisfaction! + avaliation.serviceQuality! + avaliation.providerPunctuality!) / 3);
+    avaliation.rating = double.parse(avaliation.rating!.toStringAsFixed(1));
+    avaliation.jobId = selectedRequest!.id!;
+    final result = await requestsRepository.sendAvaliation(avaliation: avaliation, requestedId: selectedRequest!.requested!.id!);
+    Get.back();
+    result.when(
+      success: (data) {
+        utilServices.showToast(message: 'Avaliação enviada com sucesso!');
+      },
+      error: (data) {
+        utilServices.showToast(message: 'Não foi possível enviar a avaliação!', isError: true);
+      },
+    );
+    setSaving(false);
+  }
 }
