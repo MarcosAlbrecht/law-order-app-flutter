@@ -8,21 +8,21 @@ part of 'avaliation_model.dart';
 
 AvaliationModel _$AvaliationModelFromJson(Map<String, dynamic> json) =>
     AvaliationModel(
-      levelOfSatisfaction: json['level_of_satisfaction'] as int?,
-      serviceQuality: json['service_quality'] as int?,
-      providerPunctuality: json['provider_punctuality'] as int?,
-      platformUsability: json['platform_usability'] as int?,
-      recommendAPlataform: json['recommend_aplataform'] as int?,
+      levelOfSatisfaction: json['levelOfSatisfaction'] as int?,
+      serviceQuality: json['serviceQuality'] as int?,
+      providerPunctuality: json['providerPunctuality'] as int?,
+      platformUsability: json['platformUsability'] as int?,
+      recommendAPlataform: json['recommendAPlataform'] as int?,
       rating: (json['rating'] as num?)?.toDouble(),
-    )..jobId = json['job_id'] as String?;
+    )..jobId = json['jobId'] as String?;
 
 Map<String, dynamic> _$AvaliationModelToJson(AvaliationModel instance) =>
     <String, dynamic>{
-      'job_id': instance.jobId,
-      'level_of_satisfaction': instance.levelOfSatisfaction,
-      'service_quality': instance.serviceQuality,
-      'provider_punctuality': instance.providerPunctuality,
-      'platform_usability': instance.platformUsability,
-      'recommend_aplataform': instance.recommendAPlataform,
+      'jobId': instance.jobId,
+      'levelOfSatisfaction': instance.levelOfSatisfaction,
+      'serviceQuality': instance.serviceQuality,
+      'providerPunctuality': instance.providerPunctuality,
+      'platformUsability': instance.platformUsability,
+      'recommendAPlataform': instance.recommendAPlataform,
       'rating': instance.rating,
     };

@@ -38,6 +38,7 @@ abstract class EndPoints {
 
   static const completeService = '$baseUrl/accounts/service-requests/complete-service-as-a-provider/';
   static const completeServiceUser = '$baseUrl/accounts/service-requests/complete-service/';
+  static const sendAvaliation = '$baseUrl/accounts/recommendations/recommend/';
 
   static const cancelRequest = '$baseUrl/accounts/service-requests/cancel-request/';
   //mercado pago -->

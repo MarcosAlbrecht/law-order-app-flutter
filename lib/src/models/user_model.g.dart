@@ -39,6 +39,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       services: (json['services'] as List<dynamic>?)
           ?.map((e) => ServiceModel.fromJson(e as Map<String, dynamic>))
           .toList(),
+      rating: (json['rating'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
@@ -66,4 +67,5 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'portfolioTitle': instance.portfolioTitle,
       'skills': instance.skills,
       'services': instance.services,
+      'rating': instance.rating,
     };

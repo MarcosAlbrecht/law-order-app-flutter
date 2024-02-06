@@ -71,14 +71,10 @@ class _ProviderTileState extends State<ProviderTile> {
                               borderRadius: BorderRadius.circular(50),
                               child: widget.item.profilePicture != null
                                   ? CachedNetworkImage(
-                                      imageUrl:
-                                          widget.item.profilePicture!.url!,
-                                      progressIndicatorBuilder: (context, url,
-                                              downloadProgress) =>
-                                          CircularProgressIndicator(
-                                              value: downloadProgress.progress),
-                                      errorWidget: (context, url, error) =>
-                                          Icon(Icons.error),
+                                      imageUrl: widget.item.profilePicture!.url!,
+                                      progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                          CircularProgressIndicator(value: downloadProgress.progress),
+                                      errorWidget: (context, url, error) => const Icon(Icons.error),
                                       height: 70,
                                       width: 70,
                                       fit: BoxFit.cover,
@@ -96,7 +92,7 @@ class _ProviderTileState extends State<ProviderTile> {
                             ),
                             RatingBarIndicator(
                               //unratedColor: CustomColors.black,
-                              rating: 2.75,
+                              rating: widget.item.rating ?? 0,
                               itemBuilder: (context, index) => Icon(
                                 Icons.star_rate,
                                 color: CustomColors.blueDark2Color,
@@ -116,8 +112,7 @@ class _ProviderTileState extends State<ProviderTile> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
                                     child: Text(
@@ -143,14 +138,12 @@ class _ProviderTileState extends State<ProviderTile> {
                                               ? Icon(
                                                   FontAwesome.user_plus,
                                                   size: 18,
-                                                  color: CustomColors
-                                                      .blueDark2Color,
+                                                  color: CustomColors.blueDark2Color,
                                                 )
                                               : Icon(
                                                   FontAwesome.user_times,
                                                   size: 18,
-                                                  color: CustomColors
-                                                      .blueDarkColor,
+                                                  color: CustomColors.blueDarkColor,
                                                 ),
                                         ),
                                       );

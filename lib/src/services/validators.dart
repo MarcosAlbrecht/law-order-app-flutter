@@ -1,3 +1,5 @@
+import 'package:app_law_order/src/models/avaliation_model.dart';
+import 'package:app_law_order/src/models/avaliation_values_model.dart';
 import 'package:app_law_order/src/models/occupation_areas_model.dart';
 import 'package:get/get.dart';
 
@@ -72,8 +74,7 @@ String? nascimentoValidator(DateTime? dateTime) {
   DateTime dataNascimento = dateTime;
 
   DateTime dataAtual = DateTime.now();
-  DateTime dataDezoitoAnosAtras =
-      dataAtual.subtract(const Duration(days: 18 * 365));
+  DateTime dataDezoitoAnosAtras = dataAtual.subtract(const Duration(days: 18 * 365));
 
   if (!dataNascimento.isBefore(dataDezoitoAnosAtras)) {
     return "Deve ser maior de 18 anos";
@@ -85,6 +86,22 @@ String? nascimentoValidator(DateTime? dateTime) {
 String? occupationAreaValidator(OccupationAreasModel? value) {
   if (value == null) {
     return 'Por favor, selecione uma área de atuação';
+  }
+  // Outras validações conforme necessário
+  return null; // Retorna null se estiver tudo certo
+}
+
+String? avaliationValidator(AvaliationValuesModel? value) {
+  if (value == null) {
+    return 'Por favor, selecione uma opção';
+  }
+  // Outras validações conforme necessário
+  return null; // Retorna null se estiver tudo certo
+}
+
+String? avaliationPlatformValidator(int? value) {
+  if (value == null) {
+    return 'Por favor, selecione uma opção';
   }
   // Outras validações conforme necessário
   return null; // Retorna null se estiver tudo certo

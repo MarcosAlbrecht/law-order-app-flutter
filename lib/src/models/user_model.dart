@@ -56,6 +56,7 @@ class UserModel {
   List<String>? skills;
   @JsonKey(name: 'services')
   List<ServiceModel>? services;
+  double? rating;
   UserModel({
     this.id,
     this.email,
@@ -81,10 +82,10 @@ class UserModel {
     this.portfolioTitle,
     this.skills,
     this.services,
+    this.rating,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) =>
-      _$UserModelFromJson(json);
+  factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
 

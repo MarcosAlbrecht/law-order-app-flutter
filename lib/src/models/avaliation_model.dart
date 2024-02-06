@@ -5,17 +5,17 @@ part 'avaliation_model.g.dart';
 
 @JsonSerializable()
 class AvaliationModel {
-  @JsonKey(name: 'job_id')
+  @JsonKey(name: 'jobId')
   String? jobId;
-  @JsonKey(name: 'level_of_satisfaction')
+  @JsonKey(name: 'levelOfSatisfaction')
   int? levelOfSatisfaction;
-  @JsonKey(name: 'service_quality')
+  @JsonKey(name: 'serviceQuality')
   int? serviceQuality;
-  @JsonKey(name: 'provider_punctuality')
+  @JsonKey(name: 'providerPunctuality')
   int? providerPunctuality;
-  @JsonKey(name: 'platform_usability')
+  @JsonKey(name: 'platformUsability')
   int? platformUsability;
-  @JsonKey(name: 'recommend_aplataform')
+  @JsonKey(name: 'recommendAPlataform')
   int? recommendAPlataform;
   double? rating;
   AvaliationModel({
