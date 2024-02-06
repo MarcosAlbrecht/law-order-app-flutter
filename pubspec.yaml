@@ -33,9 +33,9 @@ dependencies:
   cached_network_image: ^3.3.1
   flutter_rating_bar: ^4.0.1
   table_calendar: ^3.0.9
-  web_socket_channel: ^2.4.0
   flutter_custom_tabs: ^2.0.0+1
   square_progress_indicator: ^0.0.7
+  socket_io_client: ^2.0.3+1
 
 dev_dependencies:
   flutter_test:

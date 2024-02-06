@@ -95,7 +95,6 @@ abstract class AppPages {
     GetPage(
       name: PagesRoutes.chatTab,
       page: () => const ChatTab(),
-      binding: ChatBinding(),
     ),
     GetPage(
       page: () => const BaseScreen(),
@@ -105,6 +104,7 @@ abstract class AppPages {
         HomeBinding(),
         ProfileBinding(),
         RequestBinding(),
+        ChatBinding(),
       ],
     ),
   ];
