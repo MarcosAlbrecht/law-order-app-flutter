@@ -1,5 +1,6 @@
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/pages/home/controller/home_controller.dart';
+import 'package:app_law_order/src/pages/home/view/components/filter_dialog.dart';
 import 'package:app_law_order/src/pages/home/view/components/provider_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,25 +13,92 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
+  late final GlobalKey<ScaffoldState> scaffoldKey;
+  @override
+  void initState() {
+    super.initState();
+    scaffoldKey = GlobalKey<ScaffoldState>();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
+      drawerEnableOpenDragGesture: false,
+      drawer: Drawer(
+        // Add a ListView to the drawer. This ensures the user can scroll
+        // through the options in the drawer if there isn't enough vertical
+        // space to fit everything.
+        child: SafeArea(
+          child: ListView(
+            // Important: Remove any padding from the ListView.
+            padding: EdgeInsets.zero,
+            children: [
+              ListTile(
+                title: const Text('Home'),
+                //selected: _selectedIndex == 0,
+                onTap: () {
+                  // Update the state of the app
+                  //_onItemTapped(0);
+                  // Then close the drawer
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text('Business'),
+                //selected: _selectedIndex == 1,
+                onTap: () {
+                  // Update the state of the app
+                  //_onItemTapped(1);
+                  // Then close the drawer
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text('School'),
+                //selected: _selectedIndex == 2,
+                onTap: () {
+                  // Update the state of the app
+                  //_onItemTapped(2);
+                  // Then close the drawer
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
       body: SafeArea(
         child: Container(
           height: size.height,
           width: size.width,
-          padding: const EdgeInsets.only(top: 10),
+          padding: const EdgeInsets.only(top: 10, bottom: 10),
           color: CustomColors.white,
           child: Padding(
             padding: const EdgeInsets.all(12.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Text(
-                  "Busque por profissionais na Prestadio. Utilize os filtros para encontrar o profissional mais próximo de você 😁",
-                  textAlign: TextAlign.left,
+                Row(
+                  children: [
+                    Expanded(
+                      child: const Text(
+                        "Busque por profissionais na Prestadio. Utilize os filtros para encontrar o profissional mais próximo de você 😁",
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    IconButton(
+                        icon: Icon(Icons.menu),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return const FilterDialog();
+                            },
+                          );
+                        }),
+                  ],
                 ),
                 const Divider(
                   height: 20,
@@ -43,8 +111,7 @@ class _HomeTabState extends State<HomeTab> {
                         physics: const BouncingScrollPhysics(),
                         itemCount: controller.allUsers.length,
                         itemBuilder: (_, index) {
-                          if (((index + 1) == controller.allUsers.length) &&
-                              (!controller.isLastPage)) {
+                          if (((index + 1) == controller.allUsers.length) && (!controller.isLastPage)) {
                             controller.loadMoreProducts();
                           }
 

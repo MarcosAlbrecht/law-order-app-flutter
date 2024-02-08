@@ -11,6 +11,9 @@ abstract class EndPoints {
   static const getAllUsersPaginated = '$baseUrl/accounts/users';
   static const updateProfilePicture = '$baseUrl/accounts/users/update-profile-picture';
 
+  static const getStates = '$baseUrl/accounts/users/find-states';
+  static const getCities = '$baseUrl/accounts/users/find-cities';
+
   static const getFollows = '$baseUrl/accounts/follows/follows';
   static const getFollowers = '$baseUrl/accounts/follows/followers';
   static const setFollow = '$baseUrl/accounts/follows/follow/';

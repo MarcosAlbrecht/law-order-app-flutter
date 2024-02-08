@@ -1,4 +1,6 @@
+import 'package:app_law_order/src/config/app_data.dart';
 import 'package:app_law_order/src/models/follows_model.dart';
+import 'package:app_law_order/src/models/occupation_areas_model.dart';
 import 'package:app_law_order/src/models/user_model.dart';
 import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
 import 'package:app_law_order/src/pages/home/repository/home_repository.dart';
@@ -15,9 +17,17 @@ class HomeController extends GetxController {
   final authController = Get.find<AuthController>();
 
   List<UserModel>? currentListUser;
+  List<OccupationAreasModel> occupationsAreas = occupationAreas;
 
   List<UserModel> allUsers = [];
   List<FollowsModel> follows = [];
+  List<String> cities = [];
+  List<String> states = [];
+  List<Map<String, dynamic>> filters = [];
+
+  String stateSelected = "";
+  String citySected = "";
+  String occupationAreaSelected = "";
 
   int pagination = 0;
 
@@ -49,11 +59,37 @@ class HomeController extends GetxController {
     List<Future<void>> operations = [
       loadAllUsers(),
       loadFollows(),
+      loadStates(),
+      loadCities(),
     ];
 
     await Future.wait(operations);
 
     setLoading(false, isUser: true);
+  }
+
+  Future<void> loadStates() async {
+    final result = await homeRepository.getStates();
+    result.when(
+      success: (data) {
+        states = data;
+      },
+      error: (message) {
+        //erro ao buscar os estados
+      },
+    );
+  }
+
+  Future<void> loadCities() async {
+    final result = await homeRepository.getCities();
+    result.when(
+      success: (data) {
+        cities = data;
+      },
+      error: (message) {
+        //erro ao buscar as cidades
+      },
+    );
   }
 
   Future<void> loadFollows() async {
@@ -73,8 +109,7 @@ class HomeController extends GetxController {
       setLoading(true, isUser: true);
     }
 
-    var result = await homeRepository.getAllUsersPaginated(
-        limit: itemsPerPage, skip: pagination);
+    var result = await homeRepository.getAllUsersPaginated(limit: itemsPerPage, skip: pagination, filters: filters);
 
     setLoading(false, isUser: true);
 
@@ -89,8 +124,7 @@ class HomeController extends GetxController {
     );
   }
 
-  Future<void> handleFollow(
-      {required FollowsModel? follow, required UserModel user}) async {
+  Future<void> handleFollow({required FollowsModel? follow, required UserModel user}) async {
     setLoading(true, isUser: true);
     if (follow == null) {
       //adicionar follow
@@ -107,5 +141,49 @@ class HomeController extends GetxController {
   void loadMoreProducts() {
     pagination = pagination + 10;
     loadAllUsers(canLoad: false);
+  }
+
+  void toggleStateItem(int index) {
+    stateSelected = states[index];
+    update(); // Atualiza a interface quando o estado muda
+  }
+
+  void toggleCityItem(int index) {
+    citySected = cities[index];
+    update(); // Atualiza a interface quando o estado muda
+  }
+
+  void toggleOccupationAreaItem(int index) {
+    occupationAreaSelected = occupationsAreas[index].area!;
+    update(); // Atualiza a interface quando o estado muda
+  }
+
+  void cleanFilters() {
+    stateSelected = "";
+    citySected = "";
+    occupationAreaSelected = "";
+    pagination = 0;
+    currentListUser = [];
+    allUsers = [];
+    loadAllUsers(); // Atualiza a interface quando o estado muda
+  }
+
+  Future<void> applyFilters() async {
+    filters.clear();
+    if (stateSelected.isNotEmpty) {
+      filters.add({'filters[state]': stateSelected});
+    }
+    if (citySected.isNotEmpty) {
+      filters.add({'filters[cities][0]': citySected});
+    }
+    if (occupationAreaSelected.isNotEmpty) {
+      filters.add({'filters[occupationAreas][0]': occupationAreaSelected});
+    }
+
+    pagination = 0;
+    currentListUser = [];
+    allUsers = [];
+
+    loadAllUsers();
   }
 }

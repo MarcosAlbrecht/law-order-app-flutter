@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:app_law_order/src/constants/endpoints.dart';
@@ -21,12 +20,10 @@ class ProfileRepository {
   final HttpManager httpManager = HttpManager();
   final utilServices = UtilServices();
 
-  Future<UpdateProfilePictureResult> updateProfilePicture(
-      {required File picture}) async {
+  Future<UpdateProfilePictureResult> updateProfilePicture({required File picture}) async {
     // Criar um FormData para enviar a imagem
     FormData formData = FormData.fromMap({
-      'file': await MultipartFile.fromFile(picture.path,
-          filename: picture.path.split('/').last),
+      'file': await MultipartFile.fromFile(picture.path, filename: picture.path.split('/').last),
       // Adicione outros campos se necessário
     });
 
@@ -43,12 +40,10 @@ class ProfileRepository {
     }
   }
 
-  Future<UpdateProfilePictureResult> insertPortfolioPicture(
-      {required String picture}) async {
+  Future<UpdateProfilePictureResult> insertPortfolioPicture({required String picture}) async {
     // Criar um FormData para enviar a imagem
     FormData formData = FormData.fromMap({
-      'files[]': await MultipartFile.fromFile(picture,
-          filename: picture.split('/').last),
+      'files[]': await MultipartFile.fromFile(picture, filename: picture.split('/').last),
       // Adicione outros campos se necessário
     });
 
@@ -65,8 +60,7 @@ class ProfileRepository {
     }
   }
 
-  Future<UpdateProfilePictureResult> deletePortfolioPicture(
-      {required String idPicture}) async {
+  Future<UpdateProfilePictureResult> deletePortfolioPicture({required String idPicture}) async {
     // Criar um FormData para enviar a imagem
 
     final result = await httpManager.restRequest(
@@ -81,8 +75,7 @@ class ProfileRepository {
     }
   }
 
-  Future<UserServiceResult> insertService(
-      {required ServiceModel service}) async {
+  Future<UserServiceResult> insertService({required ServiceModel service}) async {
     // Criar um FormData para enviar a imagem
 
     final result = await httpManager.restRequest(
@@ -96,13 +89,11 @@ class ProfileRepository {
     if (result.isEmpty) {
       return UserServiceResult.success(true);
     } else {
-      return UserServiceResult.error(
-          "Ocorreu um erro inesperado ao inserir o serviço!");
+      return UserServiceResult.error("Ocorreu um erro inesperado ao inserir o serviço!");
     }
   }
 
-  Future<UserServiceResult> updateService(
-      {required ServiceModel service}) async {
+  Future<UserServiceResult> updateService({required ServiceModel service}) async {
     // Criar um FormData para enviar a imagem
 
     final result = await httpManager.restRequest(
@@ -114,13 +105,11 @@ class ProfileRepository {
     if (result.isEmpty) {
       return UserServiceResult.success(true);
     } else {
-      return UserServiceResult.error(
-          "Ocorreu um erro inesperado ao inserir o serviço!");
+      return UserServiceResult.error("Ocorreu um erro inesperado ao inserir o serviço!");
     }
   }
 
-  Future<UserServiceResult> deleteService(
-      {required ServiceModel service}) async {
+  Future<UserServiceResult> deleteService({required ServiceModel service}) async {
     // Criar um FormData para enviar a imagem
 
     final result = await httpManager.restRequest(
@@ -131,8 +120,7 @@ class ProfileRepository {
     if (result.isEmpty) {
       return UserServiceResult.success(true);
     } else {
-      return UserServiceResult.error(
-          "Ocorreu um erro inesperado ao inserir o serviço!");
+      return UserServiceResult.error("Ocorreu um erro inesperado ao inserir o serviço!");
     }
   }
 
@@ -149,8 +137,7 @@ class ProfileRepository {
     if (result['_id'] != null) {
       return UserServiceResult.success(true);
     } else {
-      return UserServiceResult.error(
-          'Ocorreu um erro ao editar os dados. Tente novamente mais tarde!');
+      return UserServiceResult.error('Ocorreu um erro ao editar os dados. Tente novamente mais tarde!');
     }
   }
 
@@ -167,13 +154,11 @@ class ProfileRepository {
     if (result['_id'] != null) {
       return UserServiceResult.success(true);
     } else {
-      return UserServiceResult.error(
-          'Ocorreu um erro ao editar os dados. Tente novamente mais tarde!');
+      return UserServiceResult.error('Ocorreu um erro ao editar os dados. Tente novamente mais tarde!');
     }
   }
 
-  Future<FollowsResult<FollowsModel>> getFollows(
-      {required int limit, required int skip}) async {
+  Future<FollowsResult<FollowsModel>> getFollows({required int limit, required int skip}) async {
     final result = await httpManager.restRequest(
       method: HttpMethods.get,
       url: EndPoints.getFollows,
@@ -184,10 +169,7 @@ class ProfileRepository {
     );
 
     if (result['result'] != null) {
-      List<FollowsModel> data =
-          (List<Map<String, dynamic>>.from(result['result']))
-              .map(FollowsModel.fromJson)
-              .toList();
+      List<FollowsModel> data = (List<Map<String, dynamic>>.from(result['result'])).map(FollowsModel.fromJson).toList();
 
       return FollowsResult.success(data);
     } else {
@@ -195,8 +177,7 @@ class ProfileRepository {
     }
   }
 
-  Future<FollowerResult<FollowerModel>> getFollowers(
-      {required int limit, required int skip}) async {
+  Future<FollowerResult<FollowerModel>> getFollowers({required int limit, required int skip}) async {
     final result = await httpManager.restRequest(
       method: HttpMethods.get,
       url: EndPoints.getFollowers,
@@ -207,10 +188,7 @@ class ProfileRepository {
     );
 
     if (result['result'] != null) {
-      List<FollowerModel> data =
-          (List<Map<String, dynamic>>.from(result['result']))
-              .map(FollowerModel.fromJson)
-              .toList();
+      List<FollowerModel> data = (List<Map<String, dynamic>>.from(result['result'])).map(FollowerModel.fromJson).toList();
 
       return FollowerResult.success(data);
     } else {
@@ -218,8 +196,7 @@ class ProfileRepository {
     }
   }
 
-  Future<NotificationsResult<NotificationModel>> getNotifications(
-      {required int limit, required int skip}) async {
+  Future<NotificationsResult<NotificationModel>> getNotifications({required int limit, required int skip}) async {
     final result = await httpManager.restRequest(
       method: HttpMethods.get,
       url: EndPoints.getNotifications,
@@ -230,10 +207,7 @@ class ProfileRepository {
     );
 
     if (result['result'] != null) {
-      List<NotificationModel> data =
-          (List<Map<String, dynamic>>.from(result['result']))
-              .map(NotificationModel.fromJson)
-              .toList();
+      List<NotificationModel> data = (List<Map<String, dynamic>>.from(result['result'])).map(NotificationModel.fromJson).toList();
 
       return NotificationsResult.success(data);
     } else {
@@ -241,8 +215,7 @@ class ProfileRepository {
     }
   }
 
-  Future<NotificationsResult<NotificationModel>> updateNotification(
-      {required String notificationID}) async {
+  Future<NotificationsResult<NotificationModel>> updateNotification({required String notificationID}) async {
     final result = await httpManager.restRequest(
       method: HttpMethods.patch,
       url: '${EndPoints.updateNotification}$notificationID',
@@ -253,8 +226,7 @@ class ProfileRepository {
 
       return NotificationsResult.success(data);
     } else {
-      return NotificationsResult.error(
-          "Não foi possível atualizar a notificação!");
+      return NotificationsResult.error("Não foi possível atualizar a notificação!");
     }
   }
 }
