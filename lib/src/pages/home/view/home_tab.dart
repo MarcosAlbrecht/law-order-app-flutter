@@ -1,4 +1,5 @@
 import 'package:app_law_order/src/config/custom_colors.dart';
+import 'package:app_law_order/src/pages/common_widgets/custom_text_field.dart';
 import 'package:app_law_order/src/pages/home/controller/home_controller.dart';
 import 'package:app_law_order/src/pages/home/view/components/filter_dialog.dart';
 import 'package:app_law_order/src/pages/home/view/components/provider_tile.dart';
@@ -80,28 +81,68 @@ class _HomeTabState extends State<HomeTab> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: const Text(
-                        "Busque por profissionais na Prestadio. Utilize os filtros para encontrar o profissional mais próximo de você 😁",
-                        textAlign: TextAlign.left,
-                      ),
-                    ),
-                    IconButton(
-                        icon: Icon(Icons.menu),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return const FilterDialog();
-                            },
-                          );
-                        }),
-                  ],
+                Text(
+                  "Busque por profissionais na Prestadio. Utilize os filtros para encontrar o profissional mais próximo de você 😁",
+                  textAlign: TextAlign.left,
                 ),
                 const Divider(
-                  height: 20,
+                  height: 35,
+                ),
+                SizedBox(
+                  height: 60,
+                  width: double.infinity,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GetBuilder<HomeController>(
+                        builder: (controller) {
+                          return Expanded(
+                            child: CustomTextField(
+                              icon: Icons.search,
+                              label: "Nome, área de atuação ou serviço ofertado",
+                              onChanged: (value) {
+                                controller.searchRequest.value = value!.toLowerCase();
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 10, left: 5),
+                        child: SizedBox(
+                          width: 70,
+                          height: double.infinity,
+                          child: Material(
+                            elevation: 3,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10),
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                              ),
+                            ),
+                            child: IconButton(
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return const FilterDialog();
+                                  },
+                                );
+                              },
+                              icon: const Icon(Icons.filter_list),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(
+                  height: 10,
+                  color: Colors.transparent,
                 ),
                 Expanded(
                   child: GetBuilder<HomeController>(

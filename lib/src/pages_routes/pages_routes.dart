@@ -4,7 +4,7 @@ import 'package:app_law_order/src/pages/auth/view/sign_up_step1.dart';
 import 'package:app_law_order/src/pages/base/base_screen.dart';
 import 'package:app_law_order/src/pages/base/binding/navigation_binding.dart';
 import 'package:app_law_order/src/pages/chat/binding/chat_binding.dart';
-import 'package:app_law_order/src/pages/chat/controller/chat_service.dart';
+import 'package:app_law_order/src/pages/chat/controller/chat_controller.dart';
 import 'package:app_law_order/src/pages/chat/view/chat_tab.dart';
 import 'package:app_law_order/src/pages/home/binding/home_binding.dart';
 import 'package:app_law_order/src/pages/profile/binding/follower_binding.dart';

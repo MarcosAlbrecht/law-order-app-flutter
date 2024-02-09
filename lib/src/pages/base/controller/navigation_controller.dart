@@ -24,6 +24,13 @@ class NavigationController extends GetxController {
     );
   }
 
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+    print('Fechou');
+  }
+
   void _initNavigation({required PageController pageController, required int currentIndex}) {
     _pageController = pageController;
     _currentIndex = currentIndex.obs;

@@ -146,8 +146,8 @@ class _RequestDetails extends StatelessWidget {
                   ),
                   _RowDetailServiceStatus(
                     'Status do Serviço',
-                    request.statusPortuguese!.text,
-                    request.statusPortuguese!.color,
+                    request.statusPortuguese!.text!,
+                    request.statusPortuguese!.color!,
                   ),
                   const Divider(
                     height: 20,

@@ -29,6 +29,8 @@ class HomeController extends GetxController {
   String citySected = "";
   String occupationAreaSelected = "";
 
+  RxString searchRequest = ''.obs;
+
   int pagination = 0;
 
   bool get isLastPage {
@@ -40,6 +42,12 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
+    debounce(
+      searchRequest,
+      (_) => filterByTitle(),
+      time: const Duration(milliseconds: 600),
+    );
 
     //loadAllUsers();
     loadDatas();
@@ -165,6 +173,11 @@ class HomeController extends GetxController {
     pagination = 0;
     currentListUser = [];
     allUsers = [];
+    filters = [];
+    //se tiver algo preenchido no filtro por nome, adicionar novamente
+    if (occupationAreaSelected.isNotEmpty) {
+      filters.add({'filters[occupationAreas][0]': occupationAreaSelected});
+    }
     loadAllUsers(); // Atualiza a interface quando o estado muda
   }
 
@@ -185,5 +198,24 @@ class HomeController extends GetxController {
     allUsers = [];
 
     loadAllUsers();
+  }
+
+  void filterByTitle() {
+    //setLoading(true, isUser: true);
+    if (searchRequest.value.isEmpty) {
+      currentListUser = [];
+      pagination = 0;
+      allUsers.clear();
+      loadAllUsers();
+    } else {
+      currentListUser = [];
+      pagination = 0;
+      allUsers.clear();
+      filters.add({'filters%5BfirstName%5D': searchRequest.value});
+    }
+
+    loadAllUsers();
+
+    //setLoading(false, isUser: true);
   }
 }

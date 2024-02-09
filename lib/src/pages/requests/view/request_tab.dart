@@ -46,8 +46,7 @@ class _RequestTabState extends State<RequestTab> {
                                 BoxShadow(
                                   color: CustomColors.black.withOpacity(0.2),
                                   blurRadius: 4, // Ajuste conforme necessário
-                                  offset: const Offset(
-                                      3, 4), // Ajuste conforme necessário
+                                  offset: const Offset(3, 4), // Ajuste conforme necessário
                                 ),
                               ],
                               borderRadius: BorderRadius.circular(10),
@@ -63,10 +62,7 @@ class _RequestTabState extends State<RequestTab> {
                                   style: TextStyle(
                                     fontSize: CustomFontSizes.fontSize12,
                                     fontWeight: FontWeight.bold,
-                                    color:
-                                        controller.currentCategory == "received"
-                                            ? CustomColors.white
-                                            : CustomColors.black,
+                                    color: controller.currentCategory == "received" ? CustomColors.white : CustomColors.black,
                                   ),
                                 ),
                                 Expanded(
@@ -76,10 +72,7 @@ class _RequestTabState extends State<RequestTab> {
                                       style: TextStyle(
                                         fontSize: CustomFontSizes.fontSize20,
                                         fontWeight: FontWeight.bold,
-                                        color: controller.currentCategory ==
-                                                "received"
-                                            ? CustomColors.white
-                                            : CustomColors.black,
+                                        color: controller.currentCategory == "received" ? CustomColors.white : CustomColors.black,
                                       ),
                                     ),
                                   ),
@@ -106,14 +99,11 @@ class _RequestTabState extends State<RequestTab> {
                                 BoxShadow(
                                   color: CustomColors.black.withOpacity(0.2),
                                   blurRadius: 4, // Ajuste conforme necessário
-                                  offset: const Offset(
-                                      3, 4), // Ajuste conforme necessário
+                                  offset: const Offset(3, 4), // Ajuste conforme necessário
                                 ),
                               ],
                               borderRadius: BorderRadius.circular(10),
-                              color: controller.currentCategory == "sent"
-                                  ? CustomColors.blueDark2Color
-                                  : CustomColors.backGround,
+                              color: controller.currentCategory == "sent" ? CustomColors.blueDark2Color : CustomColors.backGround,
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,9 +113,7 @@ class _RequestTabState extends State<RequestTab> {
                                   style: TextStyle(
                                     fontSize: CustomFontSizes.fontSize12,
                                     fontWeight: FontWeight.bold,
-                                    color: controller.currentCategory == "sent"
-                                        ? CustomColors.white
-                                        : CustomColors.black,
+                                    color: controller.currentCategory == "sent" ? CustomColors.white : CustomColors.black,
                                   ),
                                 ),
                                 Expanded(
@@ -135,10 +123,7 @@ class _RequestTabState extends State<RequestTab> {
                                       style: TextStyle(
                                         fontSize: CustomFontSizes.fontSize20,
                                         fontWeight: FontWeight.bold,
-                                        color:
-                                            controller.currentCategory == "sent"
-                                                ? CustomColors.white
-                                                : CustomColors.black,
+                                        color: controller.currentCategory == "sent" ? CustomColors.white : CustomColors.black,
                                       ),
                                     ),
                                   ),
@@ -153,6 +138,7 @@ class _RequestTabState extends State<RequestTab> {
                   const Divider(
                     height: 30,
                   ),
+                  //container com o botao de pesquisa
                   SizedBox(
                     height: 60,
                     width: double.infinity,
@@ -165,8 +151,7 @@ class _RequestTabState extends State<RequestTab> {
                             icon: Icons.search,
                             label: "Pesquisar",
                             onChanged: (value) {
-                              controller.searchRequest.value =
-                                  value!.toLowerCase();
+                              controller.searchRequest.value = value!.toLowerCase();
                             },
                           ),
                         ),
@@ -187,12 +172,10 @@ class _RequestTabState extends State<RequestTab> {
                               ),
                               child: PopupMenuButton<String>(
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      10.0), // Borda arredondada
+                                  borderRadius: BorderRadius.circular(10.0), // Borda arredondada
                                 ),
                                 icon: const Icon(FontAwesome.sliders),
-                                itemBuilder: (BuildContext context) =>
-                                    <PopupMenuEntry<String>>[
+                                itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
                                   PopupMenuItem<String>(
                                     value: '1',
                                     child: const Text('Filtrar'),
@@ -246,8 +229,7 @@ class _RequestTabState extends State<RequestTab> {
                         ),
                         child: ListView.separated(
                           itemBuilder: (_, index) {
-                            if (((index + 1) == controller.allRequest.length) &&
-                                (!controller.isLastPage)) {
+                            if (((index + 1) == controller.allRequest.length) && (!controller.isLastPage)) {
                               controller.loadMoreRequestsReceived();
                             }
                             return RequestTile(

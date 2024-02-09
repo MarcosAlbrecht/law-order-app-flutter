@@ -25,21 +25,21 @@ enum UserServiceRequestStatusEnum {
 StatusInfoModel getStatusInfo(UserServiceRequestStatusEnum status) {
   switch (status) {
     case UserServiceRequestStatusEnum.WAITING_PROVIDER_ACCEPT:
-      return StatusInfoModel('Aguardando Aceitação', Colors.blue, 0.1);
+      return StatusInfoModel(text: 'Aguardando Aceitação', color: Colors.blue, opacidade: 0.1);
     case UserServiceRequestStatusEnum.SCHEDULING:
-      return StatusInfoModel('Em Agendamento', Colors.orange, 0.1);
+      return StatusInfoModel(text: 'Em Agendamento', color: Colors.orange, opacidade: 0.1);
     case UserServiceRequestStatusEnum.CANCELED:
-      return StatusInfoModel('Cancelado', CustomColors.blueDarkColor, 0.3);
+      return StatusInfoModel(text: 'Cancelado', color: CustomColors.blueDarkColor, opacidade: 0.3);
     case UserServiceRequestStatusEnum.EXPIRED:
-      return StatusInfoModel('Expirado', Colors.grey, 0.1);
+      return StatusInfoModel(text: 'Expirado', color: Colors.grey, opacidade: 0.1);
     case UserServiceRequestStatusEnum.IN_CONTEST:
-      return StatusInfoModel('Em Disputa', CustomColors.blueDarkColor, 0.1);
+      return StatusInfoModel(text: 'Em Disputa', color: CustomColors.blueDarkColor, opacidade: 0.1);
     case UserServiceRequestStatusEnum.CONTEST_FINISHED:
-      return StatusInfoModel('Disputa Finalizada', Colors.purple, 0.1);
+      return StatusInfoModel(text: 'Disputa Finalizada', color: Colors.purple, opacidade: 0.1);
     case UserServiceRequestStatusEnum.COMPLETED:
-      return StatusInfoModel('Finalizado', Colors.green, 0.1);
+      return StatusInfoModel(text: 'Finalizado', color: Colors.green, opacidade: 0.1);
     default:
-      return StatusInfoModel('', Colors.black, 0.1);
+      return StatusInfoModel(text: '', color: Colors.black, opacidade: 0.1);
   }
 }
 
