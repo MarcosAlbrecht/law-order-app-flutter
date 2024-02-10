@@ -4,29 +4,40 @@ import 'package:app_law_order/src/pages/chat/view/components/chat_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ChatTab extends StatefulWidget {
-  const ChatTab({super.key});
+class ChatListTab extends StatefulWidget {
+  const ChatListTab({super.key});
 
   @override
-  State<ChatTab> createState() => _ChatTabState();
+  State<ChatListTab> createState() => _ChatListTab();
 }
 
-class _ChatTabState extends State<ChatTab> {
+class _ChatListTab extends State<ChatListTab> {
+  final chatController = Get.find<ChatController>();
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
     // Aqui você pode executar o código que deseja quando a tela é chamada novamente
-    print('A tela ChatTab foi chamada novamente.');
+    //chatController.didChangeScreen();
+  }
+
+  @override
+  void dispose() {
+    // Realize operações de limpeza ou libere recursos aqui
+    //chatController.dispose(); // Por exemplo, se você tiver algum controlador, você pode chamar o método dispose() dele aqui
+
+    super.dispose();
+    //chatController.disposeScreen();
   }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
+    final size = MediaQuery.of(context).size;
     return SafeArea(
       child: Container(
-        padding: EdgeInsets.all(16),
-        constraints: BoxConstraints(maxHeight: size.height, maxWidth: size.width),
+        padding: const EdgeInsets.all(16),
+        height: size.height,
+        width: size.width,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
@@ -42,7 +53,7 @@ class _ChatTabState extends State<ChatTab> {
             ),
             GetBuilder<ChatController>(
               builder: (controller) {
-                return controller.isLoading
+                return !controller.isLoading
                     ? const Center(
                         child: CircularProgressIndicator(),
                       )

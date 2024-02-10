@@ -1,3 +1,4 @@
+import 'package:app_law_order/src/models/chat_message_model.dart';
 import 'package:app_law_order/src/models/chat_model.dart';
 import 'package:app_law_order/src/pages/base/controller/navigation_controller.dart';
 import 'package:app_law_order/src/pages/chat/repository/chat_repository.dart';
@@ -20,8 +21,11 @@ class ChatController extends GetxController {
   late IO.Socket socket;
 
   List<ChatModel> allChats = [];
+  List<ChatMessageModel> allMessages = [];
 
   bool isLoading = false;
+  bool isMessageLoading = false;
+  bool isTabOpened = false;
 
   int get currentIndex => _currentIndex.value;
 
@@ -33,14 +37,15 @@ class ChatController extends GetxController {
     loadChats();
   }
 
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-    print('ready');
+  void setTabOpened(bool value) {
+    isTabOpened = value;
   }
 
   void setLoading(bool value) {
+    isLoading = value;
+  }
+
+  void setMessageLoading(bool value) {
     isLoading = value;
   }
 
@@ -49,10 +54,9 @@ class ChatController extends GetxController {
     result.when(success: (data) {
       allChats = data;
     }, error: (message) {
-      utilServices.showToast(
-        message: message,
-        isError: true,
-      );
+      if (message.isNotEmpty) {
+        utilServices.showToast(message: message, isError: true);
+      }
     });
   }
 
@@ -79,5 +83,25 @@ class ChatController extends GetxController {
 
   void handleNewMessage(dynamic data) {
     if (navigationController.currentIndex != 3) {}
+  }
+
+  void didChangeScreen() {
+    setTabOpened(true);
+    print('A tela ChatTab foi chamada novamente.');
+  }
+
+  void disposeScreen() {
+    setTabOpened(false);
+  }
+
+  Future<void> loadMessages({required ChatModel chat}) async {
+    setMessageLoading(true);
+    final result = await chatRepository.getMessages(chat: chat);
+    setMessageLoading(false);
+    result.when(
+        success: (data) {
+          allMessages = data;
+        },
+        error: (message) {});
   }
 }

@@ -50,6 +50,7 @@ abstract class EndPoints {
 
   //endpois chat
   static const getAllChats = '$baseUrl/messages/list-all-chats';
+  static const getChatMessage = '$baseUrl/messages/';
   //
 }
 

@@ -5,7 +5,8 @@ import 'package:app_law_order/src/pages/base/base_screen.dart';
 import 'package:app_law_order/src/pages/base/binding/navigation_binding.dart';
 import 'package:app_law_order/src/pages/chat/binding/chat_binding.dart';
 import 'package:app_law_order/src/pages/chat/controller/chat_controller.dart';
-import 'package:app_law_order/src/pages/chat/view/chat_tab.dart';
+import 'package:app_law_order/src/pages/chat/view/chat_list_tab.dart';
+import 'package:app_law_order/src/pages/chat/view/chat_messages_screen.dart';
 import 'package:app_law_order/src/pages/home/binding/home_binding.dart';
 import 'package:app_law_order/src/pages/profile/binding/follower_binding.dart';
 import 'package:app_law_order/src/pages/profile/binding/follows_binding.dart';
@@ -93,8 +94,12 @@ abstract class AppPages {
       binding: RequestManagerBinding(),
     ),
     GetPage(
-      name: PagesRoutes.chatTab,
-      page: () => const ChatTab(),
+      name: PagesRoutes.chatListTab,
+      page: () => const ChatListTab(),
+    ),
+    GetPage(
+      name: PagesRoutes.chatMessageScreen,
+      page: () => const ChatMessageScreen(),
     ),
     GetPage(
       page: () => const BaseScreen(),
@@ -126,5 +131,6 @@ abstract class PagesRoutes {
   static const String requestManagerScreen = '/requestManagerScreen';
   static const String notificationsScreen = '/notificationsScreen';
   static const String avaliationScreen = '/avaliationScreen';
-  static const String chatTab = '/chatTabScreen';
+  static const String chatListTab = '/chatListTabScreen';
+  static const String chatMessageScreen = '/chatMessageScreen';
 }

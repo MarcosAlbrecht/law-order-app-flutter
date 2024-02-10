@@ -1,9 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:app_law_order/src/config/custom_colors.dart';
+import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app_law_order/src/models/chat_model.dart';
+import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 class ChatTile extends StatelessWidget {
@@ -17,10 +19,10 @@ class ChatTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Get.toNamed(
-        //   PagesRoutes.profileViewScreen,
-        //   arguments: {'idUser': follow.followed?.id},
-        // );
+        Get.toNamed(
+          PagesRoutes.chatMessageScreen,
+          arguments: {'chat_model': chat},
+        );
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 10),
@@ -45,7 +47,7 @@ class ChatTile extends StatelessWidget {
               //color: CustomColors.backgroudCard,
             ),
             child: ListTile(
-              visualDensity: VisualDensity.comfortable,
+              visualDensity: VisualDensity.compact,
               leading: ClipRRect(
                 borderRadius: BorderRadius.circular(50),
                 child: chat.user?.profilePicture != null
@@ -61,6 +63,8 @@ class ChatTile extends StatelessWidget {
                     : Image.asset(
                         "assets/ICONPEOPLE.png",
                         fit: BoxFit.cover,
+                        height: 40,
+                        width: 40,
                       ),
               ),
               title: Text(

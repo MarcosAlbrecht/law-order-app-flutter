@@ -1,6 +1,6 @@
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/pages/base/controller/navigation_controller.dart';
-import 'package:app_law_order/src/pages/chat/view/chat_tab.dart';
+import 'package:app_law_order/src/pages/chat/view/chat_list_tab.dart';
 import 'package:app_law_order/src/pages/home/view/home_tab.dart';
 import 'package:app_law_order/src/pages/profile/view/profile_tab.dart';
 import 'package:app_law_order/src/pages/requests/view/request_tab.dart';
@@ -28,7 +28,7 @@ class _BaseScreenState extends State<BaseScreen> {
           RequestTab(),
           HomeTab(),
           ProfileTab(),
-          ChatTab(),
+          ChatListTab(),
         ],
       ),
       bottomNavigationBar: Obx(
