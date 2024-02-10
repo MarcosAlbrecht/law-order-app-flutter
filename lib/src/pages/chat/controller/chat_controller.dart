@@ -1,8 +1,8 @@
 import 'package:app_law_order/src/models/chat_message_model.dart';
 import 'package:app_law_order/src/models/chat_model.dart';
-import 'package:app_law_order/src/pages/base/controller/navigation_controller.dart';
+import 'package:app_law_order/src/models/user_model.dart';
+import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
 import 'package:app_law_order/src/pages/chat/repository/chat_repository.dart';
-import 'package:app_law_order/src/services/socket_io_manager.dart';
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -10,7 +10,9 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 class ChatController extends GetxController {
   final chatRepository = ChatRepository();
   final utilServices = UtilServices();
-  final navigationController = Get.find<NavigationController>();
+  final authController = Get.find<AuthController>();
+
+  late String userId;
   late RxInt _currentIndex;
 
   final url = 'https://sandbox.api.prestadio.com.br/chat';
@@ -24,7 +26,7 @@ class ChatController extends GetxController {
   List<ChatMessageModel> allMessages = [];
 
   bool isLoading = false;
-  bool isMessageLoading = false;
+  bool isMessageLoading = true;
   bool isTabOpened = false;
 
   int get currentIndex => _currentIndex.value;
@@ -35,6 +37,7 @@ class ChatController extends GetxController {
 
     connect();
     loadChats();
+    userId = await utilServices.getToken();
   }
 
   void setTabOpened(bool value) {
@@ -43,14 +46,20 @@ class ChatController extends GetxController {
 
   void setLoading(bool value) {
     isLoading = value;
+    update();
   }
 
-  void setMessageLoading(bool value) {
-    isLoading = value;
+  void setMessagesLoading(bool value, {bool isUser = false}) {
+    if (isUser) {
+      isMessageLoading = value;
+    }
+    update();
   }
 
   Future<void> loadChats() async {
+    setLoading(true);
     final result = await chatRepository.getAllChats();
+    setLoading(false);
     result.when(success: (data) {
       allChats = data;
     }, error: (message) {
@@ -82,7 +91,18 @@ class ChatController extends GetxController {
   }
 
   void handleNewMessage(dynamic data) {
-    if (navigationController.currentIndex != 3) {}
+    if (isTabOpened) {
+      //adiciona a mensagem na lista e atualiza a tela
+      //var userData = data as Map<String, dynamic>;
+      ChatMessageModel message = ChatMessageModel.fromJson(data);
+      allMessages.insert(0, message);
+      update();
+      // Agora você pode usar o objeto UserModel conforme necessário
+      print('Nova mensagem de $message');
+    } else {
+      //envia showMessage
+      utilServices.showToastNewChatMessage(message: 'Nova mensagem de chat recebida!');
+    }
   }
 
   void didChangeScreen() {
@@ -94,13 +114,19 @@ class ChatController extends GetxController {
     setTabOpened(false);
   }
 
-  Future<void> loadMessages({required ChatModel chat}) async {
-    setMessageLoading(true);
+  Future<void> loadMessages({required ChatModel chat, bool canLoad = true}) async {
+    if (canLoad) {
+      setMessagesLoading(true);
+    }
+
     final result = await chatRepository.getMessages(chat: chat);
-    setMessageLoading(false);
+
+    setMessagesLoading(false, isUser: true);
+
+    //setMessageLoading(false);
     result.when(
         success: (data) {
-          allMessages = data;
+          allMessages.addAll(data);
         },
         error: (message) {});
   }

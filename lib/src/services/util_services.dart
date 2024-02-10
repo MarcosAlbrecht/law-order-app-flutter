@@ -23,10 +23,21 @@ class UtilServices {
     );
   }
 
-  Future<void> saveLocalData(
-      {required String email,
-      required String senha,
-      required String token}) async {
+  void showToastNewChatMessage({
+    required String message,
+  }) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP,
+      timeInSecForIosWeb: 3,
+      backgroundColor: CustomColors.blueColor,
+      textColor: Colors.white,
+      fontSize: 16,
+    );
+  }
+
+  Future<void> saveLocalData({required String email, required String senha, required String token}) async {
     await box.write(StorageKeys.email, email);
     await box.write(StorageKeys.password, senha);
     await box.write(StorageKeys.token, token);

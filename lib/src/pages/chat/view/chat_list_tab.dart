@@ -18,16 +18,15 @@ class _ChatListTab extends State<ChatListTab> {
     super.didChangeDependencies();
 
     // Aqui você pode executar o código que deseja quando a tela é chamada novamente
-    //chatController.didChangeScreen();
+    chatController.didChangeScreen();
   }
 
   @override
   void dispose() {
     // Realize operações de limpeza ou libere recursos aqui
-    //chatController.dispose(); // Por exemplo, se você tiver algum controlador, você pode chamar o método dispose() dele aqui
 
     super.dispose();
-    //chatController.disposeScreen();
+    chatController.disposeScreen();
   }
 
   @override
@@ -40,7 +39,8 @@ class _ChatListTab extends State<ChatListTab> {
         width: size.width,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.max,
+          //mainAxisSize: MainAxisSize.max,
+
           children: [
             Text(
               'Conversas',
@@ -53,9 +53,11 @@ class _ChatListTab extends State<ChatListTab> {
             ),
             GetBuilder<ChatController>(
               builder: (controller) {
-                return !controller.isLoading
+                return controller.isLoading
                     ? const Center(
-                        child: CircularProgressIndicator(),
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
                       )
                     : Visibility(
                         visible: controller.allChats.isNotEmpty,
