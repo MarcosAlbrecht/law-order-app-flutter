@@ -8,7 +8,7 @@ class MessageFileModel {
   @JsonKey(name: '_id')
   String? id;
   String? key;
-  String? temp;
+  bool? temp;
   String? url;
   String? createdAt;
   MessageFileModel({

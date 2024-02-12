@@ -10,7 +10,7 @@ MessageFileModel _$MessageFileModelFromJson(Map<String, dynamic> json) =>
     MessageFileModel(
       id: json['_id'] as String?,
       key: json['key'] as String?,
-      temp: json['temp'] as String?,
+      temp: json['temp'] as bool?,
       url: json['url'] as String?,
       createdAt: json['createdAt'] as String?,
     );

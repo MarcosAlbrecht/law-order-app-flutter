@@ -120,4 +120,10 @@ class UtilServices {
     // Agora você pode enviar 'iso8601String' para a sua API Node.js
     return iso8601String;
   }
+
+  String getCurrentDateTimeInISO8601Format() {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat("yyyy-MM-ddTHH:mm:ss.SSS'Z'").format(now);
+    return formattedDate;
+  }
 }

@@ -1,22 +1,26 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttericon/entypo_icons.dart';
 
 import 'package:app_law_order/src/config/custom_colors.dart';
 
 class CustomTextField extends StatefulWidget {
   final IconData? icon;
-  final String label;
+  final String? label;
+  final String? hint;
   final bool isSecret;
   final List<TextInputFormatter>? inputFormatters;
   final String? initialValue;
   final bool readOnly;
+  final bool removeFloatingLabelBehavior;
   final GlobalKey<FormFieldState>? formFieldKey;
-
+  final IconData? suffixIcon;
   final TextInputType textInputType;
   final String? Function(String?)? validator;
   final void Function(String?)? onSaved;
   final void Function(String?)? onChanged;
+  final void Function()? suffixIconButtonAttach;
   final int? maxLength;
   final int? minLines;
   final int? maxLines;
@@ -26,16 +30,20 @@ class CustomTextField extends StatefulWidget {
   const CustomTextField({
     Key? key,
     this.icon,
-    required this.label,
+    this.label,
+    this.hint,
     this.isSecret = false,
     this.inputFormatters,
     this.initialValue,
     this.readOnly = false,
+    this.removeFloatingLabelBehavior = false,
     this.formFieldKey,
+    this.suffixIcon,
     this.textInputType = TextInputType.text,
     this.validator,
     this.onSaved,
     this.onChanged,
+    this.suffixIconButtonAttach,
     this.maxLength,
     this.minLines,
     this.maxLines = 1,
@@ -75,6 +83,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         maxLines: widget.maxLines,
         minLines: widget.minLines,
         decoration: InputDecoration(
+          floatingLabelBehavior: widget.removeFloatingLabelBehavior ? FloatingLabelBehavior.never : FloatingLabelBehavior.auto,
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide(
@@ -93,7 +102,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
                     isObscure ? Icons.visibility : Icons.visibility_off,
                   ),
                 )
-              : null,
+              : widget.suffixIconButtonAttach != null
+                  ? IconButton(
+                      onPressed: widget.suffixIconButtonAttach,
+                      icon: const Icon(
+                        Entypo.attach,
+                      ),
+                    )
+                  : null,
           labelText: widget.label,
           isDense: true,
           border: OutlineInputBorder(

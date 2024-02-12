@@ -24,6 +24,7 @@ class ChatController extends GetxController {
 
   List<ChatModel> allChats = [];
   List<ChatMessageModel> allMessages = [];
+  ChatModel? selectedChat = ChatModel();
 
   bool isLoading = false;
   bool isMessageLoading = true;
@@ -87,14 +88,15 @@ class ChatController extends GetxController {
     socket.onConnect((data) => print('Connected on server'));
     socket.onConnectError((data) => print('Error on Connected server ' + data));
     socket.onDisconnect((_) => print('disconnect'));
-    socket.on('receive_message', (data) => handleNewMessage(data));
+    socket.on('receive_message', (data) => handleReceiveNewMessage(data));
   }
 
-  void handleNewMessage(dynamic data) {
+  void handleReceiveNewMessage(dynamic data) {
     if (isTabOpened) {
       //adiciona a mensagem na lista e atualiza a tela
       //var userData = data as Map<String, dynamic>;
       ChatMessageModel message = ChatMessageModel.fromJson(data);
+      message.createdAt = utilServices.getCurrentDateTimeInISO8601Format();
       allMessages.insert(0, message);
       update();
       // Agora você pode usar o objeto UserModel conforme necessário
@@ -105,12 +107,17 @@ class ChatController extends GetxController {
     }
   }
 
+  Future<void> handleSendMessage({required String message}) async {
+    if (message.isEmpty) {}
+  }
+
   void didChangeScreen() {
     setTabOpened(true);
     print('A tela ChatTab foi chamada novamente.');
   }
 
   void disposeScreen() {
+    selectedChat = null;
     setTabOpened(false);
   }
 
@@ -120,12 +127,14 @@ class ChatController extends GetxController {
     }
 
     final result = await chatRepository.getMessages(chat: chat);
+    selectedChat = chat;
 
     setMessagesLoading(false, isUser: true);
 
     //setMessageLoading(false);
     result.when(
         success: (data) {
+          allMessages.clear();
           allMessages.addAll(data);
         },
         error: (message) {});
