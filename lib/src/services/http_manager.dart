@@ -55,4 +55,32 @@ class HttpManager {
       return {};
     }
   }
+
+  Future downloadFile({
+    required String url,
+    required String savePath,
+  }) async {
+    Dio dio = Dio();
+
+    try {
+      // Realiza a requisição GET para o URL do arquivo
+      Response response = await dio.download(
+        url,
+        savePath,
+        options: Options(responseType: ResponseType.bytes),
+      );
+
+      // Verifica se o download foi bem-sucedido
+      if (response.statusCode == 200) {
+        print('Download concluído: $savePath');
+        return response.data;
+      } else {
+        print('Falha ao baixar o arquivo: ${response.statusCode}');
+        return response.data;
+      }
+    } catch (e) {
+      // Em caso de erro, informa o usuário
+      print('Erro ao baixar o arquivo: $e');
+    }
+  }
 }

@@ -72,7 +72,7 @@ class ChatTile extends StatelessWidget {
                 style: TextStyle(fontSize: CustomFontSizes.fontSize14),
               ),
               subtitle: Text(
-                chat.message != null ? '${chat.message}' : 'arquivo',
+                chat.message != null ? '${chat.message}' : '',
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontSize: CustomFontSizes.fontSize12),
               ),
