@@ -15,27 +15,30 @@ class AuthRepository {
   final HttpManager httpManager = HttpManager();
 
   //Realiza o login com email e senha
-  Future<SignInResult> signIn(
-      {required String email, required String password}) async {
-    final result = await httpManager.restRequest(
-      method: HttpMethods.post,
-      url: EndPoints.signin,
-      body: {
-        'email': email,
-        'password': password,
-      },
-    );
+  Future<SignInResult<UserModel>> signIn({required String email, required String password}) async {
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.post,
+        url: EndPoints.signin,
+        body: {
+          'email': email,
+          'password': password,
+        },
+      );
 
-    if (result != null && result['statusCode'] == null) {
-      var userData = result as Map<String, dynamic>;
-      UserModel data = UserModel.fromJson(userData);
-      return SignInResult.success(data);
-    } else if (result['statusCode'] != null && result['statusCode'] == 401) {
-      return SignInResult.error('E-mail ou senha inválidos');
+      if (result != null && result['statusCode'] == null) {
+        var userData = result as Map<String, dynamic>;
+        UserModel data = UserModel.fromJson(userData);
+        return SignInResult.success(data);
+      } else if (result['statusCode'] != null && result['statusCode'] == 401) {
+        return SignInResult.error('E-mail ou senha inválidos');
+      } else {
+        return SignInResult.error('Ocorreu um erro inesperado!');
+      }
+    } catch (error) {
+      String errorMessage = error.toString().replaceFirst('Exception: ', '');
+      return SignInResult.error(errorMessage);
     }
-
-    throw Exception(
-        'Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
   }
 
   Future<SignUpResult> signUp({required UserModel user}) async {
@@ -53,8 +56,7 @@ class AuthRepository {
       return SignUpResult.error('Email já cadastrado!');
     }
 
-    throw Exception(
-        'Ocorreu um erro ao cadastrar os dados. Tente novamente mais tarde!');
+    throw Exception('Ocorreu um erro ao cadastrar os dados. Tente novamente mais tarde!');
   }
 
   Future<SignUpResult> getUserById({required UserModel user}) async {
@@ -68,8 +70,7 @@ class AuthRepository {
       UserModel data = UserModel.fromJson(userData);
       return SignUpResult.success(data);
     } else {
-      return SignUpResult.error(
-          'Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
+      return SignUpResult.error('Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
     }
   }
 
@@ -92,8 +93,7 @@ class AuthRepository {
       UserModel data = UserModel.fromJson(userData);
       return SignUpResult.success(data);
     } else {
-      return SignUpResult.error(
-          'Ocorreu um erro ao editar os dados. Tente novamente mais tarde!');
+      return SignUpResult.error('Ocorreu um erro ao editar os dados. Tente novamente mais tarde!');
     }
   }
 
@@ -107,14 +107,12 @@ class AuthRepository {
     );
 
     if (result.toString().isEmpty) {
-      return ForgotPasswordResult.success(
-          "Um link de recuperação foi enviado para o seu e-mail");
+      return ForgotPasswordResult.success("Um link de recuperação foi enviado para o seu e-mail");
     } else if (result['statusCode'] == 404) {
       return ForgotPasswordResult.error("E-mail não cadastrado!");
     }
 
-    throw Exception(
-        'Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
+    throw Exception('Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
   }
 
   Future<CepResult> getCep({required String cep}) async {

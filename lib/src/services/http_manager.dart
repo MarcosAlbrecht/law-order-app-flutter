@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:dio/dio.dart';
 
@@ -16,6 +18,8 @@ class HttpManager {
     Map? headers,
     dynamic body,
     Map<String, dynamic>? queryParams,
+    Duration requestTimeout = const Duration(seconds: 20), // Tempo limite da requisição
+    Duration receiveTimeout = const Duration(seconds: 20), // Tempo limite para receber a resposta
   }) async {
     // Headers da requisição
     final utilServices = UtilServices();
@@ -33,6 +37,10 @@ class HttpManager {
     }
 
     Dio dio = Dio();
+    dio.options = BaseOptions(
+      connectTimeout: requestTimeout,
+      receiveTimeout: receiveTimeout,
+    );
 
     try {
       Response response = await dio.request(
@@ -44,15 +52,17 @@ class HttpManager {
         ),
         data: body,
       );
-      //retorno do resutlado do server back
+      //retorno do resultado do server back
       return response.data;
-      // ignore: deprecated_member_use
-    } on DioError catch (error) {
-      //erro do dio
-
-      return error.response?.data ?? {};
+    } on DioException catch (error) {
+      //erro do Dio
+      if (error.type == DioExceptionType.connectionTimeout) {
+        throw Exception('Tempo limite de conexão excedido');
+      }
+      throw Exception(error.message);
+      //return error.response?.data ?? {};
     } catch (error) {
-      return {};
+      return {'error': 'Erro desconhecido: $error'};
     }
   }
 

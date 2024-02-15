@@ -27,7 +27,7 @@ class _ProfileTabState extends State<ProfileTab> {
         child: GetBuilder<ProfileController>(
           builder: (controller) {
             return Column(
-              mainAxisSize: MainAxisSize.min,
+              //mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
@@ -48,19 +48,12 @@ class _ProfileTabState extends State<ProfileTab> {
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(100),
-                                child: controller.authController.user
-                                            .profilePicture !=
-                                        null
+                                child: controller.authController.user.profilePicture != null
                                     ? CachedNetworkImage(
-                                        imageUrl: controller.authController.user
-                                            .profilePicture!.url!,
-                                        progressIndicatorBuilder: (context, url,
-                                                downloadProgress) =>
-                                            CircularProgressIndicator(
-                                                value:
-                                                    downloadProgress.progress),
-                                        errorWidget: (context, url, error) =>
-                                            Icon(Icons.error),
+                                        imageUrl: controller.authController.user.profilePicture!.url!,
+                                        progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                            CircularProgressIndicator(value: downloadProgress.progress),
+                                        errorWidget: (context, url, error) => const Icon(Icons.error),
                                         height: 160,
                                         width: 160,
                                         fit: BoxFit.cover,
@@ -91,9 +84,7 @@ class _ProfileTabState extends State<ProfileTab> {
                         ),
                         Text(
                           '${controller.authController.user.email}',
-                          style: TextStyle(
-                              color: CustomColors.black.withAlpha(100),
-                              fontSize: CustomFontSizes.fontSize18),
+                          style: TextStyle(color: CustomColors.black.withAlpha(100), fontSize: CustomFontSizes.fontSize18),
                         ),
                       ],
                     ),
@@ -102,105 +93,94 @@ class _ProfileTabState extends State<ProfileTab> {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 0),
-                    child: Container(
-                      // decoration: BoxDecoration(
-                      //   borderRadius: const BorderRadius.only(
-                      //     topLeft: Radius.circular(30),
-                      //     topRight: Radius.circular(30),
-                      //   ),
-                      //   color: CustomColors.white,
-                      // ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: SingleChildScrollView(
-                          physics: const BouncingScrollPhysics(),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              OptionInfo(
-                                text: " Informações Pessoais",
-                                icon: Icons.settings,
-                                onTap: () {
-                                  Get.toNamed(PagesRoutes.profileScreen);
-                                },
-                              ),
-                              const Divider(
-                                height: 5,
-                                color: Colors.transparent,
-                              ),
-                              OptionInfo(
-                                text: " Portfólio",
-                                icon: Icons.person_2_outlined,
-                                onTap: () {
-                                  Get.toNamed(PagesRoutes.portfolioScreen);
-                                },
-                              ),
-                              const Divider(
-                                height: 5,
-                                color: Colors.transparent,
-                              ),
-                              OptionInfo(
-                                text: " Notificações",
-                                icon: Icons.notifications_outlined,
-                                onTap: () {
-                                  Get.toNamed(PagesRoutes.notificationsScreen);
-                                },
-                              ),
-                              const Divider(
-                                height: 5,
-                                color: Colors.transparent,
-                              ),
-                              OptionInfo(
-                                text: " Seguidores",
-                                icon: Icons.people_alt_outlined,
-                                onTap: () {
-                                  Get.toNamed(PagesRoutes.followerScreen);
-                                },
-                              ),
-                              const Divider(
-                                height: 5,
-                                color: Colors.transparent,
-                              ),
-                              OptionInfo(
-                                text: " Seguindo",
-                                icon: Icons.people_alt_outlined,
-                                onTap: () {
-                                  Get.toNamed(PagesRoutes.followsScreen);
-                                },
-                              ),
-                              const Divider(
-                                height: 5,
-                                color: Colors.transparent,
-                              ),
-                              OptionInfo(
-                                text: " Sair",
-                                icon: Icons.power_settings_new_outlined,
-                                onTap: () async {
-                                  final bool result =
-                                      await showLogoutfirmation(context);
-                                  if (result) {
-                                    controller.authController.logout();
-                                  }
-                                },
-                              ),
-                              const Divider(
-                                height: 5,
-                                color: Colors.transparent,
-                              ),
-                              OptionInfo(
-                                text: " Excluir Conta",
-                                icon: Icons.delete_forever_outlined,
-                                onTap: () async {
-                                  final bool result =
-                                      await showLogoutfirmation(context);
-                                  if (result) {
-                                    controller.authController.logout();
-                                  }
-                                },
-                              ),
-                            ],
-                          ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            OptionInfo(
+                              text: " Informações Pessoais",
+                              icon: Icons.settings,
+                              onTap: () {
+                                Get.toNamed(PagesRoutes.profileScreen);
+                              },
+                            ),
+                            const Divider(
+                              height: 5,
+                              color: Colors.transparent,
+                            ),
+                            OptionInfo(
+                              text: " Portfólio",
+                              icon: Icons.person_2_outlined,
+                              onTap: () {
+                                Get.toNamed(PagesRoutes.portfolioScreen);
+                              },
+                            ),
+                            const Divider(
+                              height: 5,
+                              color: Colors.transparent,
+                            ),
+                            OptionInfo(
+                              text: " Notificações",
+                              icon: Icons.notifications_outlined,
+                              onTap: () {
+                                Get.toNamed(PagesRoutes.notificationsScreen);
+                              },
+                            ),
+                            const Divider(
+                              height: 5,
+                              color: Colors.transparent,
+                            ),
+                            OptionInfo(
+                              text: " Seguidores",
+                              icon: Icons.people_alt_outlined,
+                              onTap: () {
+                                Get.toNamed(PagesRoutes.followerScreen);
+                              },
+                            ),
+                            const Divider(
+                              height: 5,
+                              color: Colors.transparent,
+                            ),
+                            OptionInfo(
+                              text: " Seguindo",
+                              icon: Icons.people_alt_outlined,
+                              onTap: () {
+                                Get.toNamed(PagesRoutes.followsScreen);
+                              },
+                            ),
+                            const Divider(
+                              height: 5,
+                              color: Colors.transparent,
+                            ),
+                            OptionInfo(
+                              text: " Sair",
+                              icon: Icons.power_settings_new_outlined,
+                              onTap: () async {
+                                final bool result = await showLogoutfirmation(context);
+                                if (result) {
+                                  controller.authController.logout();
+                                }
+                              },
+                            ),
+                            const Divider(
+                              height: 5,
+                              color: Colors.transparent,
+                            ),
+                            OptionInfo(
+                              text: " Excluir Conta",
+                              icon: Icons.delete_forever_outlined,
+                              onTap: () async {
+                                final bool result = await showLogoutfirmation(context);
+                                if (result) {
+                                  controller.authController.logout();
+                                }
+                              },
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -273,22 +253,20 @@ Future<bool> showLogoutfirmation(BuildContext context) async {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Sair'),
-            content: Text('Tem certeza que deseja deslogar do aplicativo?'),
+            title: const Text('Sair'),
+            content: const Text('Tem certeza que deseja deslogar do aplicativo?'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
-                  Navigator.of(context)
-                      .pop(false); // Retorna falso para cancelar a exclusão
+                  Navigator.of(context).pop(false); // Retorna falso para cancelar a exclusão
                 },
-                child: Text('Cancelar'),
+                child: const Text('Cancelar'),
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop(
-                      true); // Retorna verdadeiro para confirmar a exclusão
+                  Navigator.of(context).pop(true); // Retorna verdadeiro para confirmar a exclusão
                 },
-                child: Text('Confirmar'),
+                child: const Text('Confirmar'),
               ),
             ],
           );

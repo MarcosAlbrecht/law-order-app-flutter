@@ -6,6 +6,7 @@ import 'package:app_law_order/src/pages/common_widgets/custom_text_field.dart';
 import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:app_law_order/src/services/validators.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -59,8 +60,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         padding: const EdgeInsets.only(top: 10),
         child: Container(
           decoration: BoxDecoration(
-            borderRadius:
-                BorderRadius.circular(10), // Define o raio para arredondamento
+            borderRadius: BorderRadius.circular(10), // Define o raio para arredondamento
             color: CustomColors.white, // Cor de fundo do container
           ),
           height: size.height,
@@ -135,8 +135,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           validator: cepValidator,
                           onChanged: (value) async {
                             if (value != null && value.length == 8) {
-                              await authController.handleValidateCep(
-                                  cep1: value);
+                              await authController.handleValidateCep(cep1: value);
                             }
                           },
                           onSaved: (value) {
@@ -148,8 +147,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(top: 2, bottom: 10),
                             child: DropdownButtonFormField(
-                              items:
-                                  authController.occupationsAreas.map((area) {
+                              items: authController.occupationsAreas.map((area) {
                                 return DropdownMenuItem<OccupationAreasModel>(
                                   value: area,
                                   child: Text(
@@ -201,14 +199,46 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             authController.confirmPassword = value;
                           },
                         ),
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.symmetric(
                             vertical: 15,
                             horizontal: 10,
                           ),
-                          child: Center(
-                            child: Text(
-                                "Ao criar uma conta, concordo com os Termos de Uso e Política de Privacidade."),
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: 'Ao criar uma conta, concordo com os ',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                TextSpan(
+                                  text: 'Termos de Uso',
+                                  style: TextStyle(color: Colors.blue),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      // Ação ao clicar em 'Termos de Uso'
+                                      //showPopup(context, 'Termos de Uso');
+                                    },
+                                ),
+                                const TextSpan(
+                                  text: ' e ',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                TextSpan(
+                                  text: 'Política de Privacidade',
+                                  style: TextStyle(color: Colors.blue),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      // Ação ao clicar em 'Política de Privacidade'
+                                      //showPopup(context, 'Política de Privacidade');
+                                    },
+                                ),
+                                const TextSpan(
+                                  text: '.',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         SizedBox(
@@ -229,9 +259,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       _formKey.currentState!.save();
                                       await authController.handleSignUp();
                                     } else {
-                                      utilServices.showToast(
-                                          message:
-                                              "Verifique todos os campos!");
+                                      utilServices.showToast(message: "Verifique todos os campos!");
                                     }
                                   },
                             child: authController.isSaving
@@ -256,6 +284,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void showPopup(BuildContext context, String text) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(text),
+          content: Text('Conteúdo do $text'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Fechar'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

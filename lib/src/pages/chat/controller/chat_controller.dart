@@ -7,6 +7,7 @@ import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
 import 'package:app_law_order/src/pages/chat/repository/chat_repository.dart';
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:get/get.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -146,17 +147,24 @@ class ChatController extends GetxController {
   Future<void> handleDownloadFile({required String url, required String fileName}) async {
     final Directory appDocumentsDir;
     if (Platform.isIOS) {
-      appDocumentsDir = await getApplicationDocumentsDirectory();
+      appDocumentsDir = (await getExternalStorageDirectory())!;
     } else {
       appDocumentsDir = (await getDownloadsDirectory())!;
     }
 
-    String documentDir = '${appDocumentsDir.path}/$fileName';
-    final result = await chatRepository.downloadFile(url: url, savePath: documentDir);
-    result.when(
-        success: (data) {
-          print('terminou o download');
-        },
-        error: (message) {});
+    if ((File('${appDocumentsDir.path}/$fileName').existsSync())) {
+      print('arquivo ja foi baixado');
+      //abrir arquivo baixado
+    } else {
+      String documentDir = '${appDocumentsDir.path}/$fileName';
+      final result = await chatRepository.downloadFile(url: url, savePath: documentDir);
+      result.when(
+          success: (data) {
+            print('terminou o download');
+          },
+          error: (message) {});
+    }
+
+    await OpenFilex.open('${appDocumentsDir.path}/$fileName');
   }
 }

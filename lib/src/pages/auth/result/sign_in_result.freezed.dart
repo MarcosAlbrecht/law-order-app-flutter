@@ -15,7 +15,7 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$SignInResult {
+mixin _$SignInResult<T> {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(UserModel data) success,
@@ -37,35 +37,35 @@ mixin _$SignInResult {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(Success value) success,
-    required TResult Function(Error value) error,
+    required TResult Function(Success<T> value) success,
+    required TResult Function(Error<T> value) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(Success value)? success,
-    TResult? Function(Error value)? error,
+    TResult? Function(Success<T> value)? success,
+    TResult? Function(Error<T> value)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(Success value)? success,
-    TResult Function(Error value)? error,
+    TResult Function(Success<T> value)? success,
+    TResult Function(Error<T> value)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $SignInResultCopyWith<$Res> {
+abstract class $SignInResultCopyWith<T, $Res> {
   factory $SignInResultCopyWith(
-          SignInResult value, $Res Function(SignInResult) then) =
-      _$SignInResultCopyWithImpl<$Res, SignInResult>;
+          SignInResult<T> value, $Res Function(SignInResult<T>) then) =
+      _$SignInResultCopyWithImpl<T, $Res, SignInResult<T>>;
 }
 
 /// @nodoc
-class _$SignInResultCopyWithImpl<$Res, $Val extends SignInResult>
-    implements $SignInResultCopyWith<$Res> {
+class _$SignInResultCopyWithImpl<T, $Res, $Val extends SignInResult<T>>
+    implements $SignInResultCopyWith<T, $Res> {
   _$SignInResultCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
@@ -75,20 +75,20 @@ class _$SignInResultCopyWithImpl<$Res, $Val extends SignInResult>
 }
 
 /// @nodoc
-abstract class _$$SuccessImplCopyWith<$Res> {
+abstract class _$$SuccessImplCopyWith<T, $Res> {
   factory _$$SuccessImplCopyWith(
-          _$SuccessImpl value, $Res Function(_$SuccessImpl) then) =
-      __$$SuccessImplCopyWithImpl<$Res>;
+          _$SuccessImpl<T> value, $Res Function(_$SuccessImpl<T>) then) =
+      __$$SuccessImplCopyWithImpl<T, $Res>;
   @useResult
   $Res call({UserModel data});
 }
 
 /// @nodoc
-class __$$SuccessImplCopyWithImpl<$Res>
-    extends _$SignInResultCopyWithImpl<$Res, _$SuccessImpl>
-    implements _$$SuccessImplCopyWith<$Res> {
+class __$$SuccessImplCopyWithImpl<T, $Res>
+    extends _$SignInResultCopyWithImpl<T, $Res, _$SuccessImpl<T>>
+    implements _$$SuccessImplCopyWith<T, $Res> {
   __$$SuccessImplCopyWithImpl(
-      _$SuccessImpl _value, $Res Function(_$SuccessImpl) _then)
+      _$SuccessImpl<T> _value, $Res Function(_$SuccessImpl<T>) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -96,7 +96,7 @@ class __$$SuccessImplCopyWithImpl<$Res>
   $Res call({
     Object? data = null,
   }) {
-    return _then(_$SuccessImpl(
+    return _then(_$SuccessImpl<T>(
       null == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
@@ -107,7 +107,7 @@ class __$$SuccessImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$SuccessImpl implements Success {
+class _$SuccessImpl<T> implements Success<T> {
   _$SuccessImpl(this.data);
 
   @override
@@ -115,14 +115,14 @@ class _$SuccessImpl implements Success {
 
   @override
   String toString() {
-    return 'SignInResult.success(data: $data)';
+    return 'SignInResult<$T>.success(data: $data)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$SuccessImpl &&
+            other is _$SuccessImpl<T> &&
             (identical(other.data, data) || other.data == data));
   }
 
@@ -132,8 +132,8 @@ class _$SuccessImpl implements Success {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$SuccessImplCopyWith<_$SuccessImpl> get copyWith =>
-      __$$SuccessImplCopyWithImpl<_$SuccessImpl>(this, _$identity);
+  _$$SuccessImplCopyWith<T, _$SuccessImpl<T>> get copyWith =>
+      __$$SuccessImplCopyWithImpl<T, _$SuccessImpl<T>>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -169,8 +169,8 @@ class _$SuccessImpl implements Success {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(Success value) success,
-    required TResult Function(Error value) error,
+    required TResult Function(Success<T> value) success,
+    required TResult Function(Error<T> value) error,
   }) {
     return success(this);
   }
@@ -178,8 +178,8 @@ class _$SuccessImpl implements Success {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(Success value)? success,
-    TResult? Function(Error value)? error,
+    TResult? Function(Success<T> value)? success,
+    TResult? Function(Error<T> value)? error,
   }) {
     return success?.call(this);
   }
@@ -187,8 +187,8 @@ class _$SuccessImpl implements Success {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(Success value)? success,
-    TResult Function(Error value)? error,
+    TResult Function(Success<T> value)? success,
+    TResult Function(Error<T> value)? error,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -198,30 +198,30 @@ class _$SuccessImpl implements Success {
   }
 }
 
-abstract class Success implements SignInResult {
-  factory Success(final UserModel data) = _$SuccessImpl;
+abstract class Success<T> implements SignInResult<T> {
+  factory Success(final UserModel data) = _$SuccessImpl<T>;
 
   UserModel get data;
   @JsonKey(ignore: true)
-  _$$SuccessImplCopyWith<_$SuccessImpl> get copyWith =>
+  _$$SuccessImplCopyWith<T, _$SuccessImpl<T>> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$ErrorImplCopyWith<$Res> {
+abstract class _$$ErrorImplCopyWith<T, $Res> {
   factory _$$ErrorImplCopyWith(
-          _$ErrorImpl value, $Res Function(_$ErrorImpl) then) =
-      __$$ErrorImplCopyWithImpl<$Res>;
+          _$ErrorImpl<T> value, $Res Function(_$ErrorImpl<T>) then) =
+      __$$ErrorImplCopyWithImpl<T, $Res>;
   @useResult
   $Res call({String message});
 }
 
 /// @nodoc
-class __$$ErrorImplCopyWithImpl<$Res>
-    extends _$SignInResultCopyWithImpl<$Res, _$ErrorImpl>
-    implements _$$ErrorImplCopyWith<$Res> {
+class __$$ErrorImplCopyWithImpl<T, $Res>
+    extends _$SignInResultCopyWithImpl<T, $Res, _$ErrorImpl<T>>
+    implements _$$ErrorImplCopyWith<T, $Res> {
   __$$ErrorImplCopyWithImpl(
-      _$ErrorImpl _value, $Res Function(_$ErrorImpl) _then)
+      _$ErrorImpl<T> _value, $Res Function(_$ErrorImpl<T>) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -229,7 +229,7 @@ class __$$ErrorImplCopyWithImpl<$Res>
   $Res call({
     Object? message = null,
   }) {
-    return _then(_$ErrorImpl(
+    return _then(_$ErrorImpl<T>(
       null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -240,7 +240,7 @@ class __$$ErrorImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ErrorImpl implements Error {
+class _$ErrorImpl<T> implements Error<T> {
   _$ErrorImpl(this.message);
 
   @override
@@ -248,14 +248,14 @@ class _$ErrorImpl implements Error {
 
   @override
   String toString() {
-    return 'SignInResult.error(message: $message)';
+    return 'SignInResult<$T>.error(message: $message)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ErrorImpl &&
+            other is _$ErrorImpl<T> &&
             (identical(other.message, message) || other.message == message));
   }
 
@@ -265,8 +265,8 @@ class _$ErrorImpl implements Error {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
-      __$$ErrorImplCopyWithImpl<_$ErrorImpl>(this, _$identity);
+  _$$ErrorImplCopyWith<T, _$ErrorImpl<T>> get copyWith =>
+      __$$ErrorImplCopyWithImpl<T, _$ErrorImpl<T>>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -302,8 +302,8 @@ class _$ErrorImpl implements Error {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(Success value) success,
-    required TResult Function(Error value) error,
+    required TResult Function(Success<T> value) success,
+    required TResult Function(Error<T> value) error,
   }) {
     return error(this);
   }
@@ -311,8 +311,8 @@ class _$ErrorImpl implements Error {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(Success value)? success,
-    TResult? Function(Error value)? error,
+    TResult? Function(Success<T> value)? success,
+    TResult? Function(Error<T> value)? error,
   }) {
     return error?.call(this);
   }
@@ -320,8 +320,8 @@ class _$ErrorImpl implements Error {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(Success value)? success,
-    TResult Function(Error value)? error,
+    TResult Function(Success<T> value)? success,
+    TResult Function(Error<T> value)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -331,11 +331,11 @@ class _$ErrorImpl implements Error {
   }
 }
 
-abstract class Error implements SignInResult {
-  factory Error(final String message) = _$ErrorImpl;
+abstract class Error<T> implements SignInResult<T> {
+  factory Error(final String message) = _$ErrorImpl<T>;
 
   String get message;
   @JsonKey(ignore: true)
-  _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
+  _$$ErrorImplCopyWith<T, _$ErrorImpl<T>> get copyWith =>
       throw _privateConstructorUsedError;
 }
