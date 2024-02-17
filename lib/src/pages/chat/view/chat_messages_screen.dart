@@ -1,5 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
+
+import 'package:app_law_order/src/models/chat_message_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/entypo_icons.dart';
 import 'package:get/get.dart';
@@ -12,13 +16,7 @@ import 'package:app_law_order/src/pages/chat/controller/chat_controller.dart';
 import 'package:app_law_order/src/pages/chat/view/components/picture_message_dialog.dart';
 import 'package:app_law_order/src/pages/common_widgets/custom_text_field.dart';
 import 'package:app_law_order/src/services/util_services.dart';
-
-enum FileType {
-  PDF,
-  Image,
-  Text,
-  Other,
-}
+import 'package:image_picker/image_picker.dart';
 
 class ChatMessageScreen extends StatefulWidget {
   const ChatMessageScreen({super.key});
@@ -111,17 +109,14 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                                     isMe: message.userId == controller.authController.user.id,
                                     controller: controller,
                                     onTap: (FileType fileType) async {
-                                      // Aqui você pode implementar a lógica para tratar a interação com o arquivo
-                                      if (fileType == FileType.Image) {
+                                      // tratar a interação com o arquivo
+                                      if (fileType == FileType.image) {
                                         await showDialog(
                                           context: context,
                                           builder: (_) {
                                             return PictureMessageDialog(imageUrl: message.file!.url!);
                                           },
                                         );
-                                      } else {
-                                        // Fazer o download do arquivo
-                                        //downloadFile(message.file?.url, message.fileName!);
                                       }
                                     },
                                   ),
@@ -144,7 +139,9 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                           Expanded(
                             child: CustomTextField(
                               //icon: Icons.search,
-                              suffixIconButtonAttach: () {},
+                              suffixIconButtonAttach: () {
+                                _handleAttachmentPressed(controller);
+                              },
                               label: 'Mensagem',
                               removeFloatingLabelBehavior: true,
                               onChanged: (value) {
@@ -171,7 +168,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                                 child: IconButton(
                                   color: CustomColors.white,
                                   onPressed: () {
-                                    _sendMessage(controller);
+                                    _sendMessage(controller, null);
                                   },
                                   icon: const Icon(Icons.send),
                                 ),
@@ -191,6 +188,92 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
     );
   }
 
+  void _handleAttachmentPressed(ChatController controller) {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) => SafeArea(
+        child: SizedBox(
+          height: 144,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  _handleImageSelection(controller);
+                },
+                child: const Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text('Foto'),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  _handleFileSelection(controller);
+                },
+                child: const Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text('Arquivos'),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text('Cancelar'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _handleFileSelection(ChatController controller) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.any);
+
+    if (result != null && result.files.single.path != null) {
+      final fileModel = MessageFileModel(
+        createdAt: utilServices.getCurrentDateTimeInISO8601Format(),
+        fileLocalPath: result.files.single.path,
+      );
+      final message = ChatMessageModel(
+        fileName: result.files.single.name,
+      );
+
+      _sendMessage(chatController, message);
+    }
+  }
+
+  void _handleImageSelection(ChatController controller) async {
+    final result = await ImagePicker().pickImage(
+      imageQuality: 70,
+      maxWidth: 1440,
+      source: ImageSource.gallery,
+    );
+
+    if (result != null) {
+      result.path;
+      final bytes = await result.readAsBytes();
+      final image = await decodeImageFromList(bytes);
+
+      final fileModel = MessageFileModel(
+        createdAt: utilServices.getCurrentDateTimeInISO8601Format(),
+        fileLocalPath: result.path,
+      );
+      final message = ChatMessageModel(
+        fileName: result.name,
+        file: fileModel,
+      );
+
+      _sendMessage(chatController, message);
+
+      //_addMessage(message);
+    }
+  }
+
   bool isSameDay(String dateString1, String dateString2) {
     final DateTime date1 = DateTime.parse(dateString1);
     final DateTime date2 = DateTime.parse(dateString2);
@@ -207,13 +290,17 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
     }
   }
 
-  void _sendMessage(ChatController controller) {
+  void _sendMessage(ChatController controller, ChatMessageModel? message) {
     final messageText = _messageController.text;
     if (messageText.isNotEmpty) {
       print('Mensagem enviada: $messageText');
-      controller.handleSendMessage(message: messageText);
+      controller.handleSendNewSimpleMessage(message: messageText, destinationUserId: '');
       _messageController.clear();
+    } else if (message != null) {
+      print('Mensagem com arquivo enviada: $message');
+      controller.handleSendNewFileMessage(message: message);
     }
+    message = ChatMessageModel();
   }
 }
 
@@ -279,7 +366,7 @@ class MessageFileBubble extends StatelessWidget {
         child: Container(
           margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
           //padding: const EdgeInsets.all(12),
-          child: getFileType(fileName) == FileType.Image && file.url != null
+          child: getFileType(fileName) == FileType.image && file.url != null
               ? Container(
                   decoration: BoxDecoration(
                     border: Border.all(
@@ -339,15 +426,15 @@ class MessageFileBubble extends StatelessWidget {
     String extension = fileName.split('.').last.toLowerCase();
     switch (extension) {
       case 'pdf':
-        return FileType.PDF;
+        return FileType.any;
       case 'jpg':
       case 'jpeg':
       case 'png':
-        return FileType.Image;
+        return FileType.image;
       case 'txt':
-        return FileType.Text;
+        return FileType.any;
       default:
-        return FileType.Other;
+        return FileType.any;
     }
   }
 }

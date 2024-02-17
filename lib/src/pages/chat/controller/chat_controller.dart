@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app_law_order/src/constants/endpoints.dart';
 import 'package:app_law_order/src/models/chat_message_model.dart';
 import 'package:app_law_order/src/models/chat_model.dart';
 import 'package:app_law_order/src/models/user_model.dart';
@@ -19,7 +20,7 @@ class ChatController extends GetxController {
   late String userId;
   late RxInt _currentIndex;
 
-  final url = 'https://sandbox.api.prestadio.com.br/chat';
+  final url = EndPoints.baseUrlChat;
 
   final hasUnreadMessages = false.obs;
   late String token;
@@ -121,10 +122,6 @@ class ChatController extends GetxController {
     }
   }
 
-  Future<void> handleSendMessage({required String message}) async {
-    if (message.isEmpty) {}
-  }
-
   Future<void> loadMessages({required ChatModel chat, bool canLoad = true}) async {
     if (canLoad) {
       setMessagesLoading(true);
@@ -167,4 +164,16 @@ class ChatController extends GetxController {
 
     await OpenFilex.open('${appDocumentsDir.path}/$fileName');
   }
+
+  Future<void> handleSendNewSimpleMessage({
+    required String destinationUserId,
+    required String message,
+  }) async {
+    socket.emit(
+      'message',
+      {"message": "Teste", "destinationUserId": "65c18b4273946074f448da33"},
+    );
+  }
+
+  Future<void> handleSendNewFileMessage({required ChatMessageModel message}) async {}
 }

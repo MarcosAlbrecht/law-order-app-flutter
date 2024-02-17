@@ -29,11 +29,16 @@
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Para personalizar seu perfil com imagens, o aplicativo precisa de acesso à sua biblioteca de fotos.</string>
+	<string>Para personalizar seu perfil com imagens e enviar fotos no chat, o aplicativo precisa de acesso à sua biblioteca de fotos.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Para personalizar seu perfil com imagens, o aplicativo precisa de acesso à sua câmera.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Para gravar áudio ou fazer chamadas de voz, o aplicativo precisa de acesso ao microfone.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+	<string>fetch</string>
+	<string>remote-notification</string>
+	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

@@ -11,12 +11,14 @@ class MessageFileModel {
   bool? temp;
   String? url;
   String? createdAt;
+  String? fileLocalPath;
   MessageFileModel({
     this.id,
     this.key,
     this.temp,
     this.url,
     this.createdAt,
+    this.fileLocalPath,
   });
 
   factory MessageFileModel.fromJson(Map<String, dynamic> json) => _$MessageFileModelFromJson(json);

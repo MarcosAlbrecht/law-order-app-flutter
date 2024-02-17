@@ -13,6 +13,7 @@ MessageFileModel _$MessageFileModelFromJson(Map<String, dynamic> json) =>
       temp: json['temp'] as bool?,
       url: json['url'] as String?,
       createdAt: json['createdAt'] as String?,
+      fileLocalPath: json['fileLocalPath'] as String?,
     );
 
 Map<String, dynamic> _$MessageFileModelToJson(MessageFileModel instance) =>
@@ -22,4 +23,5 @@ Map<String, dynamic> _$MessageFileModelToJson(MessageFileModel instance) =>
       'temp': instance.temp,
       'url': instance.url,
       'createdAt': instance.createdAt,
+      'fileLocalPath': instance.fileLocalPath,
     };

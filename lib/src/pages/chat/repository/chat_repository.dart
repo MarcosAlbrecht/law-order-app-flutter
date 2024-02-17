@@ -59,7 +59,7 @@ class ChatRepository {
 
     final result = await httpManager.downloadFile(url: url, savePath: savePath);
 
-    if (result['statusCode'] == 200) {
+    if (result.statusCode == 200) {
       String data = 'Download finalizado!';
       return DownloadFileResult.success(data);
     }

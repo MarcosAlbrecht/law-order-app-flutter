@@ -33,7 +33,7 @@ class AuthRepository {
       } else if (result['statusCode'] != null && result['statusCode'] == 401) {
         return SignInResult.error('E-mail ou senha inválidos');
       } else {
-        return SignInResult.error('Ocorreu um erro inesperado!');
+        return SignInResult.error('Ocorreu um erro ao efetuar login!');
       }
     } catch (error) {
       String errorMessage = error.toString().replaceFirst('Exception: ', '');

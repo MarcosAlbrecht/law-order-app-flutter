@@ -1,8 +1,10 @@
-const String baseUrl = 'https://sandbox.api.prestadio.com.br';
+//const String baseUrl = 'https://sandbox.api.prestadio.com.br';
+const String baseUrl = 'https://6ea1-45-233-250-147.ngrok-free.app';
 
 const String baseUrlViaCep = 'https://viacep.com.br/';
 
 abstract class EndPoints {
+  static const baseUrlChat = '$baseUrl/chat';
   static const signin = '$baseUrl/accounts/authentication/login';
   static const forgotPassword = '$baseUrl/accounts/users/recover-password';
   static const createUser = '$baseUrl/accounts/users';
