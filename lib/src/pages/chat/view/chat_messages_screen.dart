@@ -44,6 +44,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
     final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     chatController.loadMessages(chat: args['chat_model'], canLoad: false);
     final size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -294,13 +295,13 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
     final messageText = _messageController.text;
     if (messageText.isNotEmpty) {
       print('Mensagem enviada: $messageText');
-      controller.handleSendNewSimpleMessage(message: messageText, destinationUserId: '');
-      _messageController.clear();
+      controller.handleSendNewSimpleMessage(message: messageText);
     } else if (message != null) {
       print('Mensagem com arquivo enviada: $message');
       controller.handleSendNewFileMessage(message: message);
     }
-    message = ChatMessageModel();
+
+    _messageController.clear();
   }
 }
 

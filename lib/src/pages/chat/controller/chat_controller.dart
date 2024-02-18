@@ -166,12 +166,16 @@ class ChatController extends GetxController {
   }
 
   Future<void> handleSendNewSimpleMessage({
-    required String destinationUserId,
     required String message,
   }) async {
+    final String? destinationUserId = selectedChat?.chatId;
+
     socket.emit(
       'message',
-      {"message": "Teste", "destinationUserId": "65c18b4273946074f448da33"},
+      {
+        'message': message,
+        'destinationUserId': destinationUserId,
+      },
     );
   }
 

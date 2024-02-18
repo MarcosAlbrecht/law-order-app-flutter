@@ -36,8 +36,7 @@ class AuthRepository {
         return SignInResult.error('Ocorreu um erro ao efetuar login!');
       }
     } catch (error) {
-      String errorMessage = error.toString().replaceFirst('Exception: ', '');
-      return SignInResult.error(errorMessage);
+      return SignInResult.error('Ocorreu um erro ao efetuar login!');
     }
   }
 

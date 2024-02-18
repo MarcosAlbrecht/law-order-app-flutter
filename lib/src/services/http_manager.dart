@@ -25,14 +25,14 @@ class HttpManager {
     final utilServices = UtilServices();
     final token = await utilServices.getToken();
 
-    final defaultHeaders = headers?.cast<String, String>() ?? {}
-      ..addAll({
-        'content-type': 'application/json',
-        'accept': 'application/json',
-      });
+    final defaultHeaders = headers?.cast<String, String>() ?? {};
+    // ..addAll({
+    //   'content-type': 'application/json',
+    //   'accept': 'application/json',
+    // });
 
     //enviar o token do user poi é obrigatorio para fazer as chamadas da API
-    if (token != null && defaultHeaders['Authorization'] == null) {
+    if (token != null && token.isNotEmpty && defaultHeaders['Authorization'] == null) {
       defaultHeaders['Authorization'] = 'Bearer $token';
     }
 

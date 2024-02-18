@@ -10,15 +10,18 @@ class ChatModel {
   @JsonKey(name: 'id')
   String? id;
   String? chatId;
+  String? userId;
   String? destinationUserId;
   String? message;
   String? createdAt;
   bool? seen;
   UserModel? user;
   UserModel? destinationUser;
+
   ChatModel({
     this.id,
     this.chatId,
+    this.userId,
     this.destinationUserId,
     this.message,
     this.createdAt,
