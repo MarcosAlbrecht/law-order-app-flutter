@@ -4,18 +4,21 @@ import 'package:app_law_order/src/models/chat_model.dart';
 import 'package:app_law_order/src/pages/chat/result/chat_message_result.dart';
 import 'package:app_law_order/src/pages/chat/result/chats_result.dart';
 import 'package:app_law_order/src/pages/chat/result/download_file_result.dart';
+import 'package:app_law_order/src/pages/chat/result/send_file_result.dart';
 import 'package:app_law_order/src/services/http_manager.dart';
-import 'package:get/get.dart';
+
+import 'package:dio/dio.dart';
 
 class ChatRepository {
   final HttpManager httpManager = HttpManager();
 
   Future<ChatsResult<ChatModel>> getAllChats() async {
-    final result = await httpManager.restRequest(
-      url: EndPoints.getAllChats,
-      method: HttpMethods.get,
-    );
     try {
+      final result = await httpManager.restRequest(
+        url: EndPoints.getAllChats,
+        method: HttpMethods.get,
+      );
+
       if (result != null && result[0]['statusCode'] == null) {
         List<ChatModel> data = (List<Map<String, dynamic>>.from(result)).map(ChatModel.fromJson).toList();
         return ChatsResult.success(data);
@@ -34,10 +37,10 @@ class ChatRepository {
     }
   }
 
-  Future<ChatsMessageResult<ChatMessageModel>> getMessages({required ChatModel chat}) async {
+  Future<ChatsMessageResult<ChatMessageModel>> getMessages({required String userDestinationId}) async {
     final result = await httpManager.restRequest(
       method: HttpMethods.get,
-      url: '${EndPoints.getChatMessage}${chat.chatId}',
+      url: '${EndPoints.getChatMessage}$userDestinationId',
     );
 
     if (result.isNotEmpty) {
@@ -65,5 +68,28 @@ class ChatRepository {
     }
     String data = 'Erro ao realizar download!';
     return DownloadFileResult.success(data);
+  }
+
+  Future<SendFileResult> sendChatFile({required String file, required String userDestination}) async {
+    FormData formData = FormData.fromMap({
+      'files': await MultipartFile.fromFile(file, filename: file.split('/').last),
+      // Adicione outros campos se necessário
+    });
+
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.post,
+        url: '${EndPoints.sendFileMessage}$userDestination',
+        body: formData,
+      );
+
+      if (result.isEmpty) {
+        return SendFileResult.success('');
+      } else {
+        return SendFileResult.error('Não foi possivel enviar o arquivo.');
+      }
+    } on Exception {
+      return SendFileResult.error('Tente novamente mais tarde.');
+    }
   }
 }

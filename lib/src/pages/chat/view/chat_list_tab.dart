@@ -79,6 +79,7 @@ class _ChatListTab extends State<ChatListTab> {
                             itemBuilder: (_, index) {
                               return ChatTile(
                                 chat: controller.allChats[index],
+                                logedUserId: controller.authController.user.id!,
                               );
                             },
                             itemCount: controller.allChats.length,

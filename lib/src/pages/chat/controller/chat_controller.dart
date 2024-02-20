@@ -18,6 +18,7 @@ class ChatController extends GetxController {
   final authController = Get.find<AuthController>();
 
   late String userId;
+  late String destinationUser;
   late RxInt _currentIndex;
 
   final url = EndPoints.baseUrlChat;
@@ -48,6 +49,7 @@ class ChatController extends GetxController {
 
   void didChangeScreen() {
     setTabOpened(true);
+    loadChats();
     print('A tela ChatTab foi chamada novamente.');
   }
 
@@ -112,6 +114,7 @@ class ChatController extends GetxController {
       //var userData = data as Map<String, dynamic>;
       ChatMessageModel message = ChatMessageModel.fromJson(data);
       message.createdAt = utilServices.getCurrentDateTimeInISO8601Format();
+      message.userId = data['author']['_id'];
       allMessages.insert(0, message);
       update();
       // Agora você pode usar o objeto UserModel conforme necessário
@@ -122,13 +125,32 @@ class ChatController extends GetxController {
     }
   }
 
-  Future<void> loadMessages({required ChatModel chat, bool canLoad = true}) async {
+  void handleLoadingMessages({
+    ChatModel? chat,
+    String? userDestinationId,
+    bool canLoad = true,
+  }) {
+    if (chat != null) {
+      if (authController.user.id == chat.destinationUserId) {
+        destinationUser = chat.userId!;
+      } else {
+        destinationUser = chat.destinationUserId!;
+      }
+    } else {
+      destinationUser = userDestinationId!;
+    }
+
+    loadMessages(userDestinationId: destinationUser, canLoad: canLoad);
+  }
+
+  Future<void> loadMessages({required String userDestinationId, bool canLoad = true}) async {
     if (canLoad) {
       setMessagesLoading(true);
     }
 
-    final result = await chatRepository.getMessages(chat: chat);
-    selectedChat = chat;
+    final result = await chatRepository.getMessages(userDestinationId: userDestinationId);
+    destinationUser = userDestinationId;
+    //selectedChat = chat;
 
     setMessagesLoading(false, isUser: true);
 
@@ -168,16 +190,25 @@ class ChatController extends GetxController {
   Future<void> handleSendNewSimpleMessage({
     required String message,
   }) async {
-    final String? destinationUserId = selectedChat?.chatId;
+    // final String? destinationUserId;
+    // if (authController.user.id == userDestinationId) {
+    //   destinationUserId = selectedChat?.userId;
+    // } else {
+    //   destinationUserId = selectedChat?.destinationUserId;
+    // }
 
     socket.emit(
       'message',
       {
         'message': message,
-        'destinationUserId': destinationUserId,
+        'destinationUserId': destinationUser,
       },
     );
   }
 
-  Future<void> handleSendNewFileMessage({required ChatMessageModel message}) async {}
+  Future<void> handleSendNewFileMessage({required String path}) async {
+    //final String? destinationUserId;
+
+    final result = chatRepository.sendChatFile(file: path, userDestination: destinationUser);
+  }
 }

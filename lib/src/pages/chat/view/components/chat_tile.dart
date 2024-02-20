@@ -1,18 +1,20 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:app_law_order/src/config/custom_colors.dart';
-import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-
-import 'package:app_law_order/src/models/chat_model.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
+import 'package:app_law_order/src/config/custom_colors.dart';
+import 'package:app_law_order/src/models/chat_model.dart';
+import 'package:app_law_order/src/pages_routes/pages_routes.dart';
+
 class ChatTile extends StatelessWidget {
   final ChatModel chat;
+  final String logedUserId;
   const ChatTile({
     Key? key,
     required this.chat,
+    required this.logedUserId,
   }) : super(key: key);
 
   @override
@@ -49,24 +51,33 @@ class ChatTile extends StatelessWidget {
             child: ListTile(
               visualDensity: VisualDensity.compact,
               leading: ClipRRect(
-                borderRadius: BorderRadius.circular(50),
-                child: chat.user?.profilePicture != null
-                    ? CachedNetworkImage(
-                        imageUrl: chat.user!.profilePicture!.url!,
-                        progressIndicatorBuilder: (context, url, downloadProgress) =>
-                            CircularProgressIndicator(value: downloadProgress.progress),
-                        errorWidget: (context, url, error) => const Icon(Icons.error),
-                        fit: BoxFit.cover,
-                        height: 40,
-                        width: 40,
-                      )
-                    : Image.asset(
-                        "assets/ICONPEOPLE.png",
-                        fit: BoxFit.cover,
-                        height: 40,
-                        width: 40,
-                      ),
-              ),
+                  borderRadius: BorderRadius.circular(50),
+                  child: logedUserId == chat.destinationUserId
+                      ? chat.user?.profilePicture != null
+                          ? CachedNetworkImage(
+                              imageUrl: chat.user!.profilePicture!.url!,
+                              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                  CircularProgressIndicator(value: downloadProgress.progress),
+                              errorWidget: (context, url, error) => const Icon(Icons.error),
+                              fit: BoxFit.cover,
+                              height: 40,
+                              width: 40,
+                            )
+                          : Image.asset(
+                              "assets/ICONPEOPLE.png",
+                              fit: BoxFit.cover,
+                              height: 40,
+                              width: 40,
+                            )
+                      : CachedNetworkImage(
+                          imageUrl: chat.destinationUser!.profilePicture!.url!,
+                          progressIndicatorBuilder: (context, url, downloadProgress) =>
+                              CircularProgressIndicator(value: downloadProgress.progress),
+                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                          fit: BoxFit.cover,
+                          height: 40,
+                          width: 40,
+                        )),
               title: Text(
                 '${chat.user!.firstName!} ${chat.user!.lastName!}',
                 style: TextStyle(fontSize: CustomFontSizes.fontSize14),

@@ -1,4 +1,5 @@
 const String baseUrl = 'https://sandbox.prestadio-api.net';
+//const String baseUrl = 'https://sandbox.api.prestadio.com.br';
 //const String baseUrl = 'https://6ea1-45-233-250-147.ngrok-free.app';
 
 const String baseUrlViaCep = 'https://viacep.com.br/';
@@ -52,7 +53,8 @@ abstract class EndPoints {
 
   //endpois chat
   static const getAllChats = '$baseUrl/messages/list-all-chats';
-  static const getChatMessage = '$baseUrl/messages/';
+  static const getChatMessage = '$baseUrl/messages/destination/';
+  static const sendFileMessage = '$baseUrl/messages/file/';
   //
 }
 

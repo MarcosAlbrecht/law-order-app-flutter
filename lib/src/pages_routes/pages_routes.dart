@@ -99,7 +99,7 @@ abstract class AppPages {
     ),
     GetPage(
       name: PagesRoutes.chatMessageScreen,
-      page: () => const ChatMessageScreen(),
+      page: () => ChatMessageScreen(),
     ),
     GetPage(
       page: () => const BaseScreen(),

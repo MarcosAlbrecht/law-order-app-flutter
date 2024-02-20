@@ -16,10 +16,13 @@ import 'package:app_law_order/src/pages/chat/controller/chat_controller.dart';
 import 'package:app_law_order/src/pages/chat/view/components/picture_message_dialog.dart';
 import 'package:app_law_order/src/pages/common_widgets/custom_text_field.dart';
 import 'package:app_law_order/src/services/util_services.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ChatMessageScreen extends StatefulWidget {
-  const ChatMessageScreen({super.key});
+  ChatMessageScreen({super.key});
+
+  final args = Get.arguments as Map<String, dynamic>;
 
   @override
   State<ChatMessageScreen> createState() => _ChatMessageScreenState();
@@ -34,15 +37,23 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
     // TODO: implement initState
     super.initState();
 
+    //final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    //chatController.handleLoadingMessages(chat: args['chat_model'], canLoad: false, userDestinationId: args['userDestinationId']);
+    chatController.handleLoadingMessages(
+        chat: widget.args['chat_model'], canLoad: false, userDestinationId: widget.args['userDestinationId']);
+    print(widget.args);
+
     print('inicializou o chat message');
   }
 
-  final TextEditingController _messageController = TextEditingController();
+  final messageEC = TextEditingController();
+
+  void clearText() {
+    messageEC.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    chatController.loadMessages(chat: args['chat_model'], canLoad: false);
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -143,10 +154,11 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                               suffixIconButtonAttach: () {
                                 _handleAttachmentPressed(controller);
                               },
+                              controller: messageEC,
                               label: 'Mensagem',
                               removeFloatingLabelBehavior: true,
                               onChanged: (value) {
-                                _messageController.text = value!;
+                                messageEC.text = value!;
                               },
                             ),
                           ),
@@ -292,16 +304,16 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
   }
 
   void _sendMessage(ChatController controller, ChatMessageModel? message) {
-    final messageText = _messageController.text;
+    final messageText = messageEC.text;
     if (messageText.isNotEmpty) {
       print('Mensagem enviada: $messageText');
       controller.handleSendNewSimpleMessage(message: messageText);
     } else if (message != null) {
       print('Mensagem com arquivo enviada: $message');
-      controller.handleSendNewFileMessage(message: message);
+      controller.handleSendNewFileMessage(path: message.file!.fileLocalPath!);
     }
 
-    _messageController.clear();
+    clearText();
   }
 }
 
