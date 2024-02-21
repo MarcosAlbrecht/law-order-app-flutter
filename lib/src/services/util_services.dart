@@ -113,6 +113,21 @@ class UtilServices {
     return formattedDateTime;
   }
 
+  String formatTime(String? originalDateTimeString) {
+    if (originalDateTimeString == null || originalDateTimeString.isEmpty) {
+      return '';
+    }
+    // Convertendo a string para um objeto DateTime
+    DateTime originalDateTime = DateTime.parse(originalDateTimeString);
+
+    // Formatando a data e hora para o novo formato desejado
+    String formattedDateTime =
+        //"${originalDateTime.day.toString().padLeft(2, '0')}/${originalDateTime.month.toString().padLeft(2, '0')}/${originalDateTime.year}";
+        "${originalDateTime.hour.toString().padLeft(2, '0')}:${originalDateTime.minute.toString().padLeft(2, '0')}";
+
+    return formattedDateTime;
+  }
+
   String formatDateToBD(DateTime selectedDate) {
     // Convertendo para formato ISO 8601
     String iso8601String = selectedDate.toIso8601String();

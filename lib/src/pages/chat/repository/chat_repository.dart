@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:app_law_order/src/constants/endpoints.dart';
 import 'package:app_law_order/src/models/chat_message_model.dart';
 import 'package:app_law_order/src/models/chat_model.dart';
@@ -38,19 +40,25 @@ class ChatRepository {
   }
 
   Future<ChatsMessageResult<ChatMessageModel>> getMessages({required String userDestinationId}) async {
-    final result = await httpManager.restRequest(
-      method: HttpMethods.get,
-      url: '${EndPoints.getChatMessage}$userDestinationId',
-    );
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.get,
+        url: '${EndPoints.getChatMessage}$userDestinationId',
+      );
 
-    if (result.isNotEmpty) {
-      List<ChatMessageModel> data = (List<Map<String, dynamic>>.from(result)).map(ChatMessageModel.fromJson).toList();
-      return ChatsMessageResult.success(data);
-    } else if (result.isEmpty) {
-      List<ChatMessageModel> data = [];
-      return ChatsMessageResult.success(data);
-    } else {
-      return ChatsMessageResult.error('Erro ao carregar as mensagens!');
+      if (result.isNotEmpty) {
+        List<ChatMessageModel> data = (List<Map<String, dynamic>>.from(result)).map(ChatMessageModel.fromJson).toList();
+        return ChatsMessageResult.success(data);
+      } else if (result.isEmpty) {
+        List<ChatMessageModel> data = [];
+        return ChatsMessageResult.success(data);
+      } else {
+        return ChatsMessageResult.error('Erro ao carregar as mensagens!');
+      }
+    } on Exception catch (e) {
+      print(e);
+      if (e == 403) {}
+      return ChatsMessageResult.error('Não foi possível carregar as mensagens. Tente novamente mais tarde!');
     }
   }
 
@@ -72,7 +80,7 @@ class ChatRepository {
 
   Future<SendFileResult> sendChatFile({required String file, required String userDestination}) async {
     FormData formData = FormData.fromMap({
-      'files': await MultipartFile.fromFile(file, filename: file.split('/').last),
+      'file': await MultipartFile.fromFile(file, filename: file.split('/').last),
       // Adicione outros campos se necessário
     });
 
@@ -88,7 +96,8 @@ class ChatRepository {
       } else {
         return SendFileResult.error('Não foi possivel enviar o arquivo.');
       }
-    } on Exception {
+    } catch (e) {
+      log('Erro ao enviar arquivo', error: e);
       return SendFileResult.error('Tente novamente mais tarde.');
     }
   }

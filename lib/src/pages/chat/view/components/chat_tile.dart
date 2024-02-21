@@ -78,10 +78,15 @@ class ChatTile extends StatelessWidget {
                           height: 40,
                           width: 40,
                         )),
-              title: Text(
-                '${chat.user!.firstName!} ${chat.user!.lastName!}',
-                style: TextStyle(fontSize: CustomFontSizes.fontSize14),
-              ),
+              title: logedUserId == chat.destinationUserId
+                  ? Text(
+                      '${chat.user!.firstName!} ${chat.user!.lastName!}',
+                      style: TextStyle(fontSize: CustomFontSizes.fontSize14),
+                    )
+                  : Text(
+                      '${chat.destinationUser!.firstName!} ${chat.destinationUser!.lastName!}',
+                      style: TextStyle(fontSize: CustomFontSizes.fontSize14),
+                    ),
               subtitle: Text(
                 chat.message != null ? '${chat.message}' : '',
                 overflow: TextOverflow.ellipsis,

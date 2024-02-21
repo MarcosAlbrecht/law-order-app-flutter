@@ -68,23 +68,13 @@ class ProfileViewScreen extends StatelessWidget {
                                     child: Container(
                                       padding: const EdgeInsets.all(3),
                                       child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        child: controller.user.profilePicture !=
-                                                null
+                                        borderRadius: BorderRadius.circular(100),
+                                        child: controller.user.profilePicture != null
                                             ? CachedNetworkImage(
-                                                imageUrl: controller
-                                                    .user.profilePicture!.url!,
-                                                progressIndicatorBuilder:
-                                                    (context, url,
-                                                            downloadProgress) =>
-                                                        CircularProgressIndicator(
-                                                            value:
-                                                                downloadProgress
-                                                                    .progress),
-                                                errorWidget:
-                                                    (context, url, error) =>
-                                                        const Icon(Icons.error),
+                                                imageUrl: controller.user.profilePicture!.url!,
+                                                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                                    CircularProgressIndicator(value: downloadProgress.progress),
+                                                errorWidget: (context, url, error) => const Icon(Icons.error),
                                                 height: 130,
                                                 width: 130,
                                                 fit: BoxFit.cover,
@@ -98,20 +88,16 @@ class ProfileViewScreen extends StatelessWidget {
                                     ),
                                   ),
                                   Visibility(
-                                    visible:
-                                        controller.user.userType == "provider",
+                                    visible: controller.user.userType == "provider",
                                     child: Positioned(
                                       left: 15,
                                       right: 15,
                                       bottom: 0,
                                       child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 1),
+                                          padding: const EdgeInsets.symmetric(vertical: 1),
                                           decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                              color:
-                                                  CustomColors.blueDark2Color,
+                                              borderRadius: BorderRadius.circular(20),
+                                              color: CustomColors.blueDark2Color,
                                               shape: BoxShape.rectangle),
                                           child: Center(
                                             child: Text(
@@ -119,8 +105,7 @@ class ProfileViewScreen extends StatelessWidget {
                                               style: TextStyle(
                                                   color: CustomColors.white,
                                                   fontWeight: FontWeight.w600,
-                                                  fontSize: CustomFontSizes
-                                                      .fontSize12),
+                                                  fontSize: CustomFontSizes.fontSize12),
                                             ),
                                           )),
                                     ),
@@ -135,26 +120,20 @@ class ProfileViewScreen extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 10),
+                                      padding: const EdgeInsets.only(bottom: 10),
                                       child: Text(
                                         '${controller.user.firstName} ${controller.user.lastName}',
                                         style: TextStyle(
-                                            fontSize:
-                                                CustomFontSizes.fontSize24,
+                                            fontSize: CustomFontSizes.fontSize24,
                                             color: CustomColors.blueDark2Color,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                     Visibility(
-                                      visible: controller.user.portfolioTitle !=
-                                          null,
+                                      visible: controller.user.portfolioTitle != null,
                                       child: Text(
                                         '${controller.user.portfolioTitle}',
-                                        style: TextStyle(
-                                            fontSize:
-                                                CustomFontSizes.fontSize14,
-                                            color: Colors.grey.shade600),
+                                        style: TextStyle(fontSize: CustomFontSizes.fontSize14, color: Colors.grey.shade600),
                                       ),
                                     ),
                                   ],
@@ -227,22 +206,18 @@ class ProfileViewScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Visibility(
                                     replacement: Expanded(
                                       child: ElevatedButton.icon(
                                         style: ButtonStyle(
-                                          backgroundColor:
-                                              MaterialStateProperty.all<Color>(
+                                          backgroundColor: MaterialStateProperty.all<Color>(
                                             CustomColors.cyanColor,
                                           ),
-                                          shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
+                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                             RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(
+                                              borderRadius: BorderRadius.circular(
                                                 10,
                                               ), // Define a borda quadrada
                                             ),
@@ -260,8 +235,7 @@ class ProfileViewScreen extends StatelessWidget {
                                           'Deixar de Seguir',
                                           style: TextStyle(
                                             color: CustomColors.black,
-                                            fontSize:
-                                                CustomFontSizes.fontSize12,
+                                            fontSize: CustomFontSizes.fontSize12,
                                           ),
                                         ),
                                       ),
@@ -270,15 +244,12 @@ class ProfileViewScreen extends StatelessWidget {
                                     child: Expanded(
                                       child: ElevatedButton.icon(
                                         style: ButtonStyle(
-                                          backgroundColor:
-                                              MaterialStateProperty.all<Color>(
+                                          backgroundColor: MaterialStateProperty.all<Color>(
                                             CustomColors.blueDark2Color,
                                           ),
-                                          shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
+                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                             RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(
+                                              borderRadius: BorderRadius.circular(
                                                 10,
                                               ), // Define a borda quadrada
                                             ),
@@ -296,8 +267,7 @@ class ProfileViewScreen extends StatelessWidget {
                                           'Seguir',
                                           style: TextStyle(
                                             color: CustomColors.white,
-                                            fontSize:
-                                                CustomFontSizes.fontSize12,
+                                            fontSize: CustomFontSizes.fontSize12,
                                           ),
                                         ),
                                       ),
@@ -309,12 +279,10 @@ class ProfileViewScreen extends StatelessWidget {
                                   Expanded(
                                     child: ElevatedButton.icon(
                                       style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all<Color>(
+                                        backgroundColor: MaterialStateProperty.all<Color>(
                                           CustomColors.blueDark2Color,
                                         ),
-                                        shape: MaterialStateProperty.all<
-                                            RoundedRectangleBorder>(
+                                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                           RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(
                                               10,
@@ -322,7 +290,12 @@ class ProfileViewScreen extends StatelessWidget {
                                           ),
                                         ),
                                       ),
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Get.toNamed(
+                                          PagesRoutes.chatMessageScreen,
+                                          arguments: {'userDestinationId': controller.user.id},
+                                        );
+                                      },
                                       icon: Icon(
                                         Icons.message,
                                         size: 14,
@@ -352,45 +325,35 @@ class ProfileViewScreen extends StatelessWidget {
                             children: [
                               Text(
                                 'Trabalhos',
-                                style: TextStyle(
-                                    color: CustomColors.black,
-                                    fontSize: CustomFontSizes.fontSize18),
+                                style: TextStyle(color: CustomColors.black, fontSize: CustomFontSizes.fontSize18),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(top: 5),
                                 child: Visibility(
-                                  visible: controller.user.portfolioPictures !=
-                                          null &&
-                                      controller
-                                          .user.portfolioPictures!.isNotEmpty,
+                                  visible:
+                                      controller.user.portfolioPictures != null && controller.user.portfolioPictures!.isNotEmpty,
                                   replacement: const Text('Não informado'),
                                   child: Container(
                                     padding: const EdgeInsets.only(top: 5),
                                     height: 190,
                                     child: GridView.builder(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 0, 0, 16),
+                                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
                                         physics: const BouncingScrollPhysics(),
-                                        gridDelegate:
-                                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                                crossAxisCount: 2,
-                                                mainAxisSpacing: 10,
-                                                crossAxisSpacing: 10,
-                                                childAspectRatio: 9 / 8),
+                                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2,
+                                            mainAxisSpacing: 10,
+                                            crossAxisSpacing: 10,
+                                            childAspectRatio: 9 / 8),
                                         itemBuilder: (context, index) {
                                           return PictureTile(
-                                            picture: controller
-                                                .user.portfolioPictures![index],
+                                            picture: controller.user.portfolioPictures![index],
                                           );
                                         },
                                         // separatorBuilder: (context, index) =>
                                         //     const SizedBox(width: 5),
-                                        itemCount:
-                                            controller.user.portfolioPictures !=
-                                                    null
-                                                ? controller.user
-                                                    .portfolioPictures!.length
-                                                : 0),
+                                        itemCount: controller.user.portfolioPictures != null
+                                            ? controller.user.portfolioPictures!.length
+                                            : 0),
                                   ),
                                 ),
                               )
@@ -406,17 +369,12 @@ class ProfileViewScreen extends StatelessWidget {
                             children: [
                               Text(
                                 'Sobre',
-                                style: TextStyle(
-                                    color: CustomColors.black,
-                                    fontSize: CustomFontSizes.fontSize18),
+                                style: TextStyle(color: CustomColors.black, fontSize: CustomFontSizes.fontSize18),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(top: 5),
                                 child: Visibility(
-                                  visible:
-                                      controller.user.portfolioAbout != null &&
-                                          controller
-                                              .user.portfolioAbout!.isNotEmpty,
+                                  visible: controller.user.portfolioAbout != null && controller.user.portfolioAbout!.isNotEmpty,
                                   replacement: const Text('Não informado'),
                                   child: Text(
                                     '${controller.user.portfolioAbout}',
@@ -440,15 +398,11 @@ class ProfileViewScreen extends StatelessWidget {
                             children: [
                               Text(
                                 'Serviços',
-                                style: TextStyle(
-                                    color: CustomColors.black,
-                                    fontSize: CustomFontSizes.fontSize18),
+                                style: TextStyle(color: CustomColors.black, fontSize: CustomFontSizes.fontSize18),
                               ),
                               Visibility(
-                                visible: controller.user.services != null &&
-                                    controller.user.services!.isNotEmpty,
-                                replacement: const Text(
-                                    'Nenhum serviço adicionado ainda.'),
+                                visible: controller.user.services != null && controller.user.services!.isNotEmpty,
+                                replacement: const Text('Nenhum serviço adicionado ainda.'),
                                 child: Container(
                                   height: 200,
                                   padding: const EdgeInsets.only(top: 10),
@@ -459,13 +413,10 @@ class ProfileViewScreen extends StatelessWidget {
                                         //height: 100,
                                         //child: Text("OLA" + index.toString()),
 
-                                        service:
-                                            controller.user.services![index],
+                                        service: controller.user.services![index],
                                       );
                                     },
-                                    itemCount: controller.user.services != null
-                                        ? controller.user.services!.length
-                                        : 0,
+                                    itemCount: controller.user.services != null ? controller.user.services!.length : 0,
                                   ),
                                 ),
                               ),
@@ -483,16 +434,13 @@ class ProfileViewScreen extends StatelessWidget {
                             children: [
                               Text(
                                 'Avaliações',
-                                style: TextStyle(
-                                    color: CustomColors.black,
-                                    fontSize: CustomFontSizes.fontSize18),
+                                style: TextStyle(color: CustomColors.black, fontSize: CustomFontSizes.fontSize18),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(top: 5),
                                 child: Visibility(
                                   visible: false,
-                                  replacement: const Text(
-                                      'O Prestador ainda não recebeu avaliações'),
+                                  replacement: const Text('O Prestador ainda não recebeu avaliações'),
                                   child: Container(
                                     height: 180,
                                     padding: const EdgeInsets.only(top: 10),
@@ -508,14 +456,10 @@ class ProfileViewScreen extends StatelessWidget {
                                           //height: 100,
                                           //child: Text("OLA" + index.toString()),
 
-                                          service:
-                                              controller.user.services![index],
+                                          service: controller.user.services![index],
                                         );
                                       },
-                                      itemCount:
-                                          controller.user.services != null
-                                              ? controller.user.services!.length
-                                              : 0,
+                                      itemCount: controller.user.services != null ? controller.user.services!.length : 0,
                                     ),
                                   ),
                                 ),
@@ -542,8 +486,7 @@ class ProfileViewScreen extends StatelessWidget {
                             onPressed: authController.isLoading
                                 ? null
                                 : () {
-                                    Get.toNamed(
-                                        PagesRoutes.serviceRequestScreen);
+                                    Get.toNamed(PagesRoutes.serviceRequestScreen);
                                   },
                             child: authController.isLoading
                                 ? CircularProgressIndicator(

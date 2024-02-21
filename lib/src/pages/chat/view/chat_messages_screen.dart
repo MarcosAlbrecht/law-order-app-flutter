@@ -1,23 +1,24 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
 
-import 'package:app_law_order/src/models/chat_message_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/entypo_icons.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:app_law_order/src/config/custom_colors.dart';
+import 'package:app_law_order/src/models/chat_message_model.dart';
 import 'package:app_law_order/src/models/chat_model.dart';
 import 'package:app_law_order/src/models/message_file_model.dart';
 import 'package:app_law_order/src/pages/chat/controller/chat_controller.dart';
 import 'package:app_law_order/src/pages/chat/view/components/picture_message_dialog.dart';
 import 'package:app_law_order/src/pages/common_widgets/custom_text_field.dart';
+import 'package:app_law_order/src/pages/profile/view/portfolio_screen.dart';
 import 'package:app_law_order/src/services/util_services.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ChatMessageScreen extends StatefulWidget {
   ChatMessageScreen({super.key});
@@ -58,10 +59,11 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         backgroundColor: Colors.white,
         title: const Text('Chat App'),
       ),
-      body: Container(
+      body: SizedBox(
         height: size.height,
         width: size.width,
         child: GetBuilder<ChatController>(
@@ -112,6 +114,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                               ),
                             controller.allMessages[index].file == null
                                 ? MessageBubble(
+                                    createdAt: message.createdAt!,
                                     message: message.message!,
                                     isMe: message.userId == controller.authController.user.id,
                                   )
@@ -120,6 +123,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                                     file: message.file!,
                                     isMe: message.userId == controller.authController.user.id,
                                     controller: controller,
+                                    createdAt: message.createdAt!,
                                     onTap: (FileType fileType) async {
                                       // tratar a interação com o arquivo
                                       if (fileType == FileType.image) {
@@ -254,6 +258,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
       );
       final message = ChatMessageModel(
         fileName: result.files.single.name,
+        file: fileModel,
       );
 
       _sendMessage(chatController, message);
@@ -308,9 +313,9 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
     if (messageText.isNotEmpty) {
       print('Mensagem enviada: $messageText');
       controller.handleSendNewSimpleMessage(message: messageText);
-    } else if (message != null) {
+    } else if (message?.file?.fileLocalPath != null) {
       print('Mensagem com arquivo enviada: $message');
-      controller.handleSendNewFileMessage(path: message.file!.fileLocalPath!);
+      controller.handleSendNewFileMessage(message: message!);
     }
 
     clearText();
@@ -320,8 +325,14 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
 class MessageBubble extends StatelessWidget {
   final String message;
   final bool isMe;
+  final String createdAt;
 
-  const MessageBubble({required this.message, required this.isMe});
+  const MessageBubble({
+    Key? key,
+    required this.message,
+    required this.isMe,
+    required this.createdAt,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -339,12 +350,21 @@ class MessageBubble extends StatelessWidget {
             bottomRight: isMe ? const Radius.circular(0) : const Radius.circular(16),
           ),
         ),
-        child: Text(
-          message,
-          style: TextStyle(
-            color: isMe ? CustomColors.white : CustomColors.black,
-            fontSize: CustomFontSizes.fontSize14,
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(
+              message,
+              style: TextStyle(
+                color: isMe ? CustomColors.white : CustomColors.black,
+                fontSize: CustomFontSizes.fontSize14,
+              ),
+            ),
+            Text(
+              utilServices.formatTime(createdAt),
+              style: TextStyle(color: isMe ? CustomColors.white : CustomColors.black, fontSize: CustomFontSizes.fontSize14),
+            ),
+          ],
         ),
       ),
     );
@@ -357,6 +377,7 @@ class MessageFileBubble extends StatelessWidget {
   final bool isMe;
   final Function(FileType) onTap;
   final ChatController controller;
+  final String createdAt;
 
   const MessageFileBubble({
     Key? key,
@@ -365,6 +386,7 @@ class MessageFileBubble extends StatelessWidget {
     required this.isMe,
     required this.onTap,
     required this.controller,
+    required this.createdAt,
   }) : super(key: key);
 
   @override
@@ -413,18 +435,29 @@ class MessageFileBubble extends StatelessWidget {
                         bottomRight: isMe ? const Radius.circular(0) : const Radius.circular(16),
                       ),
                     ),
-                    child: Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        const Icon(Icons.insert_drive_file),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            fileName,
-                            style: TextStyle(
-                              color: isMe ? CustomColors.white : CustomColors.black,
-                              fontSize: CustomFontSizes.fontSize14,
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.insert_drive_file),
+                            const SizedBox(width: 8),
+                            Flexible(
+                              child: Text(
+                                fileName,
+                                style: TextStyle(
+                                  color: isMe ? CustomColors.white : CustomColors.black,
+                                  fontSize: CustomFontSizes.fontSize14,
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
+                        ),
+                        Text(
+                          utilServices.formatTime(createdAt),
+                          style: TextStyle(
+                              color: isMe ? CustomColors.white : CustomColors.black, fontSize: CustomFontSizes.fontSize14),
                         ),
                       ],
                     ),

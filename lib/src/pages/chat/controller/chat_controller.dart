@@ -130,6 +130,9 @@ class ChatController extends GetxController {
     String? userDestinationId,
     bool canLoad = true,
   }) {
+    destinationUser = '';
+    allChats = [];
+
     if (chat != null) {
       if (authController.user.id == chat.destinationUserId) {
         destinationUser = chat.userId!;
@@ -155,12 +158,12 @@ class ChatController extends GetxController {
     setMessagesLoading(false, isUser: true);
 
     //setMessageLoading(false);
-    result.when(
-        success: (data) {
-          allMessages.clear();
-          allMessages.addAll(data);
-        },
-        error: (message) {});
+    result.when(success: (data) {
+      allMessages.clear();
+      allMessages.addAll(data);
+    }, error: (message) {
+      allMessages = [];
+    });
   }
 
   Future<void> handleDownloadFile({required String url, required String fileName}) async {
@@ -206,9 +209,26 @@ class ChatController extends GetxController {
     );
   }
 
-  Future<void> handleSendNewFileMessage({required String path}) async {
+  Future<void> handleSendNewFileMessage({required ChatMessageModel message}) async {
     //final String? destinationUserId;
+    message.userId = authController.user.id;
+    message.createdAt = utilServices.getCurrentDateTimeInISO8601Format();
+    message.authorFirstName = authController.user.firstName;
+    message.authorLastName = authController.user.lastName;
+    //setLoading(true);
+    final result = await chatRepository.sendChatFile(
+      file: message.file!.fileLocalPath!,
+      userDestination: destinationUser,
+    );
+    result.when(
+      success: (data) {
+        //allMessages.insert(0, message);
+      },
+      error: (message) {
+        utilServices.showToast(message: 'Ocorreu um erro ao enviar o arquivo, tente novamente mais tarde');
+      },
+    );
 
-    final result = chatRepository.sendChatFile(file: path, userDestination: destinationUser);
+    //setLoading(true);
   }
 }

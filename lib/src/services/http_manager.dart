@@ -59,7 +59,7 @@ class HttpManager {
       if (error.type == DioExceptionType.connectionTimeout) {
         throw Exception('Tempo limite de conexão excedido');
       }
-      throw Exception(error.message);
+      throw Exception(error.response?.statusCode);
       //return error.response?.data ?? {};
     } catch (error) {
       return {'error': 'Erro desconhecido: $error'};

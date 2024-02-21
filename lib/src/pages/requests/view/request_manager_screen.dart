@@ -381,7 +381,10 @@ class _ActionsProvider extends StatelessWidget {
                 ),
               );
               actionWidgets.add(
-                _ChatButton(labelButton: labelButton),
+                _ChatButton(
+                  labelButton: labelButton,
+                  destinationUserId: controller.selectedRequest!.requester!.id!,
+                ),
               );
               actionWidgets.add(
                 const Divider(
@@ -406,7 +409,10 @@ class _ActionsProvider extends StatelessWidget {
                 ),
               );
               actionWidgets.add(
-                _ChatButton(labelButton: labelButton),
+                _ChatButton(
+                  labelButton: labelButton,
+                  destinationUserId: controller.selectedRequest!.requester!.id!,
+                ),
               );
 
               actionWidgets.add(
@@ -432,7 +438,10 @@ class _ActionsProvider extends StatelessWidget {
                 ),
               );
               actionWidgets.add(
-                _ChatButton(labelButton: labelButton),
+                _ChatButton(
+                  labelButton: labelButton,
+                  destinationUserId: controller.selectedRequest!.requester!.id!,
+                ),
               );
 
               actionWidgets.add(
@@ -460,7 +469,10 @@ class _ActionsProvider extends StatelessWidget {
               );
 
               actionWidgets.add(
-                _ChatButton(labelButton: labelButton),
+                _ChatButton(
+                  labelButton: labelButton,
+                  destinationUserId: controller.selectedRequest!.requester!.id!,
+                ),
               );
 
               break;
@@ -493,7 +505,10 @@ class _ActionsUser extends StatelessWidget {
 
           switch (controller.selectedRequest?.status) {
             case 'WAITING_PROVIDER_ACCEPT':
-              actionWidgets.add(_ChatButton(labelButton: labelButton));
+              actionWidgets.add(_ChatButton(
+                labelButton: labelButton,
+                destinationUserId: controller.selectedRequest!.requested!.id!,
+              ));
               actionWidgets.add(
                 const Divider(
                   height: 20,
@@ -527,7 +542,10 @@ class _ActionsUser extends StatelessWidget {
                 ),
               );
               actionWidgets.add(
-                _ChatButton(labelButton: labelButton),
+                _ChatButton(
+                  labelButton: labelButton,
+                  destinationUserId: controller.selectedRequest!.requested!.id!,
+                ),
               );
               actionWidgets.add(
                 const Divider(
@@ -574,7 +592,10 @@ class _ActionsUser extends StatelessWidget {
               );
 
               actionWidgets.add(
-                _ChatButton(labelButton: labelButton),
+                _ChatButton(
+                  labelButton: labelButton,
+                  destinationUserId: controller.selectedRequest!.requested!.id!,
+                ),
               );
 
               actionWidgets.add(
@@ -620,7 +641,10 @@ class _ActionsUser extends StatelessWidget {
                 ),
               );
               actionWidgets.add(
-                _ChatButton(labelButton: labelButton),
+                _ChatButton(
+                  labelButton: labelButton,
+                  destinationUserId: controller.selectedRequest!.requested!.id!,
+                ),
               );
 
               actionWidgets.add(
@@ -657,7 +681,10 @@ class _ActionsUser extends StatelessWidget {
               );
 
               actionWidgets.add(
-                _ChatButton(labelButton: labelButton),
+                _ChatButton(
+                  labelButton: labelButton,
+                  destinationUserId: controller.selectedRequest!.requested!.id!,
+                ),
               );
 
               actionWidgets.add(
@@ -696,9 +723,11 @@ class _ActionsUser extends StatelessWidget {
 }
 
 class _ChatButton extends StatelessWidget {
+  final String destinationUserId;
   String labelButton;
   _ChatButton({
     Key? key,
+    required this.destinationUserId,
     required this.labelButton,
   }) : super(key: key);
   @override
@@ -712,6 +741,10 @@ class _ChatButton extends StatelessWidget {
       ),
       onPressed: () {
         // Add chat functionality here
+        Get.toNamed(
+          PagesRoutes.chatMessageScreen,
+          arguments: {'userDestinationId': destinationUserId},
+        );
       },
       child: Text(
         labelButton,
