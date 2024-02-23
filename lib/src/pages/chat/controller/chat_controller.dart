@@ -131,7 +131,7 @@ class ChatController extends GetxController {
     bool canLoad = true,
   }) {
     destinationUser = '';
-    allChats = [];
+    //allChats = [];
 
     if (chat != null) {
       if (authController.user.id == chat.destinationUserId) {
@@ -200,13 +200,17 @@ class ChatController extends GetxController {
     //   destinationUserId = selectedChat?.destinationUserId;
     // }
 
-    socket.emit(
-      'message',
-      {
-        'message': message,
-        'destinationUserId': destinationUser,
-      },
-    );
+    try {
+      socket.emit(
+        'message',
+        {
+          'message': message,
+          'destinationUserId': destinationUser,
+        },
+      );
+    } on Exception catch (e) {
+      utilServices.showToast(message: 'Não foi possivel enviar a mensagem, Tente novamente mais tarde!');
+    }
   }
 
   Future<void> handleSendNewFileMessage({required ChatMessageModel message}) async {

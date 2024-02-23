@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AvaliationScreen extends StatefulWidget {
-  const AvaliationScreen({Key? key}) : super(key: key);
+  AvaliationScreen({Key? key}) : super(key: key);
+
+  final RequestModel request = Get.arguments ?? {};
 
   @override
   State<AvaliationScreen> createState() => _AvaliationScreenState();
@@ -20,7 +22,6 @@ class _AvaliationScreenState extends State<AvaliationScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
-    final RequestModel request = Get.arguments ?? {};
 
     return Scaffold(
       appBar: AppBar(
@@ -70,7 +71,7 @@ class _AvaliationScreenState extends State<AvaliationScreen> {
                       height: 25,
                     ),
                     Text(
-                      'Avaliação do prestador: ${request.requested!.firstName!} ${request.requested!.lastName!}',
+                      'Avaliação do prestador: ${widget.request.requested!.firstName!} ${widget.request.requested!.lastName!}',
                       style: TextStyle(
                         fontSize: CustomFontSizes.fontSize14,
                         fontWeight: FontWeight.w600,
@@ -324,7 +325,7 @@ class _AvaliationScreenState extends State<AvaliationScreen> {
                                         utilServices.showToast(message: 'Verifique todos os campos');
                                       }
                                     },
-                              child: authController.isLoading
+                              child: controller.isSaving
                                   ? CircularProgressIndicator(
                                       color: CustomColors.black,
                                     )

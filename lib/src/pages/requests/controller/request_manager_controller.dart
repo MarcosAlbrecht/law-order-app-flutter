@@ -234,6 +234,7 @@ class RequestManagerController extends GetxController {
     avaliation.rating = double.parse(avaliation.rating!.toStringAsFixed(1));
     avaliation.jobId = selectedRequest!.id!;
     final result = await requestsRepository.sendAvaliation(avaliation: avaliation, requestedId: selectedRequest!.requested!.id!);
+    setSaving(false);
     Get.back();
     result.when(
       success: (data) {
@@ -243,6 +244,5 @@ class RequestManagerController extends GetxController {
         utilServices.showToast(message: 'Não foi possível enviar a avaliação!', isError: true);
       },
     );
-    setSaving(false);
   }
 }

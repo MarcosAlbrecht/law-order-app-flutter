@@ -61,7 +61,7 @@ abstract class AppPages {
     ),
     GetPage(
       name: PagesRoutes.avaliationScreen,
-      page: () => const AvaliationScreen(),
+      page: () => AvaliationScreen(),
     ),
     GetPage(
       name: PagesRoutes.followsScreen,

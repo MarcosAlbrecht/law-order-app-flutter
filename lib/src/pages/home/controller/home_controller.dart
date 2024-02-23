@@ -17,6 +17,7 @@ class HomeController extends GetxController {
   final authController = Get.find<AuthController>();
 
   List<UserModel>? currentListUser;
+
   List<OccupationAreasModel> occupationsAreas = occupationAreas;
 
   List<UserModel> allUsers = [];
@@ -71,6 +72,8 @@ class HomeController extends GetxController {
       loadCities(),
     ];
 
+    occupationsAreas.sort((a, b) => (a.area ?? '').compareTo(b.area ?? ''));
+
     await Future.wait(operations);
 
     setLoading(false, isUser: true);
@@ -80,7 +83,8 @@ class HomeController extends GetxController {
     final result = await homeRepository.getStates();
     result.when(
       success: (data) {
-        states = data;
+        states.addAll(data);
+        states.sort((a, b) => a.compareTo(b));
       },
       error: (message) {
         //erro ao buscar os estados
@@ -92,7 +96,8 @@ class HomeController extends GetxController {
     final result = await homeRepository.getCities();
     result.when(
       success: (data) {
-        cities = data;
+        cities.addAll(data);
+        cities.sort((a, b) => a.compareTo(b));
       },
       error: (message) {
         //erro ao buscar as cidades
@@ -211,7 +216,7 @@ class HomeController extends GetxController {
       currentListUser = [];
       pagination = 0;
       allUsers.clear();
-      filters.add({'filters%5BfirstName%5D': searchRequest.value});
+      filters.add({'search': searchRequest.value});
     }
 
     loadAllUsers();

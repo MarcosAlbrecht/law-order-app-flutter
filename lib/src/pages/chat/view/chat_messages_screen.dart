@@ -38,8 +38,6 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
     // TODO: implement initState
     super.initState();
 
-    //final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    //chatController.handleLoadingMessages(chat: args['chat_model'], canLoad: false, userDestinationId: args['userDestinationId']);
     chatController.handleLoadingMessages(
         chat: widget.args['chat_model'], canLoad: false, userDestinationId: widget.args['userDestinationId']);
     print(widget.args);
@@ -73,25 +71,14 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                 child: CircularProgressIndicator(),
               );
             }
-            return Visibility(
-              visible: controller.allMessages.isNotEmpty,
-              replacement: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.search_off,
-                      color: CustomColors.blueDarkColor,
-                    ),
-                    const Text('Não há mensagens para apresentar'),
-                  ],
-                ),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(
+            return Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: Visibility(
+                    visible: controller.allMessages.isNotEmpty,
+                    replacement: Container(),
                     child: ListView.builder(
                       itemCount: controller.allMessages.length,
                       reverse: true,
@@ -141,63 +128,63 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                       },
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      //color: CustomColors.blueDark2Color,
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      height: 60,
-                      width: double.infinity,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: CustomTextField(
-                              //icon: Icons.search,
-                              suffixIconButtonAttach: () {
-                                _handleAttachmentPressed(controller);
-                              },
-                              controller: messageEC,
-                              label: 'Mensagem',
-                              removeFloatingLabelBehavior: true,
-                              onChanged: (value) {
-                                messageEC.text = value!;
-                              },
-                            ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    //color: CustomColors.blueDark2Color,
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    height: 60,
+                    width: double.infinity,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: CustomTextField(
+                            //icon: Icons.search,
+                            suffixIconButtonAttach: () {
+                              _handleAttachmentPressed(controller);
+                            },
+                            controller: messageEC,
+                            label: 'Mensagem',
+                            removeFloatingLabelBehavior: true,
+                            onChanged: (value) {
+                              messageEC.text = value!;
+                            },
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 10, left: 5),
-                            child: SizedBox(
-                              width: 60,
-                              height: double.infinity,
-                              child: Material(
-                                color: CustomColors.blueDark2Color,
-                                //elevation: 3,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10),
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                  ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10, left: 5),
+                          child: SizedBox(
+                            width: 60,
+                            height: double.infinity,
+                            child: Material(
+                              color: CustomColors.blueDark2Color,
+                              //elevation: 3,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
                                 ),
-                                child: IconButton(
-                                  color: CustomColors.white,
-                                  onPressed: () {
-                                    _sendMessage(controller, null);
-                                  },
-                                  icon: const Icon(Icons.send),
-                                ),
+                              ),
+                              child: IconButton(
+                                color: CustomColors.white,
+                                onPressed: () {
+                                  _sendMessage(controller, null);
+                                },
+                                icon: const Icon(Icons.send),
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             );
           },
         ),

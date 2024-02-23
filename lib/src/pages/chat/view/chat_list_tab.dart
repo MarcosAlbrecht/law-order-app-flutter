@@ -16,7 +16,7 @@ class _ChatListTab extends State<ChatListTab> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
+    print('didchange');
     // Aqui você pode executar o código que deseja quando a tela é chamada novamente
     chatController.didChangeScreen();
   }
@@ -54,23 +54,27 @@ class _ChatListTab extends State<ChatListTab> {
             GetBuilder<ChatController>(
               builder: (controller) {
                 return controller.isLoading
-                    ? const Center(
+                    ? const Expanded(
                         child: Center(
-                          child: CircularProgressIndicator(),
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
                         ),
                       )
                     : Visibility(
                         visible: controller.allChats.isNotEmpty,
-                        replacement: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.search_off,
-                                color: CustomColors.blueDarkColor,
-                              ),
-                              const Text('Não há itens para apresentar'),
-                            ],
+                        replacement: Expanded(
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.search_off,
+                                  color: CustomColors.blueDarkColor,
+                                ),
+                                const Text('Não há itens para apresentar'),
+                              ],
+                            ),
                           ),
                         ),
                         child: Expanded(

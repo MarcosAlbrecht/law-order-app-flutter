@@ -57,7 +57,9 @@ class ChatRepository {
       }
     } on Exception catch (e) {
       print(e);
-      if (e == 403) {}
+      if (e == 404) {
+        return ChatsMessageResult.error('Ainda não possui conversa iniciada');
+      }
       return ChatsMessageResult.error('Não foi possível carregar as mensagens. Tente novamente mais tarde!');
     }
   }
