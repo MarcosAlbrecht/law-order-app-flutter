@@ -12,7 +12,7 @@ MetadataRecommendationsModel _$MetadataRecommendationsModelFromJson(
       metadata: json['metadata'] == null
           ? null
           : MetadataModel.fromJson(json['metadata'] as Map<String, dynamic>),
-      result: (json['result'] as List<dynamic>?)
+      recommendations: (json['result'] as List<dynamic>?)
           ?.map((e) => RecommendationModel.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
@@ -21,5 +21,5 @@ Map<String, dynamic> _$MetadataRecommendationsModelToJson(
         MetadataRecommendationsModel instance) =>
     <String, dynamic>{
       'metadata': instance.metadata,
-      'result': instance.result,
+      'result': instance.recommendations,
     };

@@ -1,9 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttericon/entypo_icons.dart';
-
-import 'package:app_law_order/src/config/custom_colors.dart';
 
 class CustomTextField extends StatefulWidget {
   final IconData? icon;
@@ -24,6 +23,8 @@ class CustomTextField extends StatefulWidget {
   final int? maxLength;
   final int? minLines;
   final int? maxLines;
+  final bool paddingBottom;
+  final bool contentPadding;
 
   final TextEditingController? controller;
 
@@ -48,6 +49,8 @@ class CustomTextField extends StatefulWidget {
     this.minLines,
     this.maxLines = 1,
     this.controller,
+    this.paddingBottom = true,
+    this.contentPadding = true,
   }) : super(key: key);
 
   @override
@@ -67,7 +70,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.only(bottom: widget.paddingBottom ? 10 : 0),
       child: TextFormField(
         key: widget.formFieldKey,
         controller: widget.controller,
@@ -112,6 +115,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   : null,
           labelText: widget.label,
           isDense: true,
+          contentPadding: widget.contentPadding ? null : const EdgeInsets.all(10),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),

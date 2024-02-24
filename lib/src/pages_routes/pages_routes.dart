@@ -4,7 +4,6 @@ import 'package:app_law_order/src/pages/auth/view/sign_up_step1.dart';
 import 'package:app_law_order/src/pages/base/base_screen.dart';
 import 'package:app_law_order/src/pages/base/binding/navigation_binding.dart';
 import 'package:app_law_order/src/pages/chat/binding/chat_binding.dart';
-import 'package:app_law_order/src/pages/chat/controller/chat_controller.dart';
 import 'package:app_law_order/src/pages/chat/view/chat_list_tab.dart';
 import 'package:app_law_order/src/pages/chat/view/chat_messages_screen.dart';
 import 'package:app_law_order/src/pages/home/binding/home_binding.dart';
@@ -12,12 +11,14 @@ import 'package:app_law_order/src/pages/profile/binding/follower_binding.dart';
 import 'package:app_law_order/src/pages/profile/binding/follows_binding.dart';
 import 'package:app_law_order/src/pages/profile/binding/notification_binding.dart';
 import 'package:app_law_order/src/pages/profile/binding/profile_binding.dart';
+import 'package:app_law_order/src/pages/profile/binding/withdraw_binding.dart';
 import 'package:app_law_order/src/pages/profile/view/followers_screen.dart';
 import 'package:app_law_order/src/pages/profile/view/follows_screen.dart';
 import 'package:app_law_order/src/pages/profile/view/notifications_screen.dart';
 import 'package:app_law_order/src/pages/profile/view/portfolio_screen.dart';
 import 'package:app_law_order/src/pages/profile/view/profile_screen.dart';
 import 'package:app_law_order/src/pages/profile/view/profile_tab.dart';
+import 'package:app_law_order/src/pages/profile/view/withdraw_screen.dart';
 import 'package:app_law_order/src/pages/profile_view/binding/profile_view_binding.dart';
 import 'package:app_law_order/src/pages/profile_view/binding/service_request_binding.dart';
 import 'package:app_law_order/src/pages/profile_view/view/profile_view_screen.dart';
@@ -94,6 +95,11 @@ abstract class AppPages {
       binding: RequestManagerBinding(),
     ),
     GetPage(
+      name: PagesRoutes.withdrawScreen,
+      page: () => WithdrawScreen(),
+      binding: WithdrawBinding(),
+    ),
+    GetPage(
       name: PagesRoutes.chatListTab,
       page: () => const ChatListTab(),
     ),
@@ -133,4 +139,5 @@ abstract class PagesRoutes {
   static const String avaliationScreen = '/avaliationScreen';
   static const String chatListTab = '/chatListTabScreen';
   static const String chatMessageScreen = '/chatMessageScreen';
+  static const String withdrawScreen = '/withdrawScreen';
 }

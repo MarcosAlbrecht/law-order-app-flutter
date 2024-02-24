@@ -1,10 +1,8 @@
 import 'package:app_law_order/src/models/order_service_model.dart';
 import 'package:app_law_order/src/models/service_model.dart';
-import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
 import 'package:app_law_order/src/pages/profile/view/portfolio_screen.dart';
 import 'package:app_law_order/src/pages/profile_view/controller/profile_view_controller.dart';
 import 'package:app_law_order/src/pages/profile_view/repository/profile_view_repository.dart';
-import 'package:app_law_order/src/pages/profile_view/view/components/services_request_tile.dart';
 import 'package:get/get.dart';
 
 class ServiceRequestController extends GetxController {
@@ -57,8 +55,7 @@ class ServiceRequestController extends GetxController {
     if (service.isChecked!) {}
   }
 
-  Future<void> handleCheckBox(
-      {required ServiceModel service, required bool value}) async {
+  Future<void> handleCheckBox({required ServiceModel service, required bool value}) async {
     setLoading(value: true);
     for (var serv in services) {
       if (serv.id == service.id) {
@@ -96,8 +93,7 @@ class ServiceRequestController extends GetxController {
 
     if (verifyServicesChecked() > 0) {
       final result = await profileViewRepository.insertServiceRequest(
-          userRequestedId: profileController.user.id!,
-          requestedServiceIds: requestedServiceIds);
+          userRequestedId: profileController.user.id!, requestedServiceIds: requestedServiceIds);
 
       result.when(
         success: (data) {

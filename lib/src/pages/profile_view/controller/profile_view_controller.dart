@@ -1,4 +1,5 @@
 import 'package:app_law_order/src/models/follows_model.dart';
+import 'package:app_law_order/src/models/metadata_recommendations_model.dart';
 import 'package:app_law_order/src/models/user_model.dart';
 import 'package:app_law_order/src/pages/home/controller/home_controller.dart';
 import 'package:app_law_order/src/pages/profile/view/portfolio_screen.dart';
@@ -6,17 +7,28 @@ import 'package:app_law_order/src/pages/profile_view/repository/profile_view_rep
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:get/get.dart';
 
+int itemsPerPage = 10;
+
 class ProfileViewController extends GetxController {
   final profileViewRepository = ProfileViewRepository();
   final homeController = Get.find<HomeController>();
 
   final utilService = UtilServices();
   FollowsModel? followed = FollowsModel();
+  MetadataRecommendationsModel recommendations = MetadataRecommendationsModel();
+  late MetadataRecommendationsModel currentRecommendations;
 
   UserModel user = UserModel();
   late String userID;
 
-  bool isLoading = false;
+  bool isLoading = true;
+  int pagination = 0;
+
+  bool get isLastPage {
+    if (currentRecommendations.recommendations!.length < itemsPerPage) return true;
+
+    return pagination + itemsPerPage > recommendations.recommendations!.length;
+  }
 
   @override
   void onInit() {
@@ -25,24 +37,31 @@ class ProfileViewController extends GetxController {
     final arguments = Get.arguments as Map<String, dynamic>;
     final String idUser = arguments['idUser'];
     userID = idUser;
-    loadData(idUser: idUser);
+    loadData();
   }
 
-  Future<void> loadData({required String idUser}) async {
+  Future<void> loadData() async {
     setLoading(value: true);
     List<Future<void>> operations = [
-      loadUser(id: idUser),
-      loadRecommendations(id: idUser),
+      loadRecommendations(),
+      loadUser(),
     ];
 
     await Future.wait(operations);
     setLoading(value: false);
   }
 
-  Future<void> loadRecommendations({required String id}) async {
-    final result = await profileViewRepository.getRecommendations(skip: 0, limit: 10, userID: userID);
+  Future<void> loadRecommendations({bool canLoad = true}) async {
+    final result = await profileViewRepository.getRecommendations(skip: pagination, limit: itemsPerPage, userID: userID);
     result.when(
-      success: (data) {},
+      success: (data) {
+        currentRecommendations = data;
+        if (recommendations.recommendations == null) {
+          recommendations = currentRecommendations;
+        } else {
+          recommendations.recommendations?.addAll(currentRecommendations.recommendations!);
+        }
+      },
       error: (message) {},
     );
   }
@@ -52,9 +71,9 @@ class ProfileViewController extends GetxController {
     update();
   }
 
-  Future<void> loadUser({required String id}) async {
+  Future<void> loadUser() async {
     //setLoading(value: true);
-    final result = await profileViewRepository.getUserById(id: id);
+    final result = await profileViewRepository.getUserById(id: userID);
     await getFollow();
     //setLoading(value: false);
     result.when(
@@ -82,5 +101,10 @@ class ProfileViewController extends GetxController {
     update();
 
     //setFollowing(true);
+  }
+
+  void loadMoreRecommendations() {
+    pagination = pagination + 10;
+    loadRecommendations(canLoad: false);
   }
 }

@@ -101,6 +101,7 @@ class _HomeTabState extends State<HomeTab> {
                             child: CustomTextField(
                               icon: Icons.search,
                               label: "Nome, área de atuação ou serviço ofertado",
+                              initialValue: controller.searchRequest.value,
                               onChanged: (value) {
                                 controller.searchRequest.value = value!.toLowerCase();
                               },

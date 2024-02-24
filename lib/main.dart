@@ -1,8 +1,8 @@
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -75,7 +75,7 @@ class MyApp extends StatelessWidget {
  * OK - FAZER O BOTAO DE CHAT TELA DE PERFIL
  * OK - FAZER O CHAT
  * FAZER A TELA DE EXCLUIR APP NO PROFILE
- * FAZER A LISTA DE AVALIAÇOES DA TELA DE PERFIL
+ * OK - FAZER A LISTA DE AVALIAÇOES DA TELA DE PERFIL
  * ENVIAR ARQUIVO NO GERENCIAMENTO DE REQUEST
  * TELA DE MINHA CARTEIRA NO PROFILE
  * TELA DE SOLICITAR SAQUE

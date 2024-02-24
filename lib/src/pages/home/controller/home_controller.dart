@@ -211,7 +211,8 @@ class HomeController extends GetxController {
       currentListUser = [];
       pagination = 0;
       allUsers.clear();
-      loadAllUsers();
+      filters.removeWhere((element) => element.containsKey('search'));
+      //loadAllUsers();
     } else {
       currentListUser = [];
       pagination = 0;

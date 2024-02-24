@@ -7,11 +7,12 @@ part 'metadata_recommendations_model.g.dart';
 @JsonSerializable()
 class MetadataRecommendationsModel {
   MetadataModel? metadata;
-  List<RecommendationModel>? result;
+  @JsonKey(name: 'result')
+  List<RecommendationModel>? recommendations;
 
   MetadataRecommendationsModel({
     this.metadata,
-    this.result,
+    this.recommendations,
   });
 
   factory MetadataRecommendationsModel.fromJson(Map<String, dynamic> json) => _$MetadataRecommendationsModelFromJson(json);
