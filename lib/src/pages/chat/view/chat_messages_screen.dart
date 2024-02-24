@@ -1,24 +1,18 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:io';
-
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:fluttericon/entypo_icons.dart';
-import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_state.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:image_picker/image_picker.dart';
-
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/models/chat_message_model.dart';
-import 'package:app_law_order/src/models/chat_model.dart';
 import 'package:app_law_order/src/models/message_file_model.dart';
 import 'package:app_law_order/src/pages/chat/controller/chat_controller.dart';
 import 'package:app_law_order/src/pages/chat/view/components/picture_message_dialog.dart';
 import 'package:app_law_order/src/pages/common_widgets/custom_text_field.dart';
 import 'package:app_law_order/src/pages/profile/view/portfolio_screen.dart';
 import 'package:app_law_order/src/services/util_services.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:square_progress_indicator/square_progress_indicator.dart';
 
 class ChatMessageScreen extends StatefulWidget {
   ChatMessageScreen({super.key});
@@ -33,6 +27,13 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
   final chatController = Get.find<ChatController>();
   final utilServices = UtilServices();
   late String userId;
+  @override
+  void dispose() {
+    // Realize operações de limpeza ou libere recursos aqui
+    chatController.disposeChatMessagesScreen();
+    super.dispose();
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -117,7 +118,13 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                                         await showDialog(
                                           context: context,
                                           builder: (_) {
-                                            return PictureMessageDialog(imageUrl: message.file!.url!);
+                                            return PictureMessageDialog(
+                                              imageUrl: message.file!.url!,
+                                              onPressed: () async {
+                                                await controller.handleDownloadFile(
+                                                    url: message.file!.url!, fileName: message.fileName!);
+                                              },
+                                            );
                                           },
                                         );
                                       }
@@ -397,14 +404,17 @@ class MessageFileBubble extends StatelessWidget {
                     ), // Definindo a borda
                     borderRadius: BorderRadius.circular(8), // Arredondando as bordas
                   ),
-                  child: CachedNetworkImage(
-                    imageUrl: file.url!,
-                    progressIndicatorBuilder: (context, url, downloadProgress) =>
-                        CircularProgressIndicator(value: downloadProgress.progress),
-                    errorWidget: (context, url, error) => const Icon(Icons.error),
-                    height: 200,
-                    width: 200,
-                    fit: BoxFit.contain,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: CachedNetworkImage(
+                      imageUrl: file.url!,
+                      progressIndicatorBuilder: (context, url, downloadProgress) =>
+                          SquareProgressIndicator(value: downloadProgress.progress),
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                      height: 200,
+                      width: 200,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 )
               : GestureDetector(

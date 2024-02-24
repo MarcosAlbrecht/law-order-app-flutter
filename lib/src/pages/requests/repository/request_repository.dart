@@ -13,90 +13,106 @@ class RequestRepository {
 
   Future<RequestReceivedResult<RequestModel>> getRequestsReceived(
       {required int limit, required int skip, String sortDirection = 'DESC'}) async {
-    final result = await httpManager.restRequest(
-      method: HttpMethods.get,
-      url: EndPoints.getRequestsReceived,
-      queryParams: {
-        'limit': limit,
-        'skip': skip,
-        'sortColumn': 'createdAt',
-        'sortDirection': "ASC",
-      },
-    );
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.get,
+        url: EndPoints.getRequestsReceived,
+        queryParams: {
+          'limit': limit,
+          'skip': skip,
+          'sortColumn': 'createdAt',
+          'sortDirection': "ASC",
+        },
+      );
 
-    if (result['result'].isNotEmpty) {
-      List<RequestModel> data = (List<Map<String, dynamic>>.from(result['result'])).map(RequestModel.fromJson).toList();
+      if (result['result'].isNotEmpty) {
+        List<RequestModel> data = (List<Map<String, dynamic>>.from(result['result'])).map(RequestModel.fromJson).toList();
 
-      return RequestReceivedResult.success(data);
-    } else {
-      if (result['result'] != null) {
-        List<RequestModel> data = [];
         return RequestReceivedResult.success(data);
       } else {
-        return RequestReceivedResult.error("Não foi possível buscar os dados!");
+        if (result['result'] != null) {
+          List<RequestModel> data = [];
+          return RequestReceivedResult.success(data);
+        } else {
+          return RequestReceivedResult.error("Não foi possível buscar os dados!");
+        }
       }
+    } on Exception {
+      return RequestReceivedResult.error("Não foi possível buscar os dados!");
     }
   }
 
   Future<RequestReceivedResult<RequestModel>> getMyRequest(
       {required int limit, required int skip, String sortDirection = 'ASC'}) async {
-    final result = await httpManager.restRequest(
-      method: HttpMethods.get,
-      url: EndPoints.getMyRequest,
-      queryParams: {
-        'limit': limit,
-        'skip': skip,
-        'sortColumn': 'createdAt',
-        'sortDirection': sortDirection,
-      },
-    );
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.get,
+        url: EndPoints.getMyRequest,
+        queryParams: {
+          'limit': limit,
+          'skip': skip,
+          'sortColumn': 'createdAt',
+          'sortDirection': sortDirection,
+        },
+      );
 
-    if (result['result'].isNotEmpty) {
-      List<RequestModel> data = (List<Map<String, dynamic>>.from(result['result'])).map(RequestModel.fromJson).toList();
+      if (result['result'].isNotEmpty) {
+        List<RequestModel> data = (List<Map<String, dynamic>>.from(result['result'])).map(RequestModel.fromJson).toList();
 
-      return RequestReceivedResult.success(data);
-    } else {
-      if (result['statusCode'] != null) {
-        return RequestReceivedResult.error("Não foi possível buscar os dados!");
-      } else {
-        List<RequestModel> data = [];
         return RequestReceivedResult.success(data);
+      } else {
+        if (result['statusCode'] != null) {
+          return RequestReceivedResult.error("Não foi possível buscar os dados!");
+        } else {
+          List<RequestModel> data = [];
+          return RequestReceivedResult.success(data);
+        }
       }
+    } on Exception {
+      return RequestReceivedResult.error("Não foi possível buscar os dados!");
     }
   }
 
   Future<AcceptanceRequestResult> acceptProviderRequest({required String dataDeadline, required String idRequest}) async {
-    final result = await httpManager.restRequest(
-      method: HttpMethods.patch,
-      url: '${EndPoints.acceptBudget}$idRequest',
-      body: {
-        "providerAcceptance": true,
-        "deadline": dataDeadline,
-      },
-    );
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.patch,
+        url: '${EndPoints.acceptBudget}$idRequest',
+        body: {
+          "providerAcceptance": true,
+          "deadline": dataDeadline,
+        },
+      );
 
-    if (result.isNotEmpty) {
-      var userData = result as Map<String, dynamic>;
-      RequestModel data = RequestModel.fromJson(userData);
+      if (result.isNotEmpty) {
+        var userData = result as Map<String, dynamic>;
+        RequestModel data = RequestModel.fromJson(userData);
 
-      return AcceptanceRequestResult.success(data);
-    } else {
+        return AcceptanceRequestResult.success(data);
+      } else {
+        return AcceptanceRequestResult.error("Não foi possível buscar os dados!");
+      }
+    } on Exception {
       return AcceptanceRequestResult.error("Não foi possível buscar os dados!");
     }
   }
 
   Future<AcceptanceRequestResult> getServiceRequestByID({required String idRequest}) async {
-    final result = await httpManager.restRequest(
-      method: HttpMethods.get,
-      url: '${EndPoints.getRequestsReceivedById}$idRequest',
-    );
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.get,
+        url: '${EndPoints.getRequestsReceivedById}$idRequest',
+      );
 
-    if (result.isNotEmpty && result['statusCode'] == null) {
-      var userData = result as Map<String, dynamic>;
-      RequestModel data = RequestModel.fromJson(userData);
+      if (result.isNotEmpty && result['statusCode'] == null) {
+        var userData = result as Map<String, dynamic>;
+        RequestModel data = RequestModel.fromJson(userData);
 
-      return AcceptanceRequestResult.success(data);
-    } else {
+        return AcceptanceRequestResult.success(data);
+      } else {
+        return AcceptanceRequestResult.error("Não foi possível buscar os dados!");
+      }
+    } on Exception {
       return AcceptanceRequestResult.error("Não foi possível buscar os dados!");
     }
   }
@@ -104,16 +120,20 @@ class RequestRepository {
   Future<RequestReceivedResult<RequestModel>> declineBudget({
     required int idRequest,
   }) async {
-    final result = await httpManager.restRequest(
-      method: HttpMethods.patch,
-      url: '${EndPoints.declineBudget} ',
-    );
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.patch,
+        url: '${EndPoints.declineBudget} ',
+      );
 
-    if (result['result'].isNotEmpty) {
-      List<RequestModel> data = (List<Map<String, dynamic>>.from(result['result'])).map(RequestModel.fromJson).toList();
+      if (result['result'].isNotEmpty) {
+        List<RequestModel> data = (List<Map<String, dynamic>>.from(result['result'])).map(RequestModel.fromJson).toList();
 
-      return RequestReceivedResult.success(data);
-    } else {
+        return RequestReceivedResult.success(data);
+      } else {
+        return RequestReceivedResult.error("Não foi possível buscar os dados!");
+      }
+    } on Exception {
       return RequestReceivedResult.error("Não foi possível buscar os dados!");
     }
   }
@@ -121,84 +141,100 @@ class RequestRepository {
   Future<RequestReceivedResult<RequestModel>> openContest({
     required String idRequest,
   }) async {
-    final result = await httpManager.restRequest(
-      method: HttpMethods.patch,
-      url: '${EndPoints.openContest} $idRequest',
-    );
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.patch,
+        url: '${EndPoints.openContest} $idRequest',
+      );
 
-    if (result['statusCode'] == null) {
-      List<RequestModel> data = (List<Map<String, dynamic>>.from(result['result'])).map(RequestModel.fromJson).toList();
+      if (result['statusCode'] == null) {
+        List<RequestModel> data = (List<Map<String, dynamic>>.from(result['result'])).map(RequestModel.fromJson).toList();
 
-      return RequestReceivedResult.success(data);
-    } else {
-      if (result['statusCode'] == 500) {
-        return RequestReceivedResult.error("Erro interno, tente novamente mais tarde!");
+        return RequestReceivedResult.success(data);
       } else {
-        return RequestReceivedResult.error("Não foi possível buscar os dados!");
+        if (result['statusCode'] == 500) {
+          return RequestReceivedResult.error("Erro interno, tente novamente mais tarde!");
+        } else {
+          return RequestReceivedResult.error("Não foi possível buscar os dados!");
+        }
       }
+    } on Exception {
+      return RequestReceivedResult.error("Não foi possível buscar os dados!");
     }
   }
 
   Future<RequestReceivedResult<RequestModel>> completeService({
     required String idRequest,
   }) async {
-    final result = await httpManager.restRequest(
-      method: HttpMethods.patch,
-      url: '${EndPoints.completeService}$idRequest',
-    );
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.patch,
+        url: '${EndPoints.completeService}$idRequest',
+      );
 
-    if (result.isEmpty) {
-      List<RequestModel> data = [];
+      if (result.isEmpty) {
+        List<RequestModel> data = [];
 
-      return RequestReceivedResult.success(data);
-    } else {
-      if (result['statusCode'] == 500) {
-        return RequestReceivedResult.error("Erro interno, tente novamente mais tarde!");
+        return RequestReceivedResult.success(data);
       } else {
-        return RequestReceivedResult.error("Não foi possível buscar os dados!");
+        if (result['statusCode'] == 500) {
+          return RequestReceivedResult.error("Erro interno, tente novamente mais tarde!");
+        } else {
+          return RequestReceivedResult.error("Não foi possível buscar os dados!");
+        }
       }
+    } on Exception {
+      return RequestReceivedResult.error("Não foi possível buscar os dados!");
     }
   }
 
   Future<RequestReceivedResult<RequestModel>> completeServiceUser({
     required String idRequest,
   }) async {
-    final result = await httpManager.restRequest(
-      method: HttpMethods.patch,
-      url: '${EndPoints.completeServiceUser}$idRequest',
-    );
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.patch,
+        url: '${EndPoints.completeServiceUser}$idRequest',
+      );
 
-    if (result.isEmpty) {
-      List<RequestModel> data = [];
+      if (result.isEmpty) {
+        List<RequestModel> data = [];
 
-      return RequestReceivedResult.success(data);
-    } else {
-      if (result['statusCode'] == 500) {
-        return RequestReceivedResult.error("Erro interno, tente novamente mais tarde!");
+        return RequestReceivedResult.success(data);
       } else {
-        return RequestReceivedResult.error("Não foi possível buscar os dados!");
+        if (result['statusCode'] == 500) {
+          return RequestReceivedResult.error("Erro interno, tente novamente mais tarde!");
+        } else {
+          return RequestReceivedResult.error("Não foi possível buscar os dados!");
+        }
       }
+    } on Exception {
+      return RequestReceivedResult.error("Não foi possível buscar os dados!");
     }
   }
 
   Future<RequestReceivedResult<RequestModel>> cancelRequest({
     required String idRequest,
   }) async {
-    final result = await httpManager.restRequest(
-      method: HttpMethods.patch,
-      url: '${EndPoints.cancelRequest}$idRequest',
-    );
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.patch,
+        url: '${EndPoints.cancelRequest}$idRequest',
+      );
 
-    if (result.isEmpty) {
-      List<RequestModel> data = [];
+      if (result.isEmpty) {
+        List<RequestModel> data = [];
 
-      return RequestReceivedResult.success(data);
-    } else {
-      if (result['statusCode'] == 500) {
-        return RequestReceivedResult.error("Erro interno, tente novamente mais tarde!");
+        return RequestReceivedResult.success(data);
       } else {
-        return RequestReceivedResult.error("Não foi possível buscar os dados!");
+        if (result['statusCode'] == 500) {
+          return RequestReceivedResult.error("Erro interno, tente novamente mais tarde!");
+        } else {
+          return RequestReceivedResult.error("Não foi possível buscar os dados!");
+        }
       }
+    } on Exception {
+      return RequestReceivedResult.error("Não foi possível buscar os dados!");
     }
   }
 
@@ -206,22 +242,28 @@ class RequestRepository {
     required AvaliationModel avaliation,
     required String requestedId,
   }) async {
-    final result = await httpManager.restRequest(
-      method: HttpMethods.post,
-      url: '${EndPoints.sendAvaliation}$requestedId',
-      body: avaliation.toJson(),
-    );
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.post,
+        url: '${EndPoints.sendAvaliation}$requestedId',
+        body: avaliation.toJson(),
+      );
 
-    if (result.isEmpty) {
-      List<RequestModel> data = [];
+      if (result.isEmpty) {
+        List<RequestModel> data = [];
 
-      return RequestReceivedResult.success(data);
-    } else {
-      if (result['statusCode'] == 403) {
-        return RequestReceivedResult.error("Você já enviou sua avaliação sobre este usuário!");
+        return RequestReceivedResult.success(data);
       } else {
-        return RequestReceivedResult.error("Não foi possível enviar a avaliação!");
+        if (result['statusCode'] == 403) {
+          return RequestReceivedResult.error("Você já enviou sua avaliação sobre este usuário!");
+        } else {
+          return RequestReceivedResult.error("Não foi possível enviar a avaliação!");
+        }
       }
+    } on Exception catch (e) {
+      print(e);
+
+      return RequestReceivedResult.error("Não foi possível enviar a avaliação!");
     }
   }
 
@@ -230,21 +272,25 @@ class RequestRepository {
     required String description,
     required String serviceRequestID,
   }) async {
-    final result = await httpManager.restRequest(
-      method: HttpMethods.post,
-      url: '${EndPoints.generatePaymentLink}',
-      body: {
-        "value": value,
-        "productDescription": description,
-        "userServiceRequestId": serviceRequestID,
-      },
-    );
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.post,
+        url: '${EndPoints.generatePaymentLink}',
+        body: {
+          "value": value,
+          "productDescription": description,
+          "userServiceRequestId": serviceRequestID,
+        },
+      );
 
-    if (result != null && result['paymentLink'] != null) {
-      String data = result['paymentLink'];
+      if (result != null && result['paymentLink'] != null) {
+        String data = result['paymentLink'];
 
-      return PaymentLinkResult.success(data);
-    } else {
+        return PaymentLinkResult.success(data);
+      } else {
+        return PaymentLinkResult.error("Não foi possível gerar o link para pagamento!");
+      }
+    } on Exception {
       return PaymentLinkResult.error("Não foi possível gerar o link para pagamento!");
     }
   }

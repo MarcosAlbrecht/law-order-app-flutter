@@ -26,6 +26,8 @@ abstract class EndPoints {
   static const getNotifications = '$baseUrl/notifications';
   static const updateNotification = '$baseUrl/notifications/read/';
 
+  static const getRecommendationsByUserId = '$baseUrl/accounts/recommendations/user/';
+
   static const setUserService = '$baseUrl/accounts/users/add-services';
   static const deleteUserService = '$baseUrl/accounts/users/remove-service/';
   static const updateUserService = '$baseUrl/accounts/users/update-service/';

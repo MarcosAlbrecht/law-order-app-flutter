@@ -16,7 +16,7 @@ class _ChatListTab extends State<ChatListTab> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    print('didchange');
+    //print('didchange');
     // Aqui você pode executar o código que deseja quando a tela é chamada novamente
     chatController.didChangeScreen();
   }

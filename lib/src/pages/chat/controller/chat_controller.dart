@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:app_law_order/src/constants/endpoints.dart';
 import 'package:app_law_order/src/models/chat_message_model.dart';
 import 'package:app_law_order/src/models/chat_model.dart';
-import 'package:app_law_order/src/models/user_model.dart';
 import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
 import 'package:app_law_order/src/pages/chat/repository/chat_repository.dart';
 import 'package:app_law_order/src/services/util_services.dart';
@@ -56,6 +55,10 @@ class ChatController extends GetxController {
   void disposeScreen() {
     selectedChat = null;
     setTabOpened(false);
+  }
+
+  void disposeChatMessagesScreen() {
+    loadChats();
   }
 
   void setTabOpened(bool value) {

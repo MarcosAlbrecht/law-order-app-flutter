@@ -25,7 +25,26 @@ class ProfileViewController extends GetxController {
     final arguments = Get.arguments as Map<String, dynamic>;
     final String idUser = arguments['idUser'];
     userID = idUser;
-    loadUser(id: idUser);
+    loadData(idUser: idUser);
+  }
+
+  Future<void> loadData({required String idUser}) async {
+    setLoading(value: true);
+    List<Future<void>> operations = [
+      loadUser(id: idUser),
+      loadRecommendations(id: idUser),
+    ];
+
+    await Future.wait(operations);
+    setLoading(value: false);
+  }
+
+  Future<void> loadRecommendations({required String id}) async {
+    final result = await profileViewRepository.getRecommendations(skip: 0, limit: 10, userID: userID);
+    result.when(
+      success: (data) {},
+      error: (message) {},
+    );
   }
 
   void setLoading({required bool value}) {
@@ -34,10 +53,10 @@ class ProfileViewController extends GetxController {
   }
 
   Future<void> loadUser({required String id}) async {
-    setLoading(value: true);
+    //setLoading(value: true);
     final result = await profileViewRepository.getUserById(id: id);
     await getFollow();
-    setLoading(value: false);
+    //setLoading(value: false);
     result.when(
       success: (data) {
         user = data;
@@ -49,8 +68,7 @@ class ProfileViewController extends GetxController {
   }
 
   Future<FollowsModel?> getFollow() async {
-    followed = homeController.follows
-        .firstWhereOrNull((element) => element.followedId == userID);
+    followed = homeController.follows.firstWhereOrNull((element) => element.followedId == userID);
 
     return followed;
   }

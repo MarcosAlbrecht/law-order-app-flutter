@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 
 class PictureMessageDialog extends StatelessWidget {
   final String imageUrl;
+  final VoidCallback? onPressed;
+
   const PictureMessageDialog({
     Key? key,
     required this.imageUrl,
+    this.onPressed,
   }) : super(key: key);
 
   @override
@@ -38,24 +41,27 @@ class PictureMessageDialog extends StatelessWidget {
               child: Row(
                 children: [
                   Container(
-                    width: 30,
-                    height: 30,
+                    width: 40,
+                    height: 40,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.black.withOpacity(0.5),
                     ),
-                    child: const Icon(
-                      Icons.download,
-                      color: Colors.white,
-                      size: 20,
+                    child: GestureDetector(
+                      onTap: onPressed,
+                      child: const Icon(
+                        Icons.download,
+                        color: Colors.white,
+                        size: 20,
+                      ),
                     ),
                   ),
                   const VerticalDivider(
                     width: 5,
                   ),
                   Container(
-                    width: 30,
-                    height: 30,
+                    width: 40,
+                    height: 40,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.black.withOpacity(0.5),
