@@ -45,21 +45,27 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                   width: constraints.maxWidth,
                   height: constraints.maxHeight,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       const Text(
                         'Aqui você pode visualizar e solicitar saques e difinir uma chave PIX para receber os pagamentos',
                       ),
                       const Divider(
-                        height: 30,
+                        height: 40,
                       ),
                       Text(
                         'Pix',
-                        style: TextStyle(fontSize: CustomFontSizes.fontSize14, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: CustomFontSizes.fontSize14,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Text(
                         'Chave pix para aonde serão enviados os saques',
-                        style: TextStyle(fontSize: CustomFontSizes.fontSize12, fontWeight: FontWeight.normal),
+                        style: TextStyle(
+                          fontSize: CustomFontSizes.fontSize12,
+                          fontWeight: FontWeight.normal,
+                        ),
                       ),
                       const SizedBox(
                         height: 20,
@@ -67,38 +73,55 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Row(
-                            children: [
-                              Icon(
-                                Icons.pix,
-                                color: Color(
-                                  0XFF00bdaf,
+                          Expanded(
+                            flex: 2,
+                            child: Row(
+                              //crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                const Icon(
+                                  Icons.pix,
+                                  color: Color(
+                                    0XFF00bdaf,
+                                  ),
+                                  size: 40,
                                 ),
-                                size: 40,
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text('chavepixaqui'),
-                            ],
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    'chavepixaqui aaaaaaaaaaaaaaaaa',
+                                    style: TextStyle(
+                                      fontSize: CustomFontSizes.fontSize14,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
                           ),
                           GetBuilder<WithDrawController>(
                             builder: (controller) {
-                              return ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  visualDensity: VisualDensity.compact,
-                                  padding: const EdgeInsets.all(15),
-                                  backgroundColor: CustomColors.blueDark2Color,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                              return Expanded(
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    visualDensity: VisualDensity.compact,
+                                    padding: const EdgeInsets.all(18),
+                                    backgroundColor: CustomColors.blueDark2Color,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
                                   ),
-                                ),
-                                onPressed: () {},
-                                child: Text(
-                                  'Alterar Pix',
-                                  style: TextStyle(
-                                    color: CustomColors.white,
-                                    fontSize: 14,
+                                  onPressed: () {},
+                                  child: Text(
+                                    'Alterar Pix',
+                                    style: TextStyle(
+                                      color: CustomColors.white,
+                                      fontSize: 14,
+                                    ),
                                   ),
                                 ),
                               );
@@ -107,7 +130,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                         ],
                       ),
                       const Divider(
-                        height: 30,
+                        height: 40,
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,8 +168,17 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                           const SizedBox(
                             height: 20,
                           ),
-                          const Text('Valor solicitado'),
-                          Container(
+                          const Text(
+                            'Valor solicitado',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          //container com campo e botao para solicitar valor
+                          SizedBox(
                             height: 43,
                             child: Row(
                               children: [
@@ -162,13 +194,13 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                                 GetBuilder<WithDrawController>(
                                   builder: (controller) {
                                     return Container(
-                                      padding: EdgeInsets.symmetric(vertical: 1),
+                                      padding: const EdgeInsets.symmetric(vertical: 1),
                                       height: double.infinity,
                                       child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                           //visualDensity: VisualDensity.compact,
                                           //padding: const EdgeInsets.all(15),
-                                          backgroundColor: CustomColors.blueDark2Color,
+                                          backgroundColor: CustomColors.blueDark2Color.withOpacity(1),
                                           shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(10),
                                           ),
@@ -189,6 +221,18 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                             ),
                           ),
                         ],
+                      ),
+                      const Divider(
+                        height: 40,
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Histórico',
+                          style: TextStyle(
+                            fontSize: CustomFontSizes.fontSize14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ],
                   ),

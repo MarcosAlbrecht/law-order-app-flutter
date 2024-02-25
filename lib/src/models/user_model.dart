@@ -1,8 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:json_annotation/json_annotation.dart';
-
 import 'package:app_law_order/src/models/picture_model.dart';
+import 'package:app_law_order/src/models/pix_model.dart';
 import 'package:app_law_order/src/models/service_model.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'user_model.g.dart';
 
@@ -57,6 +57,8 @@ class UserModel {
   @JsonKey(name: 'services')
   List<ServiceModel>? services;
   double? rating;
+  List<PixModel>? pix;
+
   UserModel({
     this.id,
     this.email,
@@ -83,6 +85,7 @@ class UserModel {
     this.skills,
     this.services,
     this.rating,
+    this.pix,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
@@ -91,6 +94,6 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, email: $email, name: $name, password: $password, firstName: $firstName, lastName: $lastName, userType: $userType, phone: $phone, city: $city, state: $state, cep: $cep, cpf: $cpf, active: $active, birthday: $birthday, occupationArea: $occupationArea, isPasswordReset: $isPasswordReset, type: $type, accessToken: $accessToken, profilePicture: $profilePicture, portfolioPictures: $portfolioPictures, portfolioAbout: $portfolioAbout, portfolioTitle: $portfolioTitle, skills: $skills, services: $services)';
+    return 'UserModel(id: $id, email: $email, name: $name, password: $password, firstName: $firstName, lastName: $lastName, userType: $userType, phone: $phone, city: $city, state: $state, cep: $cep, cpf: $cpf, active: $active, birthday: $birthday, occupationArea: $occupationArea, isPasswordReset: $isPasswordReset, type: $type, accessToken: $accessToken, profilePicture: $profilePicture, portfolioPictures: $portfolioPictures, portfolioAbout: $portfolioAbout, portfolioTitle: $portfolioTitle, skills: $skills, services: $services, rating: $rating, pix: $pix)';
   }
 }
