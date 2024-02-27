@@ -9,8 +9,10 @@ import 'package:app_law_order/src/models/user_model.dart';
 import 'package:app_law_order/src/pages/home/result/follows_result.dart';
 import 'package:app_law_order/src/pages/profile/result/follower_result.dart';
 import 'package:app_law_order/src/pages/profile/result/notifications_result.dart';
+import 'package:app_law_order/src/pages/profile/result/pix_result.dart';
 import 'package:app_law_order/src/pages/profile/result/update_picture_profile_result.dart';
 import 'package:app_law_order/src/pages/profile/result/user_service_result.dart';
+import 'package:app_law_order/src/pages/profile/result/withdraw_profile_result.dart';
 import 'package:app_law_order/src/services/http_manager.dart';
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:dio/dio.dart';
@@ -226,6 +228,82 @@ class ProfileRepository {
       return NotificationsResult.success(data);
     } else {
       return NotificationsResult.error("Não foi possível atualizar a notificação!");
+    }
+  }
+
+  Future<WithdrawProfileResult> getUserById({required String id}) async {
+    final result = await httpManager.restRequest(
+      method: HttpMethods.get,
+      url: '${EndPoints.getUserById}$id',
+    );
+
+    if (result['_id'] != null) {
+      var userData = result as Map<String, dynamic>;
+      UserModel data = UserModel.fromJson(userData);
+      return WithdrawProfileResult.success(data);
+    } else {
+      return WithdrawProfileResult.error('Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
+    }
+  }
+
+  Future<PixResult> createPix({required String key}) async {
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.post,
+        url: EndPoints.userPix,
+        body: {
+          'active': true,
+          'key': key,
+        },
+      );
+
+      if (result.isEmpty) {
+        return PixResult.success('Chave Pix cadastrada com sucesso!');
+      } else {
+        return PixResult.error('Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
+      }
+    } on Exception {
+      return PixResult.error('Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
+    }
+  }
+
+  Future<PixResult> updateActivePix({required String key}) async {
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.patch,
+        url: '${EndPoints.userPix}$key',
+        body: {
+          'active': true,
+        },
+      );
+
+      if (result.isEmpty) {
+        return PixResult.success(result['message']);
+      } else {
+        return PixResult.error('Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
+      }
+    } on Exception {
+      return PixResult.error('Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
+    }
+  }
+
+  Future<PixResult> deletePix({required String key}) async {
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.delete,
+        url: '${EndPoints.userPix}$key',
+        queryParams: {
+          'key': key,
+        },
+      );
+
+      if (result.isEmpty) {
+        return PixResult.success('Chave Pix removida com sucesso!');
+      } else {
+        return PixResult.error('Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
+      }
+    } on Exception {
+      return PixResult.error('Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
     }
   }
 }

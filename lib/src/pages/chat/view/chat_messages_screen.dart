@@ -60,7 +60,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        title: const Text('Chat App'),
+        title: const Text('Mensagens'),
       ),
       body: SizedBox(
         height: size.height,

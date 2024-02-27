@@ -80,6 +80,8 @@ class ChatRepository {
     return DownloadFileResult.success(data);
   }
 
+  
+
   Future<SendFileResult> sendChatFile({required String file, required String userDestination}) async {
     FormData formData = FormData.fromMap({
       'file': await MultipartFile.fromFile(file, filename: file.split('/').last),

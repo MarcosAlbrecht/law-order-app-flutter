@@ -48,6 +48,8 @@ abstract class EndPoints {
   static const completeServiceUser = '$baseUrl/accounts/service-requests/complete-service/';
   static const sendAvaliation = '$baseUrl/accounts/recommendations/recommend/';
 
+  static const userPix = '$baseUrl/accounts/users/pix/';
+
   static const cancelRequest = '$baseUrl/accounts/service-requests/cancel-request/';
   //mercado pago -->
   static const generatePaymentLink = '$baseUrl/mercadopago/generate-payment-link';
