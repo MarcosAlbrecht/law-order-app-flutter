@@ -103,7 +103,7 @@ class _ProfileTabState extends State<ProfileTab> {
                               text: " Minha Carteira",
                               icon: Icons.wallet_outlined,
                               onTap: () {
-                                //Get.toNamed(PagesRoutes.profileScreen);
+                                Get.toNamed(PagesRoutes.mayWalletScreen);
                               },
                             ),
                             const Divider(
@@ -194,7 +194,7 @@ class _ProfileTabState extends State<ProfileTab> {
                               text: " Excluir Conta",
                               icon: Icons.delete_forever_outlined,
                               onTap: () async {
-                                final bool result = await showLogoutfirmation(context);
+                                final bool result = await showDeleteAccount(context);
                                 if (result) {
                                   controller.authController.logout();
                                 }
@@ -287,6 +287,72 @@ Future<bool> showLogoutfirmation(BuildContext context) async {
                   Navigator.of(context).pop(true); // Retorna verdadeiro para confirmar a exclusão
                 },
                 child: const Text('Confirmar'),
+              ),
+            ],
+          );
+        },
+      ) ??
+      false; // Retorna falso por padrão se showDialog retornar nulo
+}
+
+Future<bool> showDeleteAccount(BuildContext context) async {
+  final size = MediaQuery.sizeOf(context);
+  return await showDialog<bool>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            contentPadding: const EdgeInsets.symmetric(vertical: 20.0), // Ajuste de padding
+            title: const Text('Tem certeza que deseja excluir sua conta?'),
+            content: SizedBox(
+              child: SingleChildScrollView(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+
+                  //width: size.width * 0.2, // Defina a largura do conteúdo
+                  child: const Text(
+                    'Exclusão de Conta.\n\n'
+                    'Prezado(a),\n\n'
+                    'Por favor, esteja ciente dos seguintes pontos importantes para excluir sua conta.:\n\n'
+                    '1. **Perda de Dados:** Ao prosseguir com a exclusão da sua conta, todos os dados associados a ela serão permanentemente removidos. Isso inclui histórico de compras, preferências de configuração, e quaisquer outros dados pessoais ou transacionais relacionados à sua conta.\n\n'
+                    '2. **Saldo na Carteira:** Se houver algum saldo remanescente na sua carteira, este valor será perdido após a exclusão da conta. Recomendamos que você utilize qualquer saldo existente antes de prosseguir com a exclusão da conta.\n\n'
+                    '3. **Implicações Futuras:** Após a exclusão da sua conta, você não poderá mais acessar ou utilizar os serviços com as credenciais desta conta e qualquer outro conteúdo vinculado à sua conta.\n\n'
+                    'Por favor, tenha certeza de que deseja prosseguir com esta ação, pois ela é irreversível e não poderá ser desfeita. Se você tiver alguma dúvida ou preocupação, não hesite em entrar em contato conosco para obter assistência adicional.\n\n',
+                    style: TextStyle(
+                      fontSize: 12.0, // Tamanho da fonte
+                      //fontWeight: FontWeight.normal, // Peso da fonte (normal, bold, etc.)
+                      // Estilo da fonte (normal, itálico)
+                      color: Colors.black, // Cor do texto
+                      letterSpacing: 1.2, // Espaçamento entre as letras
+                      height: 1.5, // Altura da linha (espaçamento entre linhas)
+                    ),
+                    textAlign: TextAlign.justify, // Alinhamento do texto
+                    overflow: TextOverflow.visible, // Comportamento de overflow do texto
+                  ),
+                ),
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Get.back(); // Retorna falso para cancelar a exclusão
+                },
+                child: const Text('Cancelar'),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: CustomColors.blueDark2Color,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onPressed: () {},
+                child: Text(
+                  'Confirmar',
+                  style: TextStyle(
+                    color: CustomColors.white,
+                    fontSize: 16,
+                  ),
+                ),
               ),
             ],
           );

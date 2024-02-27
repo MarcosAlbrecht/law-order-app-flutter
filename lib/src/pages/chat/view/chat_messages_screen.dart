@@ -58,6 +58,12 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_outlined),
+          onPressed: () {
+            Get.back();
+          },
+        ),
         elevation: 0,
         backgroundColor: Colors.white,
         title: const Text('Mensagens'),

@@ -9,11 +9,13 @@ import 'package:app_law_order/src/pages/chat/view/chat_messages_screen.dart';
 import 'package:app_law_order/src/pages/home/binding/home_binding.dart';
 import 'package:app_law_order/src/pages/profile/binding/follower_binding.dart';
 import 'package:app_law_order/src/pages/profile/binding/follows_binding.dart';
+import 'package:app_law_order/src/pages/profile/binding/my_wallet_binding.dart';
 import 'package:app_law_order/src/pages/profile/binding/notification_binding.dart';
 import 'package:app_law_order/src/pages/profile/binding/profile_binding.dart';
 import 'package:app_law_order/src/pages/profile/binding/withdraw_binding.dart';
 import 'package:app_law_order/src/pages/profile/view/followers_screen.dart';
 import 'package:app_law_order/src/pages/profile/view/follows_screen.dart';
+import 'package:app_law_order/src/pages/profile/view/my_wallet_screen.dart';
 import 'package:app_law_order/src/pages/profile/view/notifications_screen.dart';
 import 'package:app_law_order/src/pages/profile/view/portfolio_screen.dart';
 import 'package:app_law_order/src/pages/profile/view/profile_screen.dart';
@@ -100,6 +102,11 @@ abstract class AppPages {
       binding: WithdrawBinding(),
     ),
     GetPage(
+      name: PagesRoutes.mayWalletScreen,
+      page: () => MyWalletScreen(),
+      binding: MyWalletBinding(),
+    ),
+    GetPage(
       name: PagesRoutes.chatListTab,
       page: () => const ChatListTab(),
     ),
@@ -140,4 +147,5 @@ abstract class PagesRoutes {
   static const String chatListTab = '/chatListTabScreen';
   static const String chatMessageScreen = '/chatMessageScreen';
   static const String withdrawScreen = '/withdrawScreen';
+  static const String mayWalletScreen = '/mayWalletScreen';
 }

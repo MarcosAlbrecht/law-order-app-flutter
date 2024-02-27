@@ -1,12 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/models/chat_model.dart';
 import 'package:app_law_order/src/pages_routes/pages_routes.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ChatTile extends StatelessWidget {
   final ChatModel chat;
@@ -50,6 +48,8 @@ class ChatTile extends StatelessWidget {
             ),
             child: ListTile(
               visualDensity: VisualDensity.compact,
+              dense: true,
+              //contentPadding: EdgeInsets.all(0),
               leading: ClipRRect(
                   borderRadius: BorderRadius.circular(50),
                   child: logedUserId == chat.destinationUserId

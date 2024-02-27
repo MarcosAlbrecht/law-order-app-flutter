@@ -88,7 +88,8 @@ class _ChatListTab extends State<ChatListTab> {
                             },
                             itemCount: controller.allChats.length,
                             separatorBuilder: (BuildContext context, int index) => const Divider(
-                              height: 10,
+                              height: 0,
+                              color: Colors.transparent,
                             ),
                           ),
                         ),

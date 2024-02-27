@@ -57,8 +57,9 @@ class ChatController extends GetxController {
     setTabOpened(false);
   }
 
-  void disposeChatMessagesScreen() {
-    loadChats();
+  void disposeChatMessagesScreen() async {
+    //allMessages.clear();
+    await loadChats(canload: false);
   }
 
   void setTabOpened(bool value) {
@@ -77,12 +78,19 @@ class ChatController extends GetxController {
     update();
   }
 
-  Future<void> loadChats() async {
-    setLoading(true);
+  Future<void> loadChats({bool canload = true}) async {
+    if (canload) {
+      setLoading(true);
+    }
+
     final result = await chatRepository.getAllChats();
-    setLoading(false);
+    if (canload) {
+      setLoading(false);
+    }
     result.when(success: (data) {
-      allChats = data;
+      allChats.clear();
+      allChats.addAll(data);
+      //allChats.sort((a, b) => (a.createdAt ?? '').compareTo(b.createdAt ?? ''));
     }, error: (message) {
       if (message.isNotEmpty) {
         utilServices.showToast(message: message, isError: true);
@@ -151,7 +159,7 @@ class ChatController extends GetxController {
 
   Future<void> loadMessages({required String userDestinationId, bool canLoad = true}) async {
     if (canLoad) {
-      setMessagesLoading(true);
+      setMessagesLoading(true, isUser: true);
     }
 
     final result = await chatRepository.getMessages(userDestinationId: userDestinationId);
