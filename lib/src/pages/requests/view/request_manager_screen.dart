@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/constants/constants.dart';
-import 'package:app_law_order/src/models/file_model.dart';
 import 'package:app_law_order/src/models/request_model.dart';
 import 'package:app_law_order/src/pages/requests/controller/request_manager_controller.dart';
 import 'package:app_law_order/src/pages/requests/view/components/calendar_dialog.dart';
@@ -12,6 +11,7 @@ import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
+import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:get/get.dart';
 
 class RequestManagerScreen extends StatelessWidget {
@@ -259,16 +259,21 @@ class _RequestDetails extends StatelessWidget {
                       shrinkWrap: true,
                       itemCount: controller.selectedRequest?.files?.length ?? 0,
                       itemBuilder: (context, index) {
-                        FileModel file = controller.selectedRequest!.files?[index];
+                        dynamic file = controller.selectedRequest!.files?[index];
                         return ListTile(
                           title: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Expanded(
-                                  child: Text(file.key!)), // Supondo que o título do arquivo esteja armazenado na chave 'title'
+                                  child:
+                                      Text(file['key']!)), // Supondo que o título do arquivo esteja armazenado na chave 'title'
                               IconButton(
-                                icon: const Icon(Icons.delete),
+                                icon: controller.isLoadingFile ? CircularProgressIndicator() : Icon(FontAwesome.trash_empty),
                                 onPressed: () {
+                                  controller.handleDeleteFile(
+                                    idFile: file['_id']!,
+                                    idRequest: controller.selectedRequest!.id!,
+                                  );
                                   // Adicione aqui a lógica para excluir o arquivo
                                 },
                               ),

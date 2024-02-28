@@ -37,6 +37,7 @@ abstract class EndPoints {
   static const getRequestsReceived = '$baseUrl/accounts/service-requests';
   static const getRequestsReceivedById = '$baseUrl/accounts/service-requests/';
   static const getMyRequest = '$baseUrl/accounts/service-requests/my';
+  static const deleteFileRequest = '$baseUrl/accounts/service-requests/';
 
   static const acceptBudget = '$baseUrl/accounts/service-requests/set-provider-acceptance/';
 
@@ -50,10 +51,12 @@ abstract class EndPoints {
 
   static const userPix = '$baseUrl/accounts/users/pix/';
 
+  static const getWithdraw = '$baseUrl/withdraw';
+
   static const cancelRequest = '$baseUrl/accounts/service-requests/cancel-request/';
   //mercado pago -->
   static const generatePaymentLink = '$baseUrl/mercadopago/generate-payment-link';
-  static const getHistoryPayments = '$baseUrl/mercadopago/user-payments';
+  static const getWallet = '$baseUrl/mercadopago/user-payments';
   //<--
 
   //endpois chat

@@ -66,6 +66,7 @@ class RequestManagerController extends GetxController {
 
   bool isLoading = true;
   bool isSaving = false;
+  bool isLoadingFile = false;
 
   @override
   void onInit() async {
@@ -95,6 +96,11 @@ class RequestManagerController extends GetxController {
     update();
   }
 
+  void setLoadingFile(bool value) {
+    isLoadingFile = value;
+    update();
+  }
+
   void setCategory(RequestModel request) {
     if (request.requester != null) {
       currentCategory = Constants.sent;
@@ -103,8 +109,11 @@ class RequestManagerController extends GetxController {
     }
   }
 
-  Future<void> loadRequest({required String idRequest}) async {
-    setLoading(true);
+  Future<void> loadRequest({required String idRequest, canload = true}) async {
+    if (canload) {
+      setLoading(true);
+    }
+
     final result = await requestsRepository.getServiceRequestByID(idRequest: idRequest);
 
     await result.when(
@@ -244,5 +253,21 @@ class RequestManagerController extends GetxController {
         utilServices.showToast(message: 'Não foi possível enviar a avaliação!', isError: true);
       },
     );
+  }
+
+  Future<String> selectFile() async {
+    return 'path';
+  }
+
+  Future<void> handleDeleteFile({required String idFile, required String idRequest}) async {
+    setLoadingFile(true);
+    final result = await requestsRepository.deleteFile(idFile: idFile, idRequest: idRequest);
+    result.when(success: (message) {
+      utilServices.showToast(message: message);
+    }, error: (message) {
+      utilServices.showToast(message: message);
+    });
+    await loadRequest(idRequest: idRequest, canload: false);
+    setLoadingFile(false);
   }
 }

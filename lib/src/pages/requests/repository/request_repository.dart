@@ -1,6 +1,7 @@
 import 'package:app_law_order/src/constants/endpoints.dart';
 import 'package:app_law_order/src/models/avaliation_model.dart';
 import 'package:app_law_order/src/models/request_model.dart';
+import 'package:app_law_order/src/pages/chat/result/send_file_result.dart';
 import 'package:app_law_order/src/pages/requests/result/acceptance_request_result.dart';
 import 'package:app_law_order/src/pages/requests/result/payment_link_result.dart';
 import 'package:app_law_order/src/pages/requests/result/request_received_result.dart';
@@ -293,4 +294,25 @@ class RequestRepository {
       return PaymentLinkResult.error("Não foi possível gerar o link para pagamento!");
     }
   }
+
+  Future<SendFileResult> deleteFile({required String idRequest, required String idFile}) async {
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.delete,
+        url: '${EndPoints.deleteFileRequest}$idRequest/files/$idFile',
+      );
+
+      if (result['message'] != null) {
+        //String data = result['paymentLink'];
+
+        return SendFileResult.success('Arquivo removido com sucesso!');
+      } else {
+        return SendFileResult.error("Não foi possível remover o arquivo!");
+      }
+    } on Exception {
+      return SendFileResult.error("Não foi possível remover o arquivo. Tente novamente mais tarde!");
+    }
+  }
+
+  Future<void> uploadFile({required String idRequest}) async {}
 }

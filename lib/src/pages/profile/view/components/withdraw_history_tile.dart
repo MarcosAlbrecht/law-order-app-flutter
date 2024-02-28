@@ -1,14 +1,17 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:app_law_order/src/config/custom_colors.dart';
+import 'package:app_law_order/src/models/withdraw_history_model.dart';
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:flutter/material.dart';
 
 class WithdrawHistoryTile extends StatelessWidget {
+  final WithdrawHistoryModel withdraw;
   //final RecommendationModel recommendation;
   final utilServices = UtilServices();
 
   WithdrawHistoryTile({
     Key? key,
+    required this.withdraw,
   }) : super(key: key);
 
   @override
@@ -17,52 +20,72 @@ class WithdrawHistoryTile extends StatelessWidget {
       children: [
         Container(
           padding: const EdgeInsets.only(left: 10),
-          child: const Column(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Column(
                 children: [
                   Row(
                     children: [
-                      Text('Data Solicitação: '),
-                      Text(''),
-                      SizedBox(
+                      const Text(
+                        'Data Solicitação: ',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        utilServices.formatDate(
+                          withdraw.createdAt!,
+                        ),
+                      ),
+                      const SizedBox(
                         width: 5,
                       ),
                     ],
                   ),
-                  Divider(
+                  const Divider(
                     height: 10,
                   ),
                   Row(
                     children: [
-                      Text('Valor: '),
-                      Text(''),
-                      SizedBox(
+                      const Text(
+                        'Valor: ',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(utilServices.priceToCurrency(withdraw.value ?? 0)),
+                      const SizedBox(
                         width: 5,
                       ),
                     ],
                   ),
-                  Divider(
+                  const Divider(
                     height: 10,
                   ),
                   Row(
                     children: [
-                      Text('Status: '),
-                      Text(''),
-                      SizedBox(
+                      const Text(
+                        'Status: ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      _buildStatusText(withdraw.status!),
+                      const SizedBox(
                         width: 5,
                       ),
                     ],
                   ),
-                  Divider(
+                  const Divider(
                     height: 10,
                   ),
                   Row(
                     children: [
-                      Text('Data final: '),
-                      Text(''),
-                      SizedBox(
+                      const Text(
+                        'Data final: ',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        withdraw.updatedAt != null ? utilServices.formatDate(withdraw.updatedAt) : '',
+                      ),
+                      const SizedBox(
                         width: 5,
                       ),
                     ],
@@ -81,6 +104,35 @@ class WithdrawHistoryTile extends StatelessWidget {
           ),
         )
       ],
+    );
+  }
+
+  Widget _buildStatusText(String status) {
+    String translatedText;
+    Color textColor;
+
+    switch (status) {
+      case 'PENDING':
+        translatedText = 'Pendente';
+        textColor = Colors.orange;
+        break;
+      case 'APPROVED':
+        translatedText = 'Aprovado';
+        textColor = CustomColors.green;
+        break;
+      case 'REJECTED':
+        translatedText = 'Rejeitado';
+        textColor = Colors.red;
+        break;
+      default:
+        translatedText = 'Desconhecido';
+        textColor = Colors.black;
+        break;
+    }
+
+    return Text(
+      translatedText,
+      style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
     );
   }
 }

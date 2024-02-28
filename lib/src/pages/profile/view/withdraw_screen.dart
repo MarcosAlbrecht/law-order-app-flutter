@@ -29,6 +29,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
         ),
         centerTitle: true,
         toolbarHeight: 80,
+        backgroundColor: CustomColors.white,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(10),
@@ -166,7 +167,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                                         height: 5,
                                       ),
                                       Text(
-                                        utilServices.priceToCurrency(150),
+                                        utilServices.priceToCurrency(controller.wallet.realizado ?? 0),
                                         style: TextStyle(
                                             color: CustomColors.green,
                                             fontWeight: FontWeight.bold,
@@ -243,6 +244,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                           ),
                           Column(
                             mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 'Histórico',
@@ -252,19 +254,25 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                                 ),
                               ),
                               const SizedBox(
-                                height: 10,
+                                height: 15,
                               ),
-                              SizedBox(
-                                height: 300,
-                                //color: Colors.red,
-                                child: ListView.separated(
-                                    itemBuilder: (context, index) {
-                                      return WithdrawHistoryTile();
-                                    },
-                                    separatorBuilder: (context, index) => const SizedBox(
-                                          height: 20,
-                                        ),
-                                    itemCount: 5),
+                              Visibility(
+                                visible: controller.withdraws.isNotEmpty,
+                                replacement: const Text('Nenhuma solicitação encontrada ainda.'),
+                                child: SizedBox(
+                                  height: 200,
+                                  //color: Colors.red,
+                                  child: ListView.separated(
+                                      itemBuilder: (context, index) {
+                                        return WithdrawHistoryTile(
+                                          withdraw: controller.withdraws[index],
+                                        );
+                                      },
+                                      separatorBuilder: (context, index) => const SizedBox(
+                                            height: 20,
+                                          ),
+                                      itemCount: controller.withdraws.length),
+                                ),
                               ),
                             ],
                           ),

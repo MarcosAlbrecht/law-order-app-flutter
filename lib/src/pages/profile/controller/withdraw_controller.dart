@@ -1,5 +1,7 @@
 import 'package:app_law_order/src/models/pix_model.dart';
 import 'package:app_law_order/src/models/user_model.dart';
+import 'package:app_law_order/src/models/wallet_model.dart';
+import 'package:app_law_order/src/models/withdraw_history_model.dart';
 import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
 import 'package:app_law_order/src/pages/profile/repository/profile_repository.dart';
 import 'package:app_law_order/src/pages/profile/view/portfolio_screen.dart';
@@ -10,6 +12,8 @@ class WithDrawController extends GetxController {
   final authController = Get.find<AuthController>();
   late String selectedUserId;
   UserModel user = UserModel();
+  WalletModel wallet = WalletModel();
+  List<WithdrawHistoryModel> withdraws = [];
 
   bool isSaving = false;
   bool isLoading = true;
@@ -36,8 +40,9 @@ class WithDrawController extends GetxController {
   Future<void> loadDatas() async {
     setLoading(true);
     List<Future<void>> futures = [
-      loadPayments(),
+      loadWithdraw(),
       loadUser(),
+      loadWallet(),
 
       // Adicione mais chamadas conforme necessário
     ];
@@ -48,16 +53,32 @@ class WithDrawController extends GetxController {
     setLoading(false);
   }
 
-  Future<void> loadPayments() async {}
+  Future<void> loadWithdraw() async {
+    final result = await profileRepository.getWithdraws();
+    result.when(success: (data) {
+      withdraws = data;
+    }, error: (message) {
+      utilServices.showToast(message: message, isError: true);
+    });
+  }
+
+  Future<void> loadWallet() async {
+    final result = await profileRepository.getWallet();
+    result.when(success: (data) {
+      wallet = data;
+    }, error: (message) {
+      utilServices.showToast(message: message, isError: true);
+    });
+  }
 
   Future<void> loadUser({bool canload = false}) async {
     if (canload) {
       setLoading(true);
     }
     final result = await profileRepository.getUserById(id: selectedUserId);
-    if (canload) {
-      setLoading(false);
-    }
+
+    setLoading(false);
+
     result.when(
       success: (data) {
         user = data;
@@ -80,7 +101,7 @@ class WithDrawController extends GetxController {
 
   void handleShowClosePixDialog(String status) {
     if (status == 'canceled') {
-      loadUser(canload: true);
+      loadUser(canload: false);
     } else if (status == 'show') {}
     //update();
   }

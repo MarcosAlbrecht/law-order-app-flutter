@@ -5,20 +5,22 @@ part 'withdraw_history_model.g.dart';
 
 @JsonSerializable()
 class WithdrawHistoryModel {
+  @JsonKey(name: '_id')
+  String? id;
   String? createdAt;
+  String? userId;
   double? value;
   String? status;
   String? updatedAt;
-
-  double? realizado;
-  double? taxa;
-  double? bloqueado;
-  double? total;
+  String? pix;
   WithdrawHistoryModel({
+    this.id,
     this.createdAt,
+    this.userId,
     this.value,
     this.status,
-    required this.updatedAt,
+    this.updatedAt,
+    this.pix,
   });
 
   factory WithdrawHistoryModel.fromJson(Map<String, dynamic> json) => _$WithdrawHistoryModelFromJson(json);

@@ -6,12 +6,16 @@ import 'package:app_law_order/src/models/follows_model.dart';
 import 'package:app_law_order/src/models/notification_model.dart';
 import 'package:app_law_order/src/models/service_model.dart';
 import 'package:app_law_order/src/models/user_model.dart';
+import 'package:app_law_order/src/models/wallet_model.dart';
+import 'package:app_law_order/src/models/withdraw_history_model.dart';
 import 'package:app_law_order/src/pages/home/result/follows_result.dart';
 import 'package:app_law_order/src/pages/profile/result/follower_result.dart';
 import 'package:app_law_order/src/pages/profile/result/notifications_result.dart';
 import 'package:app_law_order/src/pages/profile/result/pix_result.dart';
 import 'package:app_law_order/src/pages/profile/result/update_picture_profile_result.dart';
+import 'package:app_law_order/src/pages/profile/result/user_result.dart';
 import 'package:app_law_order/src/pages/profile/result/user_service_result.dart';
+import 'package:app_law_order/src/pages/profile/result/wallet_result.dart';
 import 'package:app_law_order/src/pages/profile/result/withdraw_profile_result.dart';
 import 'package:app_law_order/src/services/http_manager.dart';
 import 'package:app_law_order/src/services/util_services.dart';
@@ -231,18 +235,22 @@ class ProfileRepository {
     }
   }
 
-  Future<WithdrawProfileResult> getUserById({required String id}) async {
-    final result = await httpManager.restRequest(
-      method: HttpMethods.get,
-      url: '${EndPoints.getUserById}$id',
-    );
+  Future<UserResult> getUserById({required String id}) async {
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.get,
+        url: '${EndPoints.getUserById}$id',
+      );
 
-    if (result['_id'] != null) {
-      var userData = result as Map<String, dynamic>;
-      UserModel data = UserModel.fromJson(userData);
-      return WithdrawProfileResult.success(data);
-    } else {
-      return WithdrawProfileResult.error('Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
+      if (result['_id'] != null) {
+        var userData = result as Map<String, dynamic>;
+        UserModel data = UserModel.fromJson(userData);
+        return UserResult.success(data);
+      } else {
+        return UserResult.error('Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
+      }
+    } on Exception catch (e) {
+      return UserResult.error('Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
     }
   }
 
@@ -304,6 +312,44 @@ class ProfileRepository {
       }
     } on Exception {
       return PixResult.error('Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
+    }
+  }
+
+  Future<WithdrawProfileResult<WithdrawHistoryModel>> getWithdraws() async {
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.get,
+        url: EndPoints.getWithdraw,
+      );
+
+      if (result.isNotEmpty) {
+        List<WithdrawHistoryModel> data = (List<Map<String, dynamic>>.from(result)).map(WithdrawHistoryModel.fromJson).toList();
+        return WithdrawProfileResult.success(data);
+      } else {
+        return WithdrawProfileResult.error('Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
+      }
+    } on Exception {
+      return WithdrawProfileResult.error('Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
+    }
+  }
+
+  Future<WalletResult> getWallet() async {
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.get,
+        url: EndPoints.getWallet,
+      );
+
+      if (result.isNotEmpty) {
+        var userData = result as Map<String, dynamic>;
+        WalletModel data = WalletModel.fromJson(userData);
+
+        return WalletResult.success(data);
+      } else {
+        return WalletResult.error('Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
+      }
+    } on Exception {
+      return WalletResult.error('Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
     }
   }
 }
