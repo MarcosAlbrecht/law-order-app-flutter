@@ -1,10 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:json_annotation/json_annotation.dart';
 
-part 'message_file_model.g.dart';
+part 'file_model.g.dart';
 
 @JsonSerializable()
-class MessageFileModel {
+class FileModel {
   @JsonKey(name: '_id')
   String? id;
   String? key;
@@ -12,7 +12,7 @@ class MessageFileModel {
   String? url;
   String? createdAt;
   String? fileLocalPath;
-  MessageFileModel({
+  FileModel({
     this.id,
     this.key,
     this.temp,
@@ -21,7 +21,7 @@ class MessageFileModel {
     this.fileLocalPath,
   });
 
-  factory MessageFileModel.fromJson(Map<String, dynamic> json) => _$MessageFileModelFromJson(json);
+  factory FileModel.fromJson(Map<String, dynamic> json) => _$FileModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MessageFileModelToJson(this);
+  Map<String, dynamic> toJson() => _$FileModelToJson(this);
 }

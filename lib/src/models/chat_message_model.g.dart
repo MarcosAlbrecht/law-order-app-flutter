@@ -15,13 +15,16 @@ ChatMessageModel _$ChatMessageModelFromJson(Map<String, dynamic> json) =>
       authorFirstName: json['authorFirstName'] as String?,
       file: json['file'] == null
           ? null
-          : MessageFileModel.fromJson(json['file'] as Map<String, dynamic>),
+          : FileModel.fromJson(json['file'] as Map<String, dynamic>),
       authorLastName: json['authorLastName'] as String?,
       authorProfilePictureUrl: json['authorProfilePictureUrl'] as String?,
       chatId: json['chatId'] as String?,
       userId: json['userId'] as String?,
       fileName: json['fileName'] as String?,
       createdAt: json['createdAt'] as String?,
+      files: json['files'] == null
+          ? null
+          : FileModel.fromJson(json['files'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ChatMessageModelToJson(ChatMessageModel instance) =>
@@ -38,4 +41,5 @@ Map<String, dynamic> _$ChatMessageModelToJson(ChatMessageModel instance) =>
       'userId': instance.userId,
       'fileName': instance.fileName,
       'createdAt': instance.createdAt,
+      'files': instance.files,
     };

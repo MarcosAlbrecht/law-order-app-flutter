@@ -3,14 +3,13 @@ import 'dart:async';
 
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/constants/constants.dart';
+import 'package:app_law_order/src/models/request_model.dart';
 import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
+import 'package:app_law_order/src/pages/requests/repository/request_repository.dart';
 import 'package:app_law_order/src/pages_routes/pages_routes.dart';
+import 'package:app_law_order/src/services/util_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import 'package:app_law_order/src/models/request_model.dart';
-import 'package:app_law_order/src/pages/requests/repository/request_repository.dart';
-import 'package:app_law_order/src/services/util_services.dart';
 
 const int itemsPerPage = 10;
 
@@ -120,20 +119,15 @@ class RequestController extends GetxController {
     update();
   }
 
-  Future<void> loadRequests(
-      {bool canLoad = true,
-      bool alterCategory = false,
-      String sortDirection = 'DESC'}) async {
+  Future<void> loadRequests({bool canLoad = true, bool alterCategory = false, String sortDirection = 'DESC'}) async {
     if (canLoad) {
       setLoading(true, isUser: true);
     }
     var result;
     if (currentCategory == 'received') {
-      result = await requestsRepository.getRequestsReceived(
-          limit: itemsPerPage, skip: pagination, sortDirection: sortDirection);
+      result = await requestsRepository.getRequestsReceived(limit: itemsPerPage, skip: pagination, sortDirection: sortDirection);
     } else {
-      result = await requestsRepository.getMyRequest(
-          limit: itemsPerPage, skip: pagination);
+      result = await requestsRepository.getMyRequest(limit: itemsPerPage, skip: pagination);
     }
     setLoading(false, isUser: true);
     result.when(
@@ -170,8 +164,7 @@ class RequestController extends GetxController {
 
   StatusInfo serviceRequestStatus({required String status}) {
     UserServiceRequestStatusEnum statusEnum =
-        UserServiceRequestStatusEnum.values.firstWhere(
-            (e) => e.toString() == 'UserServiceRequestStatusEnum.$status');
+        UserServiceRequestStatusEnum.values.firstWhere((e) => e.toString() == 'UserServiceRequestStatusEnum.$status');
 
     // Obtendo o texto e a cor correspondentes ao status
     StatusInfo statusInfo = getStatusInfo(statusEnum);
@@ -205,32 +198,20 @@ class RequestController extends GetxController {
       if (currentCategory == Constants.received) {
         complexSearch = allRequest.where(
           (request) {
-            return (request.requester!.firstName!
-                    .toLowerCase()
-                    .contains(searchRequest.value) ||
-                request.requester!.lastName!
-                    .toLowerCase()
-                    .contains(searchRequest.value) ||
+            return (request.requester!.firstName!.toLowerCase().contains(searchRequest.value) ||
+                request.requester!.lastName!.toLowerCase().contains(searchRequest.value) ||
                 request.status == statusEnumValue ||
-                utilServices
-                    .priceToCurrency(request.total!)
-                    .contains(searchRequest.value) ||
+                utilServices.priceToCurrency(request.total!).contains(searchRequest.value) ||
                 request.createdAt!.contains(searchRequest.value));
           },
         ).toList();
       } else {
         complexSearch = allRequest.where(
           (request) {
-            return (request.requested!.firstName!
-                    .toLowerCase()
-                    .contains(searchRequest.value) ||
-                request.requested!.lastName!
-                    .toLowerCase()
-                    .contains(searchRequest.value) ||
+            return (request.requested!.firstName!.toLowerCase().contains(searchRequest.value) ||
+                request.requested!.lastName!.toLowerCase().contains(searchRequest.value) ||
                 request.status == statusEnumValue ||
-                utilServices
-                    .priceToCurrency(request.total!)
-                    .contains(searchRequest.value) ||
+                utilServices.priceToCurrency(request.total!).contains(searchRequest.value) ||
                 request.createdAt!.contains(searchRequest.value));
           },
         ).toList();

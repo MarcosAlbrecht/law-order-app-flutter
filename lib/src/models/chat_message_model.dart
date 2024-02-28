@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:app_law_order/src/models/file_model.dart';
 import 'package:json_annotation/json_annotation.dart';
-
-import 'package:app_law_order/src/models/message_file_model.dart';
 
 part 'chat_message_model.g.dart';
 
@@ -13,14 +12,14 @@ class ChatMessageModel {
   String? destinationUserId;
   bool? seen;
   String? authorFirstName;
-  MessageFileModel? file;
+  FileModel? file;
   String? authorLastName;
   String? authorProfilePictureUrl;
   String? chatId;
   String? userId;
   String? fileName;
   String? createdAt;
-
+  FileModel? files;
   ChatMessageModel({
     this.id,
     this.message,
@@ -34,6 +33,7 @@ class ChatMessageModel {
     this.userId,
     this.fileName,
     this.createdAt,
+    this.files,
   });
 
   factory ChatMessageModel.fromJson(Map<String, dynamic> json) => _$ChatMessageModelFromJson(json);

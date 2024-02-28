@@ -1,14 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:flutter/material.dart';
-import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
-import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_state.dart';
-
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/constants/constants.dart';
-import 'package:app_law_order/src/constants/endpoints.dart';
+import 'package:app_law_order/src/models/file_model.dart';
 import 'package:app_law_order/src/models/request_model.dart';
-import 'package:app_law_order/src/pages/requests/controller/request_controller.dart';
 import 'package:app_law_order/src/pages/requests/controller/request_manager_controller.dart';
 import 'package:app_law_order/src/pages/requests/view/components/calendar_dialog.dart';
 import 'package:app_law_order/src/pages/requests/view/components/cancel_confirmation_dialog.dart';
@@ -16,6 +10,9 @@ import 'package:app_law_order/src/pages/requests/view/components/contest_dialog.
 import 'package:app_law_order/src/pages/requests/view/components/services_tile.dart';
 import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:app_law_order/src/services/util_services.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
+import 'package:get/get.dart';
 
 class RequestManagerScreen extends StatelessWidget {
   const RequestManagerScreen({
@@ -230,9 +227,65 @@ class _RequestDetails extends StatelessWidget {
                             ),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
+                );
+              },
+            ),
+          ),
+          const Divider(
+            height: 20,
+            color: Colors.transparent,
+          ),
+          Material(
+            elevation: 4,
+            color: CustomColors.cyanColor,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(10),
+                bottomRight: Radius.circular(10),
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
+              ),
+            ),
+            child: GetBuilder<RequestManagerController>(
+              builder: (controller) {
+                return ExpansionTile(
+                  shape: Border.all(color: Colors.transparent),
+                  title: Text('Arquivos (${controller.selectedRequest!.files?.length ?? '0'})'),
+                  children: [
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: controller.selectedRequest?.files?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        FileModel file = controller.selectedRequest!.files?[index];
+                        return ListTile(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                  child: Text(file.key!)), // Supondo que o título do arquivo esteja armazenado na chave 'title'
+                              IconButton(
+                                icon: const Icon(Icons.delete),
+                                onPressed: () {
+                                  // Adicione aqui a lógica para excluir o arquivo
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                    Row(
+                      children: [
+                        TextButton(
+                          onPressed: () {},
+                          child: const Text('Escolher arquivos'),
+                        ),
+                      ],
+                    )
+                  ],
                 );
               },
             ),

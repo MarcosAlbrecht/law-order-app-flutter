@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/models/chat_message_model.dart';
-import 'package:app_law_order/src/models/message_file_model.dart';
+import 'package:app_law_order/src/models/file_model.dart';
 import 'package:app_law_order/src/pages/chat/controller/chat_controller.dart';
 import 'package:app_law_order/src/pages/chat/view/components/picture_message_dialog.dart';
 import 'package:app_law_order/src/pages/common_widgets/custom_text_field.dart';
@@ -252,7 +252,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
     FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.any);
 
     if (result != null && result.files.single.path != null) {
-      final fileModel = MessageFileModel(
+      final fileModel = FileModel(
         createdAt: utilServices.getCurrentDateTimeInISO8601Format(),
         fileLocalPath: result.files.single.path,
       );
@@ -277,7 +277,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
       final bytes = await result.readAsBytes();
       final image = await decodeImageFromList(bytes);
 
-      final fileModel = MessageFileModel(
+      final fileModel = FileModel(
         createdAt: utilServices.getCurrentDateTimeInISO8601Format(),
         fileLocalPath: result.path,
       );
@@ -373,7 +373,7 @@ class MessageBubble extends StatelessWidget {
 
 class MessageFileBubble extends StatelessWidget {
   final String fileName;
-  final MessageFileModel file;
+  final FileModel file;
   final bool isMe;
   final Function(FileType) onTap;
   final ChatController controller;

@@ -27,7 +27,6 @@ class RequestRepository {
 
       if (result['result'].isNotEmpty) {
         List<RequestModel> data = (List<Map<String, dynamic>>.from(result['result'])).map(RequestModel.fromJson).toList();
-
         return RequestReceivedResult.success(data);
       } else {
         if (result['result'] != null) {

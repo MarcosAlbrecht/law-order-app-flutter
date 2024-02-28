@@ -1,12 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'request_model.dart';
+part of 'request_one_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-RequestModel _$RequestModelFromJson(Map<String, dynamic> json) => RequestModel(
+RequestOneModel _$RequestOneModelFromJson(Map<String, dynamic> json) =>
+    RequestOneModel(
       id: json['_id'] as String?,
       requesterId: json['requesterId'] as String?,
       requestedId: json['requestedId'] as String?,
@@ -40,10 +41,12 @@ RequestModel _$RequestModelFromJson(Map<String, dynamic> json) => RequestModel(
           ? null
           : StatusInfoModel.fromJson(
               json['statusPortuguese'] as Map<String, dynamic>),
-      files: json['files'] as List<dynamic>?,
+      files: (json['files'] as List<dynamic>?)
+          ?.map((e) => FileModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
-Map<String, dynamic> _$RequestModelToJson(RequestModel instance) =>
+Map<String, dynamic> _$RequestOneModelToJson(RequestOneModel instance) =>
     <String, dynamic>{
       '_id': instance.id,
       'requesterId': instance.requesterId,
