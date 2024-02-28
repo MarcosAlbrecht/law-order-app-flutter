@@ -100,6 +100,7 @@ class _PixDialogState extends State<PixDialog> {
                                 utilServices.showToast(message: 'Preencha o campo para continuar');
                               } else {
                                 controller.handleCreatePix(key: chavePixEC.text);
+                                cleanText();
                               }
                               //Get.back(result: true);
                             },

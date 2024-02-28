@@ -277,7 +277,7 @@ class ProfileRepository {
         },
       );
 
-      if (result.isEmpty) {
+      if (result['message'] != null) {
         return PixResult.success(result['message']);
       } else {
         return PixResult.error('Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');

@@ -177,7 +177,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                                 ],
                               ),
                               const SizedBox(
-                                height: 10,
+                                height: 15,
                               ),
                               const Text('Prazo de 7 dias para a conclusão do saque'),
                               const SizedBox(
@@ -199,6 +199,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                                   children: [
                                     const Expanded(
                                       child: CustomTextField(
+                                        textInputType: TextInputType.number,
                                         contentPadding: false,
                                         paddingBottom: false,
                                       ),
@@ -253,7 +254,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              Container(
+                              SizedBox(
                                 height: 300,
                                 //color: Colors.red,
                                 child: ListView.separated(

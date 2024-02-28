@@ -10,7 +10,6 @@ class WithDrawController extends GetxController {
   final authController = Get.find<AuthController>();
   late String selectedUserId;
   UserModel user = UserModel();
-  List<PixModel> pixCopy = [];
 
   bool isSaving = false;
   bool isLoading = true;
@@ -51,8 +50,14 @@ class WithDrawController extends GetxController {
 
   Future<void> loadPayments() async {}
 
-  Future<void> loadUser() async {
+  Future<void> loadUser({bool canload = false}) async {
+    if (canload) {
+      setLoading(true);
+    }
     final result = await profileRepository.getUserById(id: selectedUserId);
+    if (canload) {
+      setLoading(false);
+    }
     result.when(
       success: (data) {
         user = data;
@@ -66,20 +71,18 @@ class WithDrawController extends GetxController {
   void toggleStateItem({required int index}) {
     final int position = user.pix!.indexWhere((e) => e.active == true);
     //altera o ativo para false
-    user.pix?[position].active = false;
+    user.pix![position].active = false;
     //altera o selecionado para true
-    user.pix?[index].active = true;
+    user.pix![index].active = true;
+    user.pix;
     update();
   }
 
   void handleShowClosePixDialog(String status) {
     if (status == 'canceled') {
-      user.pix = pixCopy;
-    } else if (status == 'show') {
-      pixCopy.clear();
-      pixCopy.addAll(user.pix!);
-    }
-    update();
+      loadUser(canload: true);
+    } else if (status == 'show') {}
+    //update();
   }
 
   Future<void> handleUpdatePix() async {
@@ -88,7 +91,9 @@ class WithDrawController extends GetxController {
     if (pixModel != null) {
       final result = await profileRepository.updateActivePix(key: pixModel.key!);
       result.when(
-        success: (data) {},
+        success: (message) {
+          utilServices.showToast(message: message);
+        },
         error: (message) {
           utilServices.showToast(message: message, isError: true);
         },
@@ -106,12 +111,13 @@ class WithDrawController extends GetxController {
       final result = await profileRepository.createPix(key: pixModel.key!);
       result.when(
         success: (data) {
-          user.pix?.forEach(
+          user.pix!.forEach(
             (element) {
               element.active = false;
             },
           );
-          user.pix?.add(pixModel);
+          user.pix!.add(pixModel);
+          utilServices.showToast(message: 'Chave Pix cadastrada com sucesso');
         },
         error: (message) {
           utilServices.showToast(message: message, isError: true);
@@ -128,10 +134,11 @@ class WithDrawController extends GetxController {
     final result = await profileRepository.deletePix(key: key);
     result.when(
       success: (data) {
-        user.pix?.removeWhere((element) => element.key == key);
-        if (user.pix != null && user.pix!.length <= 1) {
-          user.pix?[0].active = true;
+        user.pix!.removeWhere((element) => element.key == key);
+        if (user.pix!.length <= 1) {
+          user.pix![0].active = true;
         }
+        utilServices.showToast(message: 'Chave Pix removida com sucesso');
       },
       error: (message) {
         utilServices.showToast(message: message, isError: true);

@@ -53,6 +53,7 @@ abstract class EndPoints {
   static const cancelRequest = '$baseUrl/accounts/service-requests/cancel-request/';
   //mercado pago -->
   static const generatePaymentLink = '$baseUrl/mercadopago/generate-payment-link';
+  static const getHistoryPayments = '$baseUrl/mercadopago/user-payments';
   //<--
 
   //endpois chat
