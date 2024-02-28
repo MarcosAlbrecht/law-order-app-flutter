@@ -47,8 +47,8 @@ class RequestModel {
   UserModel? requester;
   @JsonKey(name: 'requested')
   UserModel? requested;
-  @JsonKey(name: 'paymentId')
-  UserModel? paymentId;
+  @JsonKey(name: 'paid', defaultValue: false)
+  bool paid;
   StatusInfoModel? statusPortuguese;
   List<dynamic>? files;
   RequestModel({
@@ -72,7 +72,7 @@ class RequestModel {
     this.updatedAt,
     this.requester,
     this.requested,
-    this.paymentId,
+    this.paid = false,
     this.statusPortuguese,
     this.files,
   });

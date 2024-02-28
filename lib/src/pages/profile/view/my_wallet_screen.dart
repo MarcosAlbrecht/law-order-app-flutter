@@ -164,7 +164,9 @@ class MyWalletScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            controller.handleRequestWithdrawal();
+                          },
                           child: Text(
                             'Solicitar saque',
                             style: TextStyle(

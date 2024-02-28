@@ -1,12 +1,17 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:app_law_order/src/constants/endpoints.dart';
 import 'package:app_law_order/src/models/avaliation_model.dart';
 import 'package:app_law_order/src/models/request_model.dart';
 import 'package:app_law_order/src/pages/chat/result/send_file_result.dart';
 import 'package:app_law_order/src/pages/requests/result/acceptance_request_result.dart';
+import 'package:app_law_order/src/pages/requests/result/download_file_request_result.dart';
 import 'package:app_law_order/src/pages/requests/result/payment_link_result.dart';
 import 'package:app_law_order/src/pages/requests/result/request_received_result.dart';
 import 'package:app_law_order/src/services/http_manager.dart';
 import 'package:app_law_order/src/services/util_services.dart';
+import 'package:dio/dio.dart';
 
 class RequestRepository {
   final HttpManager httpManager = HttpManager();
@@ -314,5 +319,56 @@ class RequestRepository {
     }
   }
 
-  Future<void> uploadFile({required String idRequest}) async {}
+  Future<DownloadFileRequestResult> downloadFile({
+    required String url,
+    required String savePath,
+  }) async {
+    // Obtém o diretório de armazenamento externo do dispositivo
+
+    final result = await httpManager.downloadFile(url: url, savePath: savePath);
+
+    if (result.statusCode == 200) {
+      String data = 'Download finalizado!';
+      return DownloadFileRequestResult.success(data);
+    }
+    String data = 'Erro ao realizar download!';
+    return DownloadFileRequestResult.success(data);
+  }
+
+  Future<DownloadFileRequestResult> uploadFile({required List<File> files, required String requestId}) async {
+    // FormData formData = FormData.fromMap({
+    //   'file[]': await MultipartFile.fromFile(file, filename: file.split('/').last),
+    //   // Adicione outros campos se necessário
+    // });
+
+    List<MultipartFile> multiPartFiles = [];
+
+    // Iterar sobre a lista de arquivos e adicionar cada um ao FormData
+    for (File file in files) {
+      String fileName = file.path.split('/').last;
+      multiPartFiles.add(await MultipartFile.fromFile(file.path, filename: fileName));
+    }
+
+    FormData formData = FormData.fromMap({
+      'files[]': multiPartFiles,
+      // Adicione outros campos se necessário
+    });
+
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.post,
+        url: '${EndPoints.uploadFileRequest}$requestId/files',
+        body: formData,
+      );
+
+      if (result['message'] != null) {
+        return DownloadFileRequestResult.success(result['message']);
+      } else {
+        return DownloadFileRequestResult.error('Não foi possivel enviar o arquivo.');
+      }
+    } catch (e) {
+      log('Erro ao enviar arquivo', error: e);
+      return DownloadFileRequestResult.error('Tente novamente mais tarde.');
+    }
+  }
 }

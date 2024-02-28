@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app_law_order/src/config/app_data.dart';
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/constants/constants.dart';
@@ -9,8 +11,11 @@ import 'package:app_law_order/src/pages/requests/controller/request_controller.d
 import 'package:app_law_order/src/pages/requests/repository/request_repository.dart';
 import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:app_law_order/src/services/util_services.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path_provider/path_provider.dart';
 
 enum UserServiceRequestStatusEnum {
   WAITING_PROVIDER_ACCEPT,
@@ -255,8 +260,16 @@ class RequestManagerController extends GetxController {
     );
   }
 
-  Future<String> selectFile() async {
-    return 'path';
+  Future<void> filePicker({required String idRequest}) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.any,
+      allowMultiple: true,
+    );
+
+    if (result != null) {
+      List<File> files = result.paths.map((path) => File(path!)).toList();
+      handleUploadFile(files: files, idRequest: idRequest);
+    }
   }
 
   Future<void> handleDeleteFile({required String idFile, required String idRequest}) async {
@@ -269,5 +282,46 @@ class RequestManagerController extends GetxController {
     });
     await loadRequest(idRequest: idRequest, canload: false);
     setLoadingFile(false);
+  }
+
+  Future<void> handleUploadFile({
+    required List<File> files,
+    required String idRequest,
+  }) async {
+    setLoadingFile(true);
+    final result = await requestsRepository.uploadFile(files: files, requestId: idRequest);
+    result.when(success: (message) {
+      utilServices.showToast(message: message);
+    }, error: (message) {
+      utilServices.showToast(message: message);
+    });
+    loadRequest(idRequest: idRequest, canload: false);
+    setLoadingFile(false);
+  }
+
+  Future<void> handleDownloadFile({required String url, required String fileName}) async {
+    setLoadingFile(true);
+    final Directory appDocumentsDir;
+    if (Platform.isIOS) {
+      appDocumentsDir = (await getExternalStorageDirectory())!;
+    } else {
+      appDocumentsDir = (await getDownloadsDirectory())!;
+    }
+
+    if ((File('${appDocumentsDir.path}/$fileName').existsSync())) {
+      print('arquivo ja foi baixado');
+      //abrir arquivo baixado
+    } else {
+      String documentDir = '${appDocumentsDir.path}/$fileName';
+      final result = await requestsRepository.downloadFile(url: url, savePath: documentDir);
+      result.when(
+          success: (data) {
+            print('terminou o download');
+          },
+          error: (message) {});
+    }
+    setLoadingFile(false);
+
+    await OpenFilex.open('${appDocumentsDir.path}/$fileName');
   }
 }

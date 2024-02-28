@@ -149,18 +149,9 @@ class _RequestDetails extends StatelessWidget {
                   const Divider(
                     height: 20,
                   ),
-                  request.paymentId != null
+                  request.paid
                       ? _RowDetailStatusPayment('Status do Pagamento', 'Pagamento realizado', Colors.green)
                       : _RowDetailStatusPayment('Status do Pagamento', 'Pagamento não realizado', Colors.red),
-
-                  // _RowDetail('Serviços solicitados', 'Teste'),
-                  // _RowDetail('Valor Total', 'R$ 1,00'),
-                  // _RowDetail('Solicitante', 'Marcos Roberto Albrecht'),
-                  // _RowDetail('Marechal Cândido Rondon', ''),
-                  // SizedBox(height: 8.0),
-                  // _RowDetail('Prestadio', ''),
-                  // _RowDetail('Prestador', 'Leonardo Winter'),
-                  // _RowDetail('Marechal Cândido Rondon', ''),
                 ],
               ),
             ),
@@ -217,7 +208,7 @@ class _RequestDetails extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Valor total'),
+                            const Text('Valor total'),
                             Text(
                               utilServices.priceToCurrency(controller.selectedRequest!.total!),
                               style: TextStyle(
@@ -261,14 +252,35 @@ class _RequestDetails extends StatelessWidget {
                       itemBuilder: (context, index) {
                         dynamic file = controller.selectedRequest!.files?[index];
                         return ListTile(
+                          dense: true,
                           title: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+                              IconButton(
+                                icon: controller.isLoadingFile
+                                    ? const CircularProgressIndicator(strokeWidth: 2)
+                                    : const Icon(
+                                        Icons.download_outlined,
+                                        size: 20,
+                                      ),
+                                onPressed: () {
+                                  controller.handleDownloadFile(
+                                    url: file['url']!,
+                                    fileName: file['key']!,
+                                  );
+                                  // Adicione aqui a lógica para excluir o arquivo
+                                },
+                              ),
                               Expanded(
                                   child:
                                       Text(file['key']!)), // Supondo que o título do arquivo esteja armazenado na chave 'title'
                               IconButton(
-                                icon: controller.isLoadingFile ? CircularProgressIndicator() : Icon(FontAwesome.trash_empty),
+                                icon: controller.isLoadingFile
+                                    ? const CircularProgressIndicator(strokeWidth: 2)
+                                    : const Icon(
+                                        FontAwesome.trash_empty,
+                                        size: 20,
+                                      ),
                                 onPressed: () {
                                   controller.handleDeleteFile(
                                     idFile: file['_id']!,
@@ -285,8 +297,12 @@ class _RequestDetails extends StatelessWidget {
                     Row(
                       children: [
                         TextButton(
-                          onPressed: () {},
-                          child: const Text('Escolher arquivos'),
+                          onPressed: () {
+                            controller.filePicker(idRequest: controller.selectedRequest!.id!);
+                          },
+                          child: controller.isLoadingFile
+                              ? const CircularProgressIndicator(strokeWidth: 2)
+                              : const Text('Escolher arquivos'),
                         ),
                       ],
                     )
@@ -345,7 +361,7 @@ class _RowDetailStatusPayment extends StatelessWidget {
           label,
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(
               10.0,
@@ -381,7 +397,7 @@ class _RowDetailServiceStatus extends StatelessWidget {
           label,
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(
               10.0,

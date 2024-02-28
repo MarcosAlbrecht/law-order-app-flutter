@@ -33,9 +33,7 @@ RequestModel _$RequestModelFromJson(Map<String, dynamic> json) => RequestModel(
       requested: json['requested'] == null
           ? null
           : UserModel.fromJson(json['requested'] as Map<String, dynamic>),
-      paymentId: json['paymentId'] == null
-          ? null
-          : UserModel.fromJson(json['paymentId'] as Map<String, dynamic>),
+      paid: json['paid'] as bool? ?? false,
       statusPortuguese: json['statusPortuguese'] == null
           ? null
           : StatusInfoModel.fromJson(
@@ -65,7 +63,7 @@ Map<String, dynamic> _$RequestModelToJson(RequestModel instance) =>
       'updatedAt': instance.updatedAt,
       'requester': instance.requester,
       'requested': instance.requested,
-      'paymentId': instance.paymentId,
+      'paid': instance.paid,
       'statusPortuguese': instance.statusPortuguese,
       'files': instance.files,
     };

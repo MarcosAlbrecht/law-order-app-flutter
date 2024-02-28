@@ -38,6 +38,7 @@ abstract class EndPoints {
   static const getRequestsReceivedById = '$baseUrl/accounts/service-requests/';
   static const getMyRequest = '$baseUrl/accounts/service-requests/my';
   static const deleteFileRequest = '$baseUrl/accounts/service-requests/';
+  static const uploadFileRequest = '$baseUrl/accounts/service-requests/';
 
   static const acceptBudget = '$baseUrl/accounts/service-requests/set-provider-acceptance/';
 
