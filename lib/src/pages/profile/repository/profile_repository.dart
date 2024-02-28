@@ -352,4 +352,23 @@ class ProfileRepository {
       return WalletResult.error('Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
     }
   }
+
+  Future<UserResult> deleteUser({required String id}) async {
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.delete,
+        url: '${EndPoints.deleteUser}/$id',
+      );
+
+      if (result.isEmpty) {
+        UserModel data = UserModel();
+
+        return UserResult.success(data);
+      } else {
+        return UserResult.error('Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
+      }
+    } on Exception {
+      return UserResult.error('Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
+    }
+  }
 }

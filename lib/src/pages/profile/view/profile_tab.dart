@@ -196,7 +196,7 @@ class _ProfileTabState extends State<ProfileTab> {
                               onTap: () async {
                                 final bool result = await showDeleteAccount(context);
                                 if (result) {
-                                  controller.authController.logout();
+                                  controller.handleDeleteAccount();
                                 }
                               },
                             ),
@@ -282,12 +282,31 @@ Future<bool> showLogoutfirmation(BuildContext context) async {
                 },
                 child: const Text('Cancelar'),
               ),
-              TextButton(
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: CustomColors.blueDark2Color,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
                 onPressed: () {
-                  Navigator.of(context).pop(true); // Retorna verdadeiro para confirmar a exclusão
+                  //Navigator.of(context).pop(true);
+                  Get.back(result: true);
                 },
-                child: const Text('Confirmar'),
+                child: Text(
+                  'Confirmar',
+                  style: TextStyle(
+                    color: CustomColors.white,
+                    fontSize: 16,
+                  ),
+                ),
               ),
+              // TextButton(
+              //   onPressed: () {
+              //     Navigator.of(context).pop(true); // Retorna verdadeiro para confirmar a exclusão
+              //   },
+              //   child: const Text('Confirmar'),
+              // ),
             ],
           );
         },
@@ -313,9 +332,9 @@ Future<bool> showDeleteAccount(BuildContext context) async {
                     'Exclusão de Conta.\n\n'
                     'Prezado(a),\n\n'
                     'Por favor, esteja ciente dos seguintes pontos importantes para excluir sua conta.:\n\n'
-                    '1. **Perda de Dados:** Ao prosseguir com a exclusão da sua conta, todos os dados associados a ela serão permanentemente removidos. Isso inclui histórico de compras, preferências de configuração, e quaisquer outros dados pessoais ou transacionais relacionados à sua conta.\n\n'
-                    '2. **Saldo na Carteira:** Se houver algum saldo remanescente na sua carteira, este valor será perdido após a exclusão da conta. Recomendamos que você utilize qualquer saldo existente antes de prosseguir com a exclusão da conta.\n\n'
-                    '3. **Implicações Futuras:** Após a exclusão da sua conta, você não poderá mais acessar ou utilizar os serviços com as credenciais desta conta e qualquer outro conteúdo vinculado à sua conta.\n\n'
+                    '1. Perda de Dados: Ao prosseguir com a exclusão da sua conta, todos os dados associados a ela serão permanentemente removidos. Isso inclui histórico de compras, preferências de configuração, e quaisquer outros dados pessoais ou transacionais relacionados à sua conta.\n\n'
+                    '2. Saldo na Carteira: Se houver algum saldo remanescente na sua carteira, este valor será perdido após a exclusão da conta. Recomendamos que você utilize qualquer saldo existente antes de prosseguir com a exclusão da conta.\n\n'
+                    '3. Implicações Futuras: Após a exclusão da sua conta, você não poderá mais acessar ou utilizar os serviços com as credenciais desta conta e qualquer outro conteúdo vinculado à sua conta.\n\n'
                     'Por favor, tenha certeza de que deseja prosseguir com esta ação, pois ela é irreversível e não poderá ser desfeita. Se você tiver alguma dúvida ou preocupação, não hesite em entrar em contato conosco para obter assistência adicional.\n\n',
                     style: TextStyle(
                       fontSize: 12.0, // Tamanho da fonte
@@ -345,7 +364,9 @@ Future<bool> showDeleteAccount(BuildContext context) async {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Get.back(result: true);
+                },
                 child: Text(
                   'Confirmar',
                   style: TextStyle(

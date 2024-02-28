@@ -10,6 +10,7 @@ abstract class EndPoints {
   static const forgotPassword = '$baseUrl/accounts/users/recover-password';
   static const createUser = '$baseUrl/accounts/users';
   static const updateUser = '$baseUrl/accounts/users';
+  static const deleteUser = '$baseUrl/accounts/users';
   static const getUserById = '$baseUrl/accounts/users/';
   static const getAllUsersPaginated = '$baseUrl/accounts/users';
   static const updateProfilePicture = '$baseUrl/accounts/users/update-profile-picture';

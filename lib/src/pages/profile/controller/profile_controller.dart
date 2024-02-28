@@ -76,14 +76,11 @@ class ProfileController extends GetxController {
 
     //fazer umload da imagem primeiro
     if (isSavingPicuture) {
-      final result =
-          await profileRepository.updateProfilePicture(picture: file);
+      final result = await profileRepository.updateProfilePicture(picture: file);
       result.when(
         success: (data) {},
         error: (message) {
-          utilService.showToast(
-              message: "Ocorreu um erro ao fazer o upload da imagem!",
-              isError: true);
+          utilService.showToast(message: "Ocorreu um erro ao fazer o upload da imagem!", isError: true);
         },
       );
     }
@@ -117,8 +114,7 @@ class ProfileController extends GetxController {
   Future<void> addPhotoFromCamera({bool isPortfolio = false}) async {
     final image = await imagePicker.pickImage(
       source: ImageSource.camera,
-      preferredCameraDevice:
-          isPortfolio ? CameraDevice.rear : CameraDevice.front,
+      preferredCameraDevice: isPortfolio ? CameraDevice.rear : CameraDevice.front,
     );
     if (image != null) {
       //comprime a imagem
@@ -184,8 +180,7 @@ class ProfileController extends GetxController {
   Future<bool> inertImagePortfolio({required String imagePath}) async {
     bool success = false;
     setSavingPortfolioPicuture(value: true);
-    final result =
-        await profileRepository.insertPortfolioPicture(picture: imagePath);
+    final result = await profileRepository.insertPortfolioPicture(picture: imagePath);
 
     await result.when(
       success: (data) async {
@@ -195,8 +190,7 @@ class ProfileController extends GetxController {
         utilService.showToast(message: "Foto adicionada com sucesso!");
       },
       error: (data) {
-        utilService.showToast(
-            message: "Oocrreu um erro a adicionar a imagem!", isError: true);
+        utilService.showToast(message: "Oocrreu um erro a adicionar a imagem!", isError: true);
         success = false;
       },
     );
@@ -205,19 +199,15 @@ class ProfileController extends GetxController {
     return success;
   }
 
-  Future<void> deleteImagePortfolio(
-      {required PictureModel picture, required int index}) async {
+  Future<void> deleteImagePortfolio({required PictureModel picture, required int index}) async {
     setSavingPortfolioPicuture(value: true);
-    final result =
-        await profileRepository.deletePortfolioPicture(idPicture: picture.id!);
+    final result = await profileRepository.deletePortfolioPicture(idPicture: picture.id!);
     result.when(success: (data) {
-      authController.user.portfolioPictures
-          ?.removeWhere((item) => item.id == picture.id);
+      authController.user.portfolioPictures?.removeWhere((item) => item.id == picture.id);
 
       utilService.showToast(message: "Foto removida com sucesso!");
     }, error: (data) {
-      utilService.showToast(
-          message: "Não foi possível remover a foto!", isError: true);
+      utilService.showToast(message: "Não foi possível remover a foto!", isError: true);
     });
 
     setSavingPortfolioPicuture(value: false);
@@ -229,8 +219,7 @@ class ProfileController extends GetxController {
     setSavingService(value: true);
     switch (status) {
       case 'insert':
-        final result =
-            await profileRepository.insertService(service: actualService);
+        final result = await profileRepository.insertService(service: actualService);
         await result.when(
           success: (data) async {
             await authController.getUserById();
@@ -242,8 +231,7 @@ class ProfileController extends GetxController {
         );
         break;
       case 'edit':
-        final result =
-            await profileRepository.updateService(service: actualService);
+        final result = await profileRepository.updateService(service: actualService);
         result.when(
           success: (data) {
             for (var element in authController.user.services!) {
@@ -259,12 +247,10 @@ class ProfileController extends GetxController {
         );
         break;
       case 'delete':
-        final result =
-            await profileRepository.deleteService(service: actualService);
+        final result = await profileRepository.deleteService(service: actualService);
         result.when(
           success: (data) async {
-            authController.user.services
-                ?.removeWhere((element) => element.id == actualService.id);
+            authController.user.services?.removeWhere((element) => element.id == actualService.id);
             utilService.showToast(message: "Serviço removido com sucesso!");
           },
           error: (message) {
@@ -282,33 +268,28 @@ class ProfileController extends GetxController {
     switch (status) {
       case 'insert':
         authController.user.skills?.add(skill);
-        final result =
-            await profileRepository.updateSkills(user: authController.user);
+        final result = await profileRepository.updateSkills(user: authController.user);
         result.when(
           success: (data) {
-            utilService.showToast(
-                message: "Competência adicionada com sucesso!");
+            utilService.showToast(message: "Competência adicionada com sucesso!");
           },
           error: (message) {
             utilService.showToast(message: message, isError: true);
-            authController.user.skills
-                ?.removeWhere((element) => element == skill);
+            authController.user.skills?.removeWhere((element) => element == skill);
           },
         );
 
         break;
       case 'delete':
         authController.user.skills?.removeWhere((element) => element == skill);
-        final result =
-            await profileRepository.updateSkills(user: authController.user);
+        final result = await profileRepository.updateSkills(user: authController.user);
         result.when(
           success: (data) {
             utilService.showToast(message: "Competência removida com sucesso!");
           },
           error: (message) {
             utilService.showToast(message: message, isError: true);
-            authController.user.skills
-                ?.removeWhere((element) => element == skill);
+            authController.user.skills?.removeWhere((element) => element == skill);
           },
         );
 
@@ -316,5 +297,14 @@ class ProfileController extends GetxController {
     }
     skill = "";
     setSavingSkill(value: false);
+  }
+
+  Future<void> handleDeleteAccount() async {
+    final result = await profileRepository.deleteUser(id: authController.user.id!);
+    result.when(success: (data) {
+      authController.logout();
+    }, error: (message) {
+      utilService.showToast(message: message, isError: true);
+    });
   }
 }
