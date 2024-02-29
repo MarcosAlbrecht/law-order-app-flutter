@@ -268,6 +268,11 @@ class RequestManagerController extends GetxController {
 
     if (result != null) {
       List<File> files = result.paths.map((path) => File(path!)).toList();
+
+      if ((files.length + selectedRequest!.files!.length) > 12) {
+        utilServices.showToast(message: 'São permitidos apenas 12 arquivos');
+        return;
+      }
       handleUploadFile(files: files, idRequest: idRequest);
     }
   }

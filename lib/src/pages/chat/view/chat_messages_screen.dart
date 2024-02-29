@@ -59,14 +59,49 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_outlined),
+          icon: const Icon(Icons.arrow_back_outlined),
           onPressed: () {
             Get.back();
           },
         ),
         elevation: 0,
         backgroundColor: Colors.white,
-        title: const Text('Mensagens'),
+        title: GetBuilder<ChatController>(
+          builder: (controller) {
+            return const Row(
+              children: [
+                // Imagem redonda
+                CircleAvatar(
+                  backgroundImage: AssetImage('assets/images/profile_image.jpg'), // Substitua pela sua imagem
+                  radius: 20, // Tamanho da imagem
+                ),
+                SizedBox(width: 10), // Espaçamento entre a imagem e o texto
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Nome
+                    Text(
+                      'Nome',
+                      style: TextStyle(
+                        fontSize: 16, // Tamanho do texto do nome
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    // Cargo
+                    Text(
+                      'position',
+                      style: TextStyle(
+                        fontSize: 12, // Tamanho do texto do cargo
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        ),
       ),
       body: SizedBox(
         height: size.height,

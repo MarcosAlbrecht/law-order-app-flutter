@@ -4,6 +4,7 @@ import 'package:app_law_order/src/constants/endpoints.dart';
 import 'package:app_law_order/src/models/chat_message_model.dart';
 import 'package:app_law_order/src/models/chat_model.dart';
 import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
+import 'package:app_law_order/src/pages/base/controller/navigation_controller.dart';
 import 'package:app_law_order/src/pages/chat/repository/chat_repository.dart';
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:get/get.dart';
@@ -15,6 +16,7 @@ class ChatController extends GetxController {
   final chatRepository = ChatRepository();
   final utilServices = UtilServices();
   final authController = Get.find<AuthController>();
+  final navigationController = Get.find<NavigationController>();
 
   late String userId;
   late String destinationUser;
@@ -34,6 +36,7 @@ class ChatController extends GetxController {
   bool isLoading = false;
   bool isMessageLoading = true;
   bool isTabOpened = false;
+  bool isMessageScreenOpened = false;
 
   int get currentIndex => _currentIndex.value;
 
@@ -52,6 +55,12 @@ class ChatController extends GetxController {
     print('A tela ChatTab foi chamada novamente.');
   }
 
+  void didChangeMessageScreen() {
+    setMessageScreenOpened(true);
+    loadChats();
+    print('A tela ChatTab foi chamada novamente.');
+  }
+
   void disposeScreen() {
     selectedChat = null;
     setTabOpened(false);
@@ -59,11 +68,16 @@ class ChatController extends GetxController {
 
   void disposeChatMessagesScreen() async {
     //allMessages.clear();
+    setMessageScreenOpened(false);
     await loadChats(canload: false);
   }
 
   void setTabOpened(bool value) {
     isTabOpened = value;
+  }
+
+  void setMessageScreenOpened(bool value) {
+    isMessageScreenOpened = value;
   }
 
   void setLoading(bool value) {
@@ -78,24 +92,30 @@ class ChatController extends GetxController {
     update();
   }
 
+  static int compareCreatedAt(ChatModel a, ChatModel b) {
+    DateTime dateTimeA = DateTime.parse(a.createdAt!);
+    DateTime dateTimeB = DateTime.parse(b.createdAt!);
+    return dateTimeB.compareTo(dateTimeA);
+  }
+
   Future<void> loadChats({bool canload = true}) async {
     if (canload) {
       setLoading(true);
     }
 
     final result = await chatRepository.getAllChats();
-    if (canload) {
-      setLoading(false);
-    }
-    result.when(success: (data) {
+
+    result.when(success: (data) async {
       allChats.clear();
       allChats.addAll(data);
-      //allChats.sort((a, b) => (a.createdAt ?? '').compareTo(b.createdAt ?? ''));
+      allChats.sort(compareCreatedAt);
     }, error: (message) {
       if (message.isNotEmpty) {
         utilServices.showToast(message: message, isError: true);
       }
     });
+
+    setLoading(false);
   }
 
   void connect() async {
@@ -120,18 +140,18 @@ class ChatController extends GetxController {
   }
 
   void handleReceiveNewMessage(dynamic data) {
-    if (isTabOpened) {
-      //adiciona a mensagem na lista e atualiza a tela
-      //var userData = data as Map<String, dynamic>;
+    if (isTabOpened || isMessageScreenOpened) {
       ChatMessageModel message = ChatMessageModel.fromJson(data);
       message.createdAt = utilServices.getCurrentDateTimeInISO8601Format();
       message.userId = data['author']['_id'];
       allMessages.insert(0, message);
+      if (!isMessageScreenOpened) {
+        loadChats(canload: false);
+      }
       update();
-      // Agora você pode usar o objeto UserModel conforme necessário
+
       print('Nova mensagem de $message');
     } else {
-      //envia showMessage
       utilServices.showToastNewChatMessage(message: 'Nova mensagem de chat recebida!');
     }
   }
@@ -141,6 +161,7 @@ class ChatController extends GetxController {
     String? userDestinationId,
     bool canLoad = true,
   }) {
+    setMessageScreenOpened(true);
     destinationUser = '';
     //allChats = [];
 
@@ -219,7 +240,7 @@ class ChatController extends GetxController {
           'destinationUserId': destinationUser,
         },
       );
-    } on Exception catch (e) {
+    } on Exception {
       utilServices.showToast(message: 'Não foi possivel enviar a mensagem, Tente novamente mais tarde!');
     }
   }

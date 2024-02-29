@@ -4,6 +4,7 @@ import 'package:app_law_order/src/models/chat_model.dart';
 import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:get/get.dart';
 
 class ChatTile extends StatelessWidget {
@@ -29,22 +30,10 @@ class ChatTile extends StatelessWidget {
         child: Material(
           //elevation: 3,
           color: CustomColors.white,
-          // shape: const RoundedRectangleBorder(
-          //   borderRadius: BorderRadius.only(
-          //     bottomLeft: Radius.circular(10),
-          //     bottomRight: Radius.circular(10),
-          //     topLeft: Radius.circular(10),
-          //     topRight: Radius.circular(10),
-          //   ),
-          // ),
+
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              // border: Border.all(
-              //   color: Colors.cyan.shade200,
-              //   width: 1, // Defina a largura da borda conforme necessário
-              // ),
-              //color: CustomColors.backgroudCard,
             ),
             child: ListTile(
               visualDensity: VisualDensity.compact,
@@ -81,21 +70,44 @@ class ChatTile extends StatelessWidget {
               title: logedUserId == chat.destinationUserId
                   ? Text(
                       '${chat.user!.firstName!} ${chat.user!.lastName!}',
-                      style: TextStyle(fontSize: CustomFontSizes.fontSize14),
+                      style: TextStyle(fontSize: CustomFontSizes.fontSize16),
                     )
                   : Text(
                       '${chat.destinationUser!.firstName!} ${chat.destinationUser!.lastName!}',
-                      style: TextStyle(fontSize: CustomFontSizes.fontSize14),
+                      style: TextStyle(fontSize: CustomFontSizes.fontSize16),
                     ),
-              subtitle: Text(
-                chat.message != null ? '${chat.message}' : '',
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: CustomFontSizes.fontSize12),
-              ),
+              subtitle: chat.message != null
+                  ? Text(
+                      '${chat.message}',
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: CustomFontSizes.fontSize14),
+                    )
+                  : _buildFileText(),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildFileText() {
+    return Row(
+      children: [
+        const Icon(
+          FontAwesome5.file_alt,
+          size: 14,
+        ),
+        const SizedBox(
+          width: 5,
+        ),
+        Text(
+          'Arquivo',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: CustomFontSizes.fontSize14,
+          ),
+        ),
+      ],
     );
   }
 }
