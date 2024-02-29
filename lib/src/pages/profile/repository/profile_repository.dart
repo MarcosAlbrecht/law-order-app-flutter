@@ -325,9 +325,10 @@ class ProfileRepository {
       if (result.isNotEmpty) {
         List<WithdrawHistoryModel> data = (List<Map<String, dynamic>>.from(result)).map(WithdrawHistoryModel.fromJson).toList();
         return WithdrawProfileResult.success(data);
-      } else {
-        return WithdrawProfileResult.error('Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
+      } else if (result.isEmpty) {
+        return WithdrawProfileResult.success([]);
       }
+      return WithdrawProfileResult.error('Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
     } on Exception {
       return WithdrawProfileResult.error('Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
     }

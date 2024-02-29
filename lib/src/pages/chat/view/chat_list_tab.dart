@@ -3,6 +3,7 @@ import 'package:app_law_order/src/pages/chat/controller/chat_controller.dart';
 import 'package:app_law_order/src/pages/chat/view/components/chat_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class ChatListTab extends StatefulWidget {
   const ChatListTab({super.key});
@@ -54,10 +55,16 @@ class _ChatListTab extends State<ChatListTab> {
             GetBuilder<ChatController>(
               builder: (controller) {
                 return controller.isLoading
-                    ? const Expanded(
+                    ? Expanded(
                         child: Center(
                           child: Center(
-                            child: CircularProgressIndicator(),
+                            child: //CircularProgressIndicator(),
+                                LoadingAnimationWidget.discreteCircle(
+                              color: CustomColors.blueDark2Color,
+                              secondRingColor: CustomColors.blueDarkColor,
+                              thirdRingColor: CustomColors.blueColor,
+                              size: 50,
+                            ),
                           ),
                         ),
                       )

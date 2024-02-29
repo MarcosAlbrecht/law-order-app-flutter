@@ -8,7 +8,6 @@ import 'package:app_law_order/src/pages/chat/result/chats_result.dart';
 import 'package:app_law_order/src/pages/chat/result/download_file_result.dart';
 import 'package:app_law_order/src/pages/chat/result/send_file_result.dart';
 import 'package:app_law_order/src/services/http_manager.dart';
-
 import 'package:dio/dio.dart';
 
 class ChatRepository {
@@ -46,20 +45,24 @@ class ChatRepository {
         url: '${EndPoints.getChatMessage}$userDestinationId',
       );
 
-      if (result.isNotEmpty) {
-        List<ChatMessageModel> data = (List<Map<String, dynamic>>.from(result)).map(ChatMessageModel.fromJson).toList();
+      if (result is List<Map<String, dynamic>>) {
+        // Se result for uma lista de mapas, trata como mensagens válidas
+        List<ChatMessageModel> data = result.map((message) => ChatMessageModel.fromJson(message)).toList();
         return ChatsMessageResult.success(data);
-      } else if (result.isEmpty) {
-        List<ChatMessageModel> data = [];
-        return ChatsMessageResult.success(data);
+      } else if (result is List && result.isNotEmpty && result[0] is Map<String, dynamic>) {
+        // Se result for uma lista com pelo menos um mapa e o primeiro mapa tiver uma chave 'statusCode'
+        if (result[0]['statusCode'] == 404) {
+          // Se o status code for 404, retorna uma lista vazia indicando que o chat não foi encontrado
+          return ChatsMessageResult.error('Erro ao carregar as mensagens!');
+        } else {
+          List<ChatMessageModel> data = (List<Map<String, dynamic>>.from(result)).map(ChatMessageModel.fromJson).toList();
+          return ChatsMessageResult.success(data);
+        }
       } else {
+        // Se não for possível determinar o formato dos dados, retorna um erro genérico
         return ChatsMessageResult.error('Erro ao carregar as mensagens!');
       }
-    } on Exception catch (e) {
-      print(e);
-      if (e == 404) {
-        return ChatsMessageResult.error('Ainda não possui conversa iniciada');
-      }
+    } on Exception {
       return ChatsMessageResult.error('Não foi possível carregar as mensagens. Tente novamente mais tarde!');
     }
   }
@@ -79,8 +82,6 @@ class ChatRepository {
     String data = 'Erro ao realizar download!';
     return DownloadFileResult.success(data);
   }
-
-  
 
   Future<SendFileResult> sendChatFile({required String file, required String userDestination}) async {
     FormData formData = FormData.fromMap({

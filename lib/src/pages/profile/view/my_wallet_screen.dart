@@ -3,6 +3,7 @@ import 'package:app_law_order/src/pages/profile/controller/my_wallet_controller.
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class MyWalletScreen extends StatelessWidget {
   MyWalletScreen({super.key});
@@ -35,8 +36,13 @@ class MyWalletScreen extends StatelessWidget {
           child: GetBuilder<MyWalletController>(
             builder: (controller) {
               return controller.isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(),
+                  ? Center(
+                      child: LoadingAnimationWidget.discreteCircle(
+                        color: CustomColors.blueDark2Color,
+                        secondRingColor: CustomColors.blueDarkColor,
+                        thirdRingColor: CustomColors.blueColor,
+                        size: 50,
+                      ),
                     )
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -31,6 +31,7 @@ class HomeController extends GetxController {
   String occupationAreaSelected = "";
 
   RxString searchRequest = ''.obs;
+  final isInitialized = false.obs;
 
   int pagination = 0;
 
@@ -75,6 +76,7 @@ class HomeController extends GetxController {
     occupationsAreas.sort((a, b) => (a.area ?? '').compareTo(b.area ?? ''));
 
     await Future.wait(operations);
+    isInitialized.value = true;
 
     setLoading(false, isUser: true);
   }

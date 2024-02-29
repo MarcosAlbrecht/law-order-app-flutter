@@ -3,6 +3,7 @@ import 'package:app_law_order/src/pages/profile/controller/follows_controller.da
 import 'package:app_law_order/src/pages/profile/view/components/follows_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class FollowsScreen extends StatelessWidget {
   const FollowsScreen({Key? key}) : super(key: key);
@@ -40,8 +41,13 @@ class FollowsScreen extends StatelessWidget {
           child: GetBuilder<FollowsController>(
             builder: (controller) {
               return controller.isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(),
+                  ? Center(
+                      child: LoadingAnimationWidget.discreteCircle(
+                        color: CustomColors.blueDark2Color,
+                        secondRingColor: CustomColors.blueDarkColor,
+                        thirdRingColor: CustomColors.blueColor,
+                        size: 50,
+                      ),
                     )
                   : Visibility(
                       visible: controller.follows.isNotEmpty,
@@ -60,8 +66,7 @@ class FollowsScreen extends StatelessWidget {
                       child: ListView.builder(
                         physics: const BouncingScrollPhysics(),
                         itemBuilder: (_, index) {
-                          if (((index + 1) == controller.follows.length) &&
-                              (!controller.isLastPage)) {
+                          if (((index + 1) == controller.follows.length) && (!controller.isLastPage)) {
                             controller.loadMoreFollows();
                           }
 

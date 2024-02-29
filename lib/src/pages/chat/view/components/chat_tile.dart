@@ -40,33 +40,34 @@ class ChatTile extends StatelessWidget {
               dense: true,
               //contentPadding: EdgeInsets.all(0),
               leading: ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
-                  child: logedUserId == chat.destinationUserId
-                      ? chat.user?.profilePicture != null
-                          ? CachedNetworkImage(
-                              imageUrl: chat.user!.profilePicture!.url!,
-                              progressIndicatorBuilder: (context, url, downloadProgress) =>
-                                  CircularProgressIndicator(value: downloadProgress.progress),
-                              errorWidget: (context, url, error) => const Icon(Icons.error),
-                              fit: BoxFit.cover,
-                              height: 40,
-                              width: 40,
-                            )
-                          : Image.asset(
-                              "assets/ICONPEOPLE.png",
-                              fit: BoxFit.cover,
-                              height: 40,
-                              width: 40,
-                            )
-                      : CachedNetworkImage(
-                          imageUrl: chat.destinationUser!.profilePicture!.url!,
-                          progressIndicatorBuilder: (context, url, downloadProgress) =>
-                              CircularProgressIndicator(value: downloadProgress.progress),
-                          errorWidget: (context, url, error) => const Icon(Icons.error),
-                          fit: BoxFit.cover,
-                          height: 40,
-                          width: 40,
-                        )),
+                borderRadius: BorderRadius.circular(50),
+                child: logedUserId == chat.destinationUserId
+                    ? chat.user?.profilePicture != null
+                        ? CachedNetworkImage(
+                            imageUrl: chat.user!.profilePicture!.url!,
+                            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                CircularProgressIndicator(value: downloadProgress.progress),
+                            errorWidget: (context, url, error) => const Icon(Icons.error),
+                            fit: BoxFit.cover,
+                            height: 40,
+                            width: 40,
+                          )
+                        : Image.asset(
+                            "assets/ICONPEOPLE.png",
+                            fit: BoxFit.cover,
+                            height: 40,
+                            width: 40,
+                          )
+                    : CachedNetworkImage(
+                        imageUrl: chat.destinationUser!.profilePicture!.url!,
+                        progressIndicatorBuilder: (context, url, downloadProgress) =>
+                            CircularProgressIndicator(value: downloadProgress.progress),
+                        errorWidget: (context, url, error) => const Icon(Icons.error),
+                        fit: BoxFit.cover,
+                        height: 40,
+                        width: 40,
+                      ),
+              ),
               title: logedUserId == chat.destinationUserId
                   ? Text(
                       '${chat.user!.firstName!} ${chat.user!.lastName!}',

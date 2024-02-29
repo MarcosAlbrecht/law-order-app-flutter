@@ -8,6 +8,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class ProfileViewScreen extends StatelessWidget {
   const ProfileViewScreen({Key? key}) : super(key: key);
@@ -28,8 +29,13 @@ class ProfileViewScreen extends StatelessWidget {
       body: GetBuilder<ProfileViewController>(
         builder: (controller) {
           return controller.isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(),
+              ? Center(
+                  child: LoadingAnimationWidget.discreteCircle(
+                    color: CustomColors.blueDark2Color,
+                    secondRingColor: CustomColors.blueDarkColor,
+                    thirdRingColor: CustomColors.blueColor,
+                    size: 50,
+                  ),
                 )
               : Container(
                   color: CustomColors.white,

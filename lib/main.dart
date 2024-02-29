@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+
     return GetMaterialApp(
       title: 'Prestadio',
       debugShowCheckedModeBanner: false,
@@ -53,7 +54,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       getPages: AppPages.pages,
-      initialRoute: PagesRoutes.signInRoute,
+      initialRoute: PagesRoutes.splashRoute,
       localizationsDelegates: const [
         GlobalWidgetsLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

@@ -1,9 +1,10 @@
 import 'package:app_law_order/src/config/custom_colors.dart';
+import 'package:app_law_order/src/config/privacy_policy.dart';
+import 'package:app_law_order/src/config/termsUse.dart';
 import 'package:app_law_order/src/models/occupation_areas_model.dart';
 import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
 import 'package:app_law_order/src/pages/common_widgets/custom_datepicker.dart';
 import 'package:app_law_order/src/pages/common_widgets/custom_text_field.dart';
-import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:app_law_order/src/services/validators.dart';
 import 'package:flutter/gestures.dart';
@@ -200,24 +201,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           },
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                             vertical: 15,
                             horizontal: 10,
                           ),
                           child: RichText(
                             text: TextSpan(
                               children: [
-                                TextSpan(
+                                const TextSpan(
                                   text: 'Ao criar uma conta, concordo com os ',
                                   style: TextStyle(color: Colors.black),
                                 ),
                                 TextSpan(
                                   text: 'Termos de Uso',
-                                  style: TextStyle(color: Colors.blue),
+                                  style: const TextStyle(color: Colors.blue),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
-                                      // Ação ao clicar em 'Termos de Uso'
-                                      //showPopup(context, 'Termos de Uso');
+                                      showPopupTermsUse(context);
                                     },
                                 ),
                                 const TextSpan(
@@ -226,11 +226,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                                 TextSpan(
                                   text: 'Política de Privacidade',
-                                  style: TextStyle(color: Colors.blue),
+                                  style: const TextStyle(color: Colors.blue),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
-                                      // Ação ao clicar em 'Política de Privacidade'
-                                      //showPopup(context, 'Política de Privacidade');
+                                      showPopupPrivacyPolice(context);
                                     },
                                 ),
                                 const TextSpan(
@@ -287,19 +286,67 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  void showPopup(BuildContext context, String text) {
+  void showPopupTermsUse(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(text),
-          content: Text('Conteúdo do $text'),
+          title: const Text('Termos de uso'),
+          content: const SingleChildScrollView(
+            child: Text(termsUse),
+          ),
           actions: [
-            TextButton(
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: CustomColors.blueDark2Color,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
               onPressed: () {
-                Navigator.of(context).pop();
+                //Navigator.of(context).pop(true);
+                Get.back(result: true);
               },
-              child: Text('Fechar'),
+              child: Text(
+                'Confirmar',
+                style: TextStyle(
+                  color: CustomColors.white,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showPopupPrivacyPolice(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Política de Privacidade'),
+          content: const SingleChildScrollView(child: Text(pprivacyPolicy)),
+          actions: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: CustomColors.blueDark2Color,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onPressed: () {
+                //Navigator.of(context).pop(true);
+                Get.back(result: true);
+              },
+              child: Text(
+                'Confirmar',
+                style: TextStyle(
+                  color: CustomColors.white,
+                  fontSize: 16,
+                ),
+              ),
             ),
           ],
         );

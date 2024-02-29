@@ -10,6 +10,7 @@ import 'package:app_law_order/src/pages/profile/view/components/skill_tile.dart'
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import 'components/camera_dialog.dart';
 
@@ -71,22 +72,18 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                       children: [
                         CustomTextField(
                           label: "Título do Perfil",
-                          initialValue:
-                              controller.authController.user.portfolioTitle,
+                          initialValue: controller.authController.user.portfolioTitle,
                           onSaved: (value) {
-                            controller.authController.user.portfolioTitle =
-                                value;
+                            controller.authController.user.portfolioTitle = value;
                           },
                         ),
                         CustomTextField(
                           label: "Sobre você",
                           minLines: 1,
                           maxLines: 5,
-                          initialValue:
-                              controller.authController.user.portfolioAbout,
+                          initialValue: controller.authController.user.portfolioAbout,
                           onSaved: (value) {
-                            controller.authController.user.portfolioAbout =
-                                value;
+                            controller.authController.user.portfolioAbout = value;
                           },
                         ),
 
@@ -109,19 +106,20 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                           height: 180,
                           child: Visibility(
                             visible: !controller.isSavingPortfolioPicuture,
-                            replacement: const Center(
-                                child: CircularProgressIndicator()),
+                            replacement: Center(
+                              child: LoadingAnimationWidget.discreteCircle(
+                                color: CustomColors.blueDark2Color,
+                                secondRingColor: CustomColors.blueDarkColor,
+                                thirdRingColor: CustomColors.blueColor,
+                                size: 50,
+                              ),
+                            ),
                             child: ListView.separated(
                               physics: const BouncingScrollPhysics(),
-                              padding:
-                                  const EdgeInsets.only(right: 15, bottom: 15),
+                              padding: const EdgeInsets.only(right: 15, bottom: 15),
                               scrollDirection: Axis.horizontal,
-                              itemCount: controller.authController.user
-                                          .portfolioPictures !=
-                                      null
-                                  ? controller.authController.user
-                                          .portfolioPictures!.length +
-                                      1
+                              itemCount: controller.authController.user.portfolioPictures != null
+                                  ? controller.authController.user.portfolioPictures!.length + 1
                                   : 1,
                               itemBuilder: (context, index) {
                                 if (index == 0) {
@@ -151,24 +149,18 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                     ),
                                   );
                                 } else {
-                                  final photo = controller.authController.user
-                                      .portfolioPictures![index - 1];
-                                  if (photo != null ||
-                                      photo.url != null ||
-                                      photo.localPath != null) {
+                                  final photo = controller.authController.user.portfolioPictures![index - 1];
+                                  if (photo != null || photo.url != null || photo.localPath != null) {
                                     return PictureTile(
-                                      picture: controller.authController.user
-                                          .portfolioPictures![index - 1],
+                                      picture: controller.authController.user.portfolioPictures![index - 1],
                                       index: index,
                                     );
                                   } else {
-                                    return const SizedBox
-                                        .shrink(); // Retorna um container vazio caso a propriedade seja nula
+                                    return const SizedBox.shrink(); // Retorna um container vazio caso a propriedade seja nula
                                   }
                                 }
                               },
-                              separatorBuilder: (context, index) =>
-                                  const SizedBox(width: 5),
+                              separatorBuilder: (context, index) => const SizedBox(width: 5),
                             ),
                           ),
                         ),
@@ -216,16 +208,13 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                         ),
                         //container que lista os serviços oferecidos
                         Visibility(
-                          visible:
-                              controller.authController.user.services != null &&
-                                  controller
-                                      .authController.user.services!.isNotEmpty,
+                          visible: controller.authController.user.services != null &&
+                              controller.authController.user.services!.isNotEmpty,
                           replacement: Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.search_off,
-                                    color: CustomColors.black),
+                                Icon(Icons.search_off, color: CustomColors.black),
                                 const Text('Não há itens para apresentar'),
                               ],
                             ),
@@ -236,8 +225,13 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                               itemBuilder: (context, index) {
                                 return Visibility(
                                   visible: !controller.isSavingService,
-                                  replacement: const Center(
-                                    child: CircularProgressIndicator(),
+                                  replacement: Center(
+                                    child: LoadingAnimationWidget.discreteCircle(
+                                      color: CustomColors.blueDark2Color,
+                                      secondRingColor: CustomColors.blueDarkColor,
+                                      thirdRingColor: CustomColors.blueColor,
+                                      size: 50,
+                                    ),
                                   ),
                                   child: Dismissible(
                                     background: Container(
@@ -255,30 +249,20 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                     ),
                                     key: ValueKey<int>(index),
                                     child: ServicesTile(
-                                      service: controller
-                                          .authController.user.services![index],
+                                      service: controller.authController.user.services![index],
                                     ),
                                     confirmDismiss: (direction) async {
-                                      if (direction ==
-                                          DismissDirection.endToStart) {
-                                        final bool result =
-                                            await showDeleteConfirmation(
-                                                context);
+                                      if (direction == DismissDirection.endToStart) {
+                                        final bool result = await showDeleteConfirmation(context);
                                         if (result) {
-                                          controller.actualService = controller
-                                              .authController
-                                              .user
-                                              .services![index];
-                                          controller.handleService(
-                                              status: 'delete');
+                                          controller.actualService = controller.authController.user.services![index];
+                                          controller.handleService(status: 'delete');
                                         }
                                       } else {
                                         await showDialog(
                                           context: context,
                                           builder: (_) {
-                                            controller.actualService =
-                                                controller.authController.user
-                                                    .services![index];
+                                            controller.actualService = controller.authController.user.services![index];
                                             return const ServiceDialog(
                                               status: "edit",
                                             );
@@ -289,10 +273,8 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                   ),
                                 );
                               },
-                              itemCount: controller
-                                  .authController.user.services!.length,
-                              separatorBuilder: (context, index) =>
-                                  const SizedBox(height: 5),
+                              itemCount: controller.authController.user.services!.length,
+                              separatorBuilder: (context, index) => const SizedBox(height: 5),
                             ),
                           ),
                         ),
@@ -308,9 +290,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                               Text(
                                 "Competências",
                                 textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    fontSize: CustomFontSizes.fontSize16,
-                                    fontWeight: FontWeight.w600),
+                                style: TextStyle(fontSize: CustomFontSizes.fontSize16, fontWeight: FontWeight.w600),
                               ),
                               InkWell(
                                 onTap: () async {
@@ -334,15 +314,13 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
 
                         //container com a lista de skill
                         Visibility(
-                          visible: controller.authController.user.skills !=
-                                  null &&
-                              controller.authController.user.skills!.isNotEmpty,
+                          visible:
+                              controller.authController.user.skills != null && controller.authController.user.skills!.isNotEmpty,
                           replacement: Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.search_off,
-                                    color: CustomColors.black),
+                                Icon(Icons.search_off, color: CustomColors.black),
                                 const Text('Não há itens para apresentar'),
                               ],
                             ),
@@ -353,8 +331,13 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                               itemBuilder: (context, index) {
                                 return Visibility(
                                   visible: !controller.isSavingSkill,
-                                  replacement: const Center(
-                                    child: CircularProgressIndicator(),
+                                  replacement: Center(
+                                    child: LoadingAnimationWidget.discreteCircle(
+                                      color: CustomColors.blueDark2Color,
+                                      secondRingColor: CustomColors.blueDarkColor,
+                                      thirdRingColor: CustomColors.blueColor,
+                                      size: 50,
+                                    ),
                                   ),
                                   child: Dismissible(
                                     background: Container(
@@ -364,35 +347,24 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                     ),
                                     key: ValueKey<int>(index),
                                     child: SkillTile(
-                                      skill: controller
-                                          .authController.user.skills![index],
+                                      skill: controller.authController.user.skills![index],
                                     ),
                                     confirmDismiss: (direction) async {
-                                      if (direction ==
-                                          DismissDirection.endToStart) {
-                                        final bool result =
-                                            await showDeleteConfirmation(
-                                                context);
+                                      if (direction == DismissDirection.endToStart) {
+                                        final bool result = await showDeleteConfirmation(context);
                                         if (result) {
-                                          controller.skill = controller
-                                              .authController
-                                              .user
-                                              .skills![index];
-                                          controller.handleSkill(
-                                              status: 'delete');
+                                          controller.skill = controller.authController.user.skills![index];
+                                          controller.handleSkill(status: 'delete');
                                         }
                                       }
                                     },
                                   ),
                                 );
                               },
-                              itemCount:
-                                  controller.authController.user.skills != null
-                                      ? controller
-                                          .authController.user.skills!.length
-                                      : 0,
-                              separatorBuilder: (context, index) =>
-                                  const SizedBox(height: 5),
+                              itemCount: controller.authController.user.skills != null
+                                  ? controller.authController.user.skills!.length
+                                  : 0,
+                              separatorBuilder: (context, index) => const SizedBox(height: 5),
                             ),
                           ),
                         ),
@@ -422,9 +394,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                                       _formKey.currentState!.save();
                                       await controller.handleUpdateProfile();
                                     } else {
-                                      utilServices.showToast(
-                                          message:
-                                              "Verifique todos os campos!");
+                                      utilServices.showToast(message: "Verifique todos os campos!");
                                     }
                                   },
                             child: controller.isSaving
@@ -463,15 +433,13 @@ Future<bool> showDeleteConfirmation(BuildContext context) async {
             actions: <Widget>[
               TextButton(
                 onPressed: () {
-                  Navigator.of(context)
-                      .pop(false); // Retorna falso para cancelar a exclusão
+                  Navigator.of(context).pop(false); // Retorna falso para cancelar a exclusão
                 },
                 child: Text('Cancelar'),
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop(
-                      true); // Retorna verdadeiro para confirmar a exclusão
+                  Navigator.of(context).pop(true); // Retorna verdadeiro para confirmar a exclusão
                 },
                 child: Text('Confirmar'),
               ),

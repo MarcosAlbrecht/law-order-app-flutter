@@ -3,6 +3,7 @@ import 'package:app_law_order/src/pages/requests/controller/request_controller.d
 import 'package:app_law_order/src/pages/requests/controller/request_manager_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarDialog extends StatefulWidget {
@@ -27,8 +28,13 @@ class _CalendarDialogState extends State<CalendarDialog> {
         builder: (controller) {
           return Visibility(
             visible: !controller.isSaving,
-            replacement: const Center(
-              child: CircularProgressIndicator(),
+            replacement: Center(
+              child: LoadingAnimationWidget.discreteCircle(
+                color: CustomColors.blueDark2Color,
+                secondRingColor: CustomColors.blueDarkColor,
+                thirdRingColor: CustomColors.blueColor,
+                size: 50,
+              ),
             ),
             child: SizedBox(
               height: size.height,
@@ -45,8 +51,7 @@ class _CalendarDialogState extends State<CalendarDialog> {
                 onDaySelected: (selectedDay, focusedDay) {
                   setState(() {
                     _selectedDay = selectedDay;
-                    _focusedDay =
-                        focusedDay; // Update focused day to selected day
+                    _focusedDay = focusedDay; // Update focused day to selected day
                   });
                 },
                 onPageChanged: (focusedDay) {
@@ -56,8 +61,7 @@ class _CalendarDialogState extends State<CalendarDialog> {
                 },
                 headerStyle: const HeaderStyle(
                   titleCentered: true,
-                  formatButtonVisible:
-                      false, // Remove o botão de mudança de formato
+                  formatButtonVisible: false, // Remove o botão de mudança de formato
                 ),
               ),
             ),

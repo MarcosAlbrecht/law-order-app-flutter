@@ -30,10 +30,15 @@ import 'package:app_law_order/src/pages/requests/binding/request_manager_binding
 import 'package:app_law_order/src/pages/requests/view/avaliation_screen.dart';
 import 'package:app_law_order/src/pages/requests/view/request_manager_screen.dart';
 import 'package:app_law_order/src/pages/requests/view/request_tab.dart';
+import 'package:app_law_order/src/pages/splash/splash_screen.dart';
 import 'package:get/get.dart';
 
 abstract class AppPages {
   static final pages = <GetPage>[
+    GetPage(
+      page: () => const SplashScreen(),
+      name: PagesRoutes.splashRoute,
+    ),
     GetPage(
       name: PagesRoutes.signInRoute,
       page: () => SignInScreen(),
@@ -148,4 +153,5 @@ abstract class PagesRoutes {
   static const String chatMessageScreen = '/chatMessageScreen';
   static const String withdrawScreen = '/withdrawScreen';
   static const String mayWalletScreen = '/mayWalletScreen';
+  static const String splashRoute = '/splashRoute';
 }

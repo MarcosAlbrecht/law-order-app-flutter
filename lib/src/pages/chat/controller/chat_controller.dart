@@ -62,7 +62,7 @@ class ChatController extends GetxController {
   }
 
   void disposeScreen() {
-    selectedChat = null;
+    selectedChat = ChatModel();
     setTabOpened(false);
   }
 
@@ -163,7 +163,7 @@ class ChatController extends GetxController {
   }) {
     setMessageScreenOpened(true);
     destinationUser = '';
-    //allChats = [];
+    allMessages = [];
 
     if (chat != null) {
       if (authController.user.id == chat.destinationUserId) {
@@ -171,10 +171,11 @@ class ChatController extends GetxController {
       } else {
         destinationUser = chat.destinationUserId!;
       }
+      selectedChat = chat;
     } else {
       destinationUser = userDestinationId!;
     }
-
+    selectedChat = allChats.firstWhereOrNull((c) => c.userId == destinationUser || c.destinationUserId == destinationUser);
     loadMessages(userDestinationId: destinationUser, canLoad: canLoad);
   }
 

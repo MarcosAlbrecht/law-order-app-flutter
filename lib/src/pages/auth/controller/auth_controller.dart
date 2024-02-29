@@ -1,14 +1,12 @@
 import 'dart:async';
 
 import 'package:app_law_order/src/config/app_data.dart';
-import 'package:app_law_order/src/constants/storage_keys.dart';
 import 'package:app_law_order/src/models/occupation_areas_model.dart';
 import 'package:app_law_order/src/models/user_model.dart';
 import 'package:app_law_order/src/pages/auth/repository/auth_repository.dart';
 import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 class AuthController extends GetxController {
   final authRepository = AuthRepository();
@@ -74,9 +72,7 @@ class AuthController extends GetxController {
   //insere um novo usuario
   Future<void> handleSignUp() async {
     //verifica se as senhas sáo iguais
-    if ((user.password != confirmPassword) ||
-        user.password == null ||
-        confirmPassword == null) {
+    if ((user.password != confirmPassword) || user.password == null || confirmPassword == null) {
       utilServices.showToast(message: "A senhas não conferem!");
       return;
     }

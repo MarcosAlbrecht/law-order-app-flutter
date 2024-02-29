@@ -6,6 +6,7 @@ import 'package:app_law_order/src/pages/profile/view/components/withdraw_history
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class WithdrawScreen extends StatefulWidget {
   WithdrawScreen({super.key});
@@ -45,8 +46,13 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
               height: size.height,
               width: size.width,
               child: controller.isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(),
+                  ? Center(
+                      child: LoadingAnimationWidget.discreteCircle(
+                        color: CustomColors.blueDark2Color,
+                        secondRingColor: CustomColors.blueDarkColor,
+                        thirdRingColor: CustomColors.blueColor,
+                        size: 50,
+                      ),
                     )
                   : SingleChildScrollView(
                       child: Column(

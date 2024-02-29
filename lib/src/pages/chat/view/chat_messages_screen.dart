@@ -3,6 +3,7 @@ import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/models/chat_message_model.dart';
 import 'package:app_law_order/src/models/file_model.dart';
 import 'package:app_law_order/src/pages/chat/controller/chat_controller.dart';
+import 'package:app_law_order/src/pages/chat/view/components/custom_appbar.dart';
 import 'package:app_law_order/src/pages/chat/view/components/picture_message_dialog.dart';
 import 'package:app_law_order/src/pages/common_widgets/custom_text_field.dart';
 import 'package:app_law_order/src/pages/profile/view/portfolio_screen.dart';
@@ -12,6 +13,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:square_progress_indicator/square_progress_indicator.dart';
 
 class ChatMessageScreen extends StatefulWidget {
@@ -57,66 +59,34 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_outlined),
-          onPressed: () {
-            Get.back();
-          },
-        ),
-        elevation: 0,
-        backgroundColor: Colors.white,
-        title: GetBuilder<ChatController>(
-          builder: (controller) {
-            return const Row(
-              children: [
-                // Imagem redonda
-                CircleAvatar(
-                  backgroundImage: AssetImage('assets/images/profile_image.jpg'), // Substitua pela sua imagem
-                  radius: 20, // Tamanho da imagem
-                ),
-                SizedBox(width: 10), // Espaçamento entre a imagem e o texto
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Nome
-                    Text(
-                      'Nome',
-                      style: TextStyle(
-                        fontSize: 16, // Tamanho do texto do nome
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                    // Cargo
-                    Text(
-                      'position',
-                      style: TextStyle(
-                        fontSize: 12, // Tamanho do texto do cargo
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            );
-          },
-        ),
-      ),
       body: SizedBox(
         height: size.height,
         width: size.width,
         child: GetBuilder<ChatController>(
           builder: (controller) {
             if (controller.isMessageLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
+              return Center(
+                child: LoadingAnimationWidget.discreteCircle(
+                  color: CustomColors.blueDark2Color,
+                  secondRingColor: CustomColors.blueDarkColor,
+                  thirdRingColor: CustomColors.blueColor,
+                  size: 50,
+                ),
               );
             }
+
             return Column(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                CustomAppBar(
+                  user: controller.selectedChat != null
+                      ? controller.authController.user.id! == controller.selectedChat?.destinationUserId!
+                          ? controller.selectedChat!.user!
+                          : controller.selectedChat!.destinationUser!
+                      : null,
+                  logedUserId: '',
+                ),
                 Expanded(
                   child: Visibility(
                     visible: controller.allMessages.isNotEmpty,
@@ -178,7 +148,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.only(top: 10),
                   child: Container(
                     //color: CustomColors.blueDark2Color,
                     padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -244,40 +214,33 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) => SafeArea(
-        child: SizedBox(
-          height: 144,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  _handleImageSelection(controller);
-                },
-                child: const Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: Text('Foto'),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  _handleFileSelection(controller);
-                },
-                child: const Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: Text('Arquivos'),
-                ),
-              ),
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: Text('Cancelar'),
-                ),
-              ),
-            ],
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              dense: true,
+              leading: const Icon(Icons.photo),
+              title: const Text('Foto'),
+              onTap: () {
+                Navigator.pop(context);
+                _handleImageSelection(controller);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.attach_file),
+              title: const Text('Arquivo'),
+              onTap: () {
+                Navigator.pop(context);
+                _handleFileSelection(controller);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.cancel),
+              title: const Text('Cancelar'),
+              onTap: () => Navigator.pop(context),
+            ),
+          ],
         ),
       ),
     );
@@ -397,7 +360,10 @@ class MessageBubble extends StatelessWidget {
             ),
             Text(
               utilServices.formatTime(createdAt),
-              style: TextStyle(color: isMe ? CustomColors.white : CustomColors.black, fontSize: CustomFontSizes.fontSize14),
+              style: TextStyle(
+                color: isMe ? CustomColors.white : CustomColors.black,
+                fontSize: CustomFontSizes.fontSize12,
+              ),
             ),
           ],
         ),
@@ -426,6 +392,7 @@ class MessageFileBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
     return Align(
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: GestureDetector(
@@ -436,27 +403,71 @@ class MessageFileBubble extends StatelessWidget {
         child: Container(
           margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
           //padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(4),
+          decoration: BoxDecoration(
+            color: isMe ? CustomColors.blueDark2Color : CustomColors.backgroudCard,
+            borderRadius: BorderRadius.only(
+              topLeft: const Radius.circular(16),
+              topRight: const Radius.circular(16),
+              bottomLeft: isMe ? const Radius.circular(16) : const Radius.circular(0),
+              bottomRight: isMe ? const Radius.circular(0) : const Radius.circular(16),
+            ),
+          ),
           child: getFileType(fileName) == FileType.image && file.url != null
-              ? Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: isMe ? CustomColors.blueColor : CustomColors.backgroudCard,
-                      width: 2,
-                    ), // Definindo a borda
-                    borderRadius: BorderRadius.circular(8), // Arredondando as bordas
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: CachedNetworkImage(
-                      imageUrl: file.url!,
-                      progressIndicatorBuilder: (context, url, downloadProgress) =>
-                          SquareProgressIndicator(value: downloadProgress.progress),
-                      errorWidget: (context, url, error) => const Icon(Icons.error),
-                      height: 200,
-                      width: 200,
-                      fit: BoxFit.cover,
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Stack(
+                      children: [
+                        Container(
+                          height: size.height * .3, // Altura da imagem
+                          width: size.width * .6, // Largura da imagem
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: CachedNetworkImage(
+                              imageUrl: file.url!,
+                              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                  SquareProgressIndicator(value: downloadProgress.progress),
+                              errorWidget: (context, url, error) => const Icon(Icons.error),
+                              fit: BoxFit.cover,
+                              height: 200,
+                              width: 200,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 0, // Alinha o widget na parte inferior
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            height: 30, // Altura da sombra
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(16),
+                                bottomRight: Radius.circular(16),
+                              ),
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [Colors.transparent, Colors.black.withOpacity(0.5)],
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 8.0, right: 8.0),
+                              child: Text(
+                                textAlign: TextAlign.right,
+                                utilServices.formatTime(createdAt),
+                                style: TextStyle(
+                                  color: isMe ? CustomColors.white : CustomColors.black,
+                                  fontSize: CustomFontSizes.fontSize12,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
+                  ],
                 )
               : GestureDetector(
                   onTap: () async {
@@ -495,7 +506,9 @@ class MessageFileBubble extends StatelessWidget {
                         Text(
                           utilServices.formatTime(createdAt),
                           style: TextStyle(
-                              color: isMe ? CustomColors.white : CustomColors.black, fontSize: CustomFontSizes.fontSize14),
+                            color: isMe ? CustomColors.white : CustomColors.black,
+                            fontSize: CustomFontSizes.fontSize12,
+                          ),
                         ),
                       ],
                     ),

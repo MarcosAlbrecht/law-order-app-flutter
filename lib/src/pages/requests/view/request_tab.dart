@@ -3,9 +3,9 @@ import 'package:app_law_order/src/pages/common_widgets/custom_text_field.dart';
 import 'package:app_law_order/src/pages/requests/controller/request_controller.dart';
 import 'package:app_law_order/src/pages/requests/view/components/request_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class RequestTab extends StatefulWidget {
   const RequestTab({Key? key}) : super(key: key);
@@ -224,8 +224,13 @@ class _RequestTabState extends State<RequestTab> {
                     child: Expanded(
                       child: Visibility(
                         visible: !controller.isLoading,
-                        replacement: const Center(
-                          child: CircularProgressIndicator(),
+                        replacement: Center(
+                          child: LoadingAnimationWidget.discreteCircle(
+                            color: CustomColors.blueDark2Color,
+                            secondRingColor: CustomColors.blueDarkColor,
+                            thirdRingColor: CustomColors.blueColor,
+                            size: 50,
+                          ),
                         ),
                         child: ListView.separated(
                           itemBuilder: (_, index) {

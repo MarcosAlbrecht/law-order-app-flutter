@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class RequestManagerScreen extends StatelessWidget {
   const RequestManagerScreen({
@@ -49,7 +50,14 @@ class RequestManagerScreen extends StatelessWidget {
             builder: (controller) {
               return Visibility(
                 visible: !controller.isLoading,
-                replacement: const Center(child: CircularProgressIndicator()),
+                replacement: Center(
+                  child: LoadingAnimationWidget.discreteCircle(
+                    color: CustomColors.blueDark2Color,
+                    secondRingColor: CustomColors.blueDarkColor,
+                    thirdRingColor: CustomColors.blueColor,
+                    size: 50,
+                  ),
+                ),
                 child: Visibility(
                   visible: controller.selectedRequest!.id != null,
                   replacement: Center(
