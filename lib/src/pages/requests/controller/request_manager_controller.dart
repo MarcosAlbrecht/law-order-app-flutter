@@ -307,11 +307,17 @@ class RequestManagerController extends GetxController {
   Future<void> handleDownloadFile({required String url, required String fileName}) async {
     setLoadingFile(true);
     final Directory appDocumentsDir;
-    if (Platform.isIOS) {
-      appDocumentsDir = (await getExternalStorageDirectory())!;
-    } else {
-      appDocumentsDir = (await getDownloadsDirectory())!;
+    try {
+      if (Platform.isIOS) {
+        appDocumentsDir = (await getDownloadsDirectory())!;
+      } else {
+        appDocumentsDir = (await getDownloadsDirectory())!;
+      }
+    } on Exception catch (e) {
+      utilServices.showToast(message: 'Não foi possivel baixar o arquivo. Tente novamente mais tarde!');
+      return;
     }
+    ;
 
     if ((File('${appDocumentsDir.path}/$fileName').existsSync())) {
       print('arquivo ja foi baixado');
