@@ -54,6 +54,7 @@ abstract class EndPoints {
   static const userPix = '$baseUrl/accounts/users/pix/';
 
   static const getWithdraw = '$baseUrl/withdraw';
+  static const requestWithdraw = '$baseUrl/withdraw';
 
   static const cancelRequest = '$baseUrl/accounts/service-requests/cancel-request/';
   //mercado pago -->

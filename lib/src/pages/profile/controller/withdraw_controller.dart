@@ -53,8 +53,14 @@ class WithDrawController extends GetxController {
     setLoading(false);
   }
 
-  Future<void> loadWithdraw() async {
+  Future<void> loadWithdraw({bool canload = false}) async {
+    if (canload) {
+      setLoading(true);
+    }
     final result = await profileRepository.getWithdraws();
+
+    setLoading(true);
+
     result.when(success: (data) {
       withdraws = data;
     }, error: (message) {
@@ -166,5 +172,49 @@ class WithDrawController extends GetxController {
       },
     );
     setLoadingPix(false);
+  }
+
+  double? numberIsValid(String value) {
+    try {
+      // Tenta converter o valor para um inteiro
+      double doubleValue = double.parse(value);
+
+      // Verifica se o valor é maior que zero
+      if (doubleValue > 0) {
+        // O valor é um número inteiro e maior que zero
+        print('O valor é um número inteiro e maior que zero');
+        return doubleValue;
+      } else {
+        // O valor não é maior que zero
+        print('O valor não é maior que zero');
+        return null;
+      }
+    } catch (e) {
+      // Se ocorrer uma exceção, o valor não é um número inteiro
+      print('O valor não é um número inteiro');
+      return null;
+    }
+  }
+
+  Future<void> handleRequestWithdraw(String value) async {
+    double? requestValue = numberIsValid(value);
+    if (requestValue == null) {
+      utilServices.showToast(message: 'Digite um valor válido para solicitar o saque!');
+      return;
+    } else if (wallet.realizado == null || requestValue > wallet.realizado!) {
+      utilServices.showToast(message: 'Saldo insuficiente para realizar saque!');
+      return;
+    }
+
+    final result = await profileRepository.requestWithdraw(value: requestValue);
+    result.when(
+      success: (message) {
+        utilServices.showToast(message: message);
+        loadWithdraw(canload: false);
+      },
+      error: (message) {
+        utilServices.showToast(message: message, isError: true);
+      },
+    );
   }
 }

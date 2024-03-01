@@ -4,7 +4,9 @@ import 'package:app_law_order/src/pages/profile/controller/withdraw_controller.d
 import 'package:app_law_order/src/pages/profile/view/components/pix_dialog.dart';
 import 'package:app_law_order/src/pages/profile/view/components/withdraw_history_tile.dart';
 import 'package:app_law_order/src/services/util_services.dart';
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
@@ -16,6 +18,12 @@ class WithdrawScreen extends StatefulWidget {
 }
 
 final utilServices = UtilServices();
+
+final valueEC = TextEditingController();
+
+cleanText() {
+  valueEC.clear();
+}
 
 class _WithdrawScreenState extends State<WithdrawScreen> {
   @override
@@ -204,11 +212,23 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                                 height: 43,
                                 child: Row(
                                   children: [
-                                    const Expanded(
+                                    Expanded(
                                       child: CustomTextField(
                                         textInputType: TextInputType.number,
                                         contentPadding: false,
                                         paddingBottom: false,
+                                        controller: valueEC,
+                                        inputFormatters: <TextInputFormatter>[
+                                          CurrencyTextInputFormatter(
+                                            enableNegative: false,
+                                            locale: 'pt-br',
+                                            decimalDigits: 2,
+                                            symbol: 'R\$ ',
+                                          ),
+                                        ],
+                                        onChanged: (value) {
+                                          chavePixEC.text = value ?? '';
+                                        },
                                       ),
                                     ),
                                     const SizedBox(
@@ -228,7 +248,10 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                                                 borderRadius: BorderRadius.circular(10),
                                               ),
                                             ),
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              controller.handleRequestWithdraw(chavePixEC.text);
+                                              cleanText();
+                                            },
                                             child: Text(
                                               'Solicitar',
                                               style: TextStyle(

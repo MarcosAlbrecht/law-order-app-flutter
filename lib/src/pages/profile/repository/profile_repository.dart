@@ -12,6 +12,7 @@ import 'package:app_law_order/src/pages/home/result/follows_result.dart';
 import 'package:app_law_order/src/pages/profile/result/follower_result.dart';
 import 'package:app_law_order/src/pages/profile/result/notifications_result.dart';
 import 'package:app_law_order/src/pages/profile/result/pix_result.dart';
+import 'package:app_law_order/src/pages/profile/result/request_withdraw_result.dart';
 import 'package:app_law_order/src/pages/profile/result/update_picture_profile_result.dart';
 import 'package:app_law_order/src/pages/profile/result/user_result.dart';
 import 'package:app_law_order/src/pages/profile/result/user_service_result.dart';
@@ -370,6 +371,26 @@ class ProfileRepository {
       }
     } on Exception {
       return UserResult.error('Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
+    }
+  }
+
+  Future<RequestWithdrawResult> requestWithdraw({required double value}) async {
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.post,
+        url: EndPoints.requestWithdraw,
+        body: {
+          'value': value,
+        },
+      );
+
+      if (result['message'] != null) {
+        return RequestWithdrawResult.success(result['message']);
+      } else {
+        return RequestWithdrawResult.error('Ocorreu um erro ao solicitar o saque. Tente novamente mais tarde!');
+      }
+    } on Exception {
+      return RequestWithdrawResult.error('Ocorreu um erro ao solicitar o saque. Tente novamente mais tarde!');
     }
   }
 }
