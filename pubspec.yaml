@@ -26,7 +26,6 @@ dependencies:
   get_storage: ^2.1.1
   google_fonts: ^6.1.0 
   mask_text_input_formatter: ^2.7.0
-  flutter_launcher_icons: ^0.11.0
   image_picker: ^1.0.5
   flutter_image_compress: ^2.1.0
   fluttericon: ^2.0.0
@@ -49,6 +48,19 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   json_serializable: ^6.7.1
   build_runner: ^2.4.7
+  flutter_launcher_icons: ^0.13.1
+
+##Utilizado para gerar Icone no terminal digitar flutter pub run
+# flutter_icons:
+#   android: true
+#   ios: true
+#   image_path: "assets/SIMBOLO-2.png"
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/SIMBOLO-2.png"
+  remove_alpha_ios: true
 
 flutter:
 

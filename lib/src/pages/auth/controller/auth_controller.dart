@@ -42,12 +42,15 @@ class AuthController extends GetxController {
   }
 
   Future<void> validateLogin() async {
+    await Future.delayed(const Duration(seconds: 3));
     String? email = await utilServices.getEmailLocalData();
     String? password = await utilServices.getPasswordlLocalData();
     String? token = await utilServices.getToken();
 
     if (email.isNotEmpty && password.isNotEmpty) {
       signIn(email: email, password: password);
+    } else {
+      Get.offAllNamed(PagesRoutes.signInRoute);
     }
   }
 
@@ -65,6 +68,7 @@ class AuthController extends GetxController {
       error: (message) async {
         utilServices.showToast(message: message, isError: true);
         await utilServices.removeLocalData();
+        Get.offAllNamed(PagesRoutes.signInRoute);
       },
     );
   }

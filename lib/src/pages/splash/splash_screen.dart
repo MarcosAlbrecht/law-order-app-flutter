@@ -8,6 +8,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  bool _imageLoaded = false;
   @override
   void initState() {
     super.initState();
@@ -19,6 +20,9 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(const Duration(seconds: 3));
 
     // Marca a imagem como carregada
+    setState(() {
+      _imageLoaded = true;
+    });
   }
 
   @override
