@@ -374,7 +374,7 @@ class ProfileRepository {
     }
   }
 
-  Future<RequestWithdrawResult> requestWithdraw({required double value}) async {
+  Future<RequestWithdrawResult> requestWithdraw({required num value}) async {
     try {
       final result = await httpManager.restRequest(
         method: HttpMethods.post,

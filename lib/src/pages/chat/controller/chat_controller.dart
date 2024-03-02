@@ -20,6 +20,7 @@ class ChatController extends GetxController {
 
   late String userId;
   late String destinationUser;
+  bool firstMessage = false;
   late RxInt _currentIndex;
 
   final url = EndPoints.baseUrlChat;
@@ -68,6 +69,7 @@ class ChatController extends GetxController {
 
   void disposeChatMessagesScreen() async {
     //allMessages.clear();
+    firstMessage = false;
     setMessageScreenOpened(false);
     await loadChats(canload: false);
   }
@@ -123,9 +125,11 @@ class ChatController extends GetxController {
 
     socket = IO.io(
         url,
-        IO.OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
+        IO.OptionBuilder()
+            .setTransports(['websocket']) // for Flutter or Dart VM
             //.setExtraHeaders({'Authorization': token})
             .setQuery({'Authorization': token})
+            .enableAutoConnect()
             // optional
             .build());
 
@@ -176,6 +180,10 @@ class ChatController extends GetxController {
       destinationUser = userDestinationId!;
     }
     selectedChat = allChats.firstWhereOrNull((c) => c.userId == destinationUser || c.destinationUserId == destinationUser);
+
+    if (selectedChat == null) {
+      firstMessage = true;
+    }
     loadMessages(userDestinationId: destinationUser, canLoad: canLoad);
   }
 
@@ -231,13 +239,6 @@ class ChatController extends GetxController {
   Future<void> handleSendNewSimpleMessage({
     required String message,
   }) async {
-    // final String? destinationUserId;
-    // if (authController.user.id == userDestinationId) {
-    //   destinationUserId = selectedChat?.userId;
-    // } else {
-    //   destinationUserId = selectedChat?.destinationUserId;
-    // }
-
     try {
       socket.emit(
         'message',
@@ -248,6 +249,12 @@ class ChatController extends GetxController {
       );
     } on Exception {
       utilServices.showToast(message: 'Não foi possivel enviar a mensagem, Tente novamente mais tarde!');
+    }
+
+    if (firstMessage) {
+      firstMessage = false;
+      loadChats(canload: false);
+      loadMessages(userDestinationId: destinationUser, canLoad: false);
     }
   }
 

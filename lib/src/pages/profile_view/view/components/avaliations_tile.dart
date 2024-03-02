@@ -28,7 +28,7 @@ class AvaliationsTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${recommendation.whoRecommended!.firstName!} ${recommendation.whoRecommended!.lastName} ',
+                      '${recommendation.whoRecommended!.firstName ?? 'Usuário'} ${recommendation.whoRecommended!.lastName ?? 'removido'} ',
                       style: TextStyle(
                         color: CustomColors.blueDark2Color,
                         fontWeight: FontWeight.bold,
@@ -37,7 +37,7 @@ class AvaliationsTile extends StatelessWidget {
                     const SizedBox(
                       height: 3,
                     ),
-                    Text(recommendation.whoRecommended!.city!),
+                    Text(recommendation.whoRecommended!.city ?? ''),
                   ],
                 ),
               ),

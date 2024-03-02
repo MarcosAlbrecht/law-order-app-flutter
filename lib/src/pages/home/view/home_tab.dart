@@ -71,104 +71,106 @@ class _HomeTabState extends State<HomeTab> {
         ),
       ),
       body: SafeArea(
-        child: Container(
-          height: size.height,
-          width: size.width,
-          padding: const EdgeInsets.only(top: 10, bottom: 10),
-          color: CustomColors.white,
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Text(
-                  "Busque por profissionais na Prestadio. Utilize os filtros para encontrar o profissional mais próximo de você 😁",
-                  textAlign: TextAlign.left,
-                ),
-                const Divider(
-                  height: 35,
-                ),
-                SizedBox(
-                  height: 60,
-                  width: double.infinity,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GetBuilder<HomeController>(
-                        builder: (controller) {
-                          return Expanded(
-                            child: CustomTextField(
-                              icon: Icons.search,
-                              label: "Nome, área de atuação ou serviço ofertado",
-                              initialValue: controller.searchRequest.value,
-                              onChanged: (value) {
-                                controller.searchRequest.value = value!.toLowerCase();
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 10, left: 5),
-                        child: SizedBox(
-                          width: 70,
-                          height: double.infinity,
-                          child: Material(
-                            elevation: 3,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10),
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
+        child: SingleChildScrollView(
+          child: Container(
+            height: size.height,
+            width: size.width,
+            padding: const EdgeInsets.only(top: 10, bottom: 10),
+            color: CustomColors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Text(
+                    "Busque por profissionais na Prestadio. Utilize os filtros para encontrar o profissional mais próximo de você 😁",
+                    textAlign: TextAlign.left,
+                  ),
+                  const Divider(
+                    height: 35,
+                  ),
+                  SizedBox(
+                    height: 60,
+                    width: double.infinity,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GetBuilder<HomeController>(
+                          builder: (controller) {
+                            return Expanded(
+                              child: CustomTextField(
+                                icon: Icons.search,
+                                label: "Nome, área de atuação ou serviço ofertado",
+                                initialValue: controller.searchRequest.value,
+                                onChanged: (value) {
+                                  controller.searchRequest.value = value!.toLowerCase();
+                                },
                               ),
-                            ),
-                            child: IconButton(
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return const FilterDialog();
-                                  },
-                                );
-                              },
-                              icon: const Icon(Icons.filter_list),
+                            );
+                          },
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 10, left: 5),
+                          child: SizedBox(
+                            width: 70,
+                            height: double.infinity,
+                            child: Material(
+                              elevation: 3,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                ),
+                              ),
+                              child: IconButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return const FilterDialog();
+                                    },
+                                  );
+                                },
+                                icon: const Icon(Icons.filter_list),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                const Divider(
-                  height: 10,
-                  color: Colors.transparent,
-                ),
-                Expanded(
-                  child: GetBuilder<HomeController>(
-                    builder: (controller) {
-                      return ListView.builder(
-                        //padding: const EdgeInsets.fromLTRB(10, 10, 16, 10),
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: controller.allUsers.length,
-                        itemBuilder: (_, index) {
-                          if (((index + 1) == controller.allUsers.length) && (!controller.isLastPage)) {
-                            controller.loadMoreProducts();
-                          }
-
-                          return ProviderTile(
-                            //height: 100,
-                            //child: Text("OLA" + index.toString()),
-
-                            item: controller.allUsers[index],
-                          );
-                        },
-                      );
-                    },
+                  const Divider(
+                    height: 10,
+                    color: Colors.transparent,
                   ),
-                ),
-              ],
+                  Expanded(
+                    child: GetBuilder<HomeController>(
+                      builder: (controller) {
+                        return ListView.builder(
+                          //padding: const EdgeInsets.fromLTRB(10, 10, 16, 10),
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: controller.allUsers.length,
+                          itemBuilder: (_, index) {
+                            if (((index + 1) == controller.allUsers.length) && (!controller.isLastPage)) {
+                              controller.loadMoreProducts();
+                            }
+
+                            return ProviderTile(
+                              //height: 100,
+                              //child: Text("OLA" + index.toString()),
+
+                              item: controller.allUsers[index],
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

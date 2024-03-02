@@ -177,13 +177,15 @@ class WithDrawController extends GetxController {
   double? numberIsValid(String value) {
     try {
       // Tenta converter o valor para um inteiro
-      double doubleValue = double.parse(value);
+
+      value = value.replaceAll(".", "").replaceAll(",", ".");
+      double? valorDouble = double.tryParse(value);
 
       // Verifica se o valor é maior que zero
-      if (doubleValue > 0) {
+      if (valorDouble != null && valorDouble > 0) {
         // O valor é um número inteiro e maior que zero
         print('O valor é um número inteiro e maior que zero');
-        return doubleValue;
+        return valorDouble;
       } else {
         // O valor não é maior que zero
         print('O valor não é maior que zero');
@@ -196,17 +198,17 @@ class WithDrawController extends GetxController {
     }
   }
 
-  Future<void> handleRequestWithdraw(String value) async {
-    double? requestValue = numberIsValid(value);
-    if (requestValue == null) {
+  Future<void> handleRequestWithdraw(num value) async {
+    //double? requestValue = numberIsValid(value);
+    if (value <= 0) {
       utilServices.showToast(message: 'Digite um valor válido para solicitar o saque!');
       return;
-    } else if (wallet.realizado == null || requestValue > wallet.realizado!) {
+    } else if (wallet.realizado == null || value > wallet.realizado!) {
       utilServices.showToast(message: 'Saldo insuficiente para realizar saque!');
       return;
     }
 
-    final result = await profileRepository.requestWithdraw(value: requestValue);
+    final result = await profileRepository.requestWithdraw(value: value);
     result.when(
       success: (message) {
         utilServices.showToast(message: message);

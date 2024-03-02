@@ -8,6 +8,7 @@ import 'package:currency_text_input_formatter/currency_text_input_formatter.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class WithdrawScreen extends StatefulWidget {
@@ -20,9 +21,11 @@ class WithdrawScreen extends StatefulWidget {
 final utilServices = UtilServices();
 
 final valueEC = TextEditingController();
+final CurrencyTextInputFormatter formatterEC = CurrencyTextInputFormatter(decimalDigits: 2, locale: 'pt', symbol: 'R\$');
 
 cleanText() {
   valueEC.clear();
+  formatterEC.val('');
 }
 
 class _WithdrawScreenState extends State<WithdrawScreen> {
@@ -217,17 +220,10 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                                         textInputType: TextInputType.number,
                                         contentPadding: false,
                                         paddingBottom: false,
+                                        inputFormatters: <TextInputFormatter>[formatterEC],
                                         controller: valueEC,
-                                        inputFormatters: <TextInputFormatter>[
-                                          CurrencyTextInputFormatter(
-                                            enableNegative: false,
-                                            locale: 'pt-br',
-                                            decimalDigits: 2,
-                                            symbol: 'R\$ ',
-                                          ),
-                                        ],
                                         onChanged: (value) {
-                                          chavePixEC.text = value ?? '';
+                                          //chavePixEC.text = value ?? '';
                                         },
                                       ),
                                     ),
@@ -249,7 +245,8 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                                               ),
                                             ),
                                             onPressed: () {
-                                              controller.handleRequestWithdraw(chavePixEC.text);
+                                              controller.handleRequestWithdraw(formatterEC.getUnformattedValue());
+                                              print(formatterEC.getUnformattedValue());
                                               cleanText();
                                             },
                                             child: Text(
