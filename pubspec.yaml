@@ -40,6 +40,7 @@ dependencies:
   file_picker: ^6.1.1
   loading_animation_widget: ^1.2.0+4
   currency_text_input_formatter: ^2.1.11
+  flutter_native_splash: ^2.3.10
 
 dev_dependencies:
   flutter_test:
@@ -56,11 +57,13 @@ dev_dependencies:
 #   ios: true
 #   image_path: "assets/SIMBOLO-2.png"
 
-flutter_launcher_icons:
+flutter_icons:
   android: true
   ios: true
-  image_path: "assets/SIMBOLO-2.png"
+  image_path: "assets/icon_app.png"
   remove_alpha_ios: true
+
+
 
 flutter:
 
