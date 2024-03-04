@@ -365,25 +365,30 @@ class ProfileViewScreen extends StatelessWidget {
                                       replacement: const Text('Não informado'),
                                       child: Container(
                                         padding: const EdgeInsets.only(top: 5),
-                                        height: 190,
-                                        child: GridView.builder(
-                                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                                            physics: const BouncingScrollPhysics(),
-                                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                                crossAxisCount: 2,
-                                                mainAxisSpacing: 10,
-                                                crossAxisSpacing: 10,
-                                                childAspectRatio: 9 / 8),
-                                            itemBuilder: (context, index) {
-                                              return PictureTile(
-                                                picture: controller.user.portfolioPictures![index],
-                                              );
-                                            },
-                                            // separatorBuilder: (context, index) =>
-                                            //     const SizedBox(width: 5),
-                                            itemCount: controller.user.portfolioPictures != null
-                                                ? controller.user.portfolioPictures!.length
-                                                : 0),
+                                        height: 250,
+                                        child: ListView.separated(
+                                          scrollDirection: Axis.horizontal,
+                                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                                          physics: const BouncingScrollPhysics(),
+                                          // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                          //     crossAxisCount: 2,
+                                          //     mainAxisSpacing: 10,
+                                          //     crossAxisSpacing: 10,
+                                          //     childAspectRatio: 9 / 8),
+                                          itemBuilder: (context, index) {
+                                            return PictureTile(
+                                              picture: controller.user.portfolioPictures![index],
+                                            );
+                                          },
+                                          // separatorBuilder: (context, index) =>
+                                          //     const SizedBox(width: 5),
+                                          itemCount: controller.user.portfolioPictures != null
+                                              ? controller.user.portfolioPictures!.length
+                                              : 0,
+                                          separatorBuilder: (context, index) => const SizedBox(
+                                            width: 8,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   )
@@ -435,9 +440,11 @@ class ProfileViewScreen extends StatelessWidget {
                                     visible: controller.user.services != null && controller.user.services!.isNotEmpty,
                                     replacement: const Text('Nenhum serviço adicionado ainda.'),
                                     child: Container(
-                                      height: 200,
+                                      height: 250,
                                       padding: const EdgeInsets.only(top: 10),
+                                      width: double.infinity,
                                       child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
                                         physics: const BouncingScrollPhysics(),
                                         itemBuilder: (_, index) {
                                           return ServicesTile(

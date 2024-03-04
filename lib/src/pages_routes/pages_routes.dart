@@ -1,3 +1,4 @@
+import 'package:app_law_order/src/global/binding/global_binding.dart';
 import 'package:app_law_order/src/pages/auth/view/sign_in_screen.dart';
 import 'package:app_law_order/src/pages/auth/view/sign_up.dart';
 import 'package:app_law_order/src/pages/auth/view/sign_up_step1.dart';
@@ -128,6 +129,7 @@ abstract class AppPages {
         ProfileBinding(),
         RequestBinding(),
         ChatBinding(),
+        GlobalBinding(),
       ],
     ),
   ];

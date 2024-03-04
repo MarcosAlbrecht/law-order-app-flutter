@@ -159,7 +159,7 @@ class ChatController extends GetxController {
 
       print('Nova mensagem de $message');
     } else {
-      utilServices.showToastNewChatMessage(message: 'Nova mensagem de chat recebida!');
+      utilServices.showToastNewChatMessage(message: 'Nova mensagem de chat recebida!', showSnackbar: true);
     }
   }
 

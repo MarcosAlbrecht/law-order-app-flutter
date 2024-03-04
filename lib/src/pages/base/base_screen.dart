@@ -5,7 +5,6 @@ import 'package:app_law_order/src/pages/home/view/home_tab.dart';
 import 'package:app_law_order/src/pages/profile/view/profile_tab.dart';
 import 'package:app_law_order/src/pages/requests/view/request_tab.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:get/get.dart';
 
 class BaseScreen extends StatefulWidget {
@@ -25,10 +24,10 @@ class _BaseScreenState extends State<BaseScreen> {
         physics: const NeverScrollableScrollPhysics(),
         controller: navigationController.pageController,
         children: const [
-          RequestTab(),
           HomeTab(),
-          ProfileTab(),
+          RequestTab(),
           ChatListTab(),
+          ProfileTab(),
         ],
       ),
       bottomNavigationBar: Obx(
@@ -43,12 +42,6 @@ class _BaseScreenState extends State<BaseScreen> {
           unselectedItemColor: Colors.cyan.shade700,
           items: [
             BottomNavigationBarItem(
-              icon: navigationController.currentIndex != 0
-                  ? const Icon(Icons.featured_play_list_outlined)
-                  : const Icon(Icons.featured_play_list),
-              label: 'Solicitações',
-            ),
-            BottomNavigationBarItem(
               icon: navigationController.currentIndex != 1
                   ? const Icon(Icons.home_outlined)
                   : const Icon(
@@ -57,12 +50,10 @@ class _BaseScreenState extends State<BaseScreen> {
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: navigationController.currentIndex != 2
-                  ? const Icon(Icons.person_2_outlined)
-                  : const Icon(
-                      Icons.person_2,
-                    ),
-              label: 'Perfil',
+              icon: navigationController.currentIndex != 0
+                  ? const Icon(Icons.featured_play_list_outlined)
+                  : const Icon(Icons.featured_play_list),
+              label: 'Solicitações',
             ),
             BottomNavigationBarItem(
               icon: navigationController.currentIndex != 3
@@ -71,6 +62,14 @@ class _BaseScreenState extends State<BaseScreen> {
                       Icons.chat,
                     ),
               label: 'Conversas',
+            ),
+            BottomNavigationBarItem(
+              icon: navigationController.currentIndex != 2
+                  ? const Icon(Icons.person_2_outlined)
+                  : const Icon(
+                      Icons.person_2,
+                    ),
+              label: 'Perfil',
             ),
           ],
         ),

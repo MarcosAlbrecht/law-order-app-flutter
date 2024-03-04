@@ -25,11 +25,12 @@ class UtilServices {
 
   void showToastNewChatMessage({
     required String message,
+    bool showSnackbar = false,
   }) {
     Fluttertoast.showToast(
       msg: message,
       toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.TOP,
+      gravity: showSnackbar ? ToastGravity.SNACKBAR : ToastGravity.BOTTOM_LEFT,
       timeInSecForIosWeb: 3,
       backgroundColor: CustomColors.blueColor,
       textColor: Colors.white,

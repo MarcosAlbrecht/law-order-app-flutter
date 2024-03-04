@@ -115,19 +115,14 @@ class ServiceRequestScreen extends StatelessWidget {
                       Text(
                         'Valor Total:',
                         style: TextStyle(
-                            color: CustomColors.black,
-                            fontSize: CustomFontSizes.fontSize18,
-                            fontWeight: FontWeight.bold),
+                            color: CustomColors.black, fontSize: CustomFontSizes.fontSize18, fontWeight: FontWeight.bold),
                       ),
                       GetBuilder<ServiceRequestController>(
                         builder: (controller) {
                           return Text(
-                            utilServices.priceToCurrency(
-                                controller.orderService.total!),
+                            utilServices.priceToCurrency(controller.orderService.total!),
                             style: TextStyle(
-                                color: CustomColors.black,
-                                fontSize: CustomFontSizes.fontSize18,
-                                fontWeight: FontWeight.bold),
+                                color: CustomColors.black, fontSize: CustomFontSizes.fontSize18, fontWeight: FontWeight.bold),
                           );
                         },
                       ),
