@@ -7,9 +7,7 @@ import 'package:app_law_order/src/pages/auth/result/cep_result.dart';
 import 'package:app_law_order/src/pages/auth/result/forgot_password_result.dart';
 import 'package:app_law_order/src/pages/auth/result/sign_in_result.dart';
 import 'package:app_law_order/src/pages/auth/result/sign_up_result.dart';
-
 import 'package:app_law_order/src/services/http_manager.dart';
-import 'package:get/get.dart';
 
 class AuthRepository {
   final HttpManager httpManager = HttpManager();

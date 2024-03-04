@@ -42,7 +42,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
     super.initState();
 
     chatController.handleLoadingMessages(
-        chat: widget.args['chat_model'], canLoad: false, userDestinationId: widget.args['userDestinationId']);
+        chat: widget.args['chat_model'], canLoad: true, userDestinationId: widget.args['userDestinationId'], isUser: false);
     print(widget.args);
 
     print('inicializou o chat message');

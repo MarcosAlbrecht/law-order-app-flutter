@@ -58,23 +58,30 @@ class ChatTile extends StatelessWidget {
                             height: 40,
                             width: 40,
                           )
-                    : CachedNetworkImage(
-                        imageUrl: chat.destinationUser!.profilePicture!.url!,
-                        progressIndicatorBuilder: (context, url, downloadProgress) =>
-                            CircularProgressIndicator(value: downloadProgress.progress),
-                        errorWidget: (context, url, error) => const Icon(Icons.error),
-                        fit: BoxFit.cover,
-                        height: 40,
-                        width: 40,
-                      ),
+                    : chat.destinationUser!.profilePicture != null
+                        ? CachedNetworkImage(
+                            imageUrl: chat.destinationUser!.profilePicture!.url!,
+                            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                CircularProgressIndicator(value: downloadProgress.progress),
+                            errorWidget: (context, url, error) => const Icon(Icons.error),
+                            fit: BoxFit.cover,
+                            height: 40,
+                            width: 40,
+                          )
+                        : Image.asset(
+                            "assets/ICONPEOPLE.png",
+                            fit: BoxFit.cover,
+                            height: 40,
+                            width: 40,
+                          ),
               ),
               title: logedUserId == chat.destinationUserId
                   ? Text(
-                      '${chat.user!.firstName!} ${chat.user!.lastName!}',
+                      '${chat.user!.firstName ?? ''} ${chat.user!.lastName ?? ''}',
                       style: TextStyle(fontSize: CustomFontSizes.fontSize16),
                     )
                   : Text(
-                      '${chat.destinationUser!.firstName!} ${chat.destinationUser!.lastName!}',
+                      '${chat.destinationUser!.firstName ?? ''} ${chat.destinationUser!.lastName ?? ''}',
                       style: TextStyle(fontSize: CustomFontSizes.fontSize16),
                     ),
               subtitle: chat.message != null
@@ -83,7 +90,7 @@ class ChatTile extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontSize: CustomFontSizes.fontSize14),
                     )
-                  : _buildFileText(),
+                  : null,
             ),
           ),
         ),

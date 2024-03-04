@@ -72,6 +72,7 @@ class ChatController extends GetxController {
     firstMessage = false;
     setMessageScreenOpened(false);
     await loadChats(canload: false);
+    isMessageLoading = true;
   }
 
   void setTabOpened(bool value) {
@@ -87,11 +88,13 @@ class ChatController extends GetxController {
     update();
   }
 
-  void setMessagesLoading(bool value, {bool isUser = false}) {
+  void setMessagesLoading(bool value, {bool isUser = true}) {
     if (isUser) {
       isMessageLoading = value;
     }
-    update();
+    if (isUser) {
+      update();
+    }
   }
 
   static int compareCreatedAt(ChatModel a, ChatModel b) {
@@ -164,6 +167,7 @@ class ChatController extends GetxController {
     ChatModel? chat,
     String? userDestinationId,
     bool canLoad = true,
+    bool isUser = true,
   }) {
     setMessageScreenOpened(true);
     destinationUser = '';
@@ -184,12 +188,12 @@ class ChatController extends GetxController {
     if (selectedChat == null) {
       firstMessage = true;
     }
-    loadMessages(userDestinationId: destinationUser, canLoad: canLoad);
+    loadMessages(userDestinationId: destinationUser, canLoad: canLoad, isUser: isUser);
   }
 
-  Future<void> loadMessages({required String userDestinationId, bool canLoad = true}) async {
+  Future<void> loadMessages({required String userDestinationId, bool canLoad = true, bool isUser = true}) async {
     if (canLoad) {
-      setMessagesLoading(true, isUser: true);
+      setMessagesLoading(true, isUser: isUser);
     }
 
     final result = await chatRepository.getMessages(userDestinationId: userDestinationId);
