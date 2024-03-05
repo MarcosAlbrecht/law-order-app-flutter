@@ -42,7 +42,7 @@ class _BaseScreenState extends State<BaseScreen> {
           unselectedItemColor: Colors.cyan.shade700,
           items: [
             BottomNavigationBarItem(
-              icon: navigationController.currentIndex != 1
+              icon: navigationController.currentIndex != 0
                   ? const Icon(Icons.home_outlined)
                   : const Icon(
                       Icons.home,
@@ -50,13 +50,13 @@ class _BaseScreenState extends State<BaseScreen> {
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: navigationController.currentIndex != 0
+              icon: navigationController.currentIndex != 1
                   ? const Icon(Icons.featured_play_list_outlined)
                   : const Icon(Icons.featured_play_list),
               label: 'Solicitações',
             ),
             BottomNavigationBarItem(
-              icon: navigationController.currentIndex != 3
+              icon: navigationController.currentIndex != 2
                   ? const Icon(Icons.chat_outlined)
                   : const Icon(
                       Icons.chat,
@@ -64,7 +64,7 @@ class _BaseScreenState extends State<BaseScreen> {
               label: 'Conversas',
             ),
             BottomNavigationBarItem(
-              icon: navigationController.currentIndex != 2
+              icon: navigationController.currentIndex != 3
                   ? const Icon(Icons.person_2_outlined)
                   : const Icon(
                       Icons.person_2,

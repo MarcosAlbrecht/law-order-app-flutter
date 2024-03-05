@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/models/service_model.dart';
+import 'package:app_law_order/src/pages/profile_view/view/components/service_dialog.dart';
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:flutter/material.dart';
 
@@ -41,9 +42,21 @@ class ServicesTile extends StatelessWidget {
                 style: TextStyle(fontSize: CustomFontSizes.fontSize14),
               ),
             ),
-            subtitle: Text(
-              service.description!,
-              style: TextStyle(fontSize: CustomFontSizes.fontSize12),
+            subtitle: GestureDetector(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return ServiceDialog(service: service);
+                  },
+                );
+              },
+              child: Text(
+                service.description!,
+                style: TextStyle(fontSize: CustomFontSizes.fontSize12),
+                maxLines: 8,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
             trailing: Text(
               utilServices.priceToCurrency(service.value!),
