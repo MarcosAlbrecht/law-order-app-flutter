@@ -4,6 +4,7 @@ import 'package:app_law_order/src/pages/profile/controller/profile_controller.da
 import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:get/get.dart';
 
 class ProfileTab extends StatefulWidget {
@@ -170,6 +171,17 @@ class _ProfileTabState extends State<ProfileTab> {
                               icon: Icons.people_alt_outlined,
                               onTap: () {
                                 Get.toNamed(PagesRoutes.followsScreen);
+                              },
+                            ),
+                            const Divider(
+                              height: 5,
+                              color: Colors.transparent,
+                            ),
+                            OptionInfo(
+                              text: " Configurações",
+                              icon: FontAwesome.sliders,
+                              onTap: () {
+                                Get.toNamed(PagesRoutes.configurationsScreen);
                               },
                             ),
                             const Divider(

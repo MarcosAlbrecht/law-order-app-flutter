@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:app_law_order/src/constants/constants.dart';
 import 'package:app_law_order/src/models/picture_model.dart';
 import 'package:app_law_order/src/models/service_model.dart';
 import 'package:app_law_order/src/models/user_model.dart';
@@ -10,6 +11,7 @@ import 'package:app_law_order/src/services/util_services.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
 class ProfileController extends GetxController {
@@ -28,6 +30,7 @@ class ProfileController extends GetxController {
   late File file;
   late PictureModel profilePinctureUrl;
   late String skill;
+  late String tokenOneSignal;
 
   bool isLoading = false;
   bool isSaving = false;
@@ -38,7 +41,14 @@ class ProfileController extends GetxController {
 
   @override
   void onInit() {
+    tokenOneSignal = authController.user.tokenOneSignal ?? '';
     super.onInit();
+  }
+
+  @override
+  void onReady() {
+    loadOneSignal();
+    super.onReady();
   }
 
   void setLoading({required bool value}) {
@@ -306,5 +316,51 @@ class ProfileController extends GetxController {
     }, error: (message) {
       utilService.showToast(message: message, isError: true);
     });
+  }
+
+  Future<void> loadOneSignal() async {
+    await initOneSignal();
+    //await getTokenOneSignal();
+  }
+
+  Future<void> initOneSignal() async {
+    print("INICIOU ONESIGNAL");
+    OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+
+    OneSignal.Debug.setAlertLevel(OSLogLevel.none);
+    OneSignal.consentRequired(false);
+
+    OneSignal.initialize(Constants.oneSignalToken);
+
+    OneSignal.Notifications.clearAll();
+
+    if (GetPlatform.isIOS) {
+      OneSignal.Notifications.requestPermission(true);
+    }
+
+    OneSignal.User.pushSubscription.addObserver((state) {
+      if (OneSignal.User.pushSubscription.id!.isNotEmpty) {
+        tokenOneSignal = OneSignal.User.pushSubscription.id ?? '';
+
+        //handleChangeTokenOneSignal();
+      }
+      print("ENTROU NO OBSERVER: " + tokenOneSignal);
+    });
+  }
+
+  Future<void> getTokenOneSignal() async {
+    //print("ENTROU NO GET TOKEN: ");
+
+    await OneSignal.User.pushSubscription.optIn();
+
+    if (GetPlatform.isIOS) {
+      //print("PASSOU O PUSH SUBSCRIBER" +
+      //OneSignal.User.pushSubscription.id.toString());
+      tokenOneSignal = OneSignal.User.pushSubscription.id.toString();
+      //print("USER SUBSCRIPTIONID IS: " + tokenOneSignal);
+    }
+
+    print(tokenOneSignal);
+    //handleChangeTokenOneSignal();
   }
 }

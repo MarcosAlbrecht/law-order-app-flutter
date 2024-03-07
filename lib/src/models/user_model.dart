@@ -59,6 +59,8 @@ class UserModel {
   double? rating;
   List<PixModel>? pix;
 
+  String? tokenOneSignal;
+
   UserModel({
     this.id,
     this.email,
@@ -86,6 +88,7 @@ class UserModel {
     this.services,
     this.rating,
     this.pix,
+    this.tokenOneSignal,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);

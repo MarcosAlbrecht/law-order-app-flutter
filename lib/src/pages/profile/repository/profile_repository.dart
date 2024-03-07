@@ -393,4 +393,24 @@ class ProfileRepository {
       return RequestWithdrawResult.error('Ocorreu um erro ao solicitar o saque. Tente novamente mais tarde!');
     }
   }
+
+  Future<UserServiceResult> updateTokenOneSignal({required UserModel user, required String token}) async {
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.patch,
+        url: '${EndPoints.updateUser}/${user.id!}',
+        body: {
+          "tokenOneSignal": token,
+        },
+      );
+
+      if (result['_id'] != null) {
+        return UserServiceResult.success(true);
+      } else {
+        return UserServiceResult.error('Ocorreu um erro ao editar os dados. Tente novamente mais tarde!');
+      }
+    } on Exception {
+      return UserServiceResult.error('Ocorreu um erro ao editar os dados. Tente novamente mais tarde!');
+    }
+  }
 }
