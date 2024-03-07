@@ -58,7 +58,6 @@ class UserModel {
   List<ServiceModel>? services;
   double? rating;
   List<PixModel>? pix;
-
   String? tokenOneSignal;
 
   UserModel({

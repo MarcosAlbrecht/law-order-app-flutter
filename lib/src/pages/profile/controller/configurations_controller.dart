@@ -33,7 +33,7 @@ class ConfigurationsController extends GetxController {
     OneSignal.Debug.setAlertLevel(OSLogLevel.none);
     OneSignal.consentRequired(false);
 
-    OneSignal.initialize(Constants.oneSignalToken);
+    OneSignal.initialize(Constants.oneSignalAppID);
 
     OneSignal.Notifications.clearAll();
 

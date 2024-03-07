@@ -43,6 +43,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       pix: (json['pix'] as List<dynamic>?)
           ?.map((e) => PixModel.fromJson(e as Map<String, dynamic>))
           .toList(),
+      tokenOneSignal: json['tokenOneSignal'] as String?,
     );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
@@ -72,4 +73,5 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'services': instance.services,
       'rating': instance.rating,
       'pix': instance.pix,
+      'tokenOneSignal': instance.tokenOneSignal,
     };
