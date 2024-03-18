@@ -1,4 +1,4 @@
-package com.example.app_law_order
+package br.com.prestadio
 
 import io.flutter.embedding.android.FlutterActivity
 
