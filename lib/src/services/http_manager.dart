@@ -60,6 +60,7 @@ class HttpManager {
         throw Exception('Tempo limite de conexão excedido');
       }
       //throw Exception(error.response?.data);
+      print(error);
       return error.response?.data ?? {};
     } catch (error) {
       return {'error': 'Erro desconhecido: $error'};

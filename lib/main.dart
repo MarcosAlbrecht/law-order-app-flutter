@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
 import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -11,6 +14,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
   Get.put(AuthController());
+  ByteData data = await PlatformAssetBundle().load('assets/ca/lets-encrypt-r3.pem');
+  SecurityContext.defaultContext.setTrustedCertificatesBytes(data.buffer.asUint8List());
   runApp(const MyApp());
 }
 
