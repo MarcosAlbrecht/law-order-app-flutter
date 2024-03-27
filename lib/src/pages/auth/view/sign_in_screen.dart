@@ -104,8 +104,7 @@ class SignInScreen extends StatelessWidget {
                                       FocusScope.of(context).unfocus();
                                       if (_formKey.currentState!.validate()) {
                                         String email = emailController.text;
-                                        String password =
-                                            passwordController.text;
+                                        String password = passwordController.text;
                                         authController.signIn(
                                           email: email,
                                           password: password,
@@ -135,16 +134,13 @@ class SignInScreen extends StatelessWidget {
                         child: TextButton(
                           child: Text(
                             'Esqueceu a senha?',
-                            style: TextStyle(
-                                color: CustomColors.blueColor,
-                                fontSize: CustomFontSizes.fontSize16),
+                            style: TextStyle(color: CustomColors.blueColor, fontSize: CustomFontSizes.fontSize16),
                           ),
                           onPressed: () async {
                             final bool? result = await showDialog(
                               context: context,
                               builder: (_) {
-                                return ForgotPasswordDialog(
-                                    email: emailController.text);
+                                return ForgotPasswordDialog(email: emailController.text);
                               },
                             );
 
@@ -214,12 +210,56 @@ class SignInScreen extends StatelessWidget {
                           },
                         ),
                       ),
+
+                      const SizedBox(
+                        height: 30,
+                      ),
+
+                      SizedBox(
+                        height: 50,
+                        child: GetBuilder<AuthController>(
+                          builder: (authController) {
+                            return authController.googleAccount.value == null
+                                ? buildLoginButton(authController)
+                                : const Text('Logado');
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  ElevatedButton buildLoginButton(AuthController authController) {
+    return ElevatedButton.icon(
+      style: ElevatedButton.styleFrom(
+        elevation: 0,
+        backgroundColor: CustomColors.white,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+      onPressed: authController.isLoading.value
+          ? null
+          : () {
+              authController.loginGoogle();
+            },
+      icon: Image.asset(
+        'assets/google_logo_icon.png',
+        scale: 2,
+      ),
+      label: Text(
+        'Continuar com o Google',
+        style: TextStyle(
+          color: CustomColors.black,
+          fontSize: CustomFontSizes.fontSize14,
         ),
       ),
     );

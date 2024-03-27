@@ -7,10 +7,14 @@ import 'package:app_law_order/src/pages/auth/repository/auth_repository.dart';
 import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthController extends GetxController {
   final authRepository = AuthRepository();
   final utilServices = UtilServices();
+
+  var _googleSignin = GoogleSignIn();
+  var googleAccount = Rx<GoogleSignInAccount?>(null);
 
   UserModel user = UserModel();
 
@@ -39,6 +43,10 @@ class AuthController extends GetxController {
   void setIsLoading(bool value) {
     isLoading.value = value;
     update();
+  }
+
+  Future<void> loginGoogle() async {
+    googleAccount.value = await _googleSignin.signIn();
   }
 
   Future<void> validateLogin() async {
