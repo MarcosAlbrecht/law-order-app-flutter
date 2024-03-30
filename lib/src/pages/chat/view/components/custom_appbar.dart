@@ -20,7 +20,7 @@ class CustomAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-      height: 120,
+      height: 100,
       width: double.infinity,
       color: CustomColors.blueDark2Color,
       child: Row(
@@ -85,10 +85,12 @@ class CustomAppBar extends StatelessWidget {
             '${user!.firstName} ${user!.lastName}',
             style: TextStyle(fontSize: 16, color: CustomColors.white, fontWeight: FontWeight.bold),
           ),
-          Text(
-            user!.occupationArea != null ? '${user!.occupationArea} ' : '',
-            style: TextStyle(fontSize: 12, color: CustomColors.white),
-          ),
+          user!.occupationArea != null
+              ? Text(
+                  user!.occupationArea != null ? '${user!.occupationArea} ' : '',
+                  style: TextStyle(fontSize: 12, color: CustomColors.white),
+                )
+              : const SizedBox.shrink(),
         ],
       ),
     );
