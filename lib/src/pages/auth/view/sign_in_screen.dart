@@ -211,21 +211,21 @@ class SignInScreen extends StatelessWidget {
                         ),
                       ),
 
-                      // const SizedBox(
-                      //   height: 30,
-                      // ),
+                      const SizedBox(
+                        height: 30,
+                      ),
 
                       //box que contem o botão com o login do google
-                      // SizedBox(
-                      //   height: 50,
-                      //   child: GetBuilder<AuthController>(
-                      //     builder: (authController) {
-                      //       return authController.googleAccount.value == null
-                      //           ? buildLoginButton(authController)
-                      //           : const Text('Logado');
-                      //     },
-                      //   ),
-                      // ),
+                      SizedBox(
+                        height: 50,
+                        child: GetBuilder<AuthController>(
+                          builder: (authController) {
+                            return authController.googleAccount.value == null
+                                ? buildLoginButton(authController)
+                                : const Text('Logado');
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 ),

@@ -44,6 +44,8 @@ dependencies:
   onesignal_flutter: ^5.1.1
   change_app_package_name: ^1.1.0
   google_sign_in: ^6.2.1
+  firebase_core: ^2.27.0
+  firebase_auth: ^4.17.7
 
 dev_dependencies:
   flutter_test:

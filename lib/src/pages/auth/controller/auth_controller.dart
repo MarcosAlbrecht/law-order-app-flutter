@@ -13,7 +13,7 @@ class AuthController extends GetxController {
   final authRepository = AuthRepository();
   final utilServices = UtilServices();
 
-  var _googleSignin = GoogleSignIn();
+  final _googleSignin = GoogleSignIn();
   var googleAccount = Rx<GoogleSignInAccount?>(null);
 
   UserModel user = UserModel();
@@ -32,7 +32,16 @@ class AuthController extends GetxController {
     super.onInit();
 
     validateLogin();
-    print(occupationsAreas);
+    //print(occupationsAreas);
+
+    //print(googleAccount);
+  }
+
+  @override
+  void onReady() {
+    // TODO: implement onReady
+    super.onReady();
+    validateGoogleLogged();
   }
 
   void setSaving(bool value) {
@@ -45,8 +54,13 @@ class AuthController extends GetxController {
     update();
   }
 
+  Future<void> validateGoogleLogged() async {
+    //print(_googleSignin.clientId);
+  }
+
   Future<void> loginGoogle() async {
     googleAccount.value = await _googleSignin.signIn();
+    print(googleAccount.value);
   }
 
   Future<void> validateLogin() async {
