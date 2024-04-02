@@ -38,6 +38,30 @@ class AuthRepository {
     }
   }
 
+  Future<SignInResult<UserModel>> googleSignIn({required String token}) async {
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.post,
+        url: EndPoints.googleSignin,
+        headers: {
+          'Token': token,
+        },
+      );
+
+      if (result != null && result['statusCode'] == null) {
+        var userData = result as Map<String, dynamic>;
+        UserModel data = UserModel.fromJson(userData);
+        return SignInResult.success(data);
+      } else if (result['statusCode'] != null && result['statusCode'] == 401) {
+        return SignInResult.error('E-mail ou senha inválidos');
+      } else {
+        return SignInResult.error('Ocorreu um erro ao efetuar login!');
+      }
+    } catch (error) {
+      return SignInResult.error('Ocorreu um erro ao efetuar login!');
+    }
+  }
+
   Future<SignUpResult> signUp({required UserModel user}) async {
     final result = await httpManager.restRequest(
       method: HttpMethods.post,

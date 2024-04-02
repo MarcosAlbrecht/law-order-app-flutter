@@ -8,6 +8,7 @@ abstract class EndPoints {
   static const baseUrlChat = '$baseUrl/chat';
   static const baseUrlNotification = '$baseUrl';
   static const signin = '$baseUrl/accounts/authentication/login';
+  static const googleSignin = '$baseUrl/accounts/authentication/google';
   static const forgotPassword = '$baseUrl/accounts/users/recover-password';
   static const createUser = '$baseUrl/accounts/users';
   static const updateUser = '$baseUrl/accounts/users';

@@ -13,7 +13,10 @@ class AuthController extends GetxController {
   final authRepository = AuthRepository();
   final utilServices = UtilServices();
 
-  final _googleSignin = GoogleSignIn();
+  static const List<String> scopes = <String>['email', 'profile', 'openid'];
+
+  final _googleSignin =
+      GoogleSignIn(scopes: scopes, clientId: '183592142336-om2umt7mohiad5gbrbiaj4hkr8f80svj.apps.googleusercontent.com');
   var googleAccount = Rx<GoogleSignInAccount?>(null);
 
   UserModel user = UserModel();
@@ -60,7 +63,20 @@ class AuthController extends GetxController {
 
   Future<void> loginGoogle() async {
     googleAccount.value = await _googleSignin.signIn();
+    GoogleSignInAuthentication? googleAuth = await googleAccount.value?.authentication;
+
+    print(googleAuth?.accessToken);
+    print(googleAuth?.idToken);
     print(googleAccount.value);
+    update();
+
+    final result = await authRepository.googleSignIn(token: googleAuth!.idToken!);
+    result.when(
+      success: (data) {},
+      error: (message) {},
+    );
+
+    await _googleSignin.disconnect();
   }
 
   Future<void> validateLogin() async {
