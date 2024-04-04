@@ -220,9 +220,7 @@ class SignInScreen extends StatelessWidget {
                         height: 50,
                         child: GetBuilder<AuthController>(
                           builder: (authController) {
-                            return authController.googleAccount.value == null
-                                ? buildLoginButton(authController)
-                                : const Text('Logado');
+                            return buildLoginButton(authController);
                           },
                         ),
                       ),

@@ -1,6 +1,7 @@
 import 'package:app_law_order/src/global/binding/global_binding.dart';
 import 'package:app_law_order/src/pages/auth/view/sign_in_screen.dart';
 import 'package:app_law_order/src/pages/auth/view/sign_up.dart';
+import 'package:app_law_order/src/pages/auth/view/sign_up_google.dart';
 import 'package:app_law_order/src/pages/auth/view/sign_up_step1.dart';
 import 'package:app_law_order/src/pages/base/base_screen.dart';
 import 'package:app_law_order/src/pages/base/binding/navigation_binding.dart';
@@ -53,6 +54,10 @@ abstract class AppPages {
     GetPage(
       name: PagesRoutes.signUp,
       page: () => SignUpScreen(),
+    ),
+    GetPage(
+      name: PagesRoutes.signupGoogleRoute,
+      page: () => SignupGoogleScreen(),
     ),
     GetPage(
       name: PagesRoutes.profileTab,
@@ -164,4 +169,5 @@ abstract class PagesRoutes {
   static const String mayWalletScreen = '/mayWalletScreen';
   static const String splashRoute = '/splashRoute';
   static const String configurationsScreen = '/configurationsScreen';
+  static const String signupGoogleRoute = '/signupGoogleRoute';
 }

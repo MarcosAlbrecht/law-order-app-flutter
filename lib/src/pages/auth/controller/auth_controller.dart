@@ -44,7 +44,6 @@ class AuthController extends GetxController {
   void onReady() {
     // TODO: implement onReady
     super.onReady();
-    validateGoogleLogged();
   }
 
   void setSaving(bool value) {
@@ -57,10 +56,6 @@ class AuthController extends GetxController {
     update();
   }
 
-  Future<void> validateGoogleLogged() async {
-    //print(_googleSignin.clientId);
-  }
-
   Future<void> loginGoogle() async {
     googleAccount.value = await _googleSignin.signIn();
     GoogleSignInAuthentication? googleAuth = await googleAccount.value?.authentication;
@@ -68,15 +63,21 @@ class AuthController extends GetxController {
     print(googleAuth?.accessToken);
     print(googleAuth?.idToken);
     print(googleAccount.value);
-    update();
+    //update();
 
     final result = await authRepository.googleSignIn(token: googleAuth!.idToken!);
-    result.when(
-      success: (data) {},
-      error: (message) {},
-    );
-
     await _googleSignin.disconnect();
+    result.when(
+      success: (data) {
+        user = data;
+        saveTokenAndProceedToBase(user.email!, user.password!, user.accessToken!, googleLogin: true);
+      },
+      error: (message) {
+        user.email = googleAccount.value!.email;
+        user.firstName = googleAccount.value!.displayName;
+        Get.offAllNamed(PagesRoutes.signupGoogleRoute);
+      },
+    );
   }
 
   Future<void> validateLogin() async {
@@ -84,12 +85,36 @@ class AuthController extends GetxController {
     String? email = await utilServices.getEmailLocalData();
     String? password = await utilServices.getPasswordlLocalData();
     String? token = await utilServices.getToken();
+    bool googleLogin = await utilServices.getGoogleLogin();
+
+    if (token.isNotEmpty && googleLogin) {
+      await signInWithAccessToken(accessToken: token);
+      return;
+    }
 
     if (email.isNotEmpty && password.isNotEmpty) {
       signIn(email: email, password: password);
     } else {
       Get.offAllNamed(PagesRoutes.signInRoute);
     }
+  }
+
+  Future<void> signInWithAccessToken({required String accessToken}) async {
+    setIsLoading(true);
+    var result = await authRepository.signInWithAccessToken(accessToken: accessToken);
+    setIsLoading(false);
+
+    result.when(
+      success: (data) {
+        user = data;
+        saveTokenAndProceedToBase(user.email!, user.password ?? ' ', accessToken, googleLogin: true);
+      },
+      error: (message) async {
+        utilServices.showToast(message: message, isError: true);
+        await utilServices.removeLocalData();
+        Get.offAllNamed(PagesRoutes.signInRoute);
+      },
+    );
   }
 
   Future<void> signIn({required String email, required String password}) async {
@@ -193,12 +218,13 @@ class AuthController extends GetxController {
     });
   }
 
-  void saveTokenAndProceedToBase(String email, String password, String token) {
+  void saveTokenAndProceedToBase(String email, String? password, String token, {googleLogin = false}) {
     //salvar o token
     utilServices.saveLocalData(
       email: email,
       senha: password,
       token: token,
+      googleLogin: googleLogin,
     );
     //ir para a tela base
     Get.offAllNamed(PagesRoutes.baseRoute);

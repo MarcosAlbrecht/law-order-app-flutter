@@ -38,10 +38,12 @@ class UtilServices {
     );
   }
 
-  Future<void> saveLocalData({required String email, required String senha, required String token}) async {
+  Future<void> saveLocalData(
+      {required String email, required String? senha, required String token, required bool googleLogin}) async {
     await box.write(StorageKeys.email, email);
-    await box.write(StorageKeys.password, senha);
+    await box.write(StorageKeys.password, senha ?? '');
     await box.write(StorageKeys.token, token);
+    await box.write(StorageKeys.googleLogin, googleLogin);
   }
 
   Future<String> getEmailLocalData() async {
@@ -57,10 +59,15 @@ class UtilServices {
     return await box.read(StorageKeys.token) ?? '';
   }
 
+  Future<bool> getGoogleLogin() async {
+    return await box.read(StorageKeys.googleLogin) ?? false;
+  }
+
   Future<void> removeLocalData() async {
     await box.remove(StorageKeys.email);
     await box.remove(StorageKeys.password);
     await box.remove(StorageKeys.token);
+    await box.remove(StorageKeys.googleLogin);
   }
 
   Future<String> convertBirthday(String date) async {

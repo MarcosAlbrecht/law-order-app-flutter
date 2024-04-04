@@ -119,8 +119,8 @@ class ProfileRepository {
     // Criar um FormData para enviar a imagem
 
     final result = await httpManager.restRequest(
-      method: HttpMethods.delete,
-      url: '${EndPoints.deleteUserService}${service.id}',
+      method: HttpMethods.patch,
+      url: EndPoints.deleteUserService,
     );
 
     if (result.isEmpty) {

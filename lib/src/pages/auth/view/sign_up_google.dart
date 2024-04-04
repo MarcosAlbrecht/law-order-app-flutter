@@ -1,10 +1,10 @@
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/config/privacy_policy.dart';
 import 'package:app_law_order/src/config/termsUse.dart';
-import 'package:app_law_order/src/models/occupation_areas_model.dart';
 import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
 import 'package:app_law_order/src/pages/common_widgets/custom_datepicker.dart';
 import 'package:app_law_order/src/pages/common_widgets/custom_text_field.dart';
+import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:app_law_order/src/services/validators.dart';
 import 'package:flutter/gestures.dart';
@@ -13,14 +13,14 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
-class SignUpScreen extends StatefulWidget {
-  SignUpScreen({Key? key}) : super(key: key);
+class SignupGoogleScreen extends StatefulWidget {
+  SignupGoogleScreen({Key? key}) : super(key: key);
 
   @override
-  _SignUpScreenState createState() => _SignUpScreenState();
+  _SignupGoogleScreenState createState() => _SignupGoogleScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignupGoogleScreenState extends State<SignupGoogleScreen> {
   final focus = FocusNode();
   final focusStatus = FocusNode();
   final utilServices = UtilServices();
@@ -45,6 +45,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final format = DateFormat("dd/MM/yyyy");
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: CustomColors.white,
         title: Text(
           "Cadastro",
           style: TextStyle(color: CustomColors.black),
@@ -84,21 +85,57 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         const Divider(
                           height: 30,
                         ),
-                        CustomTextField(
-                          icon: Icons.person_2_outlined,
-                          label: "Primeiro Nome",
-                          validator: nameValidator,
-                          onSaved: (value) {
-                            authController.user.firstName = value;
-                          },
+                        Row(
+                          children: [
+                            Text(
+                              'Olá, ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: CustomFontSizes.fontSize16,
+                              ),
+                            ),
+                            Text(
+                              '${authController.user.firstName} ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: CustomFontSizes.fontSize16,
+                              ),
+                            ),
+                          ],
                         ),
-                        CustomTextField(
-                          icon: Icons.person,
-                          label: "Último Nome",
-                          validator: nameValidator,
-                          onSaved: (value) {
-                            authController.user.lastName = value;
-                          },
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'Vamos finalizar o seu cadastro 😁',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: CustomFontSizes.fontSize14,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              const TextSpan(
+                                text: 'Já possui uma conta? ',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              TextSpan(
+                                text: 'Entrar',
+                                style: const TextStyle(color: Colors.blue),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Get.offAllNamed(PagesRoutes.signInRoute);
+                                  },
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
                         ),
                         CustomDatePicker(
                           dateFormart: format,
@@ -123,6 +160,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           label: "E-mail",
                           validator: emailValidator,
                           textInputType: TextInputType.emailAddress,
+                          initialValue: authController.user.email,
                           onSaved: (value) {
                             authController.user.email = value;
                           },
@@ -142,43 +180,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           onSaved: (value) {
                             authController.user.cep = value;
                           },
-                        ),
-                        Visibility(
-                          visible: authController.isWork.value,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 2, bottom: 10),
-                            child: DropdownButtonFormField(
-                              items: authController.occupationsAreas.map((area) {
-                                return DropdownMenuItem<OccupationAreasModel>(
-                                  value: area,
-                                  child: Text(
-                                    area.area!,
-                                  ), // Use o nome da área como rótulo
-                                );
-                              }).toList(),
-                              onChanged: (data) {
-                                authController.user.occupationArea = data?.area;
-                              },
-                              onSaved: (data) {
-                                authController.user.occupationArea = data?.area;
-                              },
-                              validator: occupationAreaValidator,
-                              decoration: InputDecoration(
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: CustomColors.blueColor,
-                                  ), // Defina a cor desejada da borda
-                                ),
-                                prefixIcon: const Icon(Icons.work_outline),
-                                labelText: "Área de Atuação",
-                                isDense: true,
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                            ),
-                          ),
                         ),
                         CustomTextField(
                           icon: Icons.lock_clock_outlined,
@@ -291,7 +292,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: CustomColors.white,
           title: const Text('Termos de uso'),
           content: const SingleChildScrollView(
             child: Text(termsUse),
