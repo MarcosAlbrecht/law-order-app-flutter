@@ -5,12 +5,14 @@ import 'package:app_law_order/src/models/file_model.dart';
 import 'package:app_law_order/src/pages/chat/controller/chat_controller.dart';
 import 'package:app_law_order/src/pages/chat/view/components/custom_appbar.dart';
 import 'package:app_law_order/src/pages/chat/view/components/picture_message_dialog.dart';
+import 'package:app_law_order/src/pages/chat/view/fast_service_screen.dart';
 import 'package:app_law_order/src/pages/common_widgets/custom_text_field.dart';
 import 'package:app_law_order/src/pages/profile/view/portfolio_screen.dart';
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttericon/typicons_icons.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -88,125 +90,199 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                         : null,
                     logedUserId: '',
                   ),
-                  Expanded(
-                    child: Visibility(
-                      visible: controller.allMessages.isNotEmpty,
-                      replacement: Container(),
-                      child: ListView.builder(
-                        itemCount: controller.allMessages.length,
-                        reverse: true,
-                        itemBuilder: (context, index) {
-                          final message = controller.allMessages[index];
-                          final previousMessage =
-                              index < controller.allMessages.length - 1 ? controller.allMessages[index + 1] : null;
-                          final isDifferentDay =
-                              previousMessage != null && !isSameDay(message.createdAt!, previousMessage.createdAt!);
-
-                          return Column(
-                            children: [
-                              if (isDifferentDay)
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                  child: Text(
-                                    getMessageDay(message.createdAt!),
-                                    style: const TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              controller.allMessages[index].file == null
-                                  ? MessageBubble(
-                                      createdAt: message.createdAt!,
-                                      message: message.message!,
-                                      isMe: message.userId == controller.authController.user.id,
-                                    )
-                                  : MessageFileBubble(
-                                      fileName: message.fileName!,
-                                      file: message.file!,
-                                      isMe: message.userId == controller.authController.user.id,
-                                      controller: controller,
-                                      createdAt: message.createdAt!,
-                                      onTap: (FileType fileType) async {
-                                        // tratar a interação com o arquivo
-                                        if (fileType == FileType.image) {
-                                          await showDialog(
-                                            context: context,
-                                            builder: (_) {
-                                              return PictureMessageDialog(
-                                                imageUrl: message.file!.url!,
-                                                onPressed: () async {
-                                                  await controller.handleDownloadFile(
-                                                      url: message.file!.url!, fileName: message.fileName!);
-                                                },
-                                              );
-                                            },
-                                          );
-                                        }
-                                      },
-                                    ),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
+                  SizedBox(
+                    height: 50,
+                    width: double.infinity,
                     child: Container(
-                      //color: CustomColors.blueDark2Color,
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      height: 60,
-                      width: double.infinity,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: CustomTextField(
-                              //icon: Icons.search,
-                              suffixIconButtonAttach: () {
-                                _handleAttachmentPressed(controller);
-                              },
-                              controller: messageEC,
-                              label: 'Mensagem',
-                              removeFloatingLabelBehavior: true,
-                              onChanged: (value) {
-                                messageEC.text = value!;
-                              },
-                            ),
+                      color: Color(0xff404040),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 10, left: 5),
-                            child: SizedBox(
-                              width: 60,
-                              height: double.infinity,
-                              child: Material(
-                                color: CustomColors.blueDark2Color,
-                                //elevation: 3,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10),
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
+                        ),
+                        onPressed: () {
+                          controller.handleFastService();
+                        },
+                        child: !controller.isFastService
+                            ? Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Typicons.flash_outline,
+                                    color: CustomColors.white,
+                                    size: 18,
                                   ),
-                                ),
-                                child: IconButton(
-                                  color: CustomColors.white,
-                                  onPressed: () {
-                                    _sendMessage(controller, null);
-                                  },
-                                  icon: const Icon(Icons.send),
-                                ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    'Contratação rápida',
+                                    style: TextStyle(
+                                      color: CustomColors.white,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Typicons.chat,
+                                    color: CustomColors.white,
+                                    size: 18,
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    'Chat',
+                                    style: TextStyle(
+                                      color: CustomColors.white,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ),
-                        ],
                       ),
                     ),
                   ),
+                  if (!controller.isFastService) ...[
+                    messagesChat(controller),
+                    sendMessagesButton(controller),
+                  ],
+                  if (controller.isFastService) ...[
+                    FastServiceScreen(
+                        name: controller.authController.user.id! == controller.selectedChat?.destinationUserId!
+                            ? controller.selectedChat!.user!.firstName!
+                            : controller.selectedChat!.destinationUser!.firstName!),
+                  ],
                 ],
               );
             },
           ),
+        ),
+      ),
+    );
+  }
+
+  Padding sendMessagesButton(ChatController controller) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Container(
+        //color: CustomColors.blueDark2Color,
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        height: 60,
+        width: double.infinity,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: CustomTextField(
+                //icon: Icons.search,
+                suffixIconButtonAttach: () {
+                  _handleAttachmentPressed(controller);
+                },
+                controller: messageEC,
+                label: 'Mensagem',
+                removeFloatingLabelBehavior: true,
+                onChanged: (value) {
+                  messageEC.text = value!;
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10, left: 5),
+              child: SizedBox(
+                width: 60,
+                height: double.infinity,
+                child: Material(
+                  color: CustomColors.blueDark2Color,
+                  //elevation: 3,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
+                    ),
+                  ),
+                  child: IconButton(
+                    color: CustomColors.white,
+                    onPressed: () {
+                      _sendMessage(controller, null);
+                    },
+                    icon: const Icon(Icons.send),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Expanded messagesChat(ChatController controller) {
+    return Expanded(
+      child: Visibility(
+        visible: controller.allMessages.isNotEmpty,
+        replacement: Container(),
+        child: ListView.builder(
+          itemCount: controller.allMessages.length,
+          reverse: true,
+          itemBuilder: (context, index) {
+            final message = controller.allMessages[index];
+            final previousMessage = index < controller.allMessages.length - 1 ? controller.allMessages[index + 1] : null;
+            final isDifferentDay = previousMessage != null && !isSameDay(message.createdAt!, previousMessage.createdAt!);
+
+            return Column(
+              children: [
+                if (isDifferentDay)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(
+                      getMessageDay(message.createdAt!),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                controller.allMessages[index].file == null
+                    ? MessageBubble(
+                        createdAt: message.createdAt!,
+                        message: message.message!,
+                        isMe: message.userId == controller.authController.user.id,
+                      )
+                    : MessageFileBubble(
+                        fileName: message.fileName!,
+                        file: message.file!,
+                        isMe: message.userId == controller.authController.user.id,
+                        controller: controller,
+                        createdAt: message.createdAt!,
+                        onTap: (FileType fileType) async {
+                          // tratar a interação com o arquivo
+                          if (fileType == FileType.image) {
+                            await showDialog(
+                              context: context,
+                              builder: (_) {
+                                return PictureMessageDialog(
+                                  imageUrl: message.file!.url!,
+                                  onPressed: () async {
+                                    await controller.handleDownloadFile(url: message.file!.url!, fileName: message.fileName!);
+                                  },
+                                );
+                              },
+                            );
+                          }
+                        },
+                      ),
+              ],
+            );
+          },
         ),
       ),
     );

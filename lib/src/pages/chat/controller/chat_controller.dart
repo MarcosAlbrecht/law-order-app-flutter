@@ -38,6 +38,7 @@ class ChatController extends GetxController {
   bool isMessageLoading = true;
   bool isTabOpened = false;
   bool isMessageScreenOpened = false;
+  bool isFastService = false;
 
   int get currentIndex => _currentIndex.value;
 
@@ -283,5 +284,10 @@ class ChatController extends GetxController {
     );
 
     //setLoading(true);
+  }
+
+  void handleFastService() {
+    isFastService = !isFastService;
+    update();
   }
 }
