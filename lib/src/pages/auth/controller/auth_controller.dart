@@ -70,7 +70,7 @@ class AuthController extends GetxController {
     result.when(
       success: (data) {
         user = data;
-        saveTokenAndProceedToBase(user.email!, user.password!, user.accessToken!, googleLogin: true);
+        saveTokenAndProceedToBase(user.email ?? '', user.password ?? '', user.accessToken!, googleLogin: true);
       },
       error: (message) {
         user.email = googleAccount.value!.email;
@@ -87,7 +87,7 @@ class AuthController extends GetxController {
     String? token = await utilServices.getToken();
     bool googleLogin = await utilServices.getGoogleLogin();
 
-    if (token.isNotEmpty && googleLogin) {
+    if (token.isNotEmpty || googleLogin) {
       await signInWithAccessToken(accessToken: token);
       return;
     }
@@ -105,9 +105,10 @@ class AuthController extends GetxController {
     setIsLoading(false);
 
     result.when(
-      success: (data) {
+      success: (data) async {
         user = data;
-        saveTokenAndProceedToBase(user.email!, user.password ?? ' ', accessToken, googleLogin: true);
+
+        saveTokenAndProceedToBase(user.email ?? '', user.password ?? '', accessToken, googleLogin: true);
       },
       error: (message) async {
         utilServices.showToast(message: message, isError: true);
@@ -126,7 +127,7 @@ class AuthController extends GetxController {
       success: (data) {
         user = data;
         user.password = password;
-        saveTokenAndProceedToBase(user.email!, password, user.accessToken!);
+        saveTokenAndProceedToBase(user.email ?? '', password, user.accessToken!);
       },
       error: (message) async {
         utilServices.showToast(message: message, isError: true);

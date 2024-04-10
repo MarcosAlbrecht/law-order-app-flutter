@@ -290,4 +290,11 @@ class ChatController extends GetxController {
     isFastService = !isFastService;
     update();
   }
+
+  Future<String> generatePayment({required num value, required String userId}) async {
+    print(value);
+    print(userId);
+    //final result = await chatRepository.generatePayment(userDestination: userId, value: value);
+    return '';
+  }
 }

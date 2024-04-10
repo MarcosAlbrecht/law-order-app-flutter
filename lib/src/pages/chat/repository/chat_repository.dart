@@ -106,4 +106,26 @@ class ChatRepository {
       return SendFileResult.error('Tente novamente mais tarde.');
     }
   }
+
+  Future<SendFileResult> generatePayment({required String userDestination, required num value}) async {
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.post,
+        url: EndPoints.generatePaymentLinkChat,
+        body: {
+          "value": value,
+          "destinationUserId": userDestination,
+        },
+      );
+
+      if (result.isEmpty) {
+        return SendFileResult.success('');
+      } else {
+        return SendFileResult.error('Não foi possivel enviar o arquivo.');
+      }
+    } catch (e) {
+      log('Erro ao enviar arquivo', error: e);
+      return SendFileResult.error('Tente novamente mais tarde.');
+    }
+  }
 }

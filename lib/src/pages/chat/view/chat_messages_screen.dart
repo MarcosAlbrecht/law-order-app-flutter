@@ -157,9 +157,13 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                   ],
                   if (controller.isFastService) ...[
                     FastServiceScreen(
-                        name: controller.authController.user.id! == controller.selectedChat?.destinationUserId!
-                            ? controller.selectedChat!.user!.firstName!
-                            : controller.selectedChat!.destinationUser!.firstName!),
+                      name: controller.authController.user.id! == controller.selectedChat?.destinationUserId!
+                          ? controller.selectedChat!.user!.firstName!
+                          : controller.selectedChat!.destinationUser!.firstName!,
+                      userId: controller.authController.user.id! == controller.selectedChat?.destinationUserId!
+                          ? controller.selectedChat!.user!.id!
+                          : controller.selectedChat!.destinationUser!.id!,
+                    ),
                   ],
                 ],
               );

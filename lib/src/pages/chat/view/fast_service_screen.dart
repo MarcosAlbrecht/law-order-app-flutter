@@ -1,17 +1,22 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:app_law_order/src/config/custom_colors.dart';
+import 'package:app_law_order/src/pages/chat/controller/chat_controller.dart';
 import 'package:app_law_order/src/pages/common_widgets/custom_text_field.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:fluttericon/typicons_icons.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 class FastServiceScreen extends StatefulWidget {
   final String name;
+  final String userId;
   const FastServiceScreen({
     Key? key,
     required this.name,
+    required this.userId,
   }) : super(key: key);
 
   @override
@@ -160,32 +165,64 @@ class _FastServiceScreenState extends State<FastServiceScreen> {
               const SizedBox(
                 height: 20,
               ),
-              SizedBox(
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: CustomColors.blueColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+              GetBuilder<ChatController>(
+                builder: (controller) {
+                  return SizedBox(
+                    height: 50,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: CustomColors.blueColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      onPressed: () async {
+                        final link =
+                            await controller.generatePayment(value: formatterEC.getUnformattedValue(), userId: widget.userId);
+                        if (link.isNotEmpty) {
+                          _launchURL(context, link: link);
+                        }
+
+                        print(formatterEC.getUnformattedValue());
+                        cleanText();
+                      },
+                      child: Text(
+                        'Enviar',
+                        style: TextStyle(
+                          color: CustomColors.white,
+                          fontSize: 18,
+                        ),
+                      ),
                     ),
-                  ),
-                  onPressed: () {
-                    print(formatterEC.getUnformattedValue());
-                    cleanText();
-                  },
-                  child: Text(
-                    'Enviar',
-                    style: TextStyle(
-                      color: CustomColors.white,
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
+                  );
+                },
               ),
             ],
           ),
         ),
       ),
     );
+  }
+}
+
+Future<void> _launchURL(BuildContext context, {required String link}) async {
+  final theme = Theme.of(context);
+  try {
+    await launchUrl(
+      Uri.parse(link),
+      customTabsOptions: CustomTabsOptions(
+        colorSchemes: CustomTabsColorSchemes.defaults(
+          toolbarColor: theme.colorScheme.surface,
+          navigationBarColor: theme.colorScheme.background,
+        ),
+        urlBarHidingEnabled: true,
+        showTitle: true,
+        browser: const CustomTabsBrowserConfiguration(
+          prefersDefaultBrowser: true,
+        ),
+      ),
+    );
+  } catch (e) {
+    debugPrint(e.toString());
   }
 }
