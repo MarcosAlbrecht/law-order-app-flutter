@@ -42,6 +42,7 @@ class ProfileController extends GetxController {
   @override
   void onInit() {
     tokenOneSignal = authController.user.tokenOneSignal ?? '';
+    getUserProfile();
     super.onInit();
   }
 
@@ -79,6 +80,15 @@ class ProfileController extends GetxController {
     isSaving = value;
 
     update();
+  }
+
+  Future<void> getUserProfile() async {
+    final result = await profileRepository.getUserById(id: authController.user.id!);
+    result.when(
+        success: (data) {
+          authController.user = data;
+        },
+        error: (message) {});
   }
 
   Future<void> handleUpdateProfile() async {

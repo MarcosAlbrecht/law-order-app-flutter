@@ -3,9 +3,11 @@ import 'dart:developer';
 import 'package:app_law_order/src/constants/endpoints.dart';
 import 'package:app_law_order/src/models/chat_message_model.dart';
 import 'package:app_law_order/src/models/chat_model.dart';
+import 'package:app_law_order/src/models/payment_model.dart';
 import 'package:app_law_order/src/pages/chat/result/chat_message_result.dart';
 import 'package:app_law_order/src/pages/chat/result/chats_result.dart';
 import 'package:app_law_order/src/pages/chat/result/download_file_result.dart';
+import 'package:app_law_order/src/pages/chat/result/payment_result.dart';
 import 'package:app_law_order/src/pages/chat/result/send_file_result.dart';
 import 'package:app_law_order/src/services/http_manager.dart';
 import 'package:dio/dio.dart';
@@ -107,7 +109,7 @@ class ChatRepository {
     }
   }
 
-  Future<SendFileResult> generatePayment({required String userDestination, required num value}) async {
+  Future<PaymentResult> generatePayment({required String userDestination, required num value}) async {
     try {
       final result = await httpManager.restRequest(
         method: HttpMethods.post,
@@ -118,14 +120,16 @@ class ChatRepository {
         },
       );
 
-      if (result.isEmpty) {
-        return SendFileResult.success('');
+      if (result.isNotEmpty) {
+        var userData = result as Map<String, dynamic>;
+        PaymentModel data = PaymentModel.fromJson(userData);
+        return PaymentResult.success(data);
       } else {
-        return SendFileResult.error('Não foi possivel enviar o arquivo.');
+        return PaymentResult.error('Não foi possivel gerar o pagamento.');
       }
     } catch (e) {
-      log('Erro ao enviar arquivo', error: e);
-      return SendFileResult.error('Tente novamente mais tarde.');
+      log('Erro ao gerar link de pagamento', error: e);
+      return PaymentResult.error('Tente novamente mais tarde.');
     }
   }
 }

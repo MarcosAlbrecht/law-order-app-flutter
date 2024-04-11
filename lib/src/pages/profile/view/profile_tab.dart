@@ -81,10 +81,10 @@ class _ProfileTabState extends State<ProfileTab> {
                           height: 5,
                           color: Colors.transparent,
                         ),
-                        Text(
-                          '${controller.authController.user.email}',
-                          style: TextStyle(color: CustomColors.black.withAlpha(100), fontSize: CustomFontSizes.fontSize18),
-                        ),
+                        // Text(
+                        //   '${controller.authController.user.email}',
+                        //   style: TextStyle(color: CustomColors.black.withAlpha(100), fontSize: CustomFontSizes.fontSize18),
+                        // ),
                       ],
                     ),
                   ),

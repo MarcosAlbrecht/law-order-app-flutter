@@ -1,5 +1,4 @@
 import 'package:app_law_order/src/config/custom_colors.dart';
-import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
 import 'package:app_law_order/src/pages/common_widgets/custom_text_field.dart';
 import 'package:app_law_order/src/pages/profile/controller/profile_controller.dart';
 import 'package:app_law_order/src/pages/profile/view/components/camera_dialog.dart';
@@ -102,19 +101,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(100),
-                                  child: controller.authController.user
-                                              .profilePicture !=
-                                          null
+                                  child: controller.authController.user.profilePicture != null
                                       ? CachedNetworkImage(
-                                          imageUrl: controller.authController
-                                              .user.profilePicture!.url!,
-                                          progressIndicatorBuilder: (context,
-                                                  url, downloadProgress) =>
-                                              CircularProgressIndicator(
-                                                  value: downloadProgress
-                                                      .progress),
-                                          errorWidget: (context, url, error) =>
-                                              Icon(Icons.error),
+                                          imageUrl: controller.authController.user.profilePicture!.url!,
+                                          progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                              CircularProgressIndicator(value: downloadProgress.progress),
+                                          errorWidget: (context, url, error) => Icon(Icons.error),
                                           height: 160,
                                           width: 160,
                                           fit: BoxFit.cover,
@@ -149,9 +141,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                        color: CustomColors.blueDark2Color,
-                                        shape: BoxShape.circle),
+                                    decoration: BoxDecoration(color: CustomColors.blueDark2Color, shape: BoxShape.circle),
                                     child: Icon(
                                       Icons.mode_edit_outline_rounded,
                                       color: CustomColors.white,
@@ -175,11 +165,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     label: "Primeiro Nome",
                                     textInputType: TextInputType.name,
                                     validator: nameValidator,
-                                    initialValue: controller
-                                        .authController.user.firstName,
+                                    initialValue: controller.authController.user.firstName,
                                     onSaved: (value) {
-                                      controller.authController.user.firstName =
-                                          value;
+                                      controller.authController.user.firstName = value;
                                     },
                                   ),
                                   CustomTextField(
@@ -187,11 +175,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     label: "Último Nome",
                                     textInputType: TextInputType.name,
                                     validator: nameValidator,
-                                    initialValue:
-                                        controller.authController.user.lastName,
+                                    initialValue: controller.authController.user.lastName,
                                     onSaved: (value) {
-                                      controller.authController.user.lastName =
-                                          value;
+                                      controller.authController.user.lastName = value;
                                     },
                                   ),
                                   CustomTextField(
@@ -199,12 +185,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     label: "CPF",
                                     textInputType: TextInputType.number,
                                     inputFormatters: [cpfFormatter],
-                                    validator: cpfValidator,
-                                    initialValue:
-                                        controller.authController.user.cpf,
+                                    // validator: cpfValidator,
+                                    initialValue: controller.authController.user.cpf,
                                     onSaved: (value) {
-                                      controller.authController.user.cpf =
-                                          value;
+                                      controller.authController.user.cpf = value;
                                     },
                                   ),
                                   CustomTextField(
@@ -213,11 +197,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     validator: phoneValidator,
                                     textInputType: TextInputType.phone,
                                     inputFormatters: [phoneFormatter],
-                                    initialValue:
-                                        controller.authController.user.phone,
+                                    initialValue: controller.authController.user.phone,
                                     onSaved: (value) {
-                                      controller.authController.user.phone =
-                                          value;
+                                      controller.authController.user.phone = value;
                                     },
                                   ),
                                   CustomTextField(
@@ -226,17 +208,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     textInputType: TextInputType.number,
                                     inputFormatters: [cepFormatter],
                                     validator: cepValidator,
-                                    initialValue:
-                                        controller.authController.user.cep,
+                                    initialValue: controller.authController.user.cep,
                                     onChanged: (value) async {
                                       if (value != null && value.length == 8) {
-                                        await controller.authController
-                                            .handleValidateCep(cep1: value);
+                                        await controller.authController.handleValidateCep(cep1: value);
                                       }
                                     },
                                     onSaved: (value) {
-                                      controller.authController.user.cep =
-                                          value;
+                                      controller.authController.user.cep = value;
                                     },
                                   ),
                                   SizedBox(
@@ -246,25 +225,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: CustomColors.blueColor,
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+                                          borderRadius: BorderRadius.circular(10),
                                         ),
                                       ),
-                                      onPressed: controller
-                                              .authController.isLoading.value
+                                      onPressed: controller.authController.isLoading.value
                                           ? null
                                           : () async {
                                               //Get.toNamed(PagesRoutes.signUpStep1);
                                               FocusScope.of(context).unfocus();
-                                              if (_formKey.currentState!
-                                                  .validate()) {
+                                              if (_formKey.currentState!.validate()) {
                                                 _formKey.currentState!.save();
-                                                await controller
-                                                    .handleUpdateProfile();
+                                                await controller.handleUpdateProfile();
                                               } else {
-                                                utilServices.showToast(
-                                                    message:
-                                                        "Verifique todos os campos!");
+                                                utilServices.showToast(message: "Verifique todos os campos!");
                                               }
                                             },
                                       child: controller.isSaving

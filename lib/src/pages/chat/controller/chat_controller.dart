@@ -39,6 +39,7 @@ class ChatController extends GetxController {
   bool isTabOpened = false;
   bool isMessageScreenOpened = false;
   bool isFastService = false;
+  bool isLoadingPayment = false;
 
   int get currentIndex => _currentIndex.value;
 
@@ -86,6 +87,11 @@ class ChatController extends GetxController {
 
   void setLoading(bool value) {
     isLoading = value;
+    update();
+  }
+
+  void setLoadingPayment(bool value) {
+    isLoadingPayment = value;
     update();
   }
 
@@ -287,14 +293,24 @@ class ChatController extends GetxController {
   }
 
   void handleFastService() {
-    isFastService = !isFastService;
-    update();
+    //isFastService = !isFastService;
+    //update();
+    utilServices.showToast(message: 'Funcionalidade em desenvolvimento');
   }
 
   Future<String> generatePayment({required num value, required String userId}) async {
-    print(value);
-    print(userId);
-    //final result = await chatRepository.generatePayment(userDestination: userId, value: value);
-    return '';
+    var link = '';
+    setLoadingPayment(true);
+    final result = await chatRepository.generatePayment(userDestination: userId, value: value);
+    setLoadingPayment(true);
+    result.when(
+      success: (data) {
+        link = data.link!;
+      },
+      error: (message) {
+        utilServices.showToast(message: message);
+      },
+    );
+    return link;
   }
 }
