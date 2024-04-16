@@ -3,6 +3,7 @@ import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/models/user_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttericon/font_awesome5_icons.dart';
 
 class CustomAppBar extends StatelessWidget {
   final VoidCallback? onBackPressed;
@@ -24,6 +25,7 @@ class CustomAppBar extends StatelessWidget {
       width: double.infinity,
       color: CustomColors.blueDark2Color,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         //crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           IconButton(
@@ -46,6 +48,14 @@ class CustomAppBar extends StatelessWidget {
                 ),
           const SizedBox(width: 8),
           user != null ? buildNameAndPosition() : const SizedBox.shrink(),
+          IconButton(
+            icon: Icon(
+              FontAwesome5.wallet,
+              color: CustomColors.white,
+              size: 22,
+            ),
+            onPressed: onBackPressed ?? () => Navigator.of(context).pop(),
+          ),
         ],
       ),
     );

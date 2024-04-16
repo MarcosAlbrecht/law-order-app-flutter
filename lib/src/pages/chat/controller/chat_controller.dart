@@ -293,9 +293,9 @@ class ChatController extends GetxController {
   }
 
   void handleFastService() {
-    //isFastService = !isFastService;
-    //update();
-    utilServices.showToast(message: 'Funcionalidade em desenvolvimento');
+    isFastService = !isFastService;
+    update();
+    //utilServices.showToast(message: 'Funcionalidade em desenvolvimento');
   }
 
   Future<String> generatePayment({required num value, required String userId}) async {

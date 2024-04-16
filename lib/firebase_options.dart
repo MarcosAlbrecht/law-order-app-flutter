@@ -63,7 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '183592142336',
     projectId: 'prestadio-5fd21',
     storageBucket: 'prestadio-5fd21.appspot.com',
-    androidClientId: '183592142336-l5johnvr5mmi9oaofubko7ceghqd9ihm.apps.googleusercontent.com',
+    androidClientId: '183592142336-iatrpaus527ohl7jklqron0jc3cdlbqn.apps.googleusercontent.com',
     iosClientId: '183592142336-amugpmh4k444jkfh4ik7rsqdonnv777a.apps.googleusercontent.com',
     iosBundleId: 'com.prestadioapp.prestadio',
   );

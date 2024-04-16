@@ -7,20 +7,41 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:183592142336:android:6d3fc9fbbaa6c964cd3ae5",
+        "android_client_info": {
+          "package_name": "com.example.app_law_order"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "183592142336-om2umt7mohiad5gbrbiaj4hkr8f80svj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAzCAw9_4I4vKMbaBdZxI4O-rVl8A8Zls"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "183592142336-om2umt7mohiad5gbrbiaj4hkr8f80svj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:183592142336:android:73c120e601100d60cd3ae5",
         "android_client_info": {
           "package_name": "com.prestadioapp.prestadio"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "183592142336-iatrpaus527ohl7jklqron0jc3cdlbqn.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.prestadioapp.prestadio",
-            "certificate_hash": "667dd0dfb56915d32dea3549e07d849b01de1aa4"
-          }
-        },
         {
           "client_id": "183592142336-l5johnvr5mmi9oaofubko7ceghqd9ihm.apps.googleusercontent.com",
           "client_type": 1,
@@ -45,13 +66,6 @@
             {
               "client_id": "183592142336-om2umt7mohiad5gbrbiaj4hkr8f80svj.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "183592142336-amugpmh4k444jkfh4ik7rsqdonnv777a.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.prestadioapp.prestadio"
-              }
             }
           ]
         }
