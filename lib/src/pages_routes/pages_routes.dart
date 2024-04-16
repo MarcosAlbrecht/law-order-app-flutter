@@ -6,8 +6,10 @@ import 'package:app_law_order/src/pages/auth/view/sign_up_step1.dart';
 import 'package:app_law_order/src/pages/base/base_screen.dart';
 import 'package:app_law_order/src/pages/base/binding/navigation_binding.dart';
 import 'package:app_law_order/src/pages/chat/binding/chat_binding.dart';
+import 'package:app_law_order/src/pages/chat/binding/wallet_payments_binding.dart';
 import 'package:app_law_order/src/pages/chat/view/chat_list_tab.dart';
 import 'package:app_law_order/src/pages/chat/view/chat_messages_screen.dart';
+import 'package:app_law_order/src/pages/chat/view/payments_wallet_screen.dart';
 import 'package:app_law_order/src/pages/home/binding/home_binding.dart';
 import 'package:app_law_order/src/pages/profile/binding/configurations_binding.dart';
 import 'package:app_law_order/src/pages/profile/binding/follower_binding.dart';
@@ -78,6 +80,11 @@ abstract class AppPages {
     GetPage(
       name: PagesRoutes.avaliationScreen,
       page: () => AvaliationScreen(),
+    ),
+    GetPage(
+      name: PagesRoutes.paymentosWalletRoute,
+      page: () => const PaymentsWalletScreen(),
+      binding: PaymentsWalletBinding(),
     ),
     GetPage(
       name: PagesRoutes.followsScreen,
@@ -170,4 +177,5 @@ abstract class PagesRoutes {
   static const String splashRoute = '/splashRoute';
   static const String configurationsScreen = '/configurationsScreen';
   static const String signupGoogleRoute = '/signupGoogleRoute';
+  static const String paymentosWalletRoute = '/paymentosWalletRoute';
 }

@@ -3,11 +3,13 @@ import 'dart:developer';
 import 'package:app_law_order/src/constants/endpoints.dart';
 import 'package:app_law_order/src/models/chat_message_model.dart';
 import 'package:app_law_order/src/models/chat_model.dart';
+import 'package:app_law_order/src/models/fast_payment_model.dart';
 import 'package:app_law_order/src/models/payment_model.dart';
 import 'package:app_law_order/src/pages/chat/result/chat_message_result.dart';
 import 'package:app_law_order/src/pages/chat/result/chats_result.dart';
 import 'package:app_law_order/src/pages/chat/result/download_file_result.dart';
 import 'package:app_law_order/src/pages/chat/result/payment_result.dart';
+import 'package:app_law_order/src/pages/chat/result/payments_wallet_result.dart';
 import 'package:app_law_order/src/pages/chat/result/send_file_result.dart';
 import 'package:app_law_order/src/services/http_manager.dart';
 import 'package:dio/dio.dart';
@@ -130,6 +132,29 @@ class ChatRepository {
     } catch (e) {
       log('Erro ao gerar link de pagamento', error: e);
       return PaymentResult.error('Tente novamente mais tarde.');
+    }
+  }
+
+  Future<PaymentsWalletResult> getPaymentsWallet({required String userDestinationId}) async {
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.get,
+        url: '${EndPoints.getPaymentsWallet}$userDestinationId',
+      );
+
+      if (result.isNotEmpty && result['statusCode'] == null) {
+        var userData = result as Map<String, dynamic>;
+        FastPaymentModel data = FastPaymentModel.fromJson(userData);
+        return PaymentsWalletResult.success(data);
+      } else if (result.isEmpty) {
+        FastPaymentModel data = FastPaymentModel();
+        return PaymentsWalletResult.success(data);
+      } else {
+        return PaymentsWalletResult.error('Não foi possivel gerar o pagamento.');
+      }
+    } catch (e) {
+      log('Erro ao gerar link de pagamento', error: e);
+      return PaymentsWalletResult.error('Tente novamente mais tarde.');
     }
   }
 }

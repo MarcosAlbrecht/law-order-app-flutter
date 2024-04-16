@@ -70,6 +70,7 @@ abstract class EndPoints {
   static const getAllChats = '$baseUrl/messages/list-all-chats';
   static const getChatMessage = '$baseUrl/messages/destination/';
   static const sendFileMessage = '$baseUrl/messages/file/';
+  static const getPaymentsWallet = '$baseUrl/messages/payment/user/';
   //
 }
 
