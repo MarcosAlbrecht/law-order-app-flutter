@@ -94,7 +94,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                     height: 50,
                     width: double.infinity,
                     child: Container(
-                      color: Color(0xff404040),
+                      color: const Color(0xff404040),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.transparent,

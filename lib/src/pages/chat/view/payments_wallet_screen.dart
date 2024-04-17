@@ -1,5 +1,6 @@
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/pages/chat/controller/wallet_payments_controller.dart';
+import 'package:app_law_order/src/pages/chat/view/components/payments_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -46,18 +47,45 @@ class _PaymentsWalletScreenState extends State<PaymentsWalletScreen> {
                   width: size.width,
                   child: Padding(
                     padding: const EdgeInsets.all(16),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          'Pagamentos para ${controller.user.firstName!}',
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: CustomFontSizes.fontSize16),
+                    child: Visibility(
+                      visible: controller.listPayments.isNotEmpty,
+                      replacement: Expanded(
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.search_off,
+                                color: CustomColors.blueDarkColor,
+                              ),
+                              const Text('Não há itens para apresentar'),
+                            ],
+                          ),
                         ),
-                        const Divider(
-                          height: 40,
-                        ),
-                      ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            'Pagamentos para ${controller.user.firstName!}',
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: CustomFontSizes.fontSize16),
+                          ),
+                          const Divider(
+                            height: 40,
+                          ),
+                          Expanded(
+                            child: ListView.separated(
+                                itemBuilder: (_, index) {
+                                  return PaymentsTile(
+                                    payment: controller.listPayments[index],
+                                  );
+                                },
+                                separatorBuilder: (context, index) => const Divider(height: 10),
+                                itemCount: controller.listPayments.length),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );

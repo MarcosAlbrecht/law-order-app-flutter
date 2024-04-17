@@ -135,19 +135,18 @@ class ChatRepository {
     }
   }
 
-  Future<PaymentsWalletResult> getPaymentsWallet({required String userDestinationId}) async {
+  Future<PaymentsWalletResult<FastPaymentModel>> getPaymentsWallet({required String userDestinationId}) async {
     try {
       final result = await httpManager.restRequest(
         method: HttpMethods.get,
         url: '${EndPoints.getPaymentsWallet}$userDestinationId',
       );
 
-      if (result.isNotEmpty && result['statusCode'] == null) {
-        var userData = result as Map<String, dynamic>;
-        FastPaymentModel data = FastPaymentModel.fromJson(userData);
+      if (result.isNotEmpty && result is List) {
+        List<FastPaymentModel> data = result.map((message) => FastPaymentModel.fromJson(message)).toList();
         return PaymentsWalletResult.success(data);
       } else if (result.isEmpty) {
-        FastPaymentModel data = FastPaymentModel();
+        List<FastPaymentModel> data = [];
         return PaymentsWalletResult.success(data);
       } else {
         return PaymentsWalletResult.error('Não foi possivel gerar o pagamento.');

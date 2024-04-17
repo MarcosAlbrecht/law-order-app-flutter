@@ -8,7 +8,7 @@ class WalletPaymentsController extends GetxController {
   final chatRepository = ChatRepository();
   final utilServices = UtilServices();
 
-  late FastPaymentModel paymentModel = FastPaymentModel();
+  List<FastPaymentModel> listPayments = [];
   late UserModel user;
 
   bool isLoading = true;
@@ -34,7 +34,7 @@ class WalletPaymentsController extends GetxController {
     setLoading(false);
     result.when(
       success: (data) {
-        paymentModel = data;
+        listPayments = data;
       },
       error: (message) {},
     );
