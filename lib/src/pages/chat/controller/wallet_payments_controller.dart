@@ -30,6 +30,7 @@ class WalletPaymentsController extends GetxController {
   }
 
   Future<void> getPaymentsWallet() async {
+    setLoading(true);
     final result = await chatRepository.getPaymentsWallet(userDestinationId: user.id!);
     setLoading(false);
     result.when(
@@ -38,5 +39,16 @@ class WalletPaymentsController extends GetxController {
       },
       error: (message) {},
     );
+  }
+
+  Future<void> releasePayment() async {
+    // final result = await chatRepository.getPaymentsWallet(userDestinationId: user.id!);
+    // setLoading(false);
+    // result.when(
+    //   success: (data) {
+    //     getPaymentsWallet();
+    //   },
+    //   error: (message) {},
+    // );
   }
 }

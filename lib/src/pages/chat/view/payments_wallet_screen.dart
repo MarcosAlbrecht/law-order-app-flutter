@@ -42,49 +42,57 @@ class _PaymentsWalletScreenState extends State<PaymentsWalletScreen> {
                     size: 50,
                   ),
                 )
-              : SizedBox(
-                  height: size.height,
-                  width: size.width,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Visibility(
-                      visible: controller.listPayments.isNotEmpty,
-                      replacement: Expanded(
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.search_off,
-                                color: CustomColors.blueDarkColor,
-                              ),
-                              const Text('Não há itens para apresentar'),
-                            ],
+              : RefreshIndicator(
+                  color: CustomColors.white, // Define a cor de fundo do indicador
+                  backgroundColor: CustomColors.blueDark2Color, // Define a cor de fundo da lista
+                  strokeWidth: 3,
+                  onRefresh: () async {
+                    controller.getPaymentsWallet();
+                  },
+                  child: SizedBox(
+                    height: size.height,
+                    width: size.width,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Visibility(
+                        visible: controller.listPayments.isNotEmpty,
+                        replacement: Expanded(
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.search_off,
+                                  color: CustomColors.blueDarkColor,
+                                ),
+                                const Text('Não há itens para apresentar'),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(
-                            'Pagamentos para ${controller.user.firstName!}',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: CustomFontSizes.fontSize16),
-                          ),
-                          const Divider(
-                            height: 40,
-                          ),
-                          Expanded(
-                            child: ListView.separated(
-                                itemBuilder: (_, index) {
-                                  return PaymentsTile(
-                                    payment: controller.listPayments[index],
-                                  );
-                                },
-                                separatorBuilder: (context, index) => const Divider(height: 10),
-                                itemCount: controller.listPayments.length),
-                          ),
-                        ],
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              'Pagamentos para ${controller.user.firstName!}',
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: CustomFontSizes.fontSize16),
+                            ),
+                            const Divider(
+                              height: 40,
+                            ),
+                            Expanded(
+                              child: ListView.separated(
+                                  itemBuilder: (_, index) {
+                                    return PaymentsTile(
+                                      payment: controller.listPayments[index],
+                                    );
+                                  },
+                                  separatorBuilder: (context, index) => const Divider(height: 10),
+                                  itemCount: controller.listPayments.length),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
