@@ -156,4 +156,23 @@ class ChatRepository {
       return PaymentsWalletResult.error('Tente novamente mais tarde.');
     }
   }
+
+  Future<PaymentsWalletResult<FastPaymentModel>> sendPayment({required String paymentId}) async {
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.patch,
+        url: '${EndPoints.sendPayment}$paymentId',
+      );
+
+      if (result.isEmpty) {
+        List<FastPaymentModel> data = [];
+        return PaymentsWalletResult.success(data);
+      } else {
+        return PaymentsWalletResult.error('Não foi possivel gerar o pagamento.');
+      }
+    } catch (e) {
+      log('Erro ao gerar link de pagamento', error: e);
+      return PaymentsWalletResult.error('Tente novamente mais tarde.');
+    }
+  }
 }

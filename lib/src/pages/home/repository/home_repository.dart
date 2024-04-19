@@ -5,6 +5,7 @@ import 'package:app_law_order/src/pages/home/result/all_users_result.dart';
 import 'package:app_law_order/src/pages/home/result/city_result.dart';
 import 'package:app_law_order/src/pages/home/result/follows_result.dart';
 import 'package:app_law_order/src/pages/home/result/state_result.dart';
+import 'package:app_law_order/src/pages/home/result/user_service_result.dart';
 import 'package:app_law_order/src/services/http_manager.dart';
 
 class HomeRepository {
@@ -120,6 +121,26 @@ class HomeRepository {
       return CityResult.error("Já curtiu este usuário");
     } else {
       return CityResult.error("Ocorreu um erro inesperado");
+    }
+  }
+
+  Future<UserServiceResult> updateTokenOneSignal({required UserModel user, required String token}) async {
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.patch,
+        url: '${EndPoints.updateUser}/${user.id!}',
+        body: {
+          "tokenOneSignal": token,
+        },
+      );
+
+      if (result['_id'] != null) {
+        return UserServiceResult.success(true);
+      } else {
+        return UserServiceResult.error('Ocorreu um erro ao editar os dados. Tente novamente mais tarde!');
+      }
+    } on Exception {
+      return UserServiceResult.error('Ocorreu um erro ao editar os dados. Tente novamente mais tarde!');
     }
   }
 }

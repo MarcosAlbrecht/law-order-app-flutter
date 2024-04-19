@@ -100,13 +100,13 @@ class MyWalletScreen extends StatelessWidget {
                             Text(
                               'Valor bloqueado',
                               style: TextStyle(
-                                color: Color(0xfff59e0b),
+                                color: const Color(0xfff59e0b),
                                 fontWeight: FontWeight.bold,
                                 fontSize: CustomFontSizes.fontSize14,
                               ),
                             ),
                             Text(
-                              '${utilService.priceToCurrency(controller.wallet.bloqueado ?? 0)}',
+                              utilService.priceToCurrency(controller.wallet.bloqueado ?? 0),
                               style: TextStyle(
                                 color: CustomColors.blueDarkColor,
                                 fontWeight: FontWeight.bold,
@@ -128,7 +128,7 @@ class MyWalletScreen extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              '${utilService.priceToCurrency(controller.wallet.taxa ?? 0)}',
+                              utilService.priceToCurrency(controller.wallet.taxa ?? 0),
                               style: TextStyle(
                                 color: CustomColors.blueDarkColor,
                                 fontWeight: FontWeight.bold,
@@ -150,7 +150,7 @@ class MyWalletScreen extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              '${utilService.priceToCurrency(controller.wallet.realizado ?? 0)}',
+                              utilService.priceToCurrency(controller.wallet.realizado ?? 0),
                               style: TextStyle(
                                 color: CustomColors.green,
                                 fontWeight: FontWeight.bold,

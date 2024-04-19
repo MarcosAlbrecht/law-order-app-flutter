@@ -39,7 +39,11 @@ class PaymentsTile extends StatelessWidget {
                 ),
                 Text(
                   utilServices.priceToCurrency(payment.payment!.value!),
-                  style: TextStyle(fontSize: CustomFontSizes.fontSize16),
+                  style: TextStyle(
+                    fontSize: CustomFontSizes.fontSize16,
+                    color: CustomColors.green,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
@@ -86,9 +90,8 @@ class PaymentsTile extends StatelessWidget {
 
 Widget paymentStatus(WalletPaymentsController controller, FastPaymentModel payment) {
   final status = payment.payment!.status!;
-
   if (status == 'PAID') {
-    return PaidButton(controller: controller);
+    return PaidButton(controller: controller, payment: payment);
   } else if (status == 'APPROVED') {
     return ApprovedButton(controller: controller);
   } else if (status == 'PENDING') {
@@ -126,6 +129,9 @@ class ApprovedButton extends StatelessWidget {
             size: 16,
             color: CustomColors.white,
           ),
+          const SizedBox(
+            width: 5,
+          ),
           Text(
             'Liberado',
             style: TextStyle(
@@ -141,9 +147,11 @@ class ApprovedButton extends StatelessWidget {
 
 class PaidButton extends StatelessWidget {
   final WalletPaymentsController controller;
+  final FastPaymentModel payment;
   const PaidButton({
     Key? key,
     required this.controller,
+    required this.payment,
   }) : super(key: key);
 
   @override
@@ -157,7 +165,7 @@ class PaidButton extends StatelessWidget {
         ),
       ),
       onPressed: () {
-        controller.releasePayment();
+        controller.releasePayment(paymentId: payment.payment!.id!);
       },
       child: Row(
         children: [
@@ -165,6 +173,9 @@ class PaidButton extends StatelessWidget {
             Elusive.ok_circled2,
             size: 16,
             color: CustomColors.white,
+          ),
+          const SizedBox(
+            width: 5,
           ),
           Text(
             'Liberar',
@@ -181,10 +192,12 @@ class PaidButton extends StatelessWidget {
 
 class PendingButton extends StatelessWidget {
   final WalletPaymentsController controller;
-  const PendingButton({
+  PendingButton({
     Key? key,
     required this.controller,
   }) : super(key: key);
+
+  final utilServices = UtilServices();
 
   @override
   Widget build(BuildContext context) {
@@ -196,7 +209,9 @@ class PendingButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
       ),
-      onPressed: () {},
+      onPressed: () {
+        utilServices.showToast(message: 'Efetue o pagamento para fazer a liberação!');
+      },
       child: Row(
         children: [
           Icon(

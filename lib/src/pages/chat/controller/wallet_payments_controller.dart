@@ -41,14 +41,16 @@ class WalletPaymentsController extends GetxController {
     );
   }
 
-  Future<void> releasePayment() async {
-    // final result = await chatRepository.getPaymentsWallet(userDestinationId: user.id!);
-    // setLoading(false);
-    // result.when(
-    //   success: (data) {
-    //     getPaymentsWallet();
-    //   },
-    //   error: (message) {},
-    // );
+  Future<void> releasePayment({required String paymentId}) async {
+    final result = await chatRepository.sendPayment(paymentId: paymentId);
+    setLoading(false);
+    result.when(
+      success: (data) {
+        getPaymentsWallet();
+      },
+      error: (message) {
+        utilServices.showToast(message: message, isError: true);
+      },
+    );
   }
 }

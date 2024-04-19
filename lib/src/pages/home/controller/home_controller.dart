@@ -1,11 +1,14 @@
 import 'package:app_law_order/src/config/app_data.dart';
+import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/models/follows_model.dart';
 import 'package:app_law_order/src/models/occupation_areas_model.dart';
 import 'package:app_law_order/src/models/user_model.dart';
 import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
 import 'package:app_law_order/src/pages/home/repository/home_repository.dart';
 import 'package:app_law_order/src/services/util_services.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 const int itemsPerPage = 10;
 
@@ -15,6 +18,8 @@ class HomeController extends GetxController {
   final utilServices = UtilServices();
 
   final authController = Get.find<AuthController>();
+
+  late String tokenOneSignal;
 
   List<UserModel>? currentListUser;
 
@@ -55,6 +60,13 @@ class HomeController extends GetxController {
     loadDatas();
   }
 
+  @override
+  void onReady() {
+    // TODO: implement onReady
+    super.onReady();
+    showAlertDialog();
+  }
+
   bool isUserLoading = false;
 
   void setLoading(bool value, {bool isUser = false}) {
@@ -62,6 +74,80 @@ class HomeController extends GetxController {
       isUserLoading = value;
     }
     update();
+  }
+
+  void showAlertDialog() {
+    // Exibir o dialog para habilitar push notifications
+    if (authController.user.tokenOneSignal == null || authController.user.tokenOneSignal!.isEmpty) {
+      Get.dialog(
+        AlertDialog(
+          title: const Text("🔔 Notificações Push! 🔔"),
+          content: const Text(
+              '''Não perca nenhuma novidade no nosso aplicativo! Ative as notificações push para receber atualizações importantes.
+
+Com as notificações push ativadas, você ficará por dentro de tudo o que acontece no aplicativo, em tempo real. Não se preocupe, prometemos enviar apenas informações relevantes e importantes para você. 
+
+Cocê poderá acessar a aba Perfil > Configurações e desativar as notificações.'''),
+          actions: [
+            TextButton(
+              onPressed: () {
+                //controller.cleanFilters();
+                Get.back(result: false); // Fechar o diálogo
+              },
+              child: const Text('Cancelar'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: CustomColors.blueDark2Color,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onPressed: () async {
+                //controller.applyFilters();
+                await handleChangeTokenOneSignal();
+                Get.back(result: true);
+              },
+              child: Text(
+                'Ativar',
+                style: TextStyle(
+                  color: CustomColors.white,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  Future<void> getTokenOneSignal() async {
+    //print("ENTROU NO GET TOKEN: ");
+
+    await OneSignal.User.pushSubscription.optIn();
+
+    tokenOneSignal = OneSignal.User.pushSubscription.id.toString();
+
+    print(tokenOneSignal);
+    //handleChangeTokenOneSignal();
+  }
+
+  Future<void> handleChangeTokenOneSignal() async {
+    setLoading(true);
+    if (authController.user.tokenOneSignal == null || authController.user.tokenOneSignal!.isEmpty) {
+      await getTokenOneSignal();
+    } else {
+      tokenOneSignal = '';
+    }
+    final result = await homeRepository.updateTokenOneSignal(user: authController.user, token: tokenOneSignal);
+    setLoading(false);
+    result.when(
+      success: (data) {
+        authController.user.tokenOneSignal = tokenOneSignal;
+      },
+      error: (message) {},
+    );
   }
 
   Future<void> loadDatas() async {
