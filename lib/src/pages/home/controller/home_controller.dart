@@ -81,11 +81,11 @@ class HomeController extends GetxController {
     if (authController.user.tokenOneSignal == null || authController.user.tokenOneSignal!.isEmpty) {
       Get.dialog(
         AlertDialog(
-          title: const Text("🔔 Notificações Push! 🔔"),
+          title: const Text("🔔 Notificações"),
           content: const Text(
-              '''Não perca nenhuma novidade no nosso aplicativo! Ative as notificações push para receber atualizações importantes.
+              '''Não perca nenhuma novidade no nosso aplicativo! Ative as notificações para receber atualizações importantes.
 
-Com as notificações push ativadas, você ficará por dentro de tudo o que acontece no aplicativo, em tempo real. Não se preocupe, prometemos enviar apenas informações relevantes e importantes para você. 
+Com as notificações ativadas, você ficará por dentro de tudo o que acontece no aplicativo, em tempo real. Não se preocupe, prometemos enviar apenas informações relevantes e importantes para você. 
 
 Cocê poderá acessar a aba Perfil > Configurações e desativar as notificações.'''),
           actions: [

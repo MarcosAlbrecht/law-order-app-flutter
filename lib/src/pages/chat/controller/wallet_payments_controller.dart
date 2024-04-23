@@ -47,6 +47,7 @@ class WalletPaymentsController extends GetxController {
     result.when(
       success: (data) {
         getPaymentsWallet();
+        utilServices.showToast(message: 'Pagamento aprovado');
       },
       error: (message) {
         utilServices.showToast(message: message, isError: true);

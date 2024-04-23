@@ -125,12 +125,15 @@ class UtilServices {
     if (originalDateTimeString == null || originalDateTimeString.isEmpty) {
       return '';
     }
-    // Convertendo a string para um objeto DateTime
+
+    // Convertendo a string para um objeto DateTime em UTC
     DateTime originalDateTime = DateTime.parse(originalDateTimeString);
 
-    // Formatando a data e hora para o novo formato desejado
+    // Convertendo para o fuso horário local do dispositivo
+    //DateTime localDateTime = originalDateTime.toLocal();
+
+    // Formatando a hora para o novo formato desejado
     String formattedDateTime =
-        //"${originalDateTime.day.toString().padLeft(2, '0')}/${originalDateTime.month.toString().padLeft(2, '0')}/${originalDateTime.year}";
         "${originalDateTime.hour.toString().padLeft(2, '0')}:${originalDateTime.minute.toString().padLeft(2, '0')}";
 
     return formattedDateTime;

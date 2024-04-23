@@ -164,7 +164,7 @@ class ChatRepository {
         url: '${EndPoints.sendPayment}$paymentId',
       );
 
-      if (result.isEmpty) {
+      if (result.isNotEmpty && result['message'] != null) {
         List<FastPaymentModel> data = [];
         return PaymentsWalletResult.success(data);
       } else {

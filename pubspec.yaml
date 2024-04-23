@@ -2,7 +2,7 @@ name: app_law_order
 description: "A new Flutter project."
 
 
-version: 1.0.0+8
+version: 1.0.0+9
 
 environment:
   sdk: '>=3.2.0 <4.0.0'

@@ -60,17 +60,15 @@ class AuthController extends GetxController {
     googleAccount.value = await _googleSignin.signIn();
     GoogleSignInAuthentication? googleAuth = await googleAccount.value?.authentication;
 
-    print(googleAuth?.accessToken);
-    print(googleAuth?.idToken);
-    print(googleAccount.value);
     //update();
     if (googleAuth == null || googleAuth.idToken == null) {
       utilServices.showToast(message: 'Não foi possivel obter os dados do google. Tente novamente mais tarde!');
       return;
     }
-
+    setIsLoading(true);
     final result = await authRepository.googleSignIn(token: googleAuth.idToken!);
     await _googleSignin.disconnect();
+    setIsLoading(false);
     result.when(
       success: (data) {
         user = data;

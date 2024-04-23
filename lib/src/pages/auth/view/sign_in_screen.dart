@@ -250,17 +250,23 @@ class SignInScreen extends StatelessWidget {
           : () {
               authController.loginGoogle();
             },
-      icon: Image.asset(
-        'assets/google_logo_icon.png',
-        scale: 2,
-      ),
-      label: Text(
-        'Continuar com o Google',
-        style: TextStyle(
-          color: CustomColors.black,
-          fontSize: CustomFontSizes.fontSize14,
-        ),
-      ),
+      icon: !authController.isLoading.value
+          ? Image.asset(
+              'assets/google_logo_icon.png',
+              scale: 2,
+            )
+          : const SizedBox.shrink(),
+      label: authController.isLoading.value
+          ? CircularProgressIndicator(
+              color: CustomColors.blueDark2Color,
+            )
+          : Text(
+              'Continuar com o Google',
+              style: TextStyle(
+                color: CustomColors.black,
+                fontSize: CustomFontSizes.fontSize14,
+              ),
+            ),
     );
   }
 }

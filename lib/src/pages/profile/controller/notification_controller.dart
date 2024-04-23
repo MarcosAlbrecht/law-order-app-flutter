@@ -1,9 +1,7 @@
-import 'package:app_law_order/src/constants/constants.dart';
 import 'package:app_law_order/src/models/notification_model.dart';
 import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
 import 'package:app_law_order/src/pages/profile/repository/profile_repository.dart';
 import 'package:app_law_order/src/pages/profile/view/portfolio_screen.dart';
-import 'package:app_law_order/src/pages/requests/repository/request_repository.dart';
 import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:get/get.dart';
 
@@ -52,8 +50,7 @@ class NotificationController extends GetxController {
       setLoading(true, isUser: true);
     }
 
-    final result = await profileRepository.getNotifications(
-        limit: itemsPerPage, skip: pagination);
+    final result = await profileRepository.getNotifications(limit: itemsPerPage, skip: pagination);
 
     setLoading(false, isUser: true);
 
@@ -94,21 +91,21 @@ class NotificationController extends GetxController {
     return null;
   }
 
-  Future<void> handleReadNotification(
-      {required NotificationModel notification}) async {
+  Future<void> handleReadNotification({required NotificationModel notification}) async {
     //setSaving(true);
-    final result = await profileRepository.updateNotification(
-        notificationID: notification.id!);
+    final result = await profileRepository.updateNotification(notificationID: notification.id!);
     //setSaving(false);
     result.when(
       success: (data) async {
         await updateNotificationList(notification);
-        Get.toNamed(
-          PagesRoutes.requestManagerScreen,
-          arguments: {
-            'idRequest': getIDRequest(notification.link!),
-          },
-        );
+        if (notification.link != null) {
+          Get.toNamed(
+            PagesRoutes.requestManagerScreen,
+            arguments: {
+              'idRequest': getIDRequest(notification.link!),
+            },
+          );
+        }
       },
       error: (message) {},
     );

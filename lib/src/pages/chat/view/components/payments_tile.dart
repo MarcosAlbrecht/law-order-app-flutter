@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/models/fast_payment_model.dart';
 import 'package:app_law_order/src/pages/chat/controller/wallet_payments_controller.dart';
@@ -9,7 +8,7 @@ import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:fluttericon/elusive_icons.dart';
 import 'package:fluttericon/modern_pictograms_icons.dart';
 import 'package:fluttericon/typicons_icons.dart';
-import 'package:get/state_manager.dart';
+import 'package:get/get.dart';
 
 class PaymentsTile extends StatelessWidget {
   final FastPaymentModel payment;
@@ -22,7 +21,9 @@ class PaymentsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final size = MediaQuery.sizeOf(context);
+    return SizedBox(
+      width: size.width,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -40,7 +41,7 @@ class PaymentsTile extends StatelessWidget {
                 Text(
                   utilServices.priceToCurrency(payment.payment!.value!),
                   style: TextStyle(
-                    fontSize: CustomFontSizes.fontSize16,
+                    fontSize: CustomFontSizes.fontSize14,
                     color: CustomColors.green,
                     fontWeight: FontWeight.bold,
                   ),
@@ -48,39 +49,37 @@ class PaymentsTile extends StatelessWidget {
               ],
             ),
           ),
-          GetBuilder<WalletPaymentsController>(
-            builder: (controller) {
-              return Row(
-                children: [
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.visibility,
-                        size: 16,
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      RichText(
-                        text: TextSpan(
-                          text: 'Visualizar',
-                          style: const TextStyle(color: Colors.black),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              //showPopupTermsUse(context);
-                              _launchURL(context, link: payment.payment!.link!);
-                            },
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  paymentStatus(controller, payment),
-                ],
-              );
-            },
+          Row(
+            children: [
+              const Icon(
+                Icons.visibility,
+                size: 16,
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              RichText(
+                text: TextSpan(
+                  text: 'Visualizar',
+                  style: const TextStyle(color: Colors.black),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      //showPopupTermsUse(context);
+                      _launchURL(context, link: payment.payment!.link!);
+                    },
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          Expanded(
+            child: GetBuilder<WalletPaymentsController>(
+              builder: (controller) {
+                return paymentStatus(controller, payment);
+              },
+            ),
           )
         ],
       ),
@@ -126,7 +125,7 @@ class ApprovedButton extends StatelessWidget {
         children: [
           Icon(
             Typicons.lock_open,
-            size: 16,
+            size: 14,
             color: CustomColors.white,
           ),
           const SizedBox(
@@ -136,7 +135,7 @@ class ApprovedButton extends StatelessWidget {
             'Liberado',
             style: TextStyle(
               color: CustomColors.white,
-              fontSize: 14,
+              fontSize: 12,
             ),
           ),
         ],
@@ -171,7 +170,7 @@ class PaidButton extends StatelessWidget {
         children: [
           Icon(
             Elusive.ok_circled2,
-            size: 16,
+            size: 14,
             color: CustomColors.white,
           ),
           const SizedBox(
@@ -181,7 +180,7 @@ class PaidButton extends StatelessWidget {
             'Liberar',
             style: TextStyle(
               color: CustomColors.white,
-              fontSize: 14,
+              fontSize: 12,
             ),
           ),
         ],
@@ -226,7 +225,7 @@ class PendingButton extends StatelessWidget {
             'Pendente',
             style: TextStyle(
               color: CustomColors.white,
-              fontSize: 14,
+              fontSize: 12,
             ),
           ),
         ],
