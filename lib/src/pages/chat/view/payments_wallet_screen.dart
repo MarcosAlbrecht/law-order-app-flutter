@@ -56,18 +56,16 @@ class _PaymentsWalletScreenState extends State<PaymentsWalletScreen> {
                       padding: const EdgeInsets.all(16),
                       child: Visibility(
                         visible: controller.listPayments.isNotEmpty,
-                        replacement: Expanded(
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.search_off,
-                                  color: CustomColors.blueDarkColor,
-                                ),
-                                const Text('Não há itens para apresentar'),
-                              ],
-                            ),
+                        replacement: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.search_off,
+                                color: CustomColors.blueDarkColor,
+                              ),
+                              const Text('Não há itens para apresentar'),
+                            ],
                           ),
                         ),
                         child: Column(

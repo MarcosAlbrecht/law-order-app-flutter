@@ -130,11 +130,11 @@ class UtilServices {
     DateTime originalDateTime = DateTime.parse(originalDateTimeString);
 
     // Convertendo para o fuso horário local do dispositivo
-    //DateTime localDateTime = originalDateTime.toLocal();
+    DateTime localDateTime = originalDateTime.toLocal();
 
     // Formatando a hora para o novo formato desejado
     String formattedDateTime =
-        "${originalDateTime.hour.toString().padLeft(2, '0')}:${originalDateTime.minute.toString().padLeft(2, '0')}";
+        "${localDateTime.hour.toString().padLeft(2, '0')}:${localDateTime.minute.toString().padLeft(2, '0')}";
 
     return formattedDateTime;
   }
@@ -148,7 +148,7 @@ class UtilServices {
   }
 
   String getCurrentDateTimeInISO8601Format() {
-    DateTime now = DateTime.now();
+    DateTime now = DateTime.now().toUtc();
     String formattedDate = DateFormat("yyyy-MM-ddTHH:mm:ss.SSS'Z'").format(now);
     return formattedDate;
   }
