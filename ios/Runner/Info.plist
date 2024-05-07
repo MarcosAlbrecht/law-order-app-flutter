@@ -34,6 +34,17 @@
 		<string>Para personalizar seu perfil com imagens, o aplicativo precisa de acesso à sua câmera.</string>
 		<key>NSMicrophoneUsageDescription</key>
 		<string>Para gravar áudio ou fazer chamadas de voz, o aplicativo precisa de acesso ao microfone.</string>
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>yourappscheme</string> <!-- Replace with your custom scheme -->
+				</array>
+			</dict>
+		</array>
 		<key>UIBackgroundModes</key>
 		<array>
 			<string>fetch</string>

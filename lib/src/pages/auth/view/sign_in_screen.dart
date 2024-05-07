@@ -7,6 +7,7 @@ import 'package:app_law_order/src/services/util_services.dart';
 import 'package:app_law_order/src/services/validators.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class SignInScreen extends StatelessWidget {
   SignInScreen({super.key});
@@ -221,6 +222,22 @@ class SignInScreen extends StatelessWidget {
                         child: GetBuilder<AuthController>(
                           builder: (authController) {
                             return buildLoginButton(authController);
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      SizedBox(
+                        height: 50,
+                        child: GetBuilder<AuthController>(
+                          builder: (authController) {
+                            return SignInWithAppleButton(
+                              text: 'Continuar com a Apple',
+                              onPressed: () {
+                                authController.loginApple();
+                              },
+                            );
                           },
                         ),
                       ),

@@ -8,6 +8,7 @@ import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthController extends GetxController {
   final authRepository = AuthRepository();
@@ -80,6 +81,36 @@ class AuthController extends GetxController {
         Get.offAllNamed(PagesRoutes.signupGoogleRoute);
       },
     );
+  }
+
+  Future<void> loginApple() async {
+    try {
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      print(credential);
+
+      // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
+      // after they have been validated with Apple (see `Integration` section for more information on how to do this)
+
+      print("Given Name: ${credential.givenName}");
+      print("Family Name: ${credential.familyName}");
+      print("email: ${credential.email}");
+      print("state: ${credential.state}");
+      print("Authorization Code: ${credential.authorizationCode}");
+      print("User Identifier: ${credential.userIdentifier}");
+      print("Identity Token: ${credential.identityToken}");
+    } on Exception catch (e) {
+      // TODO
+      print(e);
+    }
+
+    // Map<String, dynamic> decodedToken = JwtDecoder.decode("${credential.identityToken}");
+    // print(decodedToken);
   }
 
   Future<void> validateLogin() async {

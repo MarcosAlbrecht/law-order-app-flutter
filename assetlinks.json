@@ -1,0 +1,10 @@
+[
+    {
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "com.prestadioapp.prestadio",
+            "sha256_cert_fingerprints": ["DA:56:01:D4:A3:3B:28:A2:4D:88:25:C9:A0:BE:DE:02:42:65:4B:5C:5B:94:CA:98:63:BD:92:E5:D4:85:50:C4"]
+        }
+    }
+]
