@@ -104,6 +104,21 @@ class AuthController extends GetxController {
       print("Authorization Code: ${credential.authorizationCode}");
       print("User Identifier: ${credential.userIdentifier}");
       print("Identity Token: ${credential.identityToken}");
+
+      setIsLoading(true);
+      final result = await authRepository.appleSignIn(token: credential.identityToken!);
+      setIsLoading(false);
+      result.when(
+        success: (data) {
+          user = data;
+          saveTokenAndProceedToBase(user.email ?? '', user.password ?? '', user.accessToken!, googleLogin: true);
+        },
+        error: (message) {
+          user.email = googleAccount.value!.email;
+          user.firstName = googleAccount.value!.displayName;
+          Get.offAllNamed(PagesRoutes.signupGoogleRoute);
+        },
+      );
     } on Exception catch (e) {
       // TODO
       print(e);

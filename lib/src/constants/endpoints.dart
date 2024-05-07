@@ -10,6 +10,7 @@ abstract class EndPoints {
   static const signin = '$baseUrl/accounts/authentication/login';
   static const loggedUser = '$baseUrl/accounts/authentication/logged-user';
   static const googleSignin = '$baseUrl/accounts/authentication/google';
+  static const appleSignin = '$baseUrl/accounts/authentication/apple';
   static const forgotPassword = '$baseUrl/accounts/users/recover-password';
   static const createUser = '$baseUrl/accounts/users';
   static const updateUser = '$baseUrl/accounts/users';
