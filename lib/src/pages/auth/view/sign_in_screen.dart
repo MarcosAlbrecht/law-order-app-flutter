@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
 import 'package:app_law_order/src/pages/auth/view/components/forgot_password_dialog.dart';
@@ -228,19 +230,21 @@ class SignInScreen extends StatelessWidget {
                       const SizedBox(
                         height: 30,
                       ),
-                      SizedBox(
-                        height: 50,
-                        child: GetBuilder<AuthController>(
-                          builder: (authController) {
-                            return SignInWithAppleButton(
-                              text: 'Continuar com a Apple',
-                              onPressed: () {
-                                authController.loginApple();
-                              },
-                            );
-                          },
-                        ),
-                      ),
+                      Platform.isIOS
+                          ? SizedBox(
+                              height: 50,
+                              child: GetBuilder<AuthController>(
+                                builder: (authController) {
+                                  return SignInWithAppleButton(
+                                    text: 'Continuar com a Apple',
+                                    onPressed: () {
+                                      authController.loginApple();
+                                    },
+                                  );
+                                },
+                              ),
+                            )
+                          : const SizedBox.shrink(),
                     ],
                   ),
                 ),

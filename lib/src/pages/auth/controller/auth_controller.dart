@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:app_law_order/src/config/app_data.dart';
 import 'package:app_law_order/src/models/occupation_areas_model.dart';
@@ -16,8 +17,11 @@ class AuthController extends GetxController {
 
   static const List<String> scopes = <String>['email', 'profile', 'openid'];
 
-  final _googleSignin =
-      GoogleSignIn(scopes: scopes, clientId: '183592142336-om2umt7mohiad5gbrbiaj4hkr8f80svj.apps.googleusercontent.com');
+  final _googleSignin = GoogleSignIn(
+      scopes: scopes,
+      clientId: Platform.isAndroid
+          ? '183592142336-om2umt7mohiad5gbrbiaj4hkr8f80svj.apps.googleusercontent.com'
+          : '183592142336-amugpmh4k444jkfh4ik7rsqdonnv777a.apps.googleusercontent.com');
   var googleAccount = Rx<GoogleSignInAccount?>(null);
 
   UserModel user = UserModel();
@@ -90,6 +94,18 @@ class AuthController extends GetxController {
           AppleIDAuthorizationScopes.email,
           AppleIDAuthorizationScopes.fullName,
         ],
+        webAuthenticationOptions: WebAuthenticationOptions(
+          // TODO: Set the `clientId` and `redirectUri` arguments to the values you entered in the Apple Developer portal during the setup
+          clientId: 'com.prestadioapp.prestadio',
+          redirectUri:
+              // For web your redirect URI needs to be the host of the "current page",
+              // while for Android you will be using the API server that redirects back into your app via a deep link
+              // NOTE(tp): For package local development use (as described in `Development.md`)
+              // Uri.parse('https://siwa-flutter-plugin.dev/')
+
+              Uri.parse(
+                  'intent://callback?code=<code>&id_token=<jwttoken>#Intent;package=androidappid;scheme=signinwithapple;end'),
+        ),
       );
 
       print(credential);
