@@ -132,6 +132,7 @@ class AuthController extends GetxController {
         },
         error: (message) {
           Map<String, dynamic> decodedToken1 = JwtDecoder.decode("${credential.identityToken}");
+          print("Token decoded: ${credential.identityToken}");
           String? emailFromToken = decodedToken1['email'];
           user.email = emailFromToken;
           user.firstName = '';
