@@ -64,21 +64,27 @@ class AuthController extends GetxController {
 
   Future<void> loginGoogle() async {
     googleAccount.value = await _googleSignin.signIn();
-    GoogleSignInAuthentication? googleAuth = await googleAccount.value?.authentication;
+    GoogleSignInAuthentication? googleAuth =
+        await googleAccount.value?.authentication;
 
     //update();
     if (googleAuth == null || googleAuth.idToken == null) {
-      utilServices.showToast(message: 'Não foi possivel obter os dados do google. Tente novamente mais tarde!');
+      utilServices.showToast(
+          message:
+              'Não foi possivel obter os dados do google. Tente novamente mais tarde!');
       return;
     }
     setIsLoading(true);
-    final result = await authRepository.googleSignIn(token: googleAuth.idToken!);
+    final result =
+        await authRepository.googleSignIn(token: googleAuth.idToken!);
     await _googleSignin.disconnect();
     setIsLoading(false);
     result.when(
       success: (data) {
         user = data;
-        saveTokenAndProceedToBase(user.email ?? '', user.password ?? '', user.accessToken!, googleLogin: true);
+        saveTokenAndProceedToBase(
+            user.email ?? '', user.password ?? '', user.accessToken!,
+            googleLogin: true);
       },
       error: (message) {
         user.email = googleAccount.value!.email;
@@ -123,15 +129,19 @@ class AuthController extends GetxController {
       print("Identity Token: ${credential.identityToken}");
 
       setIsLoading(true);
-      final result = await authRepository.appleSignIn(token: credential.identityToken!);
+      final result =
+          await authRepository.appleSignIn(token: credential.identityToken!);
       setIsLoading(false);
       result.when(
         success: (data) {
           user = data;
-          saveTokenAndProceedToBase(user.email ?? '', user.password ?? '', user.accessToken!, googleLogin: true);
+          saveTokenAndProceedToBase(
+              user.email ?? '', user.password ?? '', user.accessToken!,
+              googleLogin: true);
         },
         error: (message) {
-          Map<String, dynamic> decodedToken1 = JwtDecoder.decode("${credential.identityToken}");
+          Map<String, dynamic> decodedToken1 =
+              JwtDecoder.decode("${credential.identityToken}");
           print("Token decoded: ${credential.identityToken}");
           String? emailFromToken = decodedToken1['email'];
           user.email = emailFromToken;
@@ -169,14 +179,17 @@ class AuthController extends GetxController {
 
   Future<void> signInWithAccessToken({required String accessToken}) async {
     setIsLoading(true);
-    var result = await authRepository.signInWithAccessToken(accessToken: accessToken);
+    var result =
+        await authRepository.signInWithAccessToken(accessToken: accessToken);
     setIsLoading(false);
 
     result.when(
       success: (data) async {
         user = data;
 
-        saveTokenAndProceedToBase(user.email ?? '', user.password ?? '', accessToken, googleLogin: true);
+        saveTokenAndProceedToBase(
+            user.email ?? '', user.password ?? '', accessToken,
+            googleLogin: true);
       },
       error: (message) async {
         utilServices.showToast(message: message, isError: true);
@@ -195,7 +208,8 @@ class AuthController extends GetxController {
       success: (data) {
         user = data;
         user.password = password;
-        saveTokenAndProceedToBase(user.email ?? '', password, user.accessToken!);
+        saveTokenAndProceedToBase(
+            user.email ?? '', password, user.accessToken!);
       },
       error: (message) async {
         utilServices.showToast(message: message, isError: true);
@@ -208,7 +222,9 @@ class AuthController extends GetxController {
   //insere um novo usuario
   Future<void> handleSignUp() async {
     //verifica se as senhas sáo iguais
-    if ((user.password != confirmPassword) || user.password == null || confirmPassword == null) {
+    if ((user.password != confirmPassword) ||
+        user.password == null ||
+        confirmPassword == null) {
       utilServices.showToast(message: "A senhas não conferem!");
       return;
     }
@@ -233,7 +249,7 @@ class AuthController extends GetxController {
         var password = user.password;
         user = data;
         //realizar o login e salva os dados localmente
-        await signIn(email: user.email!, password: password!);
+        await signIn(email: user.email ?? '', password: password!);
         //saveTokenAndProceedToBase(user.email!, password!, user.accessToken!);
       },
       error: (message) {
@@ -287,7 +303,8 @@ class AuthController extends GetxController {
     });
   }
 
-  void saveTokenAndProceedToBase(String email, String? password, String token, {googleLogin = false}) {
+  void saveTokenAndProceedToBase(String email, String? password, String token,
+      {googleLogin = false}) {
     //salvar o token
     utilServices.saveLocalData(
       email: email,
