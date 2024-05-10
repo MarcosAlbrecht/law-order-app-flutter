@@ -9,6 +9,7 @@ import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthController extends GetxController {
@@ -130,8 +131,10 @@ class AuthController extends GetxController {
           saveTokenAndProceedToBase(user.email ?? '', user.password ?? '', user.accessToken!, googleLogin: true);
         },
         error: (message) {
-          user.email = googleAccount.value!.email;
-          user.firstName = googleAccount.value!.displayName;
+          Map<String, dynamic> decodedToken1 = JwtDecoder.decode("${credential.identityToken}");
+          String? emailFromToken = decodedToken1['email'];
+          user.email = emailFromToken;
+          user.firstName = '';
           Get.offAllNamed(PagesRoutes.signupGoogleRoute);
         },
       );
