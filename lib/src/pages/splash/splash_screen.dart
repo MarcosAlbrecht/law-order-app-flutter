@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:uni_links2/uni_links.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -8,9 +11,11 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  StreamSubscription? _sub;
   @override
   void initState() {
     super.initState();
+    initUniLinks();
     loadImage();
   }
 
@@ -19,6 +24,18 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(const Duration(seconds: 3));
 
     // Marca a imagem como carregada
+  }
+
+  Future<void> initUniLinks() async {
+    _sub = linkStream.listen((String? link) {
+      if (link != null) {
+        print('Listener is working');
+        final uri = Uri.parse(link);
+        if (uri.queryParameters['id'] != null) {
+          print(uri.queryParameters['id'].toString());
+        }
+      }
+    });
   }
 
   @override

@@ -30,6 +30,8 @@ class AuthRepository {
         return SignInResult.success(data);
       } else if (result['statusCode'] != null && result['statusCode'] == 401) {
         return SignInResult.error('E-mail ou senha inválidos');
+      } else if (result['statusCode'] != null && result['statusCode'] == 403) {
+        return SignInResult.error('Confirmar E-mail');
       } else {
         return SignInResult.error('Ocorreu um erro ao efetuar login!');
       }

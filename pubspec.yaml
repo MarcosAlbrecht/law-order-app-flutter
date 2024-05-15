@@ -49,6 +49,7 @@ dependencies:
   go_router: ^14.0.2
   sign_in_with_apple: ^5.0.0
   jwt_decoder: ^2.0.1
+  uni_links2: ^0.6.0+2
 
 dev_dependencies:
   flutter_test:

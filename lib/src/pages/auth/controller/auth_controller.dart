@@ -2,11 +2,13 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:app_law_order/src/config/app_data.dart';
+import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/models/occupation_areas_model.dart';
 import 'package:app_law_order/src/models/user_model.dart';
 import 'package:app_law_order/src/pages/auth/repository/auth_repository.dart';
 import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:app_law_order/src/services/util_services.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -78,7 +80,11 @@ class AuthController extends GetxController {
     result.when(
       success: (data) {
         user = data;
-        saveTokenAndProceedToBase(user.email ?? '', user.password ?? '', user.accessToken!, googleLogin: true);
+        if (user.accessToken == null) {
+          utilServices.showToast(message: 'Não foi possível efetuar o login. Tente novamente mais tarde.');
+        } else {
+          saveTokenAndProceedToBase(user.email ?? '', user.password ?? '', user.accessToken!, googleLogin: true);
+        }
       },
       error: (message) {
         user.email = googleAccount.value!.email;
@@ -199,8 +205,42 @@ class AuthController extends GetxController {
       },
       error: (message) async {
         utilServices.showToast(message: message, isError: true);
-        await utilServices.removeLocalData();
-        Get.offAllNamed(PagesRoutes.signInRoute);
+
+        if (message.contains('Confirmar E-mail')) {
+          Get.dialog(
+            AlertDialog(
+              title: const Text("Confirmação"),
+              content: const Text('''Verifique seu email. Foi enviado um link para confirmar sua conta.
+
+Após confirmar, poderá realizar o login na plataforma.'''),
+              actions: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: CustomColors.blueDark2Color,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  onPressed: () async {
+                    //controller.applyFilters();
+                    Get.back(result: true);
+                    Get.offAllNamed(PagesRoutes.signInRoute);
+                  },
+                  child: Text(
+                    'Ok',
+                    style: TextStyle(
+                      color: CustomColors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        } else {
+          await utilServices.removeLocalData();
+          Get.offAllNamed(PagesRoutes.signInRoute);
+        }
       },
     );
   }
