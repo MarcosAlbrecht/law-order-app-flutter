@@ -78,13 +78,14 @@ class RequestRepository {
     }
   }
 
-  Future<AcceptanceRequestResult> acceptProviderRequest({required String dataDeadline, required String idRequest}) async {
+  Future<AcceptanceRequestResult> handleProviderRequest(
+      {required String dataDeadline, required String idRequest, required bool accept}) async {
     try {
       final result = await httpManager.restRequest(
         method: HttpMethods.patch,
         url: '${EndPoints.acceptBudget}$idRequest',
         body: {
-          "providerAcceptance": true,
+          "providerAcceptance": accept,
           "deadline": dataDeadline,
         },
       );

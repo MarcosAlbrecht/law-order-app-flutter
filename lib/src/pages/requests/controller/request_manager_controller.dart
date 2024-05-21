@@ -7,6 +7,7 @@ import 'package:app_law_order/src/models/avaliation_model.dart';
 import 'package:app_law_order/src/models/avaliation_values_model.dart';
 import 'package:app_law_order/src/models/request_model.dart';
 import 'package:app_law_order/src/models/status_info_model.dart';
+import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
 import 'package:app_law_order/src/pages/requests/controller/request_controller.dart';
 import 'package:app_law_order/src/pages/requests/repository/request_repository.dart';
 import 'package:app_law_order/src/pages_routes/pages_routes.dart';
@@ -62,6 +63,7 @@ class RequestManagerController extends GetxController {
   final requestsRepository = RequestRepository();
   final utilServices = UtilServices();
   final requestController = Get.find<RequestController>();
+  final authController = Get.find<AuthController>();
 
   List<AvaliationValuesModel> avaliationsValues = avaliationValues;
 
@@ -167,7 +169,7 @@ class RequestManagerController extends GetxController {
   }
 
   Future<void> completeService({required RequestModel request}) async {
-    if (currentCategory == Constants.received) {
+    if (authController.user.id == request.requestedId) {
       setSaving(true);
       final result = await requestsRepository.completeService(idRequest: request.id!);
       setSaving(false);
@@ -209,7 +211,31 @@ class RequestManagerController extends GetxController {
   Future<void> handleProviderConfirmRequest({required DateTime date}) async {
     setSaving(true);
     final dataToIso = utilServices.formatDateToBD(date);
-    final result = await requestsRepository.acceptProviderRequest(dataDeadline: dataToIso, idRequest: selectedRequest!.id!);
+    final result =
+        await requestsRepository.handleProviderRequest(dataDeadline: dataToIso, idRequest: selectedRequest!.id!, accept: true);
+
+    await result.when(
+      success: (data) async {
+        selectedRequest = data;
+        //updateItemInAllRequests(request: data);
+        await serviceRequestStatus(status: selectedRequest!.status!);
+        await requestController.updateItemInAllRequests(request: selectedRequest!);
+      },
+      error: (message) {
+        utilServices.showToast(
+          message: message,
+        );
+      },
+    );
+    setSaving(false);
+  }
+
+  Future<void> handleProviderRefuseRequest() async {
+    setSaving(true);
+    DateTime now = new DateTime.now();
+    final dataToIso = utilServices.formatDateToBD(now);
+    final result =
+        await requestsRepository.handleProviderRequest(dataDeadline: dataToIso, idRequest: selectedRequest!.id!, accept: false);
 
     await result.when(
       success: (data) async {

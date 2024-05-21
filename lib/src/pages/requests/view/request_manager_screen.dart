@@ -886,23 +886,36 @@ class _ServiceConfirmationRefuseButton extends StatelessWidget {
               width: 5,
               color: Colors.transparent,
             ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: CustomColors.red,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              onPressed: () {
-                // Add service confirmation functionality here
+            GetBuilder<RequestManagerController>(
+              builder: (controller) {
+                return ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: CustomColors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  onPressed: () async {
+                    // Add service confirmation functionality here
+                    final bool? result = await showDialog(
+                      context: context,
+                      builder: (_) {
+                        return const CancelConfirmationDialog();
+                      },
+                    );
+                    if (result ?? false) {
+                      controller.handleProviderRefuseRequest();
+                    }
+                  },
+                  child: Text(
+                    'Recusar Solicitação',
+                    style: TextStyle(
+                      color: CustomColors.white,
+                      fontSize: CustomFontSizes.fontSize14,
+                    ),
+                  ),
+                );
               },
-              child: Text(
-                'Recusar Solicitação',
-                style: TextStyle(
-                  color: CustomColors.white,
-                  fontSize: CustomFontSizes.fontSize14,
-                ),
-              ),
             ),
           ],
         ),
@@ -947,6 +960,7 @@ class _ServiceFinalizedConfirmationRefuseButtonProvider extends StatelessWidget 
                     ),
                     onPressed: () {
                       // Add service confirmation functionality here
+                      controller.completeService(request: request);
                     },
                     child: Text(
                       'Confirmar',
@@ -1051,9 +1065,17 @@ class _ServiceFinalizedConfirmationRefuseButtonUser extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       // Add service confirmation functionality here
-                      controller.cancelRequest(request: request);
+                      final bool? result = await showDialog(
+                        context: context,
+                        builder: (_) {
+                          return const CancelConfirmationDialog();
+                        },
+                      );
+                      if (result ?? false) {
+                        controller.cancelRequest(request: request);
+                      }
                     },
                     child: Text(
                       'Cancelar',

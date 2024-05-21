@@ -41,7 +41,7 @@ class CancelConfirmationDialog extends StatelessWidget {
                     bottom: 20,
                   ),
                   child: Text(
-                    'Ao clicar no botão de cancelamento, sua solicitação de serviço será imediatamente cancelada.',
+                    'Ao clicar no botão de cancelamento, a solicitação de serviço será imediatamente cancelada.',
                     textAlign: TextAlign.center,
                     style: TextStyle(),
                   ),
