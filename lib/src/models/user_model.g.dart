@@ -23,7 +23,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       birthday: json['birthday'] as String?,
       occupationArea: json['occupationArea'] as String?,
       isPasswordReset: json['isPasswordReset'] as bool?,
-      type: json['type'] as int?,
+      type: (json['type'] as num?)?.toInt(),
       accessToken: json['accessToken'] as String?,
       profilePicture: json['profilePicture'] == null
           ? null

@@ -4,6 +4,7 @@ import 'package:app_law_order/src/pages/chat/view/chat_list_tab.dart';
 import 'package:app_law_order/src/pages/home/view/home_tab.dart';
 import 'package:app_law_order/src/pages/profile/view/profile_tab.dart';
 import 'package:app_law_order/src/pages/requests/view/request_tab.dart';
+import 'package:app_law_order/src/pages/social/views/posts_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -28,6 +29,7 @@ class _BaseScreenState extends State<BaseScreen> {
           RequestTab(),
           ChatListTab(),
           ProfileTab(),
+          PostsTab(),
         ],
       ),
       bottomNavigationBar: Obx(
@@ -70,6 +72,14 @@ class _BaseScreenState extends State<BaseScreen> {
                       Icons.person_2,
                     ),
               label: 'Perfil',
+            ),
+            BottomNavigationBarItem(
+              icon: navigationController.currentIndex != 4
+                  ? const Icon(Icons.aod)
+                  : const Icon(
+                      Icons.aod_outlined,
+                    ),
+              label: 'Postagens',
             ),
           ],
         ),

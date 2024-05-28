@@ -8,9 +8,9 @@ part of 'metadata_model.dart';
 
 MetadataModel _$MetadataModelFromJson(Map<String, dynamic> json) =>
     MetadataModel(
-      total: json['total'] as int?,
-      limit: json['limit'] as int?,
-      skip: json['skip'] as int?,
+      total: (json['total'] as num?)?.toInt(),
+      limit: (json['limit'] as num?)?.toInt(),
+      skip: (json['skip'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$MetadataModelToJson(MetadataModel instance) =>

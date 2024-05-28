@@ -6,6 +6,7 @@ abstract class NavigationTabs {
   static const int request = 1;
   static const int chat = 2;
   static const int perfil = 3;
+  static const int socialTab = 4;
 }
 
 class NavigationController extends GetxController {

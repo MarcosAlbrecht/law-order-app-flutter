@@ -21,7 +21,7 @@ class WithdrawScreen extends StatefulWidget {
 final utilServices = UtilServices();
 
 final valueEC = TextEditingController();
-final CurrencyTextInputFormatter formatterEC = CurrencyTextInputFormatter(decimalDigits: 2, locale: 'pt', symbol: 'R\$');
+final CurrencyTextInputFormatter formatterEC = CurrencyTextInputFormatter.currency(decimalDigits: 2, locale: 'pt', symbol: 'R\$');
 
 cleanText() {
   valueEC.clear();

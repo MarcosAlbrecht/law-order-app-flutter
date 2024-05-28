@@ -8,11 +8,11 @@ part of 'avaliation_model.dart';
 
 AvaliationModel _$AvaliationModelFromJson(Map<String, dynamic> json) =>
     AvaliationModel(
-      levelOfSatisfaction: json['levelOfSatisfaction'] as int?,
-      serviceQuality: json['serviceQuality'] as int?,
-      providerPunctuality: json['providerPunctuality'] as int?,
-      platformUsability: json['platformUsability'] as int?,
-      recommendAPlataform: json['recommendAPlataform'] as int?,
+      levelOfSatisfaction: (json['levelOfSatisfaction'] as num?)?.toInt(),
+      serviceQuality: (json['serviceQuality'] as num?)?.toInt(),
+      providerPunctuality: (json['providerPunctuality'] as num?)?.toInt(),
+      platformUsability: (json['platformUsability'] as num?)?.toInt(),
+      recommendAPlataform: (json['recommendAPlataform'] as num?)?.toInt(),
       rating: (json['rating'] as num?)?.toDouble(),
     )..jobId = json['jobId'] as String?;
 
