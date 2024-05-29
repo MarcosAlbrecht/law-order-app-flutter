@@ -4,7 +4,7 @@ import 'package:app_law_order/src/pages/chat/view/chat_list_tab.dart';
 import 'package:app_law_order/src/pages/home/view/home_tab.dart';
 import 'package:app_law_order/src/pages/profile/view/profile_tab.dart';
 import 'package:app_law_order/src/pages/requests/view/request_tab.dart';
-import 'package:app_law_order/src/pages/social/views/posts_tab.dart';
+import 'package:app_law_order/src/pages/social/views/social_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -29,7 +29,7 @@ class _BaseScreenState extends State<BaseScreen> {
           RequestTab(),
           ChatListTab(),
           ProfileTab(),
-          PostsTab(),
+          SocialTab(),
         ],
       ),
       bottomNavigationBar: Obx(

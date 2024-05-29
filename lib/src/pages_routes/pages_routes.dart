@@ -37,7 +37,7 @@ import 'package:app_law_order/src/pages/requests/view/avaliation_screen.dart';
 import 'package:app_law_order/src/pages/requests/view/request_manager_screen.dart';
 import 'package:app_law_order/src/pages/requests/view/request_tab.dart';
 import 'package:app_law_order/src/pages/social/binding/post_binding.dart';
-import 'package:app_law_order/src/pages/social/views/posts_tab.dart';
+import 'package:app_law_order/src/pages/social/views/social_tab.dart';
 import 'package:app_law_order/src/pages/splash/splash_screen.dart';
 import 'package:get/get.dart';
 
@@ -135,7 +135,7 @@ abstract class AppPages {
     ),
     GetPage(
       name: PagesRoutes.socialTab,
-      page: () => PostsTab(),
+      page: () => SocialTab(),
       //binding: PostBinding(),
     ),
     GetPage(

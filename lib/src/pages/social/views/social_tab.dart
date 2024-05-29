@@ -1,17 +1,18 @@
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/pages/social/controller/post_controller.dart';
+import 'package:app_law_order/src/pages/social/views/components/post_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
-class PostsTab extends StatefulWidget {
-  const PostsTab({super.key});
+class SocialTab extends StatefulWidget {
+  const SocialTab({super.key});
 
   @override
-  State<PostsTab> createState() => _PostsTabState();
+  State<SocialTab> createState() => _SocialTabState();
 }
 
-class _PostsTabState extends State<PostsTab> {
+class _SocialTabState extends State<SocialTab> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -55,25 +56,15 @@ class _PostsTabState extends State<PostsTab> {
                           ),
                         ),
                         child: ListView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          itemBuilder: (_, index) {
-                            if (((index + 1) == controller.allPosts.length) && (!controller.isLastPage)) {
-                              controller.loadMorePosts();
-                            }
+                            physics: const BouncingScrollPhysics(),
+                            itemBuilder: (_, index) {
+                              if (((index + 1) == controller.allPosts.length) && (!controller.isLastPage)) {
+                                controller.loadMorePosts();
+                              }
 
-                            return Container(
-                              child: Text(controller.allPosts[index].owner!.firstName ?? ''),
-                            );
-
-                            // return FollowsTile(
-                            //   //height: 100,
-                            //   //child: Text("OLA" + index.toString()),
-
-                            //   follow: controller.follows[index],
-                            // );
-                          },
-                          itemCount: controller.allPosts.length,
-                        ),
+                              return PostTile(post: controller.allPosts[index]);
+                            },
+                            itemCount: controller.allPosts.length),
                       );
               },
             ),
