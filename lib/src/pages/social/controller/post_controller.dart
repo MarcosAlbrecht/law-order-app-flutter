@@ -1,11 +1,13 @@
 import 'package:app_law_order/src/models/post_model.dart';
 import 'package:app_law_order/src/pages/social/repository/social_repository.dart';
+import 'package:app_law_order/src/services/util_services.dart';
 import 'package:get/get.dart';
 
 const int itemsPerPage = 10;
 
 class PostController extends GetxController {
   final socialRepository = SocialRepository();
+  final utilServices = UtilServices();
   List<PostModel>? currentListPost;
 
   List<PostModel> allPosts = [];
@@ -15,6 +17,7 @@ class PostController extends GetxController {
   bool isSaving = false;
 
   int pagination = 0;
+
   bool get isLastPage {
     if (currentListPost!.length < itemsPerPage) return true;
 
@@ -45,19 +48,18 @@ class PostController extends GetxController {
     if (canLoad) {
       setLoading(true, isUser: true);
     }
+    var result = await socialRepository.getPostsPaginated(limit: itemsPerPage, skip: pagination);
 
-    final result = await socialRepository.getPostsPaginated(limit: itemsPerPage, skip: pagination);
-
-    if (canLoad) {
-      setLoading(false, isUser: true);
-    }
+    setLoading(false, isUser: true);
 
     result.when(
       success: (data) {
         currentListPost = data;
-        allPosts.addAll(data);
+        allPosts.addAll(currentListPost!);
       },
-      error: (message) {},
+      error: (message) {
+        utilServices.showToast(message: message);
+      },
     );
   }
 }

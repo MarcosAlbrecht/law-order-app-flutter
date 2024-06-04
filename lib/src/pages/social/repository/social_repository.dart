@@ -10,13 +10,15 @@ class SocialRepository {
 
   Future<PostResult<PostModel>> getPostsPaginated({required int limit, required int skip, String sortDirection = 'DESC'}) async {
     try {
+      final Map<String, dynamic> queryParams = {
+        'limit': limit,
+        'skip': skip,
+      };
+
       final result = await httpManager.restRequest(
         method: HttpMethods.get,
         url: EndPoints.getPostsPaginated,
-        queryParams: {
-          'limit': limit,
-          'skip': skip,
-        },
+        queryParams: queryParams,
       );
 
       if (result['result'].isNotEmpty) {
