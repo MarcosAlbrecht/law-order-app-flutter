@@ -39,28 +39,31 @@ class _ExpandableTextState extends State<ExpandableText> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          widget.text,
-          maxLines: isExpanded ? null : widget.maxLines,
-          overflow: isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
-          style: const TextStyle(height: 1.5),
-        ),
-        if (showButton)
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                isExpanded = !isExpanded;
-              });
-            },
-            child: Text(
-              isExpanded ? 'Ver menos' : 'Ver mais',
-              style: TextStyle(color: CustomColors.blueDark2Color),
-            ),
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            widget.text,
+            maxLines: isExpanded ? null : widget.maxLines,
+            overflow: isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
+            style: const TextStyle(height: 1.5),
           ),
-      ],
+          if (showButton)
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  isExpanded = !isExpanded;
+                });
+              },
+              child: Text(
+                isExpanded ? 'Ver menos' : 'Ver mais',
+                style: TextStyle(color: CustomColors.blueDark2Color),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

@@ -1,28 +1,33 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/models/post_model.dart';
+import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
+import 'package:app_law_order/src/pages/social/views/components/comments.dart';
 import 'package:app_law_order/src/pages/social/views/components/expandable_text.dart';
+import 'package:app_law_order/src/pages/social/views/components/interactions_buttons.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:get/get.dart';
 import 'package:square_progress_indicator/square_progress_indicator.dart';
 
 class PostTile extends StatelessWidget {
+  final authController = Get.find<AuthController>();
   final PostModel post;
 
-  const PostTile({
-    Key? key,
+  PostTile({
+    super.key,
     required this.post,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 5),
+      padding: const EdgeInsets.only(bottom: 20),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        //padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(
-          color: CustomColors.backGround.withAlpha(110),
+          //color: CustomColors.backGround.withOpacity(0.09),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
@@ -39,7 +44,7 @@ class PostTile extends StatelessWidget {
                       imageUrl: post.owner!.profilePicture!.url!,
                       progressIndicatorBuilder: (context, url, downloadProgress) =>
                           SquareProgressIndicator(value: downloadProgress.progress),
-                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                      errorWidget: (context, url, error) => const Icon(Icons.person),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -53,18 +58,14 @@ class PostTile extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Text(
-                            post.owner!.firstName?.trim() ?? '',
-                            style: TextStyle(
-                              color: CustomColors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            ' ${post.owner!.lastName!.trim()}',
-                            style: TextStyle(
-                              color: CustomColors.black,
-                              fontWeight: FontWeight.bold,
+                          Expanded(
+                            child: Text(
+                              '${post.owner!.firstName?.trim()} ${post.owner!.lastName!.trim()}',
+                              style: TextStyle(
+                                color: CustomColors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
                             ),
                           ),
                         ],
@@ -77,31 +78,34 @@ class PostTile extends StatelessWidget {
                 )
               ],
             ),
-            const SizedBox(
-              height: 15,
-            ),
             ExpandableText(
               text: post.description ?? '',
               maxLines: 10,
             ),
-            const SizedBox(
-              height: 15,
-            ),
             post.photos!.isNotEmpty
-                ? StaggeredGrid.count(
-                    crossAxisCount: post.photos!.isNotEmpty
-                        ? post.photos!.length <= 4
-                            ? post.photos!.length
-                            : 4
-                        : 0,
-                    mainAxisSpacing: post.photos!.length > 4 ? 4 : post.photos!.length.toDouble(),
-                    crossAxisSpacing: post.photos!.length > 4 ? 4 : post.photos!.length.toDouble(),
-                    children: _buildPhotoTiles(),
+                ? Padding(
+                    padding: EdgeInsets.only(top: 10),
+                    child: StaggeredGrid.count(
+                      crossAxisCount: post.photos!.isNotEmpty
+                          ? post.photos!.length <= 4
+                              ? post.photos!.length
+                              : 4
+                          : 0,
+                      mainAxisSpacing: post.photos!.length > 4 ? 4 : post.photos!.length.toDouble(),
+                      crossAxisSpacing: post.photos!.length > 4 ? 4 : post.photos!.length.toDouble(),
+                      children: _buildPhotoTiles(),
+                    ),
                   )
                 : const SizedBox.shrink(),
             const SizedBox(
-              height: 15,
+              height: 5,
             ),
+            InteractionsButtons(liked: post.likes!.any((element) => element.userId == authController.user.id)),
+            post.comments!.isNotEmpty
+                ? Comments(
+                    comments: post.comments!,
+                  )
+                : SizedBox.shrink(),
           ],
         ),
       ),
@@ -173,7 +177,7 @@ class PostTile extends StatelessWidget {
                       progressIndicatorBuilder: (context, url, downloadProgress) =>
                           SquareProgressIndicator(value: downloadProgress.progress),
                       errorWidget: (context, url, error) => const Icon(Icons.error),
-                      fit: post.photos?.length == 1 ? BoxFit.contain : BoxFit.cover,
+                      fit: post.photos?.length == 1 ? BoxFit.cover : BoxFit.cover,
                     ),
                   ),
                 ),

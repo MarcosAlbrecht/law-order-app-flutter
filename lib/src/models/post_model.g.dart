@@ -7,7 +7,7 @@ part of 'post_model.dart';
 // **************************************************************************
 
 PostModel _$PostModelFromJson(Map<String, dynamic> json) => PostModel(
-      sId: json['sId'] as String?,
+      id: json['_id'] as String?,
       description: json['description'] as String?,
       photosIds: (json['photosIds'] as List<dynamic>?)
           ?.map((e) => e as String)
@@ -22,10 +22,10 @@ PostModel _$PostModelFromJson(Map<String, dynamic> json) => PostModel(
       createdAt: json['createdAt'] as String?,
       updatedAt: json['updatedAt'] as String?,
       likes: (json['likes'] as List<dynamic>?)
-          ?.map((e) => UserModel.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => PostLikeModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       comments: (json['comments'] as List<dynamic>?)
-          ?.map((e) => UserModel.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => PostCommentModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       photos: (json['photos'] as List<dynamic>?)
           ?.map((e) => PictureModel.fromJson(e as Map<String, dynamic>))
@@ -36,7 +36,7 @@ PostModel _$PostModelFromJson(Map<String, dynamic> json) => PostModel(
     );
 
 Map<String, dynamic> _$PostModelToJson(PostModel instance) => <String, dynamic>{
-      'sId': instance.sId,
+      '_id': instance.id,
       'description': instance.description,
       'photosIds': instance.photosIds,
       'videoIds': instance.videoIds,
