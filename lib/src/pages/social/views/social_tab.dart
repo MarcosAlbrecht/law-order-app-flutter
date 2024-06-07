@@ -34,10 +34,10 @@ class _SocialTabState extends State<SocialTab> {
               child: Container(
                 height: size.height,
                 width: size.width,
-                padding: const EdgeInsets.only(top: 10, bottom: 10),
+                padding: const EdgeInsets.only(top: 5, bottom: 10),
                 color: CustomColors.white,
                 child: Padding(
-                  padding: const EdgeInsets.all(12.0),
+                  padding: const EdgeInsets.all(0),
                   child: Column(
                     children: [
                       const Divider(

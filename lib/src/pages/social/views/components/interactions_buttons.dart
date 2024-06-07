@@ -20,10 +20,12 @@ class _InteractionsButtonsState extends State<InteractionsButtons> {
     return Row(
       children: [
         IconButton(
+          visualDensity: VisualDensity.compact,
           onPressed: () {},
           icon: widget.liked ? Icon(FontAwesome.heart) : Icon(FontAwesome.heart_empty),
         ),
         IconButton(
+          visualDensity: VisualDensity.compact,
           onPressed: () {},
           icon: Icon(Linecons.comment),
         ),

@@ -22,65 +22,79 @@ class PostTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.only(bottom: 10),
       child: Container(
         //padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(
-          //color: CustomColors.backGround.withOpacity(0.09),
-          borderRadius: BorderRadius.circular(10),
+          color: CustomColors.backGround.withOpacity(0.4),
         ),
         child: Column(
           children: [
-            Row(
-              children: [
-                SizedBox(
-                  // Largura da imagem
-                  height: 50,
-                  width: 50,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(50),
-                    child: CachedNetworkImage(
-                      imageUrl: post.owner!.profilePicture!.url!,
-                      progressIndicatorBuilder: (context, url, downloadProgress) =>
-                          SquareProgressIndicator(value: downloadProgress.progress),
-                      errorWidget: (context, url, error) => const Icon(Icons.person),
-                      fit: BoxFit.cover,
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+              child: Row(
+                children: [
+                  SizedBox(
+                    // Largura da imagem
+                    height: 50,
+                    width: 50,
+                    child: ClipRRect(
+                      child: post.owner?.profilePicture?.url != null
+                          ? CachedNetworkImage(
+                              imageUrl: post.owner!.profilePicture!.url!,
+                              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                  CircularProgressIndicator(value: downloadProgress.progress),
+                              errorWidget: (context, url, error) => const Icon(Icons.error),
+                              fit: BoxFit.cover,
+                              height: 40,
+                              width: 40,
+                            )
+                          : Image.asset(
+                              "assets/ICONPEOPLE.png",
+                              fit: BoxFit.cover,
+                              height: 40,
+                              width: 40,
+                            ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              '${post.owner!.firstName?.trim()} ${post.owner!.lastName!.trim()}',
-                              style: TextStyle(
-                                color: CustomColors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13,
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                '${post.owner!.firstName?.trim()} ${post.owner!.lastName!.trim()}',
+                                style: TextStyle(
+                                  color: CustomColors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Text(
-                        timePassedSince(post.createdAt ?? ''),
-                      ),
-                    ],
-                  ),
-                )
-              ],
+                          ],
+                        ),
+                        Text(
+                          timePassedSince(post.createdAt ?? ''),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
-            ExpandableText(
-              text: post.description ?? '',
-              maxLines: 10,
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+              child: ExpandableText(
+                text: post.description ?? '',
+                maxLines: 10,
+              ),
             ),
             post.photos!.isNotEmpty
                 ? Padding(
@@ -93,7 +107,7 @@ class PostTile extends StatelessWidget {
                           : 0,
                       mainAxisSpacing: post.photos!.length > 4 ? 4 : post.photos!.length.toDouble(),
                       crossAxisSpacing: post.photos!.length > 4 ? 4 : post.photos!.length.toDouble(),
-                      children: _buildPhotoTiles(),
+                      children: _buildPhotoTiles(size),
                     ),
                   )
                 : const SizedBox.shrink(),
@@ -112,7 +126,7 @@ class PostTile extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildPhotoTiles() {
+  List<Widget> _buildPhotoTiles(Size size) {
     List<Widget> tiles = [];
     //
     var count = 0;
@@ -134,38 +148,35 @@ class PostTile extends StatelessWidget {
                   : post.photos!.length
               : 1,
           child: count == 4
-              ? Container(
-                  //margin: const EdgeInsets.all(4.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        CachedNetworkImage(
-                          imageUrl: photo.url!,
-                          progressIndicatorBuilder: (context, url, downloadProgress) => Center(
-                            child: CircularProgressIndicator(
-                              value: downloadProgress.progress,
-                            ),
-                          ),
-                          errorWidget: (context, url, error) => const Icon(Icons.error),
-                          fit: BoxFit.contain,
-                        ),
-                        Container(
-                          color: Colors.black54, // Cor preta semi-transparente
-                        ),
-                        Center(
-                          child: Text(
-                            '+${(post.photos!.length - count).toString()}',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
+              ? ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      CachedNetworkImage(
+                        imageUrl: photo.url!,
+                        progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+                          child: CircularProgressIndicator(
+                            value: downloadProgress.progress,
                           ),
                         ),
-                      ],
-                    ),
+                        errorWidget: (context, url, error) => const Icon(Icons.error),
+                        fit: BoxFit.cover,
+                      ),
+                      Container(
+                        color: Colors.black54, // Cor preta semi-transparente
+                      ),
+                      Center(
+                        child: Text(
+                          '+${(post.photos!.length - count).toString()}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 )
               : Container(
@@ -202,7 +213,7 @@ class PostTile extends StatelessWidget {
 
     // Check if the difference is more than 24 hours (1 day)
     if (difference.inDays > 0 && difference.inDays <= 1) {
-      return 'há ${difference.inDays} dia';
+      return 'há um dia';
     } else if (difference.inDays > 1) {
       return 'há ${difference.inDays} dias';
     } else {

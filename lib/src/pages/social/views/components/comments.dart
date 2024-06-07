@@ -1,5 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/models/post_comment_model.dart';
+import 'package:app_law_order/src/pages/common_widgets/custom_text_field.dart';
+import 'package:app_law_order/src/pages/social/views/components/expandable_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:square_progress_indicator/square_progress_indicator.dart';
@@ -20,7 +23,7 @@ class _CommentsState extends State<Comments> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Padding(
-      padding: const EdgeInsets.only(left: 10),
+      padding: const EdgeInsets.only(left: 10, bottom: 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,7 +55,7 @@ class _CommentsState extends State<Comments> {
                   children: [
                     Text(
                       '${widget.comments[0].user!.firstName} ${widget.comments[0].user!.lastName}',
-                      style: TextStyle(fontWeight: FontWeight.w600),
+                      style: const TextStyle(fontWeight: FontWeight.w600),
                     ),
                     Text(
                       widget.comments[0].comment!,
@@ -70,11 +73,11 @@ class _CommentsState extends State<Comments> {
             child: GestureDetector(
               onTap: () {
                 print("ver mais comentarios");
-                _handleMoreComments(size);
+                _handleMoreComments(size, widget.comments);
               },
               child: Text(
                 'Ver mais ${widget.comments.length.toString()} comentários',
-                style: TextStyle(),
+                style: const TextStyle(),
               ),
             ),
           ),
@@ -83,40 +86,150 @@ class _CommentsState extends State<Comments> {
     );
   }
 
-  void _handleMoreComments(Size size) {
+  void _handleMoreComments(Size size, List<PostCommentModel> comments) {
     showModalBottomSheet<void>(
+      useSafeArea: true,
       isScrollControlled: true,
       context: context,
-      builder: (BuildContext context) => SizedBox(
-        height: size.height * 0.75,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            ListTile(
-              dense: true,
-              leading: const Icon(Icons.photo),
-              title: const Text('Foto'),
-              onTap: () {
-                Navigator.pop(context);
-                //_handleImageSelection(controller);
-              },
+      builder: (BuildContext context) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 20, bottom: 20, left: 16, right: 16),
+            child: SizedBox(
+              height: size.height * 0.75,
+              child: Column(
+                //crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Container(
+                        width: 40,
+                        height: 5,
+                        decoration: BoxDecoration(
+                          color: CustomColors.blueDark2Color,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView.separated(
+                      itemBuilder: (context, index) {
+                        return Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              // Largura da imagem
+                              height: 50,
+                              width: 50,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(50),
+                                child: CachedNetworkImage(
+                                  imageUrl: comments[index].user!.profilePicture!.url!,
+                                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                      SquareProgressIndicator(value: downloadProgress.progress),
+                                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${comments[index].user!.firstName} ${comments[index].user!.lastName}',
+                                    style: const TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                  // Text(
+                                  //   widget.comments[0].comment! + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                                  //   style: const TextStyle(fontSize: 14),
+                                  // ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 0, right: 0, top: 0),
+                                    child: ExpandableText(
+                                      fontSize14: true,
+                                      paddingTop: false,
+                                      text: comments[index].comment ?? '',
+                                      maxLines: 10,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.more_vert_outlined,
+                                  size: 20,
+                                ))
+                          ],
+                        );
+                      },
+                      itemCount: comments.length,
+                      separatorBuilder: (context, index) => const SizedBox(
+                        height: 20,
+                      ),
+                    ),
+                  ),
+                  const Divider(
+                    height: 1,
+                    //color: Colors.red,
+                  ),
+                  Container(
+                    height: 80,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: CustomTextField(
+                            paddingBottom: false,
+                            label: 'Adicione um comentário...',
+                            removeFloatingLabelBehavior: true,
+                            onChanged: (value) {
+                              // Lógica para atualizar o texto do comentário
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 17, bottom: 17, left: 5),
+                          child: SizedBox(
+                            width: 60,
+                            height: double.infinity,
+                            child: Material(
+                              color: CustomColors.blueDark2Color,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                ),
+                              ),
+                              child: IconButton(
+                                color: CustomColors.white,
+                                onPressed: () {
+                                  // Lógica para enviar o comentário
+                                },
+                                icon: const Icon(Icons.send),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-            ListTile(
-              leading: const Icon(Icons.attach_file),
-              title: const Text('Arquivo  '),
-              onTap: () {
-                Navigator.pop(context);
-                //_handleFileSelection(controller);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.cancel),
-              title: const Text('Cancelar'),
-              onTap: () => Navigator.pop(context),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
