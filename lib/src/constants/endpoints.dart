@@ -76,6 +76,15 @@ abstract class EndPoints {
 
   //enpoints social
   static const getPostsPaginated = '$baseUrl/social/posts';
+  static const removeComment = '$baseUrl/social/posts-comments/';
+  static const insertComment = '$baseUrl/social/posts-comments/';
+
+  static const insertLike = '$baseUrl/social/posts-likes/';
+  static const removeLike = '$baseUrl/social/posts-likes/';
+
+  static const insertPost = '$baseUrl/social/posts';
+  static const updatePost = '$baseUrl/social/posts/';
+  static const deletePost = '$baseUrl/social/posts/';
 }
 
 abstract class EndPointsViaCep {

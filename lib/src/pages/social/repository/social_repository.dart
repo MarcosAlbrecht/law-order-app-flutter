@@ -1,5 +1,7 @@
 import 'package:app_law_order/src/constants/endpoints.dart';
+import 'package:app_law_order/src/models/post_comment_model.dart';
 import 'package:app_law_order/src/models/post_model.dart';
+import 'package:app_law_order/src/pages/social/result/comment_result.dart';
 import 'package:app_law_order/src/pages/social/result/post_result.dart';
 import 'package:app_law_order/src/services/http_manager.dart';
 import 'package:app_law_order/src/services/util_services.dart';
@@ -34,6 +36,55 @@ class SocialRepository {
       }
     } on Exception {
       return PostResult.error("Não foi possível buscar os dados!");
+    }
+  }
+
+  Future<CommentResult> removeComment({required String comment}) async {
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.post,
+        url: EndPoints.insertComment,
+        body: {
+          "comment": comment,
+        },
+      );
+
+      if (result.isNotEmpty && result['_id'].isNotNull) {
+        PostCommentModel data = PostCommentModel();
+        return CommentResult.success(data);
+      } else {
+        if (result['result'] != null) {
+          PostCommentModel data = PostCommentModel();
+          return CommentResult.success(data);
+        } else {
+          return CommentResult.error("Não foi possível buscar os dados!");
+        }
+      }
+    } on Exception {
+      return CommentResult.error("Não foi possível buscar os dados!");
+    }
+  }
+
+  Future<CommentResult> insertComment({required String commentId}) async {
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.delete,
+        url: '${EndPoints.removeComment}commentId',
+      );
+
+      if (result.isEmpty) {
+        PostCommentModel data = PostCommentModel();
+        return CommentResult.success(data);
+      } else {
+        if (result['result'] != null) {
+          PostCommentModel data = PostCommentModel();
+          return CommentResult.success(data);
+        } else {
+          return CommentResult.error("Não foi possível buscar os dados!");
+        }
+      }
+    } on Exception {
+      return CommentResult.error("Não foi possível buscar os dados!");
     }
   }
 }
