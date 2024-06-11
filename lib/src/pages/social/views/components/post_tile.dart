@@ -1,24 +1,46 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:app_law_order/src/config/custom_colors.dart';
+import 'package:app_law_order/src/models/picture_model.dart';
 import 'package:app_law_order/src/models/post_model.dart';
 import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
+import 'package:app_law_order/src/pages/social/controller/comments_controller.dart';
 import 'package:app_law_order/src/pages/social/views/components/comments.dart';
+import 'package:app_law_order/src/pages/social/views/components/comments_modal.dart';
 import 'package:app_law_order/src/pages/social/views/components/expandable_text.dart';
 import 'package:app_law_order/src/pages/social/views/components/interactions_buttons.dart';
+import 'package:app_law_order/src/pages/social/views/components/video_player.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:square_progress_indicator/square_progress_indicator.dart';
 
-class PostTile extends StatelessWidget {
-  final authController = Get.find<AuthController>();
+class PostTile extends StatefulWidget {
   final PostModel post;
 
   PostTile({
     super.key,
     required this.post,
   });
+
+  @override
+  State<PostTile> createState() => _PostTileState();
+}
+
+class _PostTileState extends State<PostTile> {
+  final authController = Get.find<AuthController>();
+
+  String reason = '';
+
+  void onPageChange(int index, CarouselPageChangedReason changeReason) {
+    setState(() {
+      reason = changeReason.toString();
+    });
+  }
+
+  int _current = 0;
+
+  final CarouselController _controller = CarouselController();
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +63,9 @@ class PostTile extends StatelessWidget {
                     height: 50,
                     width: 50,
                     child: ClipRRect(
-                      child: post.owner?.profilePicture?.url != null
+                      child: widget.post.owner?.profilePicture?.url != null
                           ? CachedNetworkImage(
-                              imageUrl: post.owner!.profilePicture!.url!,
+                              imageUrl: widget.post.owner!.profilePicture!.url!,
                               progressIndicatorBuilder: (context, url, downloadProgress) =>
                                   CircularProgressIndicator(value: downloadProgress.progress),
                               errorWidget: (context, url, error) => const Icon(Icons.error),
@@ -70,7 +92,7 @@ class PostTile extends StatelessWidget {
                           children: [
                             Expanded(
                               child: Text(
-                                '${post.owner!.firstName?.trim()} ${post.owner!.lastName!.trim()}',
+                                '${widget.post.owner!.firstName?.trim()} ${widget.post.owner!.lastName!.trim()}',
                                 style: TextStyle(
                                   color: CustomColors.black,
                                   fontWeight: FontWeight.bold,
@@ -81,7 +103,7 @@ class PostTile extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          timePassedSince(post.createdAt ?? ''),
+                          timePassedSince(widget.post.createdAt ?? ''),
                         ),
                       ],
                     ),
@@ -92,111 +114,91 @@ class PostTile extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
               child: ExpandableText(
-                text: post.description ?? '',
+                text: widget.post.description ?? '',
                 maxLines: 10,
               ),
             ),
-            post.photos!.isNotEmpty
-                ? Padding(
-                    padding: EdgeInsets.only(top: 10),
-                    child: StaggeredGrid.count(
-                      crossAxisCount: post.photos!.isNotEmpty
-                          ? post.photos!.length <= 4
-                              ? post.photos!.length
-                              : 4
-                          : 0,
-                      mainAxisSpacing: post.photos!.length > 4 ? 4 : post.photos!.length.toDouble(),
-                      crossAxisSpacing: post.photos!.length > 4 ? 4 : post.photos!.length.toDouble(),
-                      children: _buildPhotoTiles(size),
+            widget.post.photos!.isNotEmpty
+                ? SizedBox(
+                    height: size.height * 0.6,
+                    width: size.width,
+                    child: CarouselSlider(
+                      items: createImageSliders(widget.post.photos!, size),
+                      carouselController: _controller,
+                      options: CarouselOptions(
+                          scrollPhysics:
+                              widget.post.photos!.length > 1 ? const PageScrollPhysics() : const NeverScrollableScrollPhysics(),
+                          height: size.height * 0.6,
+                          autoPlay: false,
+                          enlargeCenterPage: true,
+                          viewportFraction: 1,
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              _current = index;
+                            });
+                          }),
                     ),
                   )
-                : const SizedBox.shrink(),
+                : widget.post.videos!.isNotEmpty
+                    ? VideoPlayerWidget(
+                        videoUrl: widget.post.videos![0].url!,
+                      )
+                    : const SizedBox.shrink(),
+            Visibility(
+              visible: widget.post.photos!.length > 1,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: widget.post.photos!.asMap().entries.map((entry) {
+                  return GestureDetector(
+                    onTap: () => _controller.animateToPage(entry.key),
+                    child: Container(
+                      width: 8.0,
+                      height: 6.0,
+                      margin: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 1.0),
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: (Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black)
+                              .withOpacity(_current == entry.key ? 0.9 : 0.4)),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
             const SizedBox(
               height: 5,
             ),
-            InteractionsButtons(liked: post.likes!.any((element) => element.userId == authController.user.id)),
-            post.comments!.isNotEmpty
+            InteractionsButtons(
+              liked: widget.post.likes!.any((element) => element.userId == authController.user.id),
+              onPressed: () {
+                print('pressionado');
+                showModalBottomSheet<void>(
+                  useSafeArea: true,
+                  isScrollControlled: true,
+                  context: context,
+                  builder: (BuildContext context) {
+                    return GetBuilder<CommentsController>(
+                      init: CommentsController(listComments: widget.post.comments!),
+                      builder: (controller) {
+                        return CommentModalWidget(
+                          size: size,
+                          comments: widget.post.comments!,
+                          controller: controller,
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            ),
+            widget.post.comments!.isNotEmpty
                 ? Comments(
-                    comments: post.comments!,
+                    comments: widget.post.comments!,
                   )
-                : SizedBox.shrink(),
+                : const SizedBox.shrink(),
           ],
         ),
       ),
     );
-  }
-
-  List<Widget> _buildPhotoTiles(Size size) {
-    List<Widget> tiles = [];
-    //
-    var count = 0;
-    for (var photo in post.photos!) {
-      print(count.toString());
-      if (count > 4) {
-        break;
-      }
-      tiles.add(
-        StaggeredGridTile.count(
-          crossAxisCellCount: count == 0
-              ? post.photos!.length > 4
-                  ? 4
-                  : post.photos!.length
-              : 1,
-          mainAxisCellCount: count == 0
-              ? post.photos!.length > 4
-                  ? 4
-                  : post.photos!.length
-              : 1,
-          child: count == 4
-              ? ClipRRect(
-                  borderRadius: BorderRadius.circular(5),
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      CachedNetworkImage(
-                        imageUrl: photo.url!,
-                        progressIndicatorBuilder: (context, url, downloadProgress) => Center(
-                          child: CircularProgressIndicator(
-                            value: downloadProgress.progress,
-                          ),
-                        ),
-                        errorWidget: (context, url, error) => const Icon(Icons.error),
-                        fit: BoxFit.cover,
-                      ),
-                      Container(
-                        color: Colors.black54, // Cor preta semi-transparente
-                      ),
-                      Center(
-                        child: Text(
-                          '+${(post.photos!.length - count).toString()}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              : Container(
-                  // Largura da imagem
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: CachedNetworkImage(
-                      imageUrl: photo.url!,
-                      progressIndicatorBuilder: (context, url, downloadProgress) =>
-                          SquareProgressIndicator(value: downloadProgress.progress),
-                      errorWidget: (context, url, error) => const Icon(Icons.error),
-                      fit: post.photos?.length == 1 ? BoxFit.cover : BoxFit.cover,
-                    ),
-                  ),
-                ),
-        ),
-      );
-      count++;
-    }
-    return tiles;
   }
 
   String timePassedSince(String dateString) {
@@ -223,5 +225,57 @@ class PostTile extends StatelessWidget {
         return 'há ${difference.inHours} horas';
       }
     }
+  }
+
+  List<Widget> createImageSliders(List<PictureModel> pictureList, Size size) {
+    return pictureList.map((item) {
+      return Container(
+        margin: const EdgeInsets.all(5.0),
+        child: Center(
+          child: ClipRRect(
+            borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+            child: Stack(
+              children: <Widget>[
+                CachedNetworkImage(
+                  imageUrl: item.url!,
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      SquareProgressIndicator(value: downloadProgress.progress),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                  fit: BoxFit.cover,
+                  height: size.height,
+                  width: size.width,
+                ),
+                Visibility(
+                  visible: pictureList.length > 1,
+                  child: Positioned(
+                    top: 1.0,
+                    right: 1.0,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(50)),
+                        gradient: LinearGradient(
+                          colors: [Color.fromARGB(198, 0, 0, 0), Color.fromARGB(0, 41, 41, 41)],
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                        ),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 6.0),
+                      child: Text(
+                        '${pictureList.indexOf(item) + 1}/${pictureList.length.toString()}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }).toList();
   }
 }

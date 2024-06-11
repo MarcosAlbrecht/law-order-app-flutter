@@ -3,6 +3,7 @@ import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/models/post_comment_model.dart';
 import 'package:app_law_order/src/pages/common_widgets/custom_text_field.dart';
 import 'package:app_law_order/src/pages/social/controller/comments_controller.dart';
+import 'package:app_law_order/src/pages/social/views/components/comments_modal.dart';
 import 'package:app_law_order/src/pages/social/views/components/expandable_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -76,25 +77,42 @@ class _CommentsState extends State<Comments> {
           const SizedBox(
             height: 5,
           ),
-          Visibility(
-            visible: widget.comments.isNotEmpty,
-            child: GestureDetector(
-              onTap: () {
-                print("ver mais comentarios");
-                _handleMoreComments(size, widget.comments);
-              },
-              child: Text(
-                'Ver mais ${widget.comments.length.toString()} comentários',
-                style: const TextStyle(),
-              ),
-            ),
+          GetBuilder<CommentsController>(
+            init: CommentsController(listComments: widget.comments),
+            initState: (_) {},
+            builder: (controller) {
+              return Visibility(
+                visible: widget.comments.isNotEmpty,
+                child: GestureDetector(
+                  onTap: () {
+                    print("ver mais comentarios");
+                    showModalBottomSheet<void>(
+                      useSafeArea: true,
+                      isScrollControlled: true,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return CommentModalWidget(
+                          size: size,
+                          comments: widget.comments,
+                          controller: controller,
+                        );
+                      },
+                    );
+                  },
+                  child: Text(
+                    'Ver mais ${widget.comments.length.toString()} comentários',
+                    style: const TextStyle(),
+                  ),
+                ),
+              );
+            },
           ),
         ],
       ),
     );
   }
 
-  void _handleMoreComments(Size size, List<PostCommentModel> comments) {
+  void _handleMoreComments(Size size, List<PostCommentModel> comments, CommentsController controller) {
     showModalBottomSheet<void>(
       useSafeArea: true,
       isScrollControlled: true,
@@ -185,8 +203,7 @@ class _CommentsState extends State<Comments> {
                                   visible: comments[index].userId == controller.authController.user.id,
                                   child: PopupMenuButton<int>(
                                     onSelected: (int item) {
-                                      print(item.toString());
-                                      print('Excluir comentário de índice: ${comments[index].id}');
+                                      controller.handleExcludeComment(commentId: comments[index].id!);
                                     },
                                     itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
                                       const PopupMenuItem<int>(

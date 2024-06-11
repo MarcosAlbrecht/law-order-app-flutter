@@ -39,7 +39,7 @@ class SocialRepository {
     }
   }
 
-  Future<CommentResult> removeComment({required String comment}) async {
+  Future<CommentResult> insertComment({required String comment}) async {
     try {
       final result = await httpManager.restRequest(
         method: HttpMethods.post,
@@ -65,11 +65,12 @@ class SocialRepository {
     }
   }
 
-  Future<CommentResult> insertComment({required String commentId}) async {
+  Future<CommentResult> removeComment({required String commentId}) async {
     try {
+      var request = '${EndPoints.removeComment}$commentId';
       final result = await httpManager.restRequest(
         method: HttpMethods.delete,
-        url: '${EndPoints.removeComment}commentId',
+        url: '${EndPoints.removeComment}$commentId',
       );
 
       if (result.isEmpty) {

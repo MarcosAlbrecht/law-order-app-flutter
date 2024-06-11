@@ -22,5 +22,16 @@ class CommentsController extends GetxController {
 
   Future<void> handleExcludeComment({required String commentId}) async {
     setExclude(true);
+    final result = await socialRepository.removeComment(commentId: commentId);
+
+    setExclude(false);
+    result.when(
+      success: (data) {
+        setExclude(true);
+        listComments.removeAt(listComments.indexWhere((item) => item.id == commentId));
+        setExclude(false);
+      },
+      error: (message) {},
+    );
   }
 }

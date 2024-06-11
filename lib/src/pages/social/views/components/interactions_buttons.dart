@@ -5,9 +5,11 @@ import 'package:fluttericon/linecons_icons.dart';
 
 class InteractionsButtons extends StatefulWidget {
   final bool liked;
+  final VoidCallback onPressed;
   const InteractionsButtons({
     Key? key,
     required this.liked,
+    required this.onPressed,
   }) : super(key: key);
 
   @override
@@ -21,12 +23,12 @@ class _InteractionsButtonsState extends State<InteractionsButtons> {
       children: [
         IconButton(
           visualDensity: VisualDensity.compact,
-          onPressed: () {},
+          onPressed: widget.onPressed,
           icon: widget.liked ? Icon(FontAwesome.heart) : Icon(FontAwesome.heart_empty),
         ),
         IconButton(
           visualDensity: VisualDensity.compact,
-          onPressed: () {},
+          onPressed: widget.onPressed,
           icon: Icon(Linecons.comment),
         ),
       ],
