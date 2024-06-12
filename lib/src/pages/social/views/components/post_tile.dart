@@ -180,6 +180,7 @@ class _PostTileState extends State<PostTile> {
                       init: CommentsController(listComments: widget.post.comments!),
                       builder: (controller) {
                         return CommentModalWidget(
+                          postId: widget.post.id!,
                           size: size,
                           comments: widget.post.comments!,
                           controller: controller,
@@ -192,6 +193,7 @@ class _PostTileState extends State<PostTile> {
             ),
             widget.post.comments!.isNotEmpty
                 ? Comments(
+                    postId: widget.post.id!,
                     comments: widget.post.comments!,
                   )
                 : const SizedBox.shrink(),

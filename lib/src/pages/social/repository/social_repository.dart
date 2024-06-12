@@ -1,8 +1,10 @@
 import 'package:app_law_order/src/constants/endpoints.dart';
 import 'package:app_law_order/src/models/post_comment_model.dart';
 import 'package:app_law_order/src/models/post_model.dart';
+import 'package:app_law_order/src/models/user_model.dart';
 import 'package:app_law_order/src/pages/social/result/comment_result.dart';
 import 'package:app_law_order/src/pages/social/result/post_result.dart';
+import 'package:app_law_order/src/pages/social/result/profile_user_result.dart';
 import 'package:app_law_order/src/services/http_manager.dart';
 import 'package:app_law_order/src/services/util_services.dart';
 
@@ -34,23 +36,42 @@ class SocialRepository {
           return PostResult.error("Não foi possível buscar os dados!");
         }
       }
-    } on Exception {
+    } catch (e) {
       return PostResult.error("Não foi possível buscar os dados!");
     }
   }
 
-  Future<CommentResult> insertComment({required String comment}) async {
+  Future<ProfileUserResult> getUserById({required String userId}) async {
+    final result = await httpManager.restRequest(
+      method: HttpMethods.get,
+      url: '${EndPoints.getUserById}$userId',
+    );
+
+    if (result['_id'] != null) {
+      var userData = result as Map<String, dynamic>;
+      UserModel data = UserModel.fromJson(userData);
+      return ProfileUserResult.success(data);
+    } else {
+      if (result['errorCode'] != null && result['errorCode'] == 33) {}
+      return ProfileUserResult.error('Ocorreu um erro ao buscar os dados. Tente novamente mais tarde!');
+    }
+  }
+
+  Future<CommentResult> insertComment({required String comment, required String postId}) async {
     try {
       final result = await httpManager.restRequest(
         method: HttpMethods.post,
-        url: EndPoints.insertComment,
+        url: '${EndPoints.insertComment}$postId',
         body: {
           "comment": comment,
         },
       );
 
-      if (result.isNotEmpty && result['_id'].isNotNull) {
-        PostCommentModel data = PostCommentModel();
+      if (result.isNotEmpty) {
+        PostCommentModel data = PostCommentModel.fromJson(result);
+        if (data.id == null) {
+          return CommentResult.error("Não foi possível adicionar um comentário. Tente novamente mais tarde");
+        }
         return CommentResult.success(data);
       } else {
         if (result['result'] != null) {
@@ -60,7 +81,7 @@ class SocialRepository {
           return CommentResult.error("Não foi possível buscar os dados!");
         }
       }
-    } on Exception {
+    } catch (e) {
       return CommentResult.error("Não foi possível buscar os dados!");
     }
   }
@@ -84,7 +105,7 @@ class SocialRepository {
           return CommentResult.error("Não foi possível buscar os dados!");
         }
       }
-    } on Exception {
+    } catch (e) {
       return CommentResult.error("Não foi possível buscar os dados!");
     }
   }
