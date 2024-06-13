@@ -1,8 +1,10 @@
 import 'package:app_law_order/src/constants/endpoints.dart';
 import 'package:app_law_order/src/models/post_comment_model.dart';
+import 'package:app_law_order/src/models/post_like_model.dart';
 import 'package:app_law_order/src/models/post_model.dart';
 import 'package:app_law_order/src/models/user_model.dart';
 import 'package:app_law_order/src/pages/social/result/comment_result.dart';
+import 'package:app_law_order/src/pages/social/result/like_result.dart';
 import 'package:app_law_order/src/pages/social/result/post_result.dart';
 import 'package:app_law_order/src/pages/social/result/profile_user_result.dart';
 import 'package:app_law_order/src/services/http_manager.dart';
@@ -107,6 +109,49 @@ class SocialRepository {
       }
     } catch (e) {
       return CommentResult.error("Não foi possível buscar os dados!");
+    }
+  }
+
+  Future<LikeResult> insertLike({required String postId}) async {
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.post,
+        url: '${EndPoints.insertLike}$postId',
+      );
+
+      if (result.isNotEmpty && result['_id'] != null) {
+        var lieData = result as Map<String, dynamic>;
+        PostLikeModel data = PostLikeModel.fromJson(lieData);
+        return LikeResult.success(data);
+      } else {
+        return LikeResult.error("Não foi possível buscar os dados!");
+      }
+    } catch (e) {
+      return LikeResult.error("Não foi possível buscar os dados!");
+    }
+  }
+
+  Future<LikeResult> removeLike({required String postId}) async {
+    try {
+      var request = '${EndPoints.removeComment}$postId';
+      final result = await httpManager.restRequest(
+        method: HttpMethods.delete,
+        url: '${EndPoints.removeLike}$postId',
+      );
+
+      if (result.isEmpty) {
+        PostLikeModel data = PostLikeModel();
+        return LikeResult.success(data);
+      } else {
+        if (result['result'] != null) {
+          PostLikeModel data = PostLikeModel();
+          return LikeResult.success(data);
+        } else {
+          return LikeResult.error("Não foi possível buscar os dados!");
+        }
+      }
+    } catch (e) {
+      return LikeResult.error("Não foi possível buscar os dados!");
     }
   }
 }

@@ -12,14 +12,12 @@ import 'package:square_progress_indicator/square_progress_indicator.dart';
 class CommentModalWidget extends StatelessWidget {
   final Size size;
   final List<PostCommentModel> comments;
-  final CommentsController controller;
   final String postId;
 
   CommentModalWidget({
     Key? key,
     required this.size,
     required this.comments,
-    required this.controller,
     required this.postId,
   }) : super(key: key);
 
@@ -38,7 +36,7 @@ class CommentModalWidget extends StatelessWidget {
         child: SizedBox(
           height: size.height * 0.75,
           child: GetBuilder<CommentsController>(
-            init: controller,
+            init: CommentsController(listComments: comments),
             builder: (controller) {
               return Column(
                 children: [

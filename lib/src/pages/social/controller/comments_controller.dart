@@ -76,4 +76,25 @@ class CommentsController extends GetxController {
       },
     );
   }
+
+  Future<void> handleLike({required String postId, comment}) async {
+    setInsertingComment(true);
+    final result = await socialRepository.insertComment(comment: comment, postId: postId);
+
+    result.when(
+      success: (data) async {
+        final res = await getUserById(id: data.userId!);
+        if (res != null) {
+          data.user = res;
+          listComments.add(data);
+        }
+
+        setInsertingComment(false);
+      },
+      error: (message) {
+        utilServices.showToast(message: message, isError: true);
+        setInsertingComment(false);
+      },
+    );
+  }
 }

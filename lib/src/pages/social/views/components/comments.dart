@@ -92,7 +92,6 @@ class _CommentsState extends State<Comments> {
                           postId: widget.postId,
                           size: size,
                           comments: widget.comments,
-                          controller: controller,
                         );
                       },
                     );

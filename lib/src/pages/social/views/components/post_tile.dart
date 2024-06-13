@@ -3,7 +3,7 @@ import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/models/picture_model.dart';
 import 'package:app_law_order/src/models/post_model.dart';
 import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
-import 'package:app_law_order/src/pages/social/controller/comments_controller.dart';
+import 'package:app_law_order/src/pages/social/controller/like_controller.dart';
 import 'package:app_law_order/src/pages/social/views/components/comments.dart';
 import 'package:app_law_order/src/pages/social/views/components/comments_modal.dart';
 import 'package:app_law_order/src/pages/social/views/components/expandable_text.dart';
@@ -167,26 +167,28 @@ class _PostTileState extends State<PostTile> {
             const SizedBox(
               height: 5,
             ),
-            InteractionsButtons(
-              liked: widget.post.likes!.any((element) => element.userId == authController.user.id),
-              onPressed: () {
-                print('pressionado');
-                showModalBottomSheet<void>(
-                  useSafeArea: true,
-                  isScrollControlled: true,
-                  context: context,
-                  builder: (BuildContext context) {
-                    return GetBuilder<CommentsController>(
-                      init: CommentsController(listComments: widget.post.comments!),
-                      builder: (controller) {
+            GetBuilder<LikeController>(
+              init: LikeController(post: widget.post),
+              global: false,
+              builder: (controller) {
+                return InteractionsButtons(
+                  liked: controller.post.likes!.any((element) => element.userId == authController.user.id),
+                  onCommentPressed: () {
+                    showModalBottomSheet<void>(
+                      useSafeArea: true,
+                      isScrollControlled: true,
+                      context: context,
+                      builder: (BuildContext context) {
                         return CommentModalWidget(
                           postId: widget.post.id!,
                           size: size,
                           comments: widget.post.comments!,
-                          controller: controller,
                         );
                       },
                     );
+                  },
+                  onLikePressed: () {
+                    controller.handleLike();
                   },
                 );
               },
