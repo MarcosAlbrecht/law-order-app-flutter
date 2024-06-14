@@ -73,7 +73,6 @@ class _PostScreenState extends State<PostScreen> {
                               itemBuilder: (BuildContext context, int index) {
                                 return Container(
                                   key: Key('$index'),
-                                  height: 100,
                                   width: size.width * .7,
                                   margin: const EdgeInsets.all(2),
                                   decoration: BoxDecoration(
@@ -89,11 +88,13 @@ class _PostScreenState extends State<PostScreen> {
                                           blurRadius: 4,
                                         ),
                                       ]),
-                                  child: Center(
-                                    child: Image.file(
-                                      File(controller.files[index].path),
-                                      fit: BoxFit.contain,
-                                    ),
+                                  child: Image.file(
+                                    File(controller.files[index].path),
+                                    fit: BoxFit.cover,
+                                    height: 100,
+                                    width: size.width * .7,
+                                    cacheHeight: 600,
+                                    cacheWidth: 600,
                                   ),
                                 );
                               },
