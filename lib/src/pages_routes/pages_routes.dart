@@ -37,6 +37,7 @@ import 'package:app_law_order/src/pages/requests/view/avaliation_screen.dart';
 import 'package:app_law_order/src/pages/requests/view/request_manager_screen.dart';
 import 'package:app_law_order/src/pages/requests/view/request_tab.dart';
 import 'package:app_law_order/src/pages/social/binding/post_binding.dart';
+import 'package:app_law_order/src/pages/social/views/post_screen.dart';
 import 'package:app_law_order/src/pages/social/views/social_tab.dart';
 import 'package:app_law_order/src/pages/splash/splash_screen.dart';
 import 'package:get/get.dart';
@@ -139,6 +140,11 @@ abstract class AppPages {
       //binding: PostBinding(),
     ),
     GetPage(
+      name: PagesRoutes.postScreen,
+      page: () => PostScreen(),
+      //binding: PostBinding(),
+    ),
+    GetPage(
       name: PagesRoutes.chatListTab,
       page: () => const ChatListTab(),
     ),
@@ -187,4 +193,5 @@ abstract class PagesRoutes {
   static const String signupGoogleRoute = '/signupGoogleRoute';
   static const String paymentosWalletRoute = '/paymentosWalletRoute';
   static const String socialTab = '/socialTab';
+  static const String postScreen = '/postTab';
 }

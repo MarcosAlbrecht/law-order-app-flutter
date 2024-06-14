@@ -1,8 +1,8 @@
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/pages/common_widgets/custom_text_field.dart';
-import 'package:app_law_order/src/pages/home/controller/home_controller.dart';
 import 'package:app_law_order/src/pages/social/controller/post_controller.dart';
 import 'package:app_law_order/src/pages/social/views/components/post_tile.dart';
+import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/elusive_icons.dart';
 import 'package:get/get.dart';
@@ -49,7 +49,7 @@ class _SocialTabState extends State<SocialTab> {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            GetBuilder<HomeController>(
+                            GetBuilder<PostController>(
                               builder: (controller) {
                                 return Expanded(
                                   child: CustomTextField(
@@ -59,14 +59,23 @@ class _SocialTabState extends State<SocialTab> {
                                     maxLines: 3,
                                     paddingBottom: false,
                                     onChanged: (value) {
-                                      controller.searchRequest.value = value!.toLowerCase();
+                                      Get.toNamed(
+                                        PagesRoutes.postScreen,
+                                        //arguments: {'chat_model': chat},
+                                      );
+                                      //controller.searchRequest.value = value!.toLowerCase();
                                     },
                                   ),
                                 );
                               },
                             ),
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Get.toNamed(
+                                  PagesRoutes.postScreen,
+                                  //arguments: {'chat_model': chat},
+                                );
+                              },
                               icon: const Icon(Elusive.attach),
                             ),
                           ],

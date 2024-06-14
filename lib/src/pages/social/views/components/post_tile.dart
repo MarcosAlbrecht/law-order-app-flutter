@@ -63,6 +63,7 @@ class _PostTileState extends State<PostTile> {
                     height: 50,
                     width: 50,
                     child: ClipRRect(
+                      borderRadius: BorderRadius.circular(50),
                       child: widget.post.owner?.profilePicture?.url != null
                           ? CachedNetworkImage(
                               imageUrl: widget.post.owner!.profilePicture!.url!,

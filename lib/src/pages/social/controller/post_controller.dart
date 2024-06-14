@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:app_law_order/src/models/post_model.dart';
 import 'package:app_law_order/src/pages/social/repository/social_repository.dart';
 import 'package:app_law_order/src/services/util_services.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 
 const int itemsPerPage = 10;
@@ -17,6 +20,8 @@ class PostController extends GetxController {
   bool isSaving = false;
 
   int pagination = 0;
+
+  List<File> files = [];
 
   bool get isLastPage {
     if (currentListPost!.length < itemsPerPage) return true;
@@ -61,5 +66,21 @@ class PostController extends GetxController {
         utilServices.showToast(message: message);
       },
     );
+  }
+
+  Future<void> imagePicker() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+      allowMultiple: true,
+    );
+
+    if (result != null) {
+      files = result.paths.map((path) => File(path!)).toList();
+
+      if (files.length > 1) {}
+      //handleUploadFile(files: files, idRequest: idRequest);
+    }
+
+    update();
   }
 }
