@@ -41,9 +41,11 @@ class _ExpandableTextState extends State<ExpandableText> {
       textDirection: TextDirection.ltr,
     );
     tp.layout(maxWidth: MediaQuery.of(context).size.width);
-    setState(() {
-      showButton = tp.didExceedMaxLines;
-    });
+    if (mounted) {
+      setState(() {
+        showButton = tp.didExceedMaxLines;
+      });
+    }
   }
 
   @override

@@ -83,4 +83,20 @@ class PostController extends GetxController {
 
     update();
   }
+
+  Future<void> videoPicker() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.video,
+      allowMultiple: false,
+    );
+
+    if (result != null) {
+      files = result.paths.map((path) => File(path!)).toList();
+
+      if (files.length > 1) {}
+      //handleUploadFile(files: files, idRequest: idRequest);
+    }
+
+    update();
+  }
 }

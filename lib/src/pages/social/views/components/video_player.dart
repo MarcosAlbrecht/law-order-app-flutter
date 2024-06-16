@@ -1,26 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:video_player/video_player.dart';
 
-class VideoPlayerWidget extends StatefulWidget {
+class CachedVideoPlayer extends StatefulWidget {
   final String videoUrl;
 
-  VideoPlayerWidget({required this.videoUrl});
+  const CachedVideoPlayer({Key? key, required this.videoUrl}) : super(key: key);
 
   @override
-  _VideoPlayerWidgetState createState() => _VideoPlayerWidgetState();
+  _CachedVideoPlayerState createState() => _CachedVideoPlayerState();
 }
 
-class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
+class _CachedVideoPlayerState extends State<CachedVideoPlayer> with AutomaticKeepAliveClientMixin {
   late VideoPlayerController _controller;
   bool _isInitialized = false;
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network(widget.videoUrl)
+    _initializeVideo();
+  }
+
+  Future<void> _initializeVideo() async {
+    final fileInfo = await DefaultCacheManager().getSingleFile(widget.videoUrl);
+    _controller = VideoPlayerController.file(fileInfo)
       ..initialize().then((_) {
         setState(() {
           _isInitialized = true;
+          _isLoading = false;
         });
 
         _controller.setLooping(true);
@@ -35,34 +43,39 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return _isInitialized
-        ? GestureDetector(
-            onTap: () {
-              setState(() {
-                if (_controller.value.isPlaying) {
-                  _controller.pause();
-                } else {
-                  _controller.play();
-                }
-              });
-            },
-            child: Container(
-              child: AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: <Widget>[
-                    VideoPlayer(_controller),
-                    _ControlsOverlay(controller: _controller),
-                    VideoProgressIndicator(_controller, allowScrubbing: true),
-                  ],
+    super.build(context);
+    return _isLoading
+        ? Center(child: CircularProgressIndicator())
+        : _isInitialized
+            ? GestureDetector(
+                onTap: () {
+                  setState(() {
+                    if (_controller.value.isPlaying) {
+                      _controller.pause();
+                    } else {
+                      _controller.play();
+                    }
+                  });
+                },
+                child: Container(
+                  child: AspectRatio(
+                    aspectRatio: _controller.value.aspectRatio,
+                    child: Stack(
+                      alignment: Alignment.bottomCenter,
+                      children: <Widget>[
+                        VideoPlayer(_controller),
+                        _ControlsOverlay(controller: _controller),
+                        VideoProgressIndicator(_controller, allowScrubbing: true),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          )
-        : Center(child: CircularProgressIndicator());
+              )
+            : Center(child: CircularProgressIndicator());
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class _ControlsOverlay extends StatefulWidget {
@@ -130,6 +143,29 @@ class _ControlsOverlayState extends State<_ControlsOverlay> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class VideoListPage extends StatelessWidget {
+  final List<String> videoUrls;
+
+  const VideoListPage({Key? key, required this.videoUrls}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Video List")),
+      body: ListView.builder(
+        itemCount: videoUrls.length,
+        itemBuilder: (context, index) {
+          return Container(
+            key: PageStorageKey(index),
+            margin: EdgeInsets.symmetric(vertical: 10),
+            child: CachedVideoPlayer(videoUrl: videoUrls[index]),
+          );
+        },
+      ),
     );
   }
 }

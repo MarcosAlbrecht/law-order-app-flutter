@@ -115,6 +115,7 @@ class _PostTileState extends State<PostTile> {
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
               child: ExpandableText(
+                //verificar isso aqui
                 text: widget.post.description ?? '',
                 maxLines: 10,
               ),
@@ -141,7 +142,7 @@ class _PostTileState extends State<PostTile> {
                     ),
                   )
                 : widget.post.videos!.isNotEmpty
-                    ? VideoPlayerWidget(
+                    ? CachedVideoPlayer(
                         videoUrl: widget.post.videos![0].url!,
                       )
                     : const SizedBox.shrink(),

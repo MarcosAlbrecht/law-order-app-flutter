@@ -52,6 +52,7 @@ dependencies:
   image_size_getter: ^1.0.0
   video_player: ^2.8.7
   video_thumbnail: ^0.5.3
+  reorderable_grid_view: ^2.2.8
 
 dev_dependencies:
   flutter_test:
