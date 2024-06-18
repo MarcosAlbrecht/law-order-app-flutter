@@ -12,12 +12,14 @@ import 'package:square_progress_indicator/square_progress_indicator.dart';
 class CommentModalWidget extends StatelessWidget {
   final Size size;
   final List<PostCommentModel> comments;
+  final VoidCallback? onInserComment;
   final String postId;
 
   CommentModalWidget({
     Key? key,
     required this.size,
     required this.comments,
+    this.onInserComment,
     required this.postId,
   }) : super(key: key);
 
@@ -126,7 +128,7 @@ class CommentModalWidget extends StatelessWidget {
                           ],
                         );
                       },
-                      itemCount: controller.listComments.length,
+                      itemCount: controller.listComments!.length,
                       separatorBuilder: (context, index) => const SizedBox(
                         height: 20,
                       ),
@@ -176,7 +178,8 @@ class CommentModalWidget extends StatelessWidget {
                                     // Lógica para enviar o comentário
                                     var message = messageEC.text;
                                     clearText();
-                                    controller.handleInsertComment(postId: postId, comment: message);
+                                    await controller.handleInsertComment(postId: postId, comment: message);
+                                    onInserComment!();
                                   },
                                   icon: const Icon(Icons.send),
                                 ),

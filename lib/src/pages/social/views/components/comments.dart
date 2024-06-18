@@ -10,10 +10,12 @@ import 'package:square_progress_indicator/square_progress_indicator.dart';
 class Comments extends StatefulWidget {
   final List<PostCommentModel> comments;
   final String postId;
+  final VoidCallback? onHandleComment;
   const Comments({
     Key? key,
     required this.comments,
     required this.postId,
+    this.onHandleComment,
   }) : super(key: key);
 
   @override
@@ -92,6 +94,7 @@ class _CommentsState extends State<Comments> {
                           postId: widget.postId,
                           size: size,
                           comments: widget.comments,
+                          onInserComment: widget.onHandleComment,
                         );
                       },
                     );

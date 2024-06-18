@@ -17,11 +17,13 @@ import 'package:square_progress_indicator/square_progress_indicator.dart';
 
 class PostTile extends StatefulWidget {
   final PostModel post;
+  final VoidCallback? onHandleComment;
 
   PostTile({
-    super.key,
+    Key? key,
     required this.post,
-  });
+    this.onHandleComment,
+  }) : super(key: key);
 
   @override
   State<PostTile> createState() => _PostTileState();
@@ -182,10 +184,10 @@ class _PostTileState extends State<PostTile> {
                       context: context,
                       builder: (BuildContext context) {
                         return CommentModalWidget(
-                          postId: widget.post.id!,
-                          size: size,
-                          comments: widget.post.comments!,
-                        );
+                            postId: widget.post.id!,
+                            size: size,
+                            comments: widget.post.comments!,
+                            onInserComment: widget.onHandleComment);
                       },
                     );
                   },
@@ -199,6 +201,9 @@ class _PostTileState extends State<PostTile> {
                 ? Comments(
                     postId: widget.post.id!,
                     comments: widget.post.comments!,
+                    onHandleComment: () {
+                      print('inseriu');
+                    },
                   )
                 : const SizedBox.shrink(),
           ],

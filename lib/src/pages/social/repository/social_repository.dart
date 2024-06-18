@@ -1,14 +1,17 @@
 import 'package:app_law_order/src/constants/endpoints.dart';
+import 'package:app_law_order/src/models/file_model.dart';
 import 'package:app_law_order/src/models/post_comment_model.dart';
 import 'package:app_law_order/src/models/post_like_model.dart';
 import 'package:app_law_order/src/models/post_model.dart';
 import 'package:app_law_order/src/models/user_model.dart';
 import 'package:app_law_order/src/pages/social/result/comment_result.dart';
+import 'package:app_law_order/src/pages/social/result/file_result.dart';
 import 'package:app_law_order/src/pages/social/result/like_result.dart';
 import 'package:app_law_order/src/pages/social/result/post_result.dart';
 import 'package:app_law_order/src/pages/social/result/profile_user_result.dart';
 import 'package:app_law_order/src/services/http_manager.dart';
 import 'package:app_law_order/src/services/util_services.dart';
+import 'package:dio/dio.dart';
 
 class SocialRepository {
   final HttpManager httpManager = HttpManager();
@@ -152,6 +155,79 @@ class SocialRepository {
       }
     } catch (e) {
       return LikeResult.error("Não foi possível buscar os dados!");
+    }
+  }
+
+  Future<LikeResult> removePost({required String postId}) async {
+    try {
+      var request = '${EndPoints.removeComment}$postId';
+      final result = await httpManager.restRequest(
+        method: HttpMethods.delete,
+        url: '${EndPoints.removePost}$postId',
+      );
+
+      if (result.isEmpty) {
+        PostLikeModel data = PostLikeModel();
+        return LikeResult.success(data);
+      } else {
+        if (result['result'] != null) {
+          PostLikeModel data = PostLikeModel();
+          return LikeResult.success(data);
+        } else {
+          return LikeResult.error("Não foi possível buscar os dados!");
+        }
+      }
+    } catch (e) {
+      return LikeResult.error("Não foi possível buscar os dados!");
+    }
+  }
+
+  Future<LikeResult> insertPost({required String description, List<String>? photosIds, List<String>? videosIds}) async {
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.post,
+        url: EndPoints.insertPost,
+        body: {
+          "description": description,
+          "photosIds": photosIds,
+          "videoIds": videosIds,
+        },
+      );
+
+      if (result.isNotEmpty && result['_id'] != null) {
+        var lieData = result as Map<String, dynamic>;
+        PostLikeModel data = PostLikeModel.fromJson(lieData);
+        return LikeResult.success(data);
+      } else {
+        return LikeResult.error("Não foi possível buscar os dados!");
+      }
+    } catch (e) {
+      return LikeResult.error("Não foi possível buscar os dados!");
+    }
+  }
+
+  Future<FileResult> insertFile({required String picture}) async {
+    try {
+      FormData formData = FormData.fromMap({
+        'file': await MultipartFile.fromFile(picture, filename: picture.split('/').last),
+        // Adicione outros campos se necessário
+      });
+
+      final result = await httpManager.restRequest(
+        method: HttpMethods.post,
+        url: EndPoints.uploadFile,
+        body: formData,
+      );
+
+      if (result.isNotEmpty && result['_id'] != null) {
+        var lieData = result as Map<String, dynamic>;
+        FileModel data = FileModel.fromJson(lieData);
+        return FileResult.success(data);
+      } else {
+        return FileResult.error("Não foi possível buscar os dados!");
+      }
+    } catch (e) {
+      return FileResult.error("Não foi possível buscar os dados!");
     }
   }
 }

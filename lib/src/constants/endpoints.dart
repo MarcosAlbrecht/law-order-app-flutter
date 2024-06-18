@@ -84,7 +84,9 @@ abstract class EndPoints {
 
   static const insertPost = '$baseUrl/social/posts';
   static const updatePost = '$baseUrl/social/posts/';
-  static const deletePost = '$baseUrl/social/posts/';
+  static const removePost = '$baseUrl/social/posts/';
+
+  static const uploadFile = '$baseUrl/files/upload';
 }
 
 abstract class EndPointsViaCep {

@@ -96,7 +96,12 @@ class _SocialTabState extends State<SocialTab> {
                                   controller.loadMorePosts();
                                 }
 
-                                return PostTile(post: controller.allPosts[index]);
+                                return PostTile(
+                                  post: controller.allPosts[index],
+                                  onHandleComment: () {
+                                    print('chegou no call back social tab');
+                                  },
+                                );
                               },
                             );
                           },

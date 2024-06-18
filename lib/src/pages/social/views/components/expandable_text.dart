@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -25,64 +24,59 @@ class _ExpandableTextState extends State<ExpandableText> {
   bool showButton = false;
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => checkTextOverflow());
-  }
-
-  void checkTextOverflow() {
-    final span = TextSpan(
-      text: widget.text,
-      style: const TextStyle(height: 1.5),
-    );
-    final tp = TextPainter(
-      text: span,
-      maxLines: widget.maxLines,
-      textDirection: TextDirection.ltr,
-    );
-    tp.layout(maxWidth: MediaQuery.of(context).size.width);
-    if (mounted) {
-      setState(() {
-        showButton = tp.didExceedMaxLines;
-      });
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: widget.paddingTop ? const EdgeInsets.only(top: 10) : const EdgeInsets.only(top: 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            widget.text,
-            maxLines: isExpanded ? null : widget.maxLines,
-            overflow: isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
-            style: widget.fontSize14
-                ? const TextStyle(
-                    height: 1.5,
-                    fontSize: 14,
-                  )
-                : const TextStyle(
-                    height: 1.5,
-                    fontSize: 12,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final span = TextSpan(
+          text: widget.text,
+          style: const TextStyle(height: 1.5),
+        );
+        final tp = TextPainter(
+          text: span,
+          maxLines: widget.maxLines,
+          textDirection: TextDirection.ltr,
+        );
+        tp.layout(maxWidth: constraints.maxWidth);
+        showButton = tp.didExceedMaxLines;
+
+        return Padding(
+          padding: widget.paddingTop ? const EdgeInsets.only(top: 10) : const EdgeInsets.only(top: 0),
+          child: Container(
+            alignment: Alignment.topLeft, // Ensure the content is aligned to the top left
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  widget.text,
+                  maxLines: isExpanded ? null : widget.maxLines,
+                  overflow: isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
+                  style: widget.fontSize14
+                      ? const TextStyle(
+                          height: 1.5,
+                          fontSize: 14,
+                        )
+                      : const TextStyle(
+                          height: 1.5,
+                          fontSize: 12,
+                        ),
+                ),
+                if (showButton)
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isExpanded = !isExpanded;
+                      });
+                    },
+                    child: Text(
+                      isExpanded ? 'Ver menos' : 'Ver mais',
+                      style: TextStyle(color: CustomColors.blueDark2Color),
+                    ),
                   ),
-          ),
-          if (showButton)
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  isExpanded = !isExpanded;
-                });
-              },
-              child: Text(
-                isExpanded ? 'Ver menos' : 'Ver mais',
-                style: TextStyle(color: CustomColors.blueDark2Color),
-              ),
+              ],
             ),
-        ],
-      ),
+          ),
+        );
+      },
     );
   }
 }

@@ -48,7 +48,7 @@ class PostCustomAppBar extends StatelessWidget {
           SizedBox(
             height: 30,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: onPostPressed,
               child: Text("Publicar"),
             ),
           )
