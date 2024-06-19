@@ -29,89 +29,101 @@ class _SocialTabState extends State<SocialTab> {
     return Scaffold(
       body: Stack(
         children: [
-          SafeArea(
-            child: SingleChildScrollView(
-              child: Container(
-                height: size.height,
-                width: size.width,
-                padding: const EdgeInsets.only(top: 5, bottom: 10),
-                color: CustomColors.white,
-                child: Padding(
-                  padding: const EdgeInsets.all(0),
-                  child: Column(
-                    children: [
-                      const Divider(
-                        height: 10,
-                        color: Colors.transparent,
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            GetBuilder<PostController>(
-                              builder: (controller) {
-                                return Expanded(
-                                  child: CustomTextField(
-                                    label: 'No que você está pensando?',
-                                    removeFloatingLabelBehavior: true,
-                                    minLines: 1,
-                                    maxLines: 3,
-                                    paddingBottom: false,
-                                    onChanged: (value) {
+          GetBuilder<PostController>(
+            builder: (controller) {
+              return SafeArea(
+                child: SingleChildScrollView(
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      controller.loadPosts();
+                    },
+                    child: Container(
+                      height: size.height,
+                      width: size.width,
+                      padding: const EdgeInsets.only(top: 5, bottom: 10),
+                      color: CustomColors.white,
+                      child: Column(
+                        children: [
+                          const Divider(
+                            height: 10,
+                            color: Colors.transparent,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 10, top: 10),
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    child: CustomTextField(
+                                      label: 'No que você está pensando?',
+                                      removeFloatingLabelBehavior: true,
+                                      minLines: 1,
+                                      maxLines: 3,
+                                      paddingBottom: false,
+                                      onChanged: (value) async {
+                                        controller.isEditing = false;
+                                        controller.descricaoPost = value ?? '';
+                                        await controller.handleNewtPost();
+                                        Get.toNamed(
+                                          PagesRoutes.postScreen,
+                                          //arguments: {'chat_model': chat},
+                                        );
+                                        //controller.searchRequest.value = value!.toLowerCase();
+                                      },
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () async {
+                                      controller.isEditing = false;
+                                      controller.descricaoPost = '';
+                                      await controller.handleNewtPost();
                                       Get.toNamed(
                                         PagesRoutes.postScreen,
                                         //arguments: {'chat_model': chat},
                                       );
-                                      //controller.searchRequest.value = value!.toLowerCase();
                                     },
+                                    icon: const Icon(Elusive.attach),
                                   ),
-                                );
-                              },
+                                ],
+                              ),
                             ),
-                            IconButton(
-                              onPressed: () {
-                                Get.toNamed(
-                                  PagesRoutes.postScreen,
-                                  //arguments: {'chat_model': chat},
-                                );
-                              },
-                              icon: const Icon(Elusive.attach),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Divider(
-                        height: 50,
-                      ),
-                      Expanded(
-                        child: GetBuilder<PostController>(
-                          builder: (controller) {
-                            return ListView.builder(
-                              //padding: const EdgeInsets.fromLTRB(10, 10, 16, 10),
-                              physics: const BouncingScrollPhysics(),
-                              itemCount: controller.allPosts.length,
-                              itemBuilder: (_, index) {
-                                if (((index + 1) == controller.allPosts.length) && (!controller.isLastPage)) {
-                                  controller.loadMorePosts();
-                                }
+                          ),
+                          const Divider(
+                            height: 50,
+                          ),
+                          GetBuilder<PostController>(
+                            builder: (controller) {
+                              return Expanded(
+                                child: GetBuilder<PostController>(
+                                  builder: (controller) {
+                                    return ListView.builder(
+                                      //padding: const EdgeInsets.fromLTRB(10, 10, 16, 10),
+                                      physics: const BouncingScrollPhysics(),
+                                      itemCount: controller.allPosts.length,
+                                      itemBuilder: (_, index) {
+                                        if (((index + 1) == controller.allPosts.length) && (!controller.isLastPage)) {
+                                          controller.loadMorePosts();
+                                        }
 
-                                return PostTile(
-                                  post: controller.allPosts[index],
-                                  onHandleComment: () {
-                                    print('chegou no call back social tab');
+                                        return PostTile(
+                                          post: controller.allPosts[index],
+                                        );
+                                      },
+                                    );
                                   },
-                                );
-                              },
-                            );
-                          },
-                        ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
         ],
       ),

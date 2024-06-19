@@ -4,11 +4,13 @@ import 'package:app_law_order/src/models/picture_model.dart';
 import 'package:app_law_order/src/models/post_model.dart';
 import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
 import 'package:app_law_order/src/pages/social/controller/like_controller.dart';
+import 'package:app_law_order/src/pages/social/controller/post_controller.dart';
 import 'package:app_law_order/src/pages/social/views/components/comments.dart';
 import 'package:app_law_order/src/pages/social/views/components/comments_modal.dart';
 import 'package:app_law_order/src/pages/social/views/components/expandable_text.dart';
 import 'package:app_law_order/src/pages/social/views/components/interactions_buttons.dart';
 import 'package:app_law_order/src/pages/social/views/components/video_player.dart';
+import 'package:app_law_order/src/pages_routes/pages_routes.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -18,11 +20,13 @@ import 'package:square_progress_indicator/square_progress_indicator.dart';
 class PostTile extends StatefulWidget {
   final PostModel post;
   final VoidCallback? onHandleComment;
+  final VoidCallback? onHandlePost;
 
   PostTile({
     Key? key,
     required this.post,
     this.onHandleComment,
+    this.onHandlePost,
   }) : super(key: key);
 
   @override
@@ -110,7 +114,44 @@ class _PostTileState extends State<PostTile> {
                         ),
                       ],
                     ),
-                  )
+                  ),
+                  GetBuilder<PostController>(
+                    builder: (controller) {
+                      return Visibility(
+                        visible: widget.post.ownerId == authController.user.id,
+                        child: GestureDetector(
+                          onTap: () {
+                            FocusScope.of(context).unfocus(); // Remove o foco do teclado
+                          },
+                          child: PopupMenuButton<int>(
+                            onSelected: (int item) {
+                              //controller.handleExcludeComment(commentId: comments[index].id!);
+                            },
+                            itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
+                              PopupMenuItem<int>(
+                                value: 1,
+                                child: const Text('Editar post'),
+                                onTap: () async {
+                                  await controller.handleEditPost(postId: widget.post.id!);
+                                  Get.toNamed(
+                                    PagesRoutes.postScreen,
+                                    //arguments: {'chat_model': chat},
+                                  );
+                                },
+                              ),
+                              PopupMenuItem<int>(
+                                value: 2,
+                                child: const Text('Excluir post'),
+                                onTap: () {
+                                  controller.deletePost(postId: widget.post.id!);
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),

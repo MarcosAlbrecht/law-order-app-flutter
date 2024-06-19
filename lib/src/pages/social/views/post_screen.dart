@@ -25,7 +25,7 @@ class _PostScreenState extends State<PostScreen> {
     messageEC.clear();
   }
 
-  Widget buildItem(String path, PostController controller) {
+  Widget buildItem(String path, PostController controller, {bool fromServer = false}) {
     final isVideo = _isVideoFile(path);
     return Stack(
       key: ValueKey(path),
@@ -33,14 +33,23 @@ class _PostScreenState extends State<PostScreen> {
         Card(
           child: isVideo
               ? VideoItem(filePath: path)
-              : Image.file(
-                  File(path),
-                  fit: BoxFit.cover,
-                  height: 200,
-                  width: MediaQuery.of(context).size.width * .7,
-                  cacheHeight: 600,
-                  cacheWidth: 600,
-                ),
+              : !fromServer
+                  ? Image.file(
+                      File(path),
+                      fit: BoxFit.cover,
+                      height: 200,
+                      width: MediaQuery.of(context).size.width * .7,
+                      cacheHeight: 600,
+                      cacheWidth: 600,
+                    )
+                  : Image.network(
+                      path,
+                      fit: BoxFit.cover,
+                      height: 200,
+                      width: MediaQuery.of(context).size.width * .7,
+                      cacheHeight: 600,
+                      cacheWidth: 600,
+                    ),
         ),
         Positioned(
           top: 8,
@@ -50,11 +59,11 @@ class _PostScreenState extends State<PostScreen> {
               controller.removeFile(filePath: path);
             },
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.black54,
                 shape: BoxShape.circle,
               ),
-              child: Icon(
+              child: const Icon(
                 Icons.close,
                 color: Colors.white,
               ),
@@ -88,17 +97,20 @@ class _PostScreenState extends State<PostScreen> {
                         child: Column(
                           children: [
                             PostCustomAppBar(
+                              controller: controller,
                               logedUserId: authController.user.id!,
                               user: authController.user,
-                              onPostPressed: () {
-                                controller.cretePost(description: messageEC.text);
+                              onPostPressed: () async {
+                                await controller.cretePost(description: messageEC.text);
+                                Get.back();
                               },
                             ),
                             const SizedBox(height: 20),
                             Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: TextFormField(
-                                controller: messageEC,
+                                initialValue: controller.descricaoPost,
+                                //controller: messageEC,
                                 minLines: 3,
                                 maxLines: 10,
                                 style: const TextStyle(fontSize: 18),
@@ -107,9 +119,10 @@ class _PostScreenState extends State<PostScreen> {
                                   border: InputBorder.none,
                                 ),
                                 onChanged: (value) {
-                                  setState(() {
-                                    messageEC.text = value;
-                                  });
+                                  // setState(() {
+                                  //   messageEC.text = value;
+                                  // });
+                                  controller.descricaoPost = value;
                                 },
                               ),
                             ),
@@ -132,7 +145,15 @@ class _PostScreenState extends State<PostScreen> {
                                             controller.files.insert(newIndex, element);
                                           });
                                         },
-                                        children: controller.files.map((e) => buildItem(e.path, controller)).toList(),
+                                        children: controller.files
+                                            .map(
+                                              (e) => buildItem(
+                                                e.localPath ?? e.url!,
+                                                controller,
+                                                fromServer: e.url != null,
+                                              ),
+                                            )
+                                            .toList(),
                                       ),
                                     ),
                                   ),
@@ -157,7 +178,7 @@ class _PostScreenState extends State<PostScreen> {
                           onPressed: () {
                             controller.videoPicker();
                           },
-                          child: Icon(Icons.video_library),
+                          child: const Icon(Icons.video_library),
                         ),
                         const SizedBox(width: 16),
                         FloatingActionButton(
@@ -167,7 +188,7 @@ class _PostScreenState extends State<PostScreen> {
                           onPressed: () {
                             controller.imagePicker();
                           },
-                          child: Icon(Icons.image),
+                          child: const Icon(Icons.image),
                         ),
                       ],
                     ),
@@ -234,7 +255,7 @@ class _VideoItemState extends State<VideoItem> {
               ),
             ),
           )
-        : Center(child: CircularProgressIndicator());
+        : const Center(child: CircularProgressIndicator());
   }
 }
 

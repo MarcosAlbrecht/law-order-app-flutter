@@ -5,6 +5,7 @@ import 'package:app_law_order/src/models/post_like_model.dart';
 import 'package:app_law_order/src/models/post_model.dart';
 import 'package:app_law_order/src/models/user_model.dart';
 import 'package:app_law_order/src/pages/social/result/comment_result.dart';
+import 'package:app_law_order/src/pages/social/result/create_post_result.dart';
 import 'package:app_law_order/src/pages/social/result/file_result.dart';
 import 'package:app_law_order/src/pages/social/result/like_result.dart';
 import 'package:app_law_order/src/pages/social/result/post_result.dart';
@@ -158,7 +159,7 @@ class SocialRepository {
     }
   }
 
-  Future<LikeResult> removePost({required String postId}) async {
+  Future<CreatePostResult> removePost({required String postId}) async {
     try {
       var request = '${EndPoints.removeComment}$postId';
       final result = await httpManager.restRequest(
@@ -167,22 +168,22 @@ class SocialRepository {
       );
 
       if (result.isEmpty) {
-        PostLikeModel data = PostLikeModel();
-        return LikeResult.success(data);
+        PostModel data = PostModel();
+        return CreatePostResult.success(data);
       } else {
         if (result['result'] != null) {
-          PostLikeModel data = PostLikeModel();
-          return LikeResult.success(data);
+          PostModel data = PostModel();
+          return CreatePostResult.success(data);
         } else {
-          return LikeResult.error("Não foi possível buscar os dados!");
+          return CreatePostResult.error("Não foi possível buscar os dados!");
         }
       }
     } catch (e) {
-      return LikeResult.error("Não foi possível buscar os dados!");
+      return CreatePostResult.error("Não foi possível buscar os dados!");
     }
   }
 
-  Future<LikeResult> insertPost({required String description, List<String>? photosIds, List<String>? videosIds}) async {
+  Future<CreatePostResult> insertPost({required String description, List<String>? photosIds, List<String>? videosIds}) async {
     try {
       final result = await httpManager.restRequest(
         method: HttpMethods.post,
@@ -196,13 +197,13 @@ class SocialRepository {
 
       if (result.isNotEmpty && result['_id'] != null) {
         var lieData = result as Map<String, dynamic>;
-        PostLikeModel data = PostLikeModel.fromJson(lieData);
-        return LikeResult.success(data);
+        PostModel data = PostModel.fromJson(lieData);
+        return CreatePostResult.success(data);
       } else {
-        return LikeResult.error("Não foi possível buscar os dados!");
+        return CreatePostResult.error("Não foi possível buscar os dados!");
       }
     } catch (e) {
-      return LikeResult.error("Não foi possível buscar os dados!");
+      return CreatePostResult.error("Não foi possível buscar os dados!");
     }
   }
 

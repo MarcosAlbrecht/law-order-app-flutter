@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:app_law_order/src/models/picture_model.dart';
 import 'package:app_law_order/src/models/post_model.dart';
 import 'package:app_law_order/src/pages/social/repository/social_repository.dart';
 import 'package:app_law_order/src/services/util_services.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
-import 'package:image/image.dart' as img;
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 const int itemsPerPage = 10;
 
@@ -20,15 +22,21 @@ class PostController extends GetxController {
 
   List<PostModel> allPosts = [];
 
+  PostModel? postEdit;
+
   bool isLoading = false;
 
   bool isSaving = false;
 
   bool isLoadingFiles = false;
 
+  bool isEditing = false;
+
   int pagination = 0;
 
-  List<File> files = [];
+  String descricaoPost = '';
+
+  List<PictureModel> files = [];
 
   bool get isLastPage {
     if (currentListPost!.length < itemsPerPage) return true;
@@ -88,54 +96,55 @@ class PostController extends GetxController {
   }
 
   Future<void> imagePicker() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-      allowMultiple: true,
-      onFileLoading: (p0) {
-        setLoadingFiles(true);
-      },
-    );
+    setLoadingFiles(true);
 
-    if (result != null) {
-      files = files + result.paths.map((path) => File(path!)).toList();
+    final ImagePicker _imagePicker = ImagePicker();
+    final image = await _imagePicker.pickMultiImage();
+    if (image != null) {
+      for (var pickedFile in image) {
+        File file = File(pickedFile.path);
+        file = await testCompressFile(file);
 
-      if (files.length > 1) {}
-      //handleUploadFile(files: files, idRequest: idRequest);
+        //cria e adiciona uma lista de FileModel
+        PictureModel fileModel = PictureModel();
+        fileModel.localPath = file.path;
+        files.add(fileModel);
+      }
     }
     setLoadingFiles(false);
+  }
 
-    //update();
+  Future<File> testCompressFile(File file) async {
+    final result = await FlutterImageCompress.compressWithFile(
+      file.absolute.path,
+      rotate: 0,
+      quality: 100,
+    );
+    String fileName = file.path.split('/').last;
+    final tempDir = await getTemporaryDirectory();
+    final tempPath = tempDir.path;
+    final tempFile = File('$tempPath/compressed_$fileName');
+
+    await tempFile.writeAsBytes(result!.toList());
+
+    return tempFile;
   }
 
   Future<void> videoPicker() async {
     setLoadingFiles(true);
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.video,
-      allowMultiple: false,
-      onFileLoading: (p0) {
-        setLoadingFiles(true);
-      },
-    );
-    setLoadingFiles(false);
 
-    if (result != null) {
-      files = files + result.paths.map((path) => File(path!)).toList();
+    final ImagePicker _videoPicker = ImagePicker();
+    final video = await _videoPicker.pickVideo(source: ImageSource.gallery);
+    if (video != null) {
+      File file = File(video.path);
+      file = await testCompressFile(file);
 
-      if (files.length > 1) {}
-      //handleUploadFile(files: files, idRequest: idRequest);
+      //cria e adiciona uma lista de FileModel
+      PictureModel fileModel = PictureModel();
+      fileModel.localPath = file.path;
+      files.add(fileModel);
     }
-  }
-
-  Future<File> _correctImageOrientation(File file) async {
-    final bytes = await file.readAsBytes();
-    final image = img.decodeImage(bytes)!;
-    final orientedImage = img.bakeOrientation(image);
-    final orientedBytes = img.encodeJpg(orientedImage);
-
-    final orientedFile = File('${file.path}_oriented.jpg');
-    await orientedFile.writeAsBytes(orientedBytes);
-
-    return orientedFile;
+    setLoadingFiles(false);
   }
 
   bool _isVideoFile(String path) {
@@ -145,19 +154,19 @@ class PostController extends GetxController {
   }
 
   Future<void> removeFile({required String filePath}) async {
-    files.removeWhere((item) => item.path == filePath);
+    files.removeWhere((item) => item.localPath == filePath || item.url == filePath);
     update();
   }
 
   Future<void> uploadFiles() async {
     for (var file in files) {
-      final result = await socialRepository.insertFile(picture: file.path);
+      final result = await socialRepository.insertFile(picture: file.localPath!);
       result.when(
           success: (data) {
-            if (_isVideoFile(file.path)) {
-              listUploadedVideos?.add(data.id!);
+            if (_isVideoFile(file.localPath!)) {
+              listUploadedVideos.add(data.id!);
             } else {
-              listUploadedImages?.add(data.id!);
+              listUploadedImages.add(data.id!);
             }
           },
           error: (message) {});
@@ -171,6 +180,68 @@ class PostController extends GetxController {
     }
 
     final result = await socialRepository.insertPost(
-        description: description, photosIds: listUploadedImages ?? [], videosIds: listUploadedVideos ?? []);
+      description: description,
+      photosIds: listUploadedImages,
+      videosIds: listUploadedVideos,
+    );
+
+    result.when(
+      success: (data) async {
+        pagination = 0;
+        currentListPost = [];
+        allPosts = [];
+        files = [];
+
+        await loadPosts();
+        utilServices.showToast(message: "Post adicionado com sucesso!", isError: false);
+        setSaving(false);
+      },
+      error: (message) {
+        utilServices.showToast(message: "Não foi possível adicionar o post. Teste novamente mais tarde!", isError: true);
+        setSaving(false);
+      },
+    );
+  }
+
+  Future<void> deletePost({required String postId}) async {
+    setSaving(true);
+    // if (files.length > 0) {
+    //   await uploadFiles();
+    // }
+
+    final result = await socialRepository.removePost(postId: postId);
+    setSaving(false);
+    result.when(
+      success: (data) {
+        allPosts.removeWhere((item) => item.id == postId);
+        utilServices.showToast(message: "Post removido com sucesso!", isError: false);
+      },
+      error: (message) {
+        utilServices.showToast(message: "Não foi possível remover o post. Teste novamente mais tarde!", isError: true);
+      },
+    );
+  }
+
+  Future<void> handleEditPost({required String postId}) async {
+    setLoadingFiles(true);
+    isEditing = true;
+    files = [];
+    postEdit = allPosts.firstWhereOrNull((item) => item.id == postId)!;
+    if (postEdit != null) {
+      descricaoPost = postEdit?.description ?? '';
+      files.addAll(postEdit!.photos!);
+      files.addAll(postEdit!.videos!);
+
+      files.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
+    }
+    setLoadingFiles(false);
+  }
+
+  Future<void> handleNewtPost() async {
+    setLoadingFiles(true);
+    isEditing = true;
+    files = [];
+
+    setLoadingFiles(false);
   }
 }

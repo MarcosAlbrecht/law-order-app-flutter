@@ -1,14 +1,17 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/models/user_model.dart';
+import 'package:app_law_order/src/pages/social/controller/post_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class PostCustomAppBar extends StatelessWidget {
   final VoidCallback? onBackPressed;
   final VoidCallback? onPostPressed;
   final UserModel? user;
   final String logedUserId;
+  final PostController controller;
 
   const PostCustomAppBar({
     Key? key,
@@ -16,6 +19,7 @@ class PostCustomAppBar extends StatelessWidget {
     this.onPostPressed,
     this.user,
     required this.logedUserId,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -37,7 +41,7 @@ class PostCustomAppBar extends StatelessWidget {
                     Icons.arrow_back_outlined,
                     color: CustomColors.white,
                   ),
-                  onPressed: onBackPressed ?? () => Navigator.of(context).pop(),
+                  onPressed: onBackPressed ?? () => Get.back(),
                 ),
                 const SizedBox(width: 8),
                 buildProfileImage(),
@@ -47,10 +51,15 @@ class PostCustomAppBar extends StatelessWidget {
           const SizedBox(width: 8),
           SizedBox(
             height: 30,
-            child: ElevatedButton(
-              onPressed: onPostPressed,
-              child: Text("Publicar"),
-            ),
+            child: controller.isSaving
+                ? ElevatedButton(
+                    onPressed: () {},
+                    child: const CircularProgressIndicator(),
+                  )
+                : ElevatedButton(
+                    onPressed: onPostPressed,
+                    child: const Text("Publicar"),
+                  ),
           )
         ],
       ),

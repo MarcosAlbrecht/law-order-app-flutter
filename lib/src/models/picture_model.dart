@@ -18,6 +18,7 @@ class PictureModel {
   String? localPath;
   @JsonKey(name: 'status')
   String? status;
+  DateTime? createdAt;
   PictureModel({
     this.id,
     this.key,
@@ -25,10 +26,10 @@ class PictureModel {
     this.url,
     this.localPath,
     this.status,
+    this.createdAt,
   });
 
-  factory PictureModel.fromJson(Map<String, dynamic> json) =>
-      _$PictureModelFromJson(json);
+  factory PictureModel.fromJson(Map<String, dynamic> json) => _$PictureModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$PictureModelToJson(this);
 

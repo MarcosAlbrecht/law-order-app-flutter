@@ -13,6 +13,9 @@ PictureModel _$PictureModelFromJson(Map<String, dynamic> json) => PictureModel(
       url: json['url'] as String?,
       localPath: json['localPath'] as String?,
       status: json['status'] as String?,
+      createdAt: json['createdAt'] == null
+          ? null
+          : DateTime.parse(json['createdAt'] as String),
     );
 
 Map<String, dynamic> _$PictureModelToJson(PictureModel instance) =>
@@ -23,4 +26,5 @@ Map<String, dynamic> _$PictureModelToJson(PictureModel instance) =>
       'url': instance.url,
       'localPath': instance.localPath,
       'status': instance.status,
+      'createdAt': instance.createdAt?.toIso8601String(),
     };
