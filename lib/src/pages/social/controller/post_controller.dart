@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:app_law_order/src/models/picture_model.dart';
 import 'package:app_law_order/src/models/post_model.dart';
 import 'package:app_law_order/src/pages/social/repository/social_repository.dart';
+import 'package:app_law_order/src/pages/social/result/create_post_result.dart';
 import 'package:app_law_order/src/services/util_services.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
@@ -74,6 +75,13 @@ class PostController extends GetxController {
   void loadMorePosts() {
     pagination = pagination + 10;
     loadPosts(canLoad: false);
+  }
+
+  Future<void> refreshPosts() async {
+    pagination = 0;
+    allPosts = [];
+    currentListPost = [];
+    loadPosts(canLoad: true);
   }
 
   Future<void> loadPosts({bool canLoad = true}) async {
@@ -160,8 +168,9 @@ class PostController extends GetxController {
 
   Future<void> uploadFiles() async {
     for (var file in files) {
-      final result = await socialRepository.insertFile(picture: file.localPath!);
-      result.when(
+      if (file.localPath != null) {
+        final result = await socialRepository.insertFile(picture: file.localPath!);
+        result.when(
           success: (data) {
             if (_isVideoFile(file.localPath!)) {
               listUploadedVideos.add(data.id!);
@@ -169,21 +178,39 @@ class PostController extends GetxController {
               listUploadedImages.add(data.id!);
             }
           },
-          error: (message) {});
+          error: (message) {},
+        );
+      } else if (file.url != null) {
+        if (_isVideoFile(file.url!)) {
+          listUploadedVideos.add(file.id!);
+        } else {
+          listUploadedImages.add(file.id!);
+        }
+      }
     }
   }
 
-  Future<void> cretePost({required String description}) async {
+  Future<void> handleEditInsertPost() async {
     setSaving(true);
     if (files.length > 0) {
       await uploadFiles();
     }
 
-    final result = await socialRepository.insertPost(
-      description: description,
-      photosIds: listUploadedImages,
-      videosIds: listUploadedVideos,
-    );
+    late CreatePostResult result;
+    if (isEditing) {
+      result = await socialRepository.editPost(
+        description: descricaoPost,
+        photosIds: listUploadedImages,
+        videosIds: listUploadedVideos,
+        idPost: postEdit!.id!,
+      );
+    } else {
+      result = await socialRepository.insertPost(
+        description: descricaoPost,
+        photosIds: listUploadedImages,
+        videosIds: listUploadedVideos,
+      );
+    }
 
     result.when(
       success: (data) async {
@@ -193,7 +220,12 @@ class PostController extends GetxController {
         files = [];
 
         await loadPosts();
-        utilServices.showToast(message: "Post adicionado com sucesso!", isError: false);
+        if (isEditing) {
+          utilServices.showToast(message: "Post editado com sucesso!", isError: false);
+        } else {
+          utilServices.showToast(message: "Post adicionado com sucesso!", isError: false);
+        }
+
         setSaving(false);
       },
       error: (message) {
@@ -201,6 +233,8 @@ class PostController extends GetxController {
         setSaving(false);
       },
     );
+
+    isEditing = false;
   }
 
   Future<void> deletePost({required String postId}) async {

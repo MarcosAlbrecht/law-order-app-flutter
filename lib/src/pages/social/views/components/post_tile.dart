@@ -3,6 +3,7 @@ import 'package:app_law_order/src/config/custom_colors.dart';
 import 'package:app_law_order/src/models/picture_model.dart';
 import 'package:app_law_order/src/models/post_model.dart';
 import 'package:app_law_order/src/pages/auth/controller/auth_controller.dart';
+import 'package:app_law_order/src/pages/social/controller/comments_controller.dart';
 import 'package:app_law_order/src/pages/social/controller/like_controller.dart';
 import 'package:app_law_order/src/pages/social/controller/post_controller.dart';
 import 'package:app_law_order/src/pages/social/views/components/comments.dart';
@@ -58,196 +59,204 @@ class _PostTileState extends State<PostTile> {
         decoration: BoxDecoration(
           color: CustomColors.backGround.withOpacity(0.4),
         ),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
-              child: Row(
-                children: [
-                  SizedBox(
-                    // Largura da imagem
-                    height: 50,
-                    width: 50,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(50),
-                      child: widget.post.owner?.profilePicture?.url != null
-                          ? CachedNetworkImage(
-                              imageUrl: widget.post.owner!.profilePicture!.url!,
-                              progressIndicatorBuilder: (context, url, downloadProgress) =>
-                                  CircularProgressIndicator(value: downloadProgress.progress),
-                              errorWidget: (context, url, error) => const Icon(Icons.error),
-                              fit: BoxFit.cover,
-                              height: 40,
-                              width: 40,
-                            )
-                          : Image.asset(
-                              "assets/ICONPEOPLE.png",
-                              fit: BoxFit.cover,
-                              height: 40,
-                              width: 40,
-                            ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                '${widget.post.owner!.firstName?.trim()} ${widget.post.owner!.lastName!.trim()}',
-                                style: TextStyle(
-                                  color: CustomColors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 13,
+        child: GetBuilder<CommentsController>(
+          init: CommentsController(listComments: widget.post.comments ?? []),
+          global: false,
+          builder: (commentsController) {
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        // Largura da imagem
+                        height: 50,
+                        width: 50,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: widget.post.owner?.profilePicture?.url != null
+                              ? CachedNetworkImage(
+                                  imageUrl: widget.post.owner!.profilePicture!.url!,
+                                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                      CircularProgressIndicator(value: downloadProgress.progress),
+                                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                                  fit: BoxFit.cover,
+                                  height: 40,
+                                  width: 40,
+                                )
+                              : Image.asset(
+                                  "assets/ICONPEOPLE.png",
+                                  fit: BoxFit.cover,
+                                  height: 40,
+                                  width: 40,
                                 ),
-                              ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    '${widget.post.owner!.firstName?.trim()} ${widget.post.owner!.lastName!.trim()}',
+                                    style: TextStyle(
+                                      color: CustomColors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Text(
+                              timePassedSince(widget.post.createdAt ?? ''),
                             ),
                           ],
                         ),
-                        Text(
-                          timePassedSince(widget.post.createdAt ?? ''),
-                        ),
-                      ],
-                    ),
+                      ),
+                      GetBuilder<PostController>(
+                        builder: (controller) {
+                          return Visibility(
+                            visible: widget.post.ownerId == authController.user.id,
+                            child: GestureDetector(
+                              onTap: () {
+                                FocusScope.of(context).unfocus(); // Remove o foco do teclado
+                              },
+                              child: PopupMenuButton<int>(
+                                onSelected: (int item) {
+                                  //controller.handleExcludeComment(commentId: comments[index].id!);
+                                },
+                                itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
+                                  PopupMenuItem<int>(
+                                    value: 1,
+                                    child: const Text('Editar post'),
+                                    onTap: () async {
+                                      await controller.handleEditPost(postId: widget.post.id!);
+                                      Get.toNamed(
+                                        PagesRoutes.postScreen,
+                                        //arguments: {'chat_model': chat},
+                                      );
+                                    },
+                                  ),
+                                  PopupMenuItem<int>(
+                                    value: 2,
+                                    child: const Text('Excluir post'),
+                                    onTap: () {
+                                      controller.deletePost(postId: widget.post.id!);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                   ),
-                  GetBuilder<PostController>(
-                    builder: (controller) {
-                      return Visibility(
-                        visible: widget.post.ownerId == authController.user.id,
-                        child: GestureDetector(
-                          onTap: () {
-                            FocusScope.of(context).unfocus(); // Remove o foco do teclado
-                          },
-                          child: PopupMenuButton<int>(
-                            onSelected: (int item) {
-                              //controller.handleExcludeComment(commentId: comments[index].id!);
-                            },
-                            itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
-                              PopupMenuItem<int>(
-                                value: 1,
-                                child: const Text('Editar post'),
-                                onTap: () async {
-                                  await controller.handleEditPost(postId: widget.post.id!);
-                                  Get.toNamed(
-                                    PagesRoutes.postScreen,
-                                    //arguments: {'chat_model': chat},
-                                  );
-                                },
-                              ),
-                              PopupMenuItem<int>(
-                                value: 2,
-                                child: const Text('Excluir post'),
-                                onTap: () {
-                                  controller.deletePost(postId: widget.post.id!);
-                                },
-                              ),
-                            ],
-                          ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+                  child: ExpandableText(
+                    //verificar isso aqui
+                    text: widget.post.description ?? '',
+                    maxLines: 10,
+                  ),
+                ),
+                widget.post.photos!.isNotEmpty
+                    ? SizedBox(
+                        height: size.height * 0.6,
+                        width: size.width,
+                        child: CarouselSlider(
+                          items: createImageSliders(widget.post.photos!, size),
+                          carouselController: _controller,
+                          options: CarouselOptions(
+                              scrollPhysics: widget.post.photos!.length > 1
+                                  ? const PageScrollPhysics()
+                                  : const NeverScrollableScrollPhysics(),
+                              height: size.height * 0.6,
+                              autoPlay: false,
+                              enlargeCenterPage: true,
+                              viewportFraction: 1,
+                              onPageChanged: (index, reason) {
+                                setState(() {
+                                  _current = index;
+                                });
+                              }),
+                        ),
+                      )
+                    : widget.post.videos!.isNotEmpty
+                        ? CachedVideoPlayer(
+                            videoUrl: widget.post.videos![0].url!,
+                          )
+                        : const SizedBox.shrink(),
+                Visibility(
+                  visible: widget.post.photos!.length > 1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: widget.post.photos!.asMap().entries.map((entry) {
+                      return GestureDetector(
+                        onTap: () => _controller.animateToPage(entry.key),
+                        child: Container(
+                          width: 8.0,
+                          height: 6.0,
+                          margin: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 1.0),
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: (Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black)
+                                  .withOpacity(_current == entry.key ? 0.9 : 0.4)),
                         ),
                       );
-                    },
+                    }).toList(),
                   ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
-              child: ExpandableText(
-                //verificar isso aqui
-                text: widget.post.description ?? '',
-                maxLines: 10,
-              ),
-            ),
-            widget.post.photos!.isNotEmpty
-                ? SizedBox(
-                    height: size.height * 0.6,
-                    width: size.width,
-                    child: CarouselSlider(
-                      items: createImageSliders(widget.post.photos!, size),
-                      carouselController: _controller,
-                      options: CarouselOptions(
-                          scrollPhysics:
-                              widget.post.photos!.length > 1 ? const PageScrollPhysics() : const NeverScrollableScrollPhysics(),
-                          height: size.height * 0.6,
-                          autoPlay: false,
-                          enlargeCenterPage: true,
-                          viewportFraction: 1,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              _current = index;
-                            });
-                          }),
-                    ),
-                  )
-                : widget.post.videos!.isNotEmpty
-                    ? CachedVideoPlayer(
-                        videoUrl: widget.post.videos![0].url!,
-                      )
-                    : const SizedBox.shrink(),
-            Visibility(
-              visible: widget.post.photos!.length > 1,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: widget.post.photos!.asMap().entries.map((entry) {
-                  return GestureDetector(
-                    onTap: () => _controller.animateToPage(entry.key),
-                    child: Container(
-                      width: 8.0,
-                      height: 6.0,
-                      margin: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 1.0),
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: (Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black)
-                              .withOpacity(_current == entry.key ? 0.9 : 0.4)),
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            GetBuilder<LikeController>(
-              init: LikeController(post: widget.post),
-              global: false,
-              builder: (controller) {
-                return InteractionsButtons(
-                  liked: controller.post.likes!.any((element) => element.userId == authController.user.id),
-                  onCommentPressed: () {
-                    showModalBottomSheet<void>(
-                      useSafeArea: true,
-                      isScrollControlled: true,
-                      context: context,
-                      builder: (BuildContext context) {
-                        return CommentModalWidget(
-                            postId: widget.post.id!,
-                            size: size,
-                            comments: widget.post.comments!,
-                            onInserComment: widget.onHandleComment);
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                GetBuilder<LikeController>(
+                  init: LikeController(post: widget.post),
+                  global: false,
+                  builder: (controller) {
+                    return InteractionsButtons(
+                      liked: controller.post.likes!.any((element) => element.userId == authController.user.id),
+                      onCommentPressed: () {
+                        showModalBottomSheet<void>(
+                          useSafeArea: true,
+                          isScrollControlled: true,
+                          context: context,
+                          builder: (BuildContext context) {
+                            return CommentModalWidget(
+                                postId: widget.post.id!,
+                                size: size,
+                                controller: commentsController,
+                                onInserComment: widget.onHandleComment);
+                          },
+                        );
+                      },
+                      onLikePressed: () {
+                        controller.handleLike();
                       },
                     );
                   },
-                  onLikePressed: () {
-                    controller.handleLike();
-                  },
-                );
-              },
-            ),
-            widget.post.comments!.isNotEmpty
-                ? Comments(
-                    postId: widget.post.id!,
-                    comments: widget.post.comments!,
-                    onHandleComment: () {
-                      print('inseriu');
-                    },
-                  )
-                : const SizedBox.shrink(),
-          ],
+                ),
+                widget.post.comments!.isNotEmpty
+                    ? Comments(
+                        postId: widget.post.id!,
+                        onHandleComment: () {
+                          print('inseriu comentario');
+                          setState(() {});
+                        },
+                        controller: commentsController,
+                      )
+                    : const SizedBox.shrink(),
+              ],
+            );
+          },
         ),
       ),
     );

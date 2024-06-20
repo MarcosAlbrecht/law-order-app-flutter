@@ -101,7 +101,7 @@ class _PostScreenState extends State<PostScreen> {
                               logedUserId: authController.user.id!,
                               user: authController.user,
                               onPostPressed: () async {
-                                await controller.cretePost(description: messageEC.text);
+                                await controller.handleEditInsertPost();
                                 Get.back();
                               },
                             ),

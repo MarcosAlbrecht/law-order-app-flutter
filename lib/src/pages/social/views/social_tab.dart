@@ -35,7 +35,7 @@ class _SocialTabState extends State<SocialTab> {
                 child: SingleChildScrollView(
                   child: RefreshIndicator(
                     onRefresh: () async {
-                      controller.loadPosts();
+                      controller.refreshPosts();
                     },
                     child: Container(
                       height: size.height,

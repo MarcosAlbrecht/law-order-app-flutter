@@ -32,14 +32,21 @@ class CommentsController extends GetxController {
     setExclude(true);
     final result = await socialRepository.removeComment(commentId: commentId);
 
-    setExclude(false);
     result.when(
-      success: (data) {
-        setExclude(true);
-        listComments.removeAt(listComments.indexWhere((item) => item.id == commentId));
+      success: (data) async {
+        try {
+          listComments.removeAt(listComments.indexWhere((item) => item.id == commentId));
+          utilServices.showToast(message: "Comentário removido com sucesso", isError: false);
+        } catch (e) {
+          print('Erro ao remover da lista: ' + e.toString());
+        }
+
         setExclude(false);
       },
-      error: (message) {},
+      error: (message) {
+        utilServices.showToast(message: "Não foi possível remover, tente novamente mais tarde!", isError: true);
+        setExclude(false);
+      },
     );
   }
 

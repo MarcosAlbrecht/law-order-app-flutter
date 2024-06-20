@@ -207,6 +207,31 @@ class SocialRepository {
     }
   }
 
+  Future<CreatePostResult> editPost(
+      {required String description, List<String>? photosIds, List<String>? videosIds, required String idPost}) async {
+    try {
+      final result = await httpManager.restRequest(
+        method: HttpMethods.put,
+        url: '${EndPoints.updatePost}$idPost',
+        body: {
+          "description": description,
+          "photosIds": photosIds,
+          "videoIds": videosIds,
+        },
+      );
+
+      if (result.isNotEmpty && result['_id'] != null) {
+        var lieData = result as Map<String, dynamic>;
+        PostModel data = PostModel.fromJson(lieData);
+        return CreatePostResult.success(data);
+      } else {
+        return CreatePostResult.error("Não foi possível buscar os dados!");
+      }
+    } catch (e) {
+      return CreatePostResult.error("Não foi possível buscar os dados!");
+    }
+  }
+
   Future<FileResult> insertFile({required String picture}) async {
     try {
       FormData formData = FormData.fromMap({
